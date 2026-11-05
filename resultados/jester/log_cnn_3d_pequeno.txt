@@ -1,0 +1,35 @@
+Treino 20000 (faltando 0); validação 5000 (faltando 0); 27 classes
+cnn_3d: 3,522,747 parâmetros, inicialização aleatória
+ ep0 passo 0 perda 3.578 top1 0.062 8 vídeos/s GPU 4992 MB
+ ep0 passo 200 perda 3.174 top1 0.107 169 vídeos/s GPU 4992 MB
+ ep0 passo 400 perda 2.914 top1 0.187 178 vídeos/s GPU 4992 MB
+Época 0: treino 0.192, validação top1 0.2476 top5 0.6422, 1.9 min
+ ep1 passo 0 perda 2.309 top1 0.417 111 vídeos/s GPU 5907 MB
+ ep1 passo 200 perda 2.292 top1 0.374 188 vídeos/s GPU 5907 MB
+ ep1 passo 400 perda 2.190 top1 0.417 188 vídeos/s GPU 5907 MB
+Época 1: treino 0.419, validação top1 0.4460 top5 0.8818, 1.8 min
+ ep2 passo 0 perda 2.005 top1 0.354 149 vídeos/s GPU 5907 MB
+ ep2 passo 200 perda 1.949 top1 0.516 189 vídeos/s GPU 5907 MB
+ ep2 passo 400 perda 1.908 top1 0.530 188 vídeos/s GPU 5907 MB
+Época 2: treino 0.533, validação top1 0.5746 top5 0.9072, 1.8 min
+ ep3 passo 0 perda 1.990 top1 0.542 146 vídeos/s GPU 5907 MB
+ ep3 passo 200 perda 1.761 top1 0.592 182 vídeos/s GPU 5907 MB
+ ep3 passo 400 perda 1.734 top1 0.601 183 vídeos/s GPU 5907 MB
+Época 3: treino 0.602, validação top1 0.7178 top5 0.9568, 1.8 min
+ ep4 passo 0 perda 1.601 top1 0.688 145 vídeos/s GPU 5907 MB
+ ep4 passo 200 perda 1.631 top1 0.641 186 vídeos/s GPU 5907 MB
+ ep4 passo 400 perda 1.605 top1 0.654 187 vídeos/s GPU 5907 MB
+Época 4: treino 0.656, validação top1 0.7398 top5 0.9534, 1.8 min
+ ep5 passo 0 perda 1.781 top1 0.542 148 vídeos/s GPU 5907 MB
+ ep5 passo 200 perda 1.522 top1 0.687 187 vídeos/s GPU 5907 MB
+ ep5 passo 400 perda 1.499 top1 0.702 188 vídeos/s GPU 5907 MB
+Época 5: treino 0.702, validação top1 0.7810 top5 0.9698, 1.8 min
+ ep6 passo 0 perda 1.448 top1 0.771 148 vídeos/s GPU 5907 MB
+ ep6 passo 200 perda 1.424 top1 0.736 187 vídeos/s GPU 5907 MB
+ ep6 passo 400 perda 1.418 top1 0.737 187 vídeos/s GPU 5907 MB
+Época 6: treino 0.736, validação top1 0.8222 top5 0.9780, 1.8 min
+ ep7 passo 0 perda 1.466 top1 0.688 142 vídeos/s GPU 5907 MB
+ ep7 passo 200 perda 1.377 top1 0.755 186 vídeos/s GPU 5907 MB
+ ep7 passo 400 perda 1.376 top1 0.755 186 vídeos/s GPU 5907 MB
+Época 7: treino 0.755, validação top1 0.8280 top5 0.9802, 1.8 min
+Teste rápido: conjunto de teste não avaliado.

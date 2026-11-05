@@ -1,0 +1,44 @@
+[
+  {
+    "limiar": 0.5,
+    "falsa_ativacao": 0.00893521960824728,
+    "gestos_acertados": 0.757652759552002,
+    "gestos_errados": 0.07693196088075638
+  },
+  {
+    "limiar": 0.6,
+    "falsa_ativacao": 0.0059568132273852825,
+    "gestos_acertados": 0.7031304240226746,
+    "gestos_errados": 0.050479382276535034
+  },
+  {
+    "limiar": 0.7,
+    "falsa_ativacao": 0.0029784066136926413,
+    "gestos_acertados": 0.6317430734634399,
+    "gestos_errados": 0.031650688499212265
+  },
+  {
+    "limiar": 0.8,
+    "falsa_ativacao": 0.00223380490206182,
+    "gestos_acertados": 0.5329790711402893,
+    "gestos_errados": 0.016518425196409225
+  },
+  {
+    "limiar": 0.9,
+    "falsa_ativacao": 0.00223380490206182,
+    "gestos_acertados": 0.39182165265083313,
+    "gestos_errados": 0.006237726658582687
+  },
+  {
+    "limiar": 0.95,
+    "falsa_ativacao": 0.0014892033068463206,
+    "gestos_acertados": 0.2750375270843506,
+    "gestos_errados": 0.0031188633292913437
+  },
+  {
+    "limiar": 0.99,
+    "falsa_ativacao": 0.0007446016534231603,
+    "gestos_acertados": 0.10523276031017303,
+    "gestos_errados": 0.00023102691920939833
+  }
+]

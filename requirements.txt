@@ -1,0 +1,9 @@
+numpy
+pandas
+matplotlib
+pillow
+scikit-learn
+opencv-python
+tqdm
+ipykernel
+nbconvert

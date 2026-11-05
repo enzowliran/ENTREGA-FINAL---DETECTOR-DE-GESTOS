@@ -1,0 +1,16 @@
+{
+  "modelo": "cnn_3d",
+  "dados": "data/Jester",
+  "epocas": 20,
+  "lote": 48,
+  "lr": 0.001,
+  "seed": 42,
+  "limite_treino": null,
+  "retomar": true,
+  "peso_falso": 1.0,
+  "aug_tempo": true,
+  "aug_espaco": true,
+  "suavizacao": 0.05,
+  "frac_sinteticos": 0.1,
+  "nome": "cnn_3d"
+}

@@ -1,0 +1,51 @@
+{
+  "perda": 0.27059315645224946,
+  "top1": 0.9260666078817066,
+  "top5": 0.9938275791901241,
+  "n": 14743,
+  "curva": [
+    {
+      "limiar": 0.5,
+      "falsa_ativacao": 0.006352567579597235,
+      "gestos_acertados": 0.8897619247436523,
+      "gestos_errados": 0.044966548681259155
+    },
+    {
+      "limiar": 0.6,
+      "falsa_ativacao": 0.0031762837897986174,
+      "gestos_acertados": 0.8637778162956238,
+      "gestos_errados": 0.032441262155771255
+    },
+    {
+      "limiar": 0.7,
+      "falsa_ativacao": 0.0026469030417501926,
+      "gestos_acertados": 0.8333592414855957,
+      "gestos_errados": 0.023416835814714432
+    },
+    {
+      "limiar": 0.8,
+      "falsa_ativacao": 0.0026469030417501926,
+      "gestos_acertados": 0.7778123617172241,
+      "gestos_errados": 0.01610393635928631
+    },
+    {
+      "limiar": 0.9,
+      "falsa_ativacao": 0.0005293806316331029,
+      "gestos_acertados": 0.6700637936592102,
+      "gestos_errados": 0.008557647466659546
+    },
+    {
+      "limiar": 0.95,
+      "falsa_ativacao": 0.0,
+      "gestos_acertados": 0.5333748459815979,
+      "gestos_errados": 0.004045433364808559
+    },
+    {
+      "limiar": 0.99,
+      "falsa_ativacao": 0.0,
+      "gestos_acertados": 0.19262486696243286,
+      "gestos_errados": 0.00015559358871541917
+    }
+  ],
+  "melhor_top1_val": 0.9329816730912288
+}

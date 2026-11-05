@@ -1,0 +1,55 @@
+=== cnn_3d_pequeno
+top1 0.8230 em 14787 vídeos
+limiar  falsa_ativacao  gestos_acertados  gestos_errados
+ 0.50          0.0190            0.6644          0.0633
+ 0.60          0.0110            0.5705          0.0326
+ 0.70          0.0050            0.4613          0.0157
+ 0.80          0.0030            0.3315          0.0052
+ 0.90          0.0010            0.1836          0.0008
+ 0.95          0.0005            0.0968          0.0000
+ 0.99          0.0005            0.0151          0.0000
+ativações em dados sintéticos: {'ruido': (0.02734375, 0.0), 'cor_lisa': (0.0, 0.0)} (limiar 0,6 e 0,9)
+=== cnn_3d_pequeno_sint
+top1 0.8010 em 14787 vídeos
+limiar  falsa_ativacao  gestos_acertados  gestos_errados
+ 0.50          0.0165            0.6208          0.0694
+ 0.60          0.0100            0.5232          0.0339
+ 0.70          0.0060            0.4052          0.0148
+ 0.80          0.0025            0.2805          0.0052
+ 0.90          0.0010            0.1477          0.0005
+ 0.95          0.0005            0.0820          0.0002
+ 0.99          0.0000            0.0150          0.0000
+ativações em dados sintéticos: {'ruido': (0.0, 0.0), 'cor_lisa': (0.0, 0.0)} (limiar 0,6 e 0,9)
+=== cnn_3d_pequeno_p1
+top1 0.7820 em 14787 vídeos
+limiar  falsa_ativacao  gestos_acertados  gestos_errados
+ 0.50          0.0115            0.5804          0.0695
+ 0.60          0.0055            0.4679          0.0322
+ 0.70          0.0035            0.3476          0.0130
+ 0.80          0.0020            0.2258          0.0032
+ 0.90          0.0010            0.1142          0.0005
+ 0.95          0.0010            0.0598          0.0001
+ 0.99          0.0000            0.0095          0.0000
+ativações em dados sintéticos: {'ruido': (0.0, 0.0), 'cor_lisa': (0.0, 0.0)} (limiar 0,6 e 0,9)
+=== cnn_3d_pequeno_p2
+top1 0.7575 em 14787 vídeos
+limiar  falsa_ativacao  gestos_acertados  gestos_errados
+ 0.50          0.0100            0.5279          0.0704
+ 0.60          0.0075            0.4145          0.0321
+ 0.70          0.0025            0.2921          0.0109
+ 0.80          0.0025            0.1806          0.0025
+ 0.90          0.0015            0.0903          0.0004
+ 0.95          0.0010            0.0482          0.0002
+ 0.99          0.0000            0.0079          0.0000
+ativações em dados sintéticos: {'ruido': (0.0, 0.0), 'cor_lisa': (0.0, 0.0)} (limiar 0,6 e 0,9)
+=== cnn_3d_medio
+top1 0.8487 em 14787 vídeos
+limiar  falsa_ativacao  gestos_acertados  gestos_errados
+ 0.50          0.0095            0.7568          0.0779
+ 0.60          0.0055            0.7014          0.0501
+ 0.70          0.0025            0.6319          0.0310
+ 0.80          0.0015            0.5343          0.0169
+ 0.90          0.0015            0.3923          0.0066
+ 0.95          0.0010            0.2787          0.0028
+ 0.99          0.0005            0.1057          0.0002
+ativações em dados sintéticos: {'ruido': (0.0, 0.0), 'cor_lisa': (0.0, 0.0)} (limiar 0,6 e 0,9)

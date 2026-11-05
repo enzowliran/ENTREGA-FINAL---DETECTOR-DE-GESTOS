@@ -1,0 +1,13 @@
+{
+  "modelo": "cnn_transformer",
+  "dados": "data/Jester",
+  "epocas": 8,
+  "lote": 48,
+  "lr": 0.001,
+  "seed": 42,
+  "limite_treino": 20000,
+  "retomar": false,
+  "peso_falso": 0.0,
+  "frac_sinteticos": 0.0,
+  "nome": "cnn_transformer_pequeno"
+}

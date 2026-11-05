@@ -1,0 +1,15 @@
+gesto,mao,teste,treino,total
+FlickDown,direita,100,257,357
+FlickDown,esquerda,104,259,363
+FlickUp,direita,102,262,364
+FlickUp,esquerda,105,268,373
+None,direita,107,269,376
+None,esquerda,107,270,377
+Other,direita,106,264,370
+Other,esquerda,106,263,369
+SwipeLeft,direita,100,266,366
+SwipeLeft,esquerda,104,267,371
+SwipeRight,direita,101,260,361
+SwipeRight,esquerda,100,266,366
+Tap,direita,102,266,368
+Tap,esquerda,102,265,367

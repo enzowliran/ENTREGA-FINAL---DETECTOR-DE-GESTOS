@@ -1,0 +1,11 @@
+{
+  "modelo": "cnn_3d",
+  "dados": "data/Jester",
+  "epocas": 8,
+  "lote": 48,
+  "lr": 0.001,
+  "seed": 42,
+  "limite_treino": 20000,
+  "retomar": false,
+  "nome": "cnn_3d_pequeno"
+}

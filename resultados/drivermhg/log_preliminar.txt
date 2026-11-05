@@ -1,0 +1,3 @@
+S10_R4: 6321 frames RGB, 6321 IR, ausentes 0/0
+S10_R5: 5622 frames RGB, 5622 IR, ausentes 0/0
+S11_R1: 5441 frames RGB, 5441 IR, ausentes 0/0
