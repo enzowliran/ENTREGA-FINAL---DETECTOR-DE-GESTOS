@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tênis por Gestos</title>
+<style>
+  :root { --texto: #f7f6f2; --apoio: #d4d7d9; --verde: #6ad08c; --vermelho: #ff8b80; --amarelo: #f4c464; --vidro: rgba(10,14,17,.72); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #10181d; color: var(--texto); font-family: "Segoe UI", system-ui, sans-serif; }
+  canvas { display: block; position: fixed; inset: 0; }
+  .painel { position: fixed; background: var(--vidro); border-radius: 8px; padding: 12px 16px; }
+  #placar { left: 16px; top: 16px; font-variant-numeric: tabular-nums; min-width: 230px; }
+  #placar table { border-collapse: collapse; width: 100%; font-size: 19px; }
+  #placar th { color: var(--apoio); font-size: 13px; font-weight: 600; text-align: right; padding: 0 0 4px 16px; }
+  #placar td { padding: 3px 0 3px 16px; text-align: right; font-weight: 700; }
+  #placar td:first-child { text-align: left; padding-left: 0; font-weight: 600; }
+  #rali { color: var(--apoio); font-size: 14px; margin-top: 6px; }
+  #comando { left: 50%; top: 22px; transform: translateX(-50%); text-align: center; min-width: 340px; padding: 12px 24px; transition: background .12s; }
+  #comando .golpe { font-size: 34px; font-weight: 800; letter-spacing: .02em; }
+  #comando .acao { font-size: 18px; color: var(--apoio); }
+  #comando.agora { background: rgba(35,130,78,.92); }
+  #comando.agora .acao { color: var(--texto); }
+  #mensagem { position: fixed; left: 50%; top: 40%; transform: translate(-50%,-50%); font-size: 56px; font-weight: 800; pointer-events: none; opacity: 0; transition: opacity .15s; text-shadow: 0 3px 14px rgba(0,0,0,.65); text-align: center; white-space: nowrap; }
+  #mensagem.ver { opacity: 1; }
+  #camera { right: 16px; bottom: 16px; width: 264px; padding: 8px; }
+  #video { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; border-radius: 4px; display: block; }
+  #gesto { font-size: 16px; font-weight: 700; margin-top: 7px; min-height: 22px; }
+  #gesto.golpe { color: var(--verde); }
+  .barra { height: 5px; background: rgba(255,255,255,.18); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+  #confianca { height: 100%; width: 0; background: var(--apoio); transition: width .12s; }
+  #estado { color: var(--apoio); font-size: 13px; margin-top: 6px; }
+  #ajuda { left: 16px; bottom: 16px; font-size: 15px; line-height: 1.5; color: var(--apoio); }
+  #ajuda b { color: var(--texto); }
+  #inicio { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(8,12,15,.82); text-align: center; padding: 16px; z-index: 3; }
+  #inicio h1 { font-size: 46px; margin: 0 0 12px; }
+  #inicio p { font-size: 20px; color: var(--apoio); margin: 0 0 8px; line-height: 1.4; }
+  button { margin-top: 18px; border: 0; border-radius: 8px; background: var(--verde); color: #0d1a12; font: 700 20px "Segoe UI", system-ui, sans-serif; padding: 13px 34px; cursor: pointer; }
+  button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  #erro3d { display: none; color: var(--vermelho); margin-top: 12px; }
+  @media (max-width: 800px) { #ajuda { display: none; } #camera { width: 180px; } #comando { min-width: 0; width: calc(100% - 32px); top: 150px; } }
+</style>
+</head>
+<body>
+<div class="painel" id="placar">
+  <table>
+    <tr><th style="text-align:left"></th><th>Games</th><th>Pontos</th></tr>
+    <tr><td>Você</td><td id="gVoce">0</td><td id="pVoce">0</td></tr>
+    <tr><td>Rival</td><td id="gRival">0</td><td id="pRival">0</td></tr>
+  </table>
+  <div id="rali">Troca atual: 0 · Recorde: 0</div>
+</div>
+<div class="painel" id="comando"><div class="golpe" id="golpe">Prepare-se</div><div class="acao" id="acao">O rival vai sacar</div></div>
+<div id="mensagem" role="status" aria-live="polite"></div>
+<div class="painel" id="ajuda">
+  <b>Arrastar a mão para a esquerda:</b> forehand<br>
+  <b>Arrastar a mão para a direita:</b> backhand<br>
+  Sinal de pare ou tecla P: pausa · Setas ← →: jogar no teclado
+</div>
+<div class="painel" id="camera">
+  <img id="video" alt="Imagem da webcam">
+  <div id="gesto">Conectando...</div>
+  <div class="barra"><div id="confianca"></div></div>
+  <div id="estado">Sem conexão com o modelo</div>
+</div>
+<div id="inicio"><div>
+  <h1>Tênis por Gestos</h1>
+  <p>Você fica parado. Veja de que lado a bola vem e rebata com a mão.</p>
+  <p><b>Bola à direita:</b> arraste para a esquerda (forehand).<br><b>Bola à esquerda:</b> arraste para a direita (backhand).</p>
+  <p>O gesto leva cerca de 1 s para ser reconhecido, então faça assim que o aviso ficar verde.</p>
+  <button id="comecar">Jogar</button>
+  <div id="erro3d">Não foi possível iniciar o 3D neste navegador.</div>
+</div></div>
+
+<script src="/vendor/three.min.js"></script>
+<script>
+"use strict";
+// Coordenadas em metros, com a quadra simples: x de -4,1 a 4,1 e z de -11,9 a 11,9.
+const QUADRA = { x: 4.115, z: 11.885, zJogador: 10.2, zRival: -10.2, alturaGolpe: 1.05, ladoBola: 1.25 };
+const DIFICULDADE = { voo: 3.4, vooMin: 2.3, janela: 1.9, janelaMin: 1.25, atrasoAceito: 0.5 };
+const NOMES = { forehand: "FOREHAND", backhand: "BACKHAND" };
+const INSTRUCAO = { forehand: "← arraste a mão para a esquerda", backhand: "arraste a mão para a direita →" };
+// Comando do servidor: Swiping Left chega como "anterior" e Swiping Right como "proxima".
+const GOLPE_DO_COMANDO = { anterior: "forehand", proxima: "backhand" };
+
+let cena, camera, render, bola, sombra, marca, jogador, rival;
+const estado = { fase: "parado", pausado: false, tempo: 0, voo: 0, lado: null, de: null, para: null, resposta: false, jaBateu: false, golpeado: false, rali: 0, recorde: 0, pontos: [0, 0], games: [0, 0], espera: 0, proximaFase: null, balanco: 0, ladoBalanco: 0, balancoRival: 0 };
+const el = id => document.getElementById(id);
+
+function material(cor, opcoes) { return new THREE.MeshStandardMaterial(Object.assign({ color: cor, roughness: 0.8 }, opcoes || {})); }
+function malha(geo, mat, x, y, z, pai) {
+  const m = new THREE.Mesh(geo, mat); m.position.set(x || 0, y || 0, z || 0); m.castShadow = true; (pai || cena).add(m); return m;
+}
+
+function criarQuadra() {
+  const fora = new THREE.Mesh(new THREE.PlaneGeometry(60, 80), material(0x2f6f57));
+  fora.rotation.x = -Math.PI / 2; fora.receiveShadow = true; cena.add(fora);
+  const piso = new THREE.Mesh(new THREE.PlaneGeometry(QUADRA.x * 2 + 2.74, QUADRA.z * 2), material(0x2b6c9e));
+  piso.rotation.x = -Math.PI / 2; piso.position.y = 0.01; piso.receiveShadow = true; cena.add(piso);
+  const branco = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const linha = (l, c, x, z) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(l, c), branco); m.rotation.x = -Math.PI / 2; m.position.set(x, 0.02, z); cena.add(m); };
+  const dupla = QUADRA.x + 1.37;
+  [-dupla, -QUADRA.x, QUADRA.x, dupla].forEach(x => linha(0.08, QUADRA.z * 2, x, 0));
+  [-QUADRA.z, QUADRA.z].forEach(z => linha(dupla * 2 + 0.08, 0.1, 0, z));
+  [-6.4, 6.4].forEach(z => linha(QUADRA.x * 2, 0.07, 0, z));
+  linha(0.07, 12.8, 0, 0);
+  const rede = new THREE.Mesh(new THREE.PlaneGeometry(dupla * 2 + 1, 0.95), new THREE.MeshStandardMaterial({ color: 0xf1f1f1, transparent: true, opacity: 0.45, side: THREE.DoubleSide }));
+  rede.position.set(0, 0.475, 0); rede.castShadow = true; cena.add(rede);
+  linha2(dupla);
+  const postes = material(0x272c30);
+  [-dupla - 0.5, dupla + 0.5].forEach(x => malha(new THREE.CylinderGeometry(0.05, 0.05, 1.07, 12), postes, x, 0.53, 0));
+  // Arquibancada simples, para dar profundidade à cena.
+  const cores = [0x39424a, 0x434e57, 0x4e5a64];
+  for (let i = 0; i < 3; i++) {
+    malha(new THREE.BoxGeometry(34, 1.4 + i * 1.6, 2), material(cores[i]), 0, (1.4 + i * 1.6) / 2, -19 - i * 2);
+    [-1, 1].forEach(l => malha(new THREE.BoxGeometry(2, 1.4 + i * 1.6, 44), material(cores[i]), l * (12 + i * 2), (1.4 + i * 1.6) / 2, -2));
+  }
+}
+function linha2(dupla) {
+  const faixa = new THREE.Mesh(new THREE.BoxGeometry(dupla * 2 + 1, 0.07, 0.03), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  faixa.position.set(0, 0.95, 0); cena.add(faixa);
+}
+
+function criarPessoa(corRoupa, corPele) {
+  const g = new THREE.Group();
+  const roupa = material(corRoupa), pele = material(corPele), calca = material(0xf0efe9);
+  [-0.13, 0.13].forEach(x => malha(new THREE.CylinderGeometry(0.075, 0.065, 0.8, 12), pele, x, 0.4, 0, g));
+  malha(new THREE.CylinderGeometry(0.21, 0.19, 0.27, 16), calca, 0, 0.87, 0, g);
+  malha(new THREE.CylinderGeometry(0.2, 0.2, 0.55, 16), roupa, 0, 1.25, 0, g);
+  malha(new THREE.SphereGeometry(0.135, 20, 16), pele, 0, 1.68, 0, g);
+  malha(new THREE.CylinderGeometry(0.145, 0.145, 0.05, 20), roupa, 0, 1.76, 0, g);
+  malha(new THREE.CylinderGeometry(0.052, 0.05, 0.55, 10), pele, -0.26, 1.2, 0, g).rotation.z = -0.14;
+  // O ombro direito gira e leva o braço e a raquete.
+  const ombro = new THREE.Group(); ombro.position.set(0.25, 1.42, 0); g.add(ombro);
+  const braco = malha(new THREE.CylinderGeometry(0.052, 0.046, 0.62, 10), pele, 0.22, -0.2, 0, ombro); braco.rotation.z = 1.12;
+  const raquete = new THREE.Group(); raquete.position.set(0.48, -0.32, 0); ombro.add(raquete);
+  const cabo = malha(new THREE.CylinderGeometry(0.018, 0.018, 0.34, 8), material(0x222629), 0.15, 0.04, 0, raquete); cabo.rotation.z = -1.32;
+  const aro = malha(new THREE.TorusGeometry(0.14, 0.015, 8, 26), material(0xdd4c3c), 0.44, 0.12, 0, raquete); aro.scale.set(1.2, 1, 1);
+  const tela = malha(new THREE.CircleGeometry(0.135, 24), new THREE.MeshStandardMaterial({ color: 0xfafafa, transparent: true, opacity: 0.38, side: THREE.DoubleSide }), 0.44, 0.12, 0, raquete); tela.scale.set(1.2, 1, 1);
+  g.userData.ombro = ombro;
+  cena.add(g);
+  return g;
+}
+
+function iniciar3D() {
+  cena = new THREE.Scene();
+  cena.background = new THREE.Color(0x9fd0e8);
+  cena.fog = new THREE.Fog(0x9fd0e8, 40, 90);
+  camera = new THREE.PerspectiveCamera(50, innerWidth / innerHeight, 0.1, 200);
+  camera.position.set(0, 3.5, 15.2);
+  camera.lookAt(0, 1.05, -1);
+  render = new THREE.WebGLRenderer({ antialias: true });
+  render.setPixelRatio(Math.min(devicePixelRatio, 2));
+  render.setSize(innerWidth, innerHeight);
+  render.shadowMap.enabled = true; render.shadowMap.type = THREE.PCFSoftShadowMap;
+  document.body.prepend(render.domElement);
+  cena.add(new THREE.HemisphereLight(0xffffff, 0x6e8378, 0.75));
+  const sol = new THREE.DirectionalLight(0xffffff, 0.9);
+  sol.position.set(9, 22, 10); sol.castShadow = true; sol.shadow.mapSize.set(2048, 2048);
+  Object.assign(sol.shadow.camera, { left: -14, right: 14, top: 18, bottom: -18, near: 1, far: 60 });
+  cena.add(sol);
+  criarQuadra();
+  jogador = criarPessoa(0xe6663c, 0xe7b48f); jogador.position.set(0, 0, QUADRA.zJogador);
+  rival = criarPessoa(0x3a4fa8, 0xb98563); rival.position.set(0, 0, QUADRA.zRival); rival.rotation.y = Math.PI;
+  bola = malha(new THREE.SphereGeometry(0.095, 20, 16), new THREE.MeshStandardMaterial({ color: 0xdff23e, emissive: 0x2d3200 }));
+  sombra = new THREE.Mesh(new THREE.CircleGeometry(0.12, 20), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.32 }));
+  sombra.rotation.x = -Math.PI / 2; cena.add(sombra);
+  marca = new THREE.Mesh(new THREE.RingGeometry(0.34, 0.5, 40), new THREE.MeshBasicMaterial({ color: 0xffd34e, transparent: true, opacity: 0.85, side: THREE.DoubleSide }));
+  marca.rotation.x = -Math.PI / 2; marca.position.y = 0.03; marca.visible = false; cena.add(marca);
+  bola.visible = false;
+}
+addEventListener("resize", () => { if (!camera) return; camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); render.setSize(innerWidth, innerHeight); });
+
+let audio;
+function som(freq, dur, vol, tipo) {
+  if (!audio) return;
+  const o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime;
+  o.type = tipo || "triangle"; o.frequency.setValueAtTime(freq, t); o.frequency.exponentialRampToValueAtTime(Math.max(freq * 0.45, 40), t + dur);
+  g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g); g.connect(audio.destination); o.start(t); o.stop(t + dur + 0.02);
+}
+let tempoMsg;
+function mensagem(texto, cor, duracao) {
+  const m = el("mensagem"); m.textContent = texto; m.style.color = cor || "#fff"; m.classList.add("ver");
+  clearTimeout(tempoMsg); tempoMsg = setTimeout(() => m.classList.remove("ver"), duracao || 1100);
+}
+function mostrarComando(golpe, acao, agora) {
+  el("golpe").textContent = golpe; el("acao").textContent = acao; el("comando").classList.toggle("agora", !!agora);
+}
+function atualizarPlacar() {
+  const nomes = ["0", "15", "30", "40"], [a, b] = estado.pontos;
+  let tA, tB;
+  if (a >= 3 && b >= 3) { tA = a === b ? "40" : a > b ? "Vant." : "-"; tB = a === b ? "40" : b > a ? "Vant." : "-"; }
+  else { tA = nomes[Math.min(a, 3)]; tB = nomes[Math.min(b, 3)]; }
+  el("pVoce").textContent = tA; el("pRival").textContent = tB;
+  el("gVoce").textContent = estado.games[0]; el("gRival").textContent = estado.games[1];
+  el("rali").textContent = "Troca atual: " + estado.rali + " · Recorde: " + estado.recorde;
+}
+function ponto(quem) {
+  estado.pontos[quem]++;
+  const [a, b] = estado.pontos;
+  if ((a >= 4 || b >= 4) && Math.abs(a - b) >= 2) {
+    estado.games[quem]++; estado.pontos = [0, 0];
+    mensagem(quem === 0 ? "Game seu!" : "Game do rival", quem === 0 ? "#6ad08c" : "#ff8b80", 1500);
+  }
+  atualizarPlacar();
+}
+function esperar(s, fase) { estado.fase = "espera"; estado.espera = s; estado.proximaFase = fase; }
+
+function vooAtual() { return Math.max(DIFICULDADE.vooMin, DIFICULDADE.voo - estado.rali * 0.1); }
+function janelaAtual() { return Math.max(DIFICULDADE.janelaMin, DIFICULDADE.janela - estado.rali * 0.05); }
+
+function bolaVindo() {
+  estado.lado = Math.random() < 0.5 ? "forehand" : "backhand";
+  const sinal = estado.lado === "forehand" ? 1 : -1;
+  estado.de = new THREE.Vector3(rival.position.x, 1.25, QUADRA.zRival);
+  estado.para = new THREE.Vector3(sinal * QUADRA.ladoBola, QUADRA.alturaGolpe, QUADRA.zJogador - 0.3);
+  estado.voo = vooAtual(); estado.tempo = 0; estado.resposta = false; estado.jaBateu = false; estado.golpeado = false;
+  estado.fase = "vindo"; bola.visible = true;
+  estado.balancoRival = 1; som(380, 0.09, 0.4);
+  marca.position.x = estado.para.x * 0.92; marca.position.z = QUADRA.zJogador - 3.4; marca.visible = true;
+  mostrarComando(NOMES[estado.lado], "espere o aviso verde", false);
+}
+function bolaIndo(perfeito) {
+  const errou = Math.random() < Math.min(0.5, 0.06 + estado.rali * 0.035 - (perfeito ? 0.03 : 0));
+  estado.de = bola.position.clone();
+  const alvoX = (Math.random() * 2 - 1) * 2.8;
+  estado.para = new THREE.Vector3(errou ? alvoX * 1.9 : alvoX, 1.05, errou ? QUADRA.zRival - 5 : QUADRA.zRival + 0.2);
+  estado.voo = 1.25; estado.tempo = 0; estado.jaBateu = false; estado.resposta = errou;
+  estado.fase = "indo";
+  marca.visible = false;
+  mostrarComando(perfeito ? "Perfeito!" : "Boa!", "a bola vai para o rival", false);
+}
+function posicaoBola(t) {
+  // Dois arcos: do golpe até o quique, aos 72% do tempo, e do quique até a altura do rebate.
+  const a = estado.de, b = estado.para, q = 0.72;
+  const x = a.x + (b.x - a.x) * t, z = a.z + (b.z - a.z) * t;
+  let y;
+  if (t < q) { const u = t / q; y = a.y * (1 - u) + 0.1 * u + 4 * 1.55 * u * (1 - u); }
+  else { const u = (t - q) / (1 - q); y = 0.1 * (1 - u) + b.y * u + 4 * 0.9 * u * (1 - u); }
+  return [x, y, z];
+}
+
+function golpear(golpe, origem) {
+  if (estado.pausado) return;
+  if (estado.balanco <= 0) { estado.balanco = 1; estado.ladoBalanco = golpe === "forehand" ? 1 : -1; }
+  if (estado.fase !== "vindo" || estado.golpeado) return;
+  const restante = estado.voo - estado.tempo, janela = janelaAtual();
+  if (restante > janela) { mensagem("Cedo demais", "#f4c464", 700); return; }
+  estado.golpeado = true;
+  if (golpe !== estado.lado) {
+    som(150, 0.2, 0.3, "sine");
+    mensagem("Lado errado!", "#ff8b80");
+    mostrarComando(NOMES[golpe], "a bola vinha pelo outro lado", false);
+    return;
+  }
+  som(620, 0.07, 0.6); som(260, 0.1, 0.35, "square");
+  estado.rali++; estado.recorde = Math.max(estado.recorde, estado.rali); atualizarPlacar();
+  const perfeito = restante < janela * 0.55;
+  bolaIndo(perfeito);
+}
+function perdeuPonto(texto) {
+  som(170, 0.26, 0.3, "sine");
+  mensagem(texto, "#ff8b80");
+  estado.rali = 0; ponto(1); bola.visible = false; marca.visible = false;
+  mostrarComando("Prepare-se", "o rival vai sacar", false);
+  esperar(1.8, "vindo");
+}
+function ganhouPonto() {
+  som(780, 0.18, 0.35);
+  mensagem("Ponto seu!", "#6ad08c");
+  estado.rali = 0; ponto(0); bola.visible = false; marca.visible = false;
+  mostrarComando("Prepare-se", "o rival vai sacar", false);
+  esperar(1.8, "vindo");
+}
+
+function atualizar(dt) {
+  if (estado.balanco > 0) estado.balanco = Math.max(0, estado.balanco - dt * 2.4);
+  if (estado.balancoRival > 0) estado.balancoRival = Math.max(0, estado.balancoRival - dt * 2.6);
+  // Forehand cruza o corpo da direita para a esquerda; backhand, da esquerda para a direita.
+  const avanco = 1 - estado.balanco, f = Math.sin(avanco * Math.PI);
+  const ombro = jogador.userData.ombro;
+  // Ângulo do ombro: 0 aponta para a direita da tela e valores positivos giram para a frente.
+  if (estado.balanco > 0) ombro.rotation.y = estado.ladoBalanco > 0 ? -0.7 + avanco * 3.1 : 2.7 - avanco * 3.2;
+  else ombro.rotation.y = 0.35;
+  jogador.rotation.y = estado.balanco > 0 ? estado.ladoBalanco * f * 0.5 : 0;
+  rival.userData.ombro.rotation.y = estado.balancoRival > 0 ? Math.sin((1 - estado.balancoRival) * Math.PI) * 2 : 0.35;
+
+  if (estado.pausado || estado.fase === "parado") return;
+  if (estado.fase === "espera") {
+    estado.espera -= dt;
+    if (estado.espera <= 0) bolaVindo();
+    return;
+  }
+  estado.tempo += dt;
+  const t = Math.min(1.25, estado.tempo / estado.voo);
+  const [x, y, z] = posicaoBola(Math.min(t, 1));
+  if (t <= 1) bola.position.set(x, y, z);
+  sombra.position.set(bola.position.x, 0.025, bola.position.z);
+  sombra.material.opacity = Math.max(0.1, 0.35 - bola.position.y * 0.05);
+  if (!estado.jaBateu && t >= 0.72) { estado.jaBateu = true; som(220, 0.05, 0.22); }
+
+  if (estado.fase === "vindo") {
+    rival.position.x += (0 - rival.position.x) * Math.min(1, dt * 1.5);
+    const restante = estado.voo - estado.tempo;
+    if (!estado.golpeado && restante <= janelaAtual()) mostrarComando(NOMES[estado.lado], INSTRUCAO[estado.lado], true);
+    marca.material.opacity = 0.55 + 0.35 * Math.sin(estado.tempo * 9);
+    if (estado.golpeado && estado.fase === "vindo" && restante <= 0) perdeuPonto("Ponto do rival");
+    else if (estado.tempo >= estado.voo + DIFICULDADE.atrasoAceito) perdeuPonto("Atrasado!");
+    if (t >= 1 && !estado.golpeado) {
+      const u = (estado.tempo - estado.voo) / DIFICULDADE.atrasoAceito;
+      bola.position.set(estado.para.x, Math.max(0.15, estado.para.y - u * 0.85), estado.para.z + u * 3);
+    }
+    return;
+  }
+  if (estado.fase === "indo") {
+    if (!estado.resposta) rival.position.x += (estado.para.x * 0.92 - rival.position.x) * Math.min(1, dt * 3.5);
+    if (estado.tempo >= estado.voo) {
+      if (estado.resposta) ganhouPonto(); else bolaVindo();
+    }
+  }
+}
+let ultimo = 0;
+function quadro(agora) {
+  requestAnimationFrame(quadro);
+  const dt = Math.min(0.05, (agora - ultimo) / 1000 || 0); ultimo = agora;
+  atualizar(dt);
+  render.render(cena, camera);
+}
+function alternarPausa() {
+  if (estado.fase === "parado") return;
+  estado.pausado = !estado.pausado;
+  mensagem(estado.pausado ? "Pausado" : "Valendo!", "#fff", estado.pausado ? 100000 : 700);
+}
+addEventListener("keydown", e => {
+  if (e.key === "ArrowLeft") { e.preventDefault(); golpear("forehand", "teclado"); }
+  if (e.key === "ArrowRight") { e.preventDefault(); golpear("backhand", "teclado"); }
+  if (e.key.toLowerCase() === "p") alternarPausa();
+});
+try {
+  if (!window.THREE) throw new Error("Three.js não carregou");
+  iniciar3D(); atualizarPlacar(); requestAnimationFrame(quadro);
+} catch (erro) { el("erro3d").style.display = "block"; el("erro3d").textContent += " " + erro.message; el("comecar").disabled = true; }
+el("comecar").onclick = () => {
+  el("inicio").style.display = "none";
+  try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { audio = null; }
+  estado.fase = "parado"; mostrarComando("Prepare-se", "o rival vai sacar", false);
+  esperar(1.8, "vindo");
+};
+el("video").src = "/video";
+const fonte = new EventSource("/eventos");
+fonte.onopen = () => { el("estado").textContent = "Modelo conectado"; };
+fonte.onerror = () => { el("estado").textContent = "Sem conexão com o modelo: use as setas"; };
+fonte.onmessage = ev => {
+  const e = JSON.parse(ev.data);
+  if (e.tipo === "erro") el("estado").textContent = e.mensagem;
+  if (e.tipo === "estado") {
+    el("gesto").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
+    el("gesto").className = e.e_comando ? "golpe" : "";
+    el("confianca").style.width = (e.confianca * 100) + "%";
+  }
+  if (e.tipo === "comando") {
+    if (GOLPE_DO_COMANDO[e.comando]) golpear(GOLPE_DO_COMANDO[e.comando], "gesto");
+    if (e.comando === "alternar") alternarPausa();
+  }
+};
+</script>
+</body>
+</html>

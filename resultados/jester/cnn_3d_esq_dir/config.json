@@ -1,0 +1,13 @@
+{
+  "origem": "resultados/jester/cnn_3d/melhor.pt",
+  "dados": "data/Jester",
+  "nome": "cnn_3d_esq_dir",
+  "epocas": 4,
+  "repeticoes": 2,
+  "outros": 20000,
+  "lr": 0.0001,
+  "lote": 48,
+  "bloco": 1500,
+  "seed": 42,
+  "sem_fluxo": false
+}

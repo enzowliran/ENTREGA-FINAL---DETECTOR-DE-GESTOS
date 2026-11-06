@@ -1,0 +1,26 @@
+gesto,n,det_unico,det_por_gesto_fora_da_amostra,limiar_final,comando_da_demo
+Swiping Left,494,0.7409,0.8097,0.6,True
+Swiping Right,486,0.6893,0.6728,0.75,True
+Swiping Down,520,0.6558,0.7365,0.6,False
+Swiping Up,508,0.6299,0.7461,0.5,False
+Pushing Hand Away,538,0.868,0.8457,0.75,False
+Pulling Hand In,526,0.7624,0.7338,0.75,False
+Sliding Two Fingers Left,519,0.6879,0.7977,0.5,False
+Sliding Two Fingers Right,516,0.6066,0.7403,0.5,False
+Sliding Two Fingers Down,531,0.6121,0.7081,0.5,False
+Sliding Two Fingers Up,522,0.6245,0.772,0.5,False
+Pushing Two Fingers Away,531,0.693,0.7891,0.5,False
+Pulling Two Fingers In,519,0.7514,0.8015,0.6,False
+Rolling Hand Forward,521,0.7274,0.8369,0.5,False
+Rolling Hand Backward,493,0.8134,0.8519,0.6,False
+Turning Hand Clockwise,385,0.5091,0.6104,0.6,False
+Turning Hand Counterclockwise,399,0.5238,0.604,0.5,False
+Zooming In With Full Hand,526,0.7624,0.846,0.55,False
+Zooming Out With Full Hand,526,0.7395,0.7966,0.6,False
+Zooming In With Two Fingers,522,0.6897,0.7912,0.5,False
+Zooming Out With Two Fingers,530,0.7113,0.8075,0.5,False
+Thumb Up,539,0.8052,0.8182,0.7,True
+Thumb Down,536,0.9123,0.9123,0.7,True
+Shaking Hand,528,0.839,0.8428,0.75,False
+Stop Sign,536,0.7556,0.8414,0.55,True
+Drumming Fingers,535,0.8729,0.9196,0.5,False

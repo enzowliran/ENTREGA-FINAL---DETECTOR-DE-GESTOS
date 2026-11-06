@@ -1,0 +1,2017 @@
+fonte,modo,gravacao,gesto,mao,inicio,fim,predito,confianca,conf_gesto
+rgb,normal,S01_R1,FlickDown,direita,113,146,No gesture,0.5144,0.1774
+rgb,normal,S01_R1,SwipeLeft,direita,254,282,No gesture,0.7294,0.0806
+rgb,normal,S01_R1,Tap,esquerda,420,448,Doing other things,0.9433,0.0097
+rgb,normal,S01_R1,FlickUp,direita,590,620,Doing other things,0.9651,0.0113
+rgb,normal,S01_R1,FlickUp,direita,785,812,Doing other things,0.5949,0.1294
+rgb,normal,S01_R1,SwipeRight,esquerda,941,970,No gesture,0.4407,0.0677
+rgb,normal,S01_R1,SwipeRight,direita,1107,1141,Thumb Down,0.6066,0.6066
+rgb,normal,S01_R1,SwipeLeft,direita,1275,1309,No gesture,0.6496,0.0763
+rgb,normal,S01_R1,FlickUp,direita,1436,1466,Doing other things,0.5329,0.1113
+rgb,normal,S01_R1,Tap,direita,1602,1632,Thumb Down,0.2731,0.2731
+rgb,normal,S01_R1,Tap,direita,1772,1803,No gesture,0.9217,0.0061
+rgb,normal,S01_R1,FlickUp,esquerda,1952,1984,Doing other things,0.7501,0.2051
+rgb,normal,S01_R1,SwipeRight,esquerda,2115,2161,No gesture,0.534,0.1761
+rgb,normal,S01_R1,Tap,esquerda,2290,2329,Doing other things,0.5192,0.1174
+rgb,normal,S01_R1,FlickDown,esquerda,2457,2497,No gesture,0.4937,0.2314
+rgb,normal,S01_R1,SwipeLeft,esquerda,2613,2646,No gesture,0.7319,0.0405
+rgb,normal,S01_R1,SwipeRight,esquerda,2784,2830,No gesture,0.6114,0.1026
+rgb,normal,S01_R1,FlickDown,esquerda,2964,2990,No gesture,0.555,0.1615
+rgb,normal,S01_R1,SwipeRight,direita,3118,3154,Thumb Down,0.354,0.354
+rgb,normal,S01_R1,Tap,esquerda,3289,3320,Doing other things,0.992,0.0025
+rgb,normal,S01_R1,SwipeLeft,esquerda,3466,3498,No gesture,0.7441,0.0957
+rgb,normal,S01_R1,FlickDown,esquerda,3642,3688,No gesture,0.5787,0.0751
+rgb,normal,S01_R1,SwipeLeft,esquerda,3799,3839,No gesture,0.6845,0.0884
+rgb,normal,S01_R1,SwipeLeft,direita,3955,3993,No gesture,0.5946,0.1992
+rgb,normal,S01_R1,FlickDown,direita,4126,4181,Thumb Down,0.3281,0.3281
+rgb,normal,S01_R1,SwipeRight,direita,4304,4346,Thumb Down,0.2518,0.2518
+rgb,normal,S01_R1,Tap,direita,4472,4510,No gesture,0.8288,0.0252
+rgb,normal,S01_R1,FlickUp,esquerda,4640,4677,No gesture,0.78,0.0405
+rgb,normal,S01_R1,FlickUp,esquerda,4810,4845,No gesture,0.8065,0.0421
+rgb,normal,S01_R1,FlickDown,direita,4979,5020,Thumb Down,0.6543,0.6543
+rgb,normal,S01_R1,None,direita,0,35,No gesture,0.8924,0.0065
+rgb,normal,S01_R1,None,direita,210,250,No gesture,0.967,0.0025
+rgb,normal,S01_R1,None,direita,1223,1258,No gesture,0.8273,0.0379
+rgb,normal,S01_R1,None,esquerda,83,113,Thumb Down,0.2009,0.2009
+rgb,normal,S01_R1,None,esquerda,295,340,No gesture,0.7545,0.0307
+rgb,normal,S01_R1,None,esquerda,2083,2108,No gesture,0.9714,0.0019
+rgb,normal,S01_R1,Other,direita,3063,3096,Doing other things,0.959,0.0254
+rgb,normal,S01_R1,Other,direita,1904,1944,Doing other things,0.9974,0.0008
+rgb,normal,S01_R1,Other,direita,450,469,Doing other things,0.9857,0.0084
+rgb,normal,S01_R1,Other,esquerda,1049,1104,Doing other things,0.9946,0.0031
+rgb,normal,S01_R1,Other,esquerda,3036,3062,Doing other things,0.9967,0.0024
+rgb,normal,S01_R1,Other,esquerda,358,387,Doing other things,0.9989,0.0004
+rgb,normal,S01_R2,SwipeLeft,direita,118,146,No gesture,0.5743,0.232
+rgb,normal,S01_R2,Tap,direita,280,311,No gesture,0.8412,0.0108
+rgb,normal,S01_R2,SwipeLeft,esquerda,459,488,No gesture,0.6868,0.0679
+rgb,normal,S01_R2,FlickDown,direita,607,638,Doing other things,0.6055,0.1389
+rgb,normal,S01_R2,SwipeRight,direita,788,825,Doing other things,0.9659,0.0145
+rgb,normal,S01_R2,FlickUp,esquerda,923,955,Doing other things,0.9979,0.0003
+rgb,normal,S01_R2,FlickUp,direita,1097,1129,Doing other things,0.9213,0.0247
+rgb,normal,S01_R2,Tap,direita,1262,1297,Doing other things,0.8439,0.0386
+rgb,normal,S01_R2,Tap,esquerda,1433,1460,Doing other things,0.9968,0.0005
+rgb,normal,S01_R2,SwipeLeft,esquerda,1596,1631,No gesture,0.8186,0.0306
+rgb,normal,S01_R2,Tap,direita,1751,1775,Doing other things,0.6207,0.1385
+rgb,normal,S01_R2,SwipeRight,direita,1898,1931,Thumb Down,0.735,0.735
+rgb,normal,S01_R2,SwipeLeft,direita,2059,2087,Thumb Down,0.4467,0.4467
+rgb,normal,S01_R2,SwipeRight,esquerda,2228,2270,Doing other things,0.173,0.1539
+rgb,normal,S01_R2,SwipeLeft,esquerda,2416,2441,Doing other things,0.7796,0.0571
+rgb,normal,S01_R2,Tap,esquerda,2571,2602,Doing other things,0.5019,0.0636
+rgb,normal,S01_R2,FlickUp,esquerda,2745,2777,Doing other things,0.8671,0.1155
+rgb,normal,S01_R2,SwipeRight,direita,2919,2962,No gesture,0.1667,0.1635
+rgb,normal,S01_R2,FlickDown,esquerda,3098,3119,No gesture,0.6626,0.0985
+rgb,normal,S01_R2,SwipeRight,esquerda,3280,3314,Doing other things,0.7977,0.052
+rgb,normal,S01_R2,FlickDown,direita,3423,3450,No gesture,0.2284,0.1227
+rgb,normal,S01_R2,Tap,esquerda,3580,3606,Doing other things,0.995,0.0016
+rgb,normal,S01_R2,FlickDown,direita,3748,3787,Thumb Down,0.5283,0.5283
+rgb,normal,S01_R2,FlickDown,esquerda,3947,3970,Sliding Two Fingers Up,0.2408,0.2408
+rgb,normal,S01_R2,FlickDown,esquerda,4131,4150,No gesture,0.3033,0.1416
+rgb,normal,S01_R2,FlickUp,direita,4264,4290,No gesture,0.8392,0.038
+rgb,normal,S01_R2,SwipeRight,esquerda,4420,4460,Zooming Out With Two Fingers,0.3047,0.3047
+rgb,normal,S01_R2,FlickUp,direita,4591,4624,No gesture,0.8702,0.0352
+rgb,normal,S01_R2,FlickUp,esquerda,4764,4789,Doing other things,0.4365,0.2355
+rgb,normal,S01_R2,SwipeLeft,direita,4918,4954,No gesture,0.7153,0.0741
+rgb,normal,S01_R2,None,direita,0,50,No gesture,0.9681,0.0017
+rgb,normal,S01_R2,None,direita,543,584,No gesture,0.4405,0.0623
+rgb,normal,S01_R2,None,direita,1015,1053,No gesture,0.8229,0.0202
+rgb,normal,S01_R2,None,esquerda,51,100,No gesture,0.9746,0.0013
+rgb,normal,S01_R2,None,esquerda,904,916,No gesture,0.9417,0.0043
+rgb,normal,S01_R2,None,esquerda,1342,1380,No gesture,0.5767,0.0584
+rgb,normal,S01_R2,Other,direita,143,162,No gesture,0.3088,0.1129
+rgb,normal,S01_R2,Other,direita,858,876,Sliding Two Fingers Up,0.3726,0.3726
+rgb,normal,S01_R2,Other,direita,1847,1868,Zooming Out With Two Fingers,0.2915,0.2915
+rgb,normal,S01_R2,Other,esquerda,709,730,Doing other things,0.9849,0.004
+rgb,normal,S01_R2,Other,esquerda,1137,1168,Doing other things,0.9974,0.001
+rgb,normal,S01_R2,Other,esquerda,1806,1823,Doing other things,0.8904,0.0436
+rgb,normal,S01_R3,SwipeLeft,direita,77,107,No gesture,0.8754,0.0349
+rgb,normal,S01_R3,FlickDown,direita,197,225,Thumb Down,0.3155,0.3155
+rgb,normal,S01_R3,FlickUp,esquerda,322,348,Doing other things,0.7885,0.0888
+rgb,normal,S01_R3,SwipeLeft,esquerda,460,476,No gesture,0.8262,0.0492
+rgb,normal,S01_R3,FlickUp,esquerda,557,582,No gesture,0.8352,0.0421
+rgb,normal,S01_R3,SwipeRight,esquerda,674,692,Doing other things,0.8906,0.0673
+rgb,normal,S01_R3,FlickUp,direita,795,825,No gesture,0.8974,0.0136
+rgb,normal,S01_R3,FlickDown,esquerda,897,921,No gesture,0.6163,0.1221
+rgb,normal,S01_R3,Tap,direita,993,1014,No gesture,0.3804,0.081
+rgb,normal,S01_R3,FlickUp,direita,1105,1124,No gesture,0.678,0.0699
+rgb,normal,S01_R3,FlickUp,esquerda,1222,1247,Doing other things,0.7224,0.0283
+rgb,normal,S01_R3,SwipeRight,esquerda,1333,1359,Doing other things,0.8446,0.0503
+rgb,normal,S01_R3,Tap,esquerda,1449,1470,Doing other things,0.9466,0.0086
+rgb,normal,S01_R3,Tap,esquerda,1560,1581,Doing other things,0.6793,0.0261
+rgb,normal,S01_R3,Tap,direita,1677,1700,No gesture,0.3454,0.1101
+rgb,normal,S01_R3,FlickUp,direita,1791,1818,Doing other things,0.9917,0.001
+rgb,normal,S01_R3,SwipeRight,direita,1901,1927,Doing other things,0.4319,0.3154
+rgb,normal,S01_R3,SwipeLeft,esquerda,2012,2037,No gesture,0.8926,0.0171
+rgb,normal,S01_R3,FlickDown,esquerda,2125,2147,Doing other things,0.5667,0.082
+rgb,normal,S01_R3,FlickDown,direita,2253,2262,Doing other things,0.3287,0.0597
+rgb,normal,S01_R3,FlickDown,direita,2354,2375,Doing other things,0.6746,0.0909
+rgb,normal,S01_R3,SwipeLeft,direita,2459,2481,Thumb Down,0.698,0.698
+rgb,normal,S01_R3,FlickDown,esquerda,2574,2593,No gesture,0.5842,0.1437
+rgb,normal,S01_R3,SwipeLeft,direita,2671,2692,No gesture,0.668,0.102
+rgb,normal,S01_R3,Tap,esquerda,2791,2811,Doing other things,0.985,0.005
+rgb,normal,S01_R3,SwipeRight,direita,2903,2931,Thumb Down,0.7915,0.7915
+rgb,normal,S01_R3,Tap,direita,3015,3037,No gesture,0.3019,0.1324
+rgb,normal,S01_R3,SwipeRight,esquerda,3133,3157,No gesture,0.357,0.1003
+rgb,normal,S01_R3,SwipeRight,direita,3244,3266,Doing other things,0.859,0.0932
+rgb,normal,S01_R3,SwipeLeft,esquerda,3371,3385,No gesture,0.598,0.1942
+rgb,normal,S01_R3,None,direita,0,40,No gesture,0.9708,0.0019
+rgb,normal,S01_R3,None,direita,134,170,No gesture,0.937,0.0045
+rgb,normal,S01_R3,None,direita,847,871,No gesture,0.6905,0.0287
+rgb,normal,S01_R3,None,esquerda,41,75,No gesture,0.9715,0.0018
+rgb,normal,S01_R3,None,esquerda,254,270,No gesture,0.9722,0.0018
+rgb,normal,S01_R3,None,esquerda,600,636,No gesture,0.9717,0.0018
+rgb,normal,S01_R3,Other,direita,295,311,Doing other things,0.9975,0.0005
+rgb,normal,S01_R3,Other,direita,646,665,Doing other things,0.9991,0.0004
+rgb,normal,S01_R3,Other,direita,704,721,Doing other things,0.9558,0.0371
+rgb,normal,S01_R3,Other,esquerda,349,398,Doing other things,0.7546,0.1492
+rgb,normal,S01_R3,Other,esquerda,487,502,Doing other things,0.5874,0.18
+rgb,normal,S01_R3,Other,esquerda,760,799,Doing other things,0.9761,0.006
+rgb,normal,S01_R4,FlickDown,direita,82,117,Thumb Down,0.4711,0.4711
+rgb,normal,S01_R4,SwipeLeft,esquerda,208,230,Doing other things,0.6085,0.0775
+rgb,normal,S01_R4,FlickDown,esquerda,316,337,Doing other things,0.8531,0.0806
+rgb,normal,S01_R4,FlickUp,direita,435,458,No gesture,0.4971,0.1993
+rgb,normal,S01_R4,SwipeRight,esquerda,540,560,No gesture,0.6085,0.1143
+rgb,normal,S01_R4,FlickUp,esquerda,631,651,No gesture,0.4521,0.0312
+rgb,normal,S01_R4,SwipeLeft,esquerda,737,752,No gesture,0.4278,0.1099
+rgb,normal,S01_R4,SwipeLeft,direita,823,844,Thumb Down,0.5908,0.5908
+rgb,normal,S01_R4,Tap,esquerda,944,961,Doing other things,0.9939,0.0034
+rgb,normal,S01_R4,SwipeRight,esquerda,1020,1038,Doing other things,0.5046,0.0605
+rgb,normal,S01_R4,FlickDown,direita,1120,1133,Thumb Down,0.446,0.446
+rgb,normal,S01_R4,SwipeLeft,esquerda,1208,1227,No gesture,0.4948,0.0817
+rgb,normal,S01_R4,Tap,esquerda,1310,1327,Doing other things,0.9725,0.0036
+rgb,normal,S01_R4,SwipeRight,direita,1403,1432,Thumb Down,0.4705,0.4705
+rgb,normal,S01_R4,SwipeLeft,direita,1501,1520,Doing other things,0.6221,0.3128
+rgb,normal,S01_R4,FlickUp,esquerda,1621,1635,Doing other things,0.9358,0.0145
+rgb,normal,S01_R4,SwipeRight,direita,1694,1718,Thumb Down,0.6834,0.6834
+rgb,normal,S01_R4,FlickDown,direita,1795,1819,Thumb Down,0.7085,0.7085
+rgb,normal,S01_R4,Tap,direita,1896,1910,Doing other things,0.5886,0.0353
+rgb,normal,S01_R4,FlickDown,esquerda,1990,2015,Doing other things,0.5643,0.0233
+rgb,normal,S01_R4,FlickUp,direita,2111,2130,No gesture,0.72,0.0778
+rgb,normal,S01_R4,SwipeRight,esquerda,2187,2210,No gesture,0.509,0.0932
+rgb,normal,S01_R4,FlickDown,esquerda,2292,2309,Doing other things,0.457,0.1643
+rgb,normal,S01_R4,SwipeLeft,direita,2382,2403,No gesture,0.3468,0.1842
+rgb,normal,S01_R4,FlickUp,esquerda,2475,2494,No gesture,0.4489,0.0564
+rgb,normal,S01_R4,Tap,direita,2576,2586,No gesture,0.5046,0.0323
+rgb,normal,S01_R4,Tap,direita,2671,2692,Doing other things,0.3605,0.0503
+rgb,normal,S01_R4,FlickUp,direita,2771,2789,Pushing Two Fingers Away,0.1728,0.1728
+rgb,normal,S01_R4,SwipeRight,direita,2867,2883,Thumb Down,0.7788,0.7788
+rgb,normal,S01_R4,Tap,esquerda,2975,2995,Doing other things,0.9249,0.0142
+rgb,normal,S01_R4,None,direita,135,150,No gesture,0.9262,0.0037
+rgb,normal,S01_R4,None,direita,1089,1117,Doing other things,0.6251,0.0313
+rgb,normal,S01_R4,None,direita,508,522,No gesture,0.8987,0.0063
+rgb,normal,S01_R4,None,esquerda,508,522,No gesture,0.8987,0.0063
+rgb,normal,S01_R4,None,esquerda,1231,1250,No gesture,0.5248,0.1139
+rgb,normal,S01_R4,None,esquerda,1439,1468,No gesture,0.9312,0.0035
+rgb,normal,S01_R4,Other,direita,0,20,Thumb Down,0.844,0.844
+rgb,normal,S01_R4,Other,direita,371,385,Doing other things,0.7067,0.0929
+rgb,normal,S01_R4,Other,direita,714,730,Doing other things,0.9169,0.0138
+rgb,normal,S01_R4,Other,esquerda,158,181,Doing other things,0.9228,0.0395
+rgb,normal,S01_R4,Other,esquerda,234,251,Doing other things,0.8799,0.034
+rgb,normal,S01_R4,Other,esquerda,871,900,Doing other things,0.9795,0.0067
+rgb,normal,S01_R5,FlickDown,esquerda,101,124,No gesture,0.2454,0.1359
+rgb,normal,S01_R5,Tap,direita,230,250,Doing other things,0.3877,0.2904
+rgb,normal,S01_R5,FlickUp,esquerda,360,379,Doing other things,0.8131,0.0257
+rgb,normal,S01_R5,FlickDown,esquerda,499,525,Doing other things,0.7647,0.0734
+rgb,normal,S01_R5,SwipeRight,direita,638,670,Thumb Down,0.6958,0.6958
+rgb,normal,S01_R5,SwipeRight,direita,769,792,Doing other things,0.8813,0.0579
+rgb,normal,S01_R5,SwipeLeft,esquerda,890,913,No gesture,0.543,0.021
+rgb,normal,S01_R5,Tap,esquerda,1017,1047,Doing other things,0.9818,0.0056
+rgb,normal,S01_R5,Tap,esquerda,1114,1136,Doing other things,0.9842,0.0093
+rgb,normal,S01_R5,FlickDown,esquerda,1232,1270,Doing other things,0.2954,0.0792
+rgb,normal,S01_R5,FlickDown,direita,1346,1367,Doing other things,0.5533,0.0602
+rgb,normal,S01_R5,SwipeLeft,direita,1471,1492,No gesture,0.3764,0.0547
+rgb,normal,S01_R5,FlickUp,esquerda,1570,1591,No gesture,0.8224,0.036
+rgb,normal,S01_R5,FlickUp,direita,1683,1711,No gesture,0.7052,0.0408
+rgb,normal,S01_R5,FlickDown,direita,1793,1812,Doing other things,0.3677,0.3257
+rgb,normal,S01_R5,FlickUp,direita,1909,1930,Thumb Down,0.3277,0.3277
+rgb,normal,S01_R5,FlickUp,esquerda,2018,2036,Doing other things,0.7361,0.1098
+rgb,normal,S01_R5,SwipeRight,direita,2117,2145,Thumb Down,0.3809,0.3809
+rgb,normal,S01_R5,SwipeLeft,esquerda,2230,2254,No gesture,0.8378,0.0296
+rgb,normal,S01_R5,SwipeLeft,esquerda,2360,2374,Thumb Down,0.3899,0.3899
+rgb,normal,S01_R5,Tap,direita,2456,2475,Doing other things,0.6676,0.0958
+rgb,normal,S01_R5,FlickDown,direita,2594,2615,Doing other things,0.817,0.0628
+rgb,normal,S01_R5,FlickUp,direita,2681,2703,Doing other things,0.8466,0.065
+rgb,normal,S01_R5,SwipeRight,esquerda,2797,2823,Doing other things,0.7809,0.051
+rgb,normal,S01_R5,Tap,esquerda,2909,2927,Doing other things,0.8988,0.0484
+rgb,normal,S01_R5,SwipeRight,esquerda,3020,3049,Doing other things,0.8972,0.0171
+rgb,normal,S01_R5,SwipeRight,esquerda,3141,3162,No gesture,0.2907,0.1774
+rgb,normal,S01_R5,Tap,direita,3241,3265,No gesture,0.6022,0.0536
+rgb,normal,S01_R5,SwipeLeft,direita,3360,3378,Zooming In With Two Fingers,0.4862,0.4862
+rgb,normal,S01_R5,SwipeLeft,direita,3495,3508,Thumb Down,0.6424,0.6424
+rgb,normal,S01_R5,None,direita,0,50,No gesture,0.9599,0.0029
+rgb,normal,S01_R5,None,direita,680,702,No gesture,0.8783,0.0086
+rgb,normal,S01_R5,None,direita,942,971,No gesture,0.9414,0.005
+rgb,normal,S01_R5,None,esquerda,51,90,No gesture,0.9574,0.0027
+rgb,normal,S01_R5,None,esquerda,680,702,No gesture,0.8783,0.0086
+rgb,normal,S01_R5,None,esquerda,1160,1199,Doing other things,0.9444,0.0355
+rgb,normal,S01_R5,Other,direita,794,808,Doing other things,0.9728,0.0081
+rgb,normal,S01_R5,Other,direita,1055,1103,Doing other things,0.9951,0.0018
+rgb,normal,S01_R5,Other,direita,1616,1633,Doing other things,0.949,0.0266
+rgb,normal,S01_R5,Other,esquerda,453,468,Doing other things,0.9315,0.0494
+rgb,normal,S01_R5,Other,esquerda,1375,1391,Doing other things,0.9631,0.0226
+rgb,normal,S01_R5,Other,esquerda,1858,1882,Doing other things,0.9943,0.0027
+rgb,normal,S02_R1,FlickUp,esquerda,119,141,Thumb Down,0.1347,0.1347
+rgb,normal,S02_R1,FlickDown,esquerda,287,316,Doing other things,0.8642,0.0222
+rgb,normal,S02_R1,Tap,esquerda,454,469,Doing other things,0.5894,0.1073
+rgb,normal,S02_R1,Tap,direita,614,631,No gesture,0.8763,0.0107
+rgb,normal,S02_R1,Tap,direita,787,802,No gesture,0.6474,0.0464
+rgb,normal,S02_R1,FlickDown,esquerda,935,968,Doing other things,0.5093,0.1136
+rgb,normal,S02_R1,FlickDown,direita,1104,1126,Thumb Down,0.5729,0.5729
+rgb,normal,S02_R1,SwipeLeft,esquerda,1255,1274,Doing other things,0.8658,0.0326
+rgb,normal,S02_R1,Tap,esquerda,1410,1422,Sliding Two Fingers Up,0.4571,0.4571
+rgb,normal,S02_R1,FlickUp,direita,1546,1563,No gesture,0.5586,0.0789
+rgb,normal,S02_R1,Tap,direita,1692,1710,No gesture,0.2543,0.1559
+rgb,normal,S02_R1,SwipeLeft,esquerda,1868,1889,Doing other things,0.8115,0.1675
+rgb,normal,S02_R1,SwipeRight,esquerda,2028,2064,No gesture,0.2596,0.1301
+rgb,normal,S02_R1,FlickUp,direita,2205,2230,Doing other things,0.3279,0.1422
+rgb,normal,S02_R1,SwipeRight,esquerda,2370,2404,Doing other things,0.937,0.005
+rgb,normal,S02_R1,FlickDown,esquerda,2529,2556,No gesture,0.345,0.109
+rgb,normal,S02_R1,FlickUp,esquerda,2681,2712,Doing other things,0.7983,0.0635
+rgb,normal,S02_R1,Tap,esquerda,2857,2871,Thumb Down,0.2613,0.2613
+rgb,normal,S02_R1,FlickUp,esquerda,3004,3038,Doing other things,0.2801,0.2109
+rgb,normal,S02_R1,SwipeLeft,direita,3178,3207,Thumb Down,0.2862,0.2862
+rgb,normal,S02_R1,SwipeLeft,esquerda,3354,3374,Thumb Down,0.4697,0.4697
+rgb,normal,S02_R1,SwipeRight,direita,3508,3532,Thumb Down,0.108,0.108
+rgb,normal,S02_R1,FlickDown,direita,3675,3693,Doing other things,0.9336,0.021
+rgb,normal,S02_R1,FlickDown,direita,3836,3864,Doing other things,0.4318,0.1708
+rgb,normal,S02_R1,FlickUp,direita,4005,4031,No gesture,0.1311,0.0959
+rgb,normal,S02_R1,FlickUp,esquerda,4173,4190,Zooming In With Two Fingers,0.2149,0.2149
+rgb,normal,S02_R1,SwipeRight,direita,4330,4358,Doing other things,0.3571,0.1155
+rgb,normal,S02_R1,SwipeRight,esquerda,4502,4527,Doing other things,0.8968,0.0116
+rgb,normal,S02_R1,SwipeLeft,direita,4641,4658,Zooming In With Two Fingers,0.2501,0.2501
+rgb,normal,S02_R1,SwipeLeft,direita,4799,4823,Zooming In With Two Fingers,0.2268,0.2268
+rgb,normal,S02_R1,None,direita,0,40,No gesture,0.8771,0.0092
+rgb,normal,S02_R1,None,direita,1964,1994,No gesture,0.9514,0.0033
+rgb,normal,S02_R1,None,direita,41,90,No gesture,0.975,0.0015
+rgb,normal,S02_R1,None,esquerda,41,90,No gesture,0.975,0.0015
+rgb,normal,S02_R1,None,esquerda,1964,1994,No gesture,0.9514,0.0033
+rgb,normal,S02_R1,None,esquerda,2803,2837,No gesture,0.7963,0.0324
+rgb,normal,S02_R1,Other,direita,1314,1329,Thumb Down,0.877,0.877
+rgb,normal,S02_R1,Other,direita,1463,1479,Doing other things,0.3846,0.2855
+rgb,normal,S02_R1,Other,direita,2072,2089,Doing other things,0.9843,0.0068
+rgb,normal,S02_R1,Other,esquerda,859,877,Doing other things,0.8879,0.0165
+rgb,normal,S02_R1,Other,esquerda,1359,1385,Doing other things,0.9913,0.0026
+rgb,normal,S02_R1,Other,esquerda,2006,2027,Thumb Down,0.4713,0.4713
+rgb,normal,S02_R2,FlickDown,esquerda,118,148,Doing other things,0.5056,0.1278
+rgb,normal,S02_R2,FlickDown,esquerda,293,319,Doing other things,0.6928,0.0647
+rgb,normal,S02_R2,SwipeRight,direita,457,483,Doing other things,0.9661,0.0096
+rgb,normal,S02_R2,FlickUp,direita,610,629,Doing other things,0.2935,0.2353
+rgb,normal,S02_R2,Tap,direita,768,785,No gesture,0.5404,0.1426
+rgb,normal,S02_R2,SwipeRight,direita,944,972,Doing other things,0.4348,0.068
+rgb,normal,S02_R2,SwipeLeft,esquerda,1127,1146,No gesture,0.4908,0.1474
+rgb,normal,S02_R2,FlickDown,direita,1278,1304,Doing other things,0.9595,0.0143
+rgb,normal,S02_R2,FlickUp,direita,1475,1501,Doing other things,0.8226,0.0279
+rgb,normal,S02_R2,FlickUp,direita,1635,1651,No gesture,0.4595,0.0615
+rgb,normal,S02_R2,Tap,esquerda,1798,1811,Doing other things,0.9761,0.0028
+rgb,normal,S02_R2,SwipeLeft,direita,1964,1990,No gesture,0.2394,0.1947
+rgb,normal,S02_R2,FlickDown,direita,2116,2135,Doing other things,0.9753,0.0092
+rgb,normal,S02_R2,Tap,direita,2287,2304,No gesture,0.4824,0.1119
+rgb,normal,S02_R2,Tap,esquerda,2471,2489,Doing other things,0.2867,0.1186
+rgb,normal,S02_R2,SwipeRight,esquerda,2645,2677,No gesture,0.5848,0.0552
+rgb,normal,S02_R2,SwipeLeft,esquerda,2815,2838,No gesture,0.6719,0.104
+rgb,normal,S02_R2,Tap,esquerda,2976,2991,Doing other things,0.463,0.0331
+rgb,normal,S02_R2,SwipeLeft,direita,3146,3165,No gesture,0.7339,0.0425
+rgb,normal,S02_R2,FlickUp,esquerda,3300,3314,Doing other things,0.768,0.0552
+rgb,normal,S02_R2,FlickDown,esquerda,3478,3503,Doing other things,0.9136,0.0229
+rgb,normal,S02_R2,SwipeRight,direita,3636,3661,Doing other things,0.5254,0.0522
+rgb,normal,S02_R2,FlickUp,esquerda,3813,3828,No gesture,0.6197,0.2142
+rgb,normal,S02_R2,FlickUp,esquerda,3984,4008,No gesture,0.4047,0.1645
+rgb,normal,S02_R2,SwipeLeft,direita,4176,4191,No gesture,0.6911,0.0765
+rgb,normal,S02_R2,Tap,direita,4344,4358,Doing other things,0.8043,0.079
+rgb,normal,S02_R2,SwipeLeft,esquerda,4519,4534,Doing other things,0.5087,0.0713
+rgb,normal,S02_R2,FlickDown,direita,4698,4711,Zooming Out With Two Fingers,0.3164,0.3164
+rgb,normal,S02_R2,SwipeRight,esquerda,4858,4877,No gesture,0.5665,0.0282
+rgb,normal,S02_R2,SwipeRight,esquerda,5007,5022,No gesture,0.6635,0.0273
+rgb,normal,S02_R2,None,direita,0,40,No gesture,0.811,0.0251
+rgb,normal,S02_R2,None,direita,190,210,No gesture,0.9666,0.0024
+rgb,normal,S02_R2,None,direita,700,750,No gesture,0.9383,0.0066
+rgb,normal,S02_R2,None,esquerda,41,70,No gesture,0.9648,0.0021
+rgb,normal,S02_R2,None,esquerda,700,750,No gesture,0.9383,0.0066
+rgb,normal,S02_R2,None,esquerda,2069,2100,Doing other things,0.6682,0.0954
+rgb,normal,S02_R2,Other,direita,496,517,Doing other things,0.6506,0.0615
+rgb,normal,S02_R2,Other,direita,869,887,Thumb Down,0.4926,0.4926
+rgb,normal,S02_R2,Other,direita,1553,1584,Doing other things,0.9995,0.0003
+rgb,normal,S02_R2,Other,esquerda,218,240,Sliding Two Fingers Up,0.5174,0.5174
+rgb,normal,S02_R2,Other,esquerda,335,356,Doing other things,0.9342,0.0441
+rgb,normal,S02_R2,Other,esquerda,1367,1390,Doing other things,0.9995,0.0001
+rgb,normal,S02_R3,SwipeLeft,direita,91,106,Zooming Out With Full Hand,0.1567,0.1567
+rgb,normal,S02_R3,Tap,esquerda,199,210,Doing other things,0.2931,0.0846
+rgb,normal,S02_R3,FlickDown,direita,319,332,Zooming In With Two Fingers,0.4933,0.4933
+rgb,normal,S02_R3,FlickUp,esquerda,444,456,Doing other things,0.6031,0.3573
+rgb,normal,S02_R3,FlickUp,esquerda,565,579,No gesture,0.6463,0.0667
+rgb,normal,S02_R3,FlickDown,direita,702,714,Doing other things,0.8638,0.0507
+rgb,normal,S02_R3,FlickUp,direita,811,820,No gesture,0.2195,0.0575
+rgb,normal,S02_R3,SwipeRight,direita,922,941,No gesture,0.4022,0.0604
+rgb,normal,S02_R3,SwipeRight,direita,1034,1050,Doing other things,0.7196,0.0141
+rgb,normal,S02_R3,FlickDown,esquerda,1149,1167,Doing other things,0.9662,0.0053
+rgb,normal,S02_R3,SwipeRight,esquerda,1264,1282,No gesture,0.4781,0.1811
+rgb,normal,S02_R3,SwipeLeft,direita,1380,1394,Thumb Down,0.5312,0.5312
+rgb,normal,S02_R3,FlickDown,direita,1489,1501,Doing other things,0.4328,0.0897
+rgb,normal,S02_R3,SwipeLeft,direita,1605,1619,No gesture,0.1722,0.1201
+rgb,normal,S02_R3,Tap,esquerda,1717,1728,Turning Hand Counterclockwise,0.1827,0.1827
+rgb,normal,S02_R3,Tap,direita,1829,1839,No gesture,0.4293,0.0806
+rgb,normal,S02_R3,SwipeRight,direita,1941,1961,Thumb Down,0.2381,0.2381
+rgb,normal,S02_R3,FlickUp,direita,2057,2068,Thumb Down,0.6975,0.6975
+rgb,normal,S02_R3,SwipeRight,esquerda,2165,2183,Thumb Down,0.5397,0.5397
+rgb,normal,S02_R3,Tap,direita,2275,2285,Doing other things,0.9495,0.0114
+rgb,normal,S02_R3,Tap,direita,2385,2397,No gesture,0.5336,0.0369
+rgb,normal,S02_R3,Tap,esquerda,2502,2511,Doing other things,0.2908,0.0822
+rgb,normal,S02_R3,SwipeLeft,esquerda,2615,2624,Thumb Down,0.4829,0.4829
+rgb,normal,S02_R3,FlickUp,esquerda,2718,2731,No gesture,0.7244,0.08
+rgb,normal,S02_R3,SwipeRight,esquerda,2824,2851,Doing other things,0.9994,0.0002
+rgb,normal,S02_R3,FlickDown,esquerda,2938,2949,Doing other things,0.4737,0.0732
+rgb,normal,S02_R3,SwipeLeft,esquerda,3041,3052,Thumb Down,0.7354,0.7354
+rgb,normal,S02_R3,FlickUp,direita,3151,3162,No gesture,0.445,0.049
+rgb,normal,S02_R3,FlickDown,esquerda,3269,3280,No gesture,0.4531,0.1477
+rgb,normal,S02_R3,SwipeLeft,esquerda,3376,3392,Doing other things,0.6867,0.175
+rgb,normal,S02_R3,None,direita,0,20,No gesture,0.951,0.0028
+rgb,normal,S02_R3,None,direita,775,802,No gesture,0.9642,0.0021
+rgb,normal,S02_R3,None,direita,1783,1809,No gesture,0.7905,0.0175
+rgb,normal,S02_R3,None,esquerda,40,60,No gesture,0.9474,0.0028
+rgb,normal,S02_R3,None,esquerda,1330,1362,No gesture,0.9503,0.0031
+rgb,normal,S02_R3,None,esquerda,2448,2472,No gesture,0.9469,0.0031
+rgb,normal,S02_R3,Other,direita,460,494,Doing other things,0.5974,0.1079
+rgb,normal,S02_R3,Other,direita,608,621,Doing other things,0.4883,0.1483
+rgb,normal,S02_R3,Other,direita,1559,1570,Thumb Down,0.4498,0.4498
+rgb,normal,S02_R3,Other,esquerda,134,148,Zooming In With Two Fingers,0.164,0.164
+rgb,normal,S02_R3,Other,esquerda,342,359,Doing other things,0.8794,0.0199
+rgb,normal,S02_R3,Other,esquerda,1549,1558,Doing other things,0.9817,0.0134
+rgb,normal,S02_R4,FlickDown,esquerda,107,122,No gesture,0.6294,0.0576
+rgb,normal,S02_R4,SwipeLeft,direita,229,245,Thumb Down,0.2133,0.2133
+rgb,normal,S02_R4,Tap,esquerda,344,355,Doing other things,0.6315,0.1173
+rgb,normal,S02_R4,FlickUp,direita,451,461,No gesture,0.6074,0.0368
+rgb,normal,S02_R4,SwipeLeft,esquerda,568,580,Thumb Down,0.4241,0.4241
+rgb,normal,S02_R4,Tap,direita,669,678,No gesture,0.6745,0.0467
+rgb,normal,S02_R4,FlickDown,esquerda,789,803,No gesture,0.5921,0.1368
+rgb,normal,S02_R4,SwipeLeft,direita,897,911,Thumb Down,0.4721,0.4721
+rgb,normal,S02_R4,FlickUp,esquerda,1010,1020,No gesture,0.7339,0.1236
+rgb,normal,S02_R4,SwipeRight,direita,1119,1136,Thumb Down,0.3214,0.3214
+rgb,normal,S02_R4,Tap,esquerda,1231,1238,Doing other things,0.4758,0.0696
+rgb,normal,S02_R4,SwipeRight,esquerda,1337,1357,Doing other things,0.7423,0.0368
+rgb,normal,S02_R4,Tap,esquerda,1436,1446,Sliding Two Fingers Up,0.2138,0.2138
+rgb,normal,S02_R4,Tap,direita,1551,1560,No gesture,0.7159,0.0167
+rgb,normal,S02_R4,SwipeLeft,direita,1665,1676,No gesture,0.3362,0.2375
+rgb,normal,S02_R4,SwipeRight,esquerda,1764,1786,Doing other things,0.9694,0.0032
+rgb,normal,S02_R4,FlickUp,direita,1881,1889,No gesture,0.4627,0.0714
+rgb,normal,S02_R4,Tap,direita,1983,1993,No gesture,0.3565,0.1992
+rgb,normal,S02_R4,SwipeLeft,esquerda,2088,2100,No gesture,0.3369,0.2408
+rgb,normal,S02_R4,FlickUp,direita,2200,2209,No gesture,0.3256,0.2545
+rgb,normal,S02_R4,FlickDown,esquerda,2318,2329,Doing other things,0.9083,0.012
+rgb,normal,S02_R4,FlickUp,esquerda,2427,2438,No gesture,0.7746,0.055
+rgb,normal,S02_R4,SwipeRight,esquerda,2531,2548,Doing other things,0.6009,0.1071
+rgb,normal,S02_R4,SwipeLeft,esquerda,2641,2653,Doing other things,0.3268,0.2168
+rgb,normal,S02_R4,FlickDown,direita,2760,2770,Doing other things,0.3557,0.1731
+rgb,normal,S02_R4,FlickDown,direita,2872,2882,Doing other things,0.7342,0.1474
+rgb,normal,S02_R4,FlickUp,esquerda,2977,2986,No gesture,0.6789,0.1126
+rgb,normal,S02_R4,FlickDown,direita,3086,3100,Doing other things,0.4176,0.2349
+rgb,normal,S02_R4,SwipeRight,direita,3188,3204,Doing other things,0.4228,0.2751
+rgb,normal,S02_R4,SwipeRight,direita,3297,3315,Doing other things,0.4975,0.1693
+rgb,normal,S02_R4,None,direita,0,25,No gesture,0.9423,0.0034
+rgb,normal,S02_R4,None,direita,752,777,No gesture,0.8938,0.009
+rgb,normal,S02_R4,None,direita,2070,2083,No gesture,0.9597,0.0023
+rgb,normal,S02_R4,None,esquerda,50,70,No gesture,0.551,0.0427
+rgb,normal,S02_R4,None,esquerda,1274,1305,No gesture,0.9631,0.0024
+rgb,normal,S02_R4,None,esquerda,2712,2750,No gesture,0.9601,0.0025
+rgb,normal,S02_R4,Other,direita,932,955,Doing other things,0.9271,0.0309
+rgb,normal,S02_R4,Other,direita,1374,1379,Doing other things,0.9974,0.0005
+rgb,normal,S02_R4,Other,direita,2678,2690,Doing other things,0.9345,0.014
+rgb,normal,S02_R4,Other,esquerda,296,322,Doing other things,0.9714,0.0108
+rgb,normal,S02_R4,Other,esquerda,1154,1171,Doing other things,0.9985,0.0003
+rgb,normal,S02_R4,Other,esquerda,2502,2515,Doing other things,0.941,0.0067
+rgb,normal,S02_R5,SwipeLeft,direita,96,108,No gesture,0.6855,0.0541
+rgb,normal,S02_R5,FlickUp,esquerda,228,240,No gesture,0.3775,0.1282
+rgb,normal,S02_R5,SwipeLeft,esquerda,345,360,Doing other things,0.541,0.0484
+rgb,normal,S02_R5,Tap,direita,462,476,Zooming Out With Two Fingers,0.364,0.364
+rgb,normal,S02_R5,Tap,esquerda,589,599,Turning Hand Clockwise,0.1591,0.1591
+rgb,normal,S02_R5,FlickDown,direita,712,724,Doing other things,0.4421,0.0997
+rgb,normal,S02_R5,FlickDown,esquerda,824,834,Doing other things,0.6725,0.0291
+rgb,normal,S02_R5,SwipeLeft,esquerda,935,946,No gesture,0.4239,0.1475
+rgb,normal,S02_R5,SwipeRight,direita,1051,1066,Doing other things,0.3532,0.0642
+rgb,normal,S02_R5,FlickDown,direita,1164,1178,Doing other things,0.3776,0.2626
+rgb,normal,S02_R5,FlickUp,direita,1270,1284,No gesture,0.2326,0.0661
+rgb,normal,S02_R5,FlickUp,esquerda,1384,1397,No gesture,0.4773,0.1119
+rgb,normal,S02_R5,FlickDown,esquerda,1498,1509,Doing other things,0.3864,0.077
+rgb,normal,S02_R5,FlickUp,esquerda,1609,1618,Doing other things,0.4189,0.3446
+rgb,normal,S02_R5,FlickDown,direita,1714,1727,Doing other things,0.5632,0.0912
+rgb,normal,S02_R5,SwipeRight,direita,1824,1842,Doing other things,0.5608,0.0802
+rgb,normal,S02_R5,SwipeLeft,direita,1936,1949,No gesture,0.6505,0.0933
+rgb,normal,S02_R5,SwipeLeft,direita,2060,2075,Thumb Down,0.2654,0.2654
+rgb,normal,S02_R5,FlickUp,direita,2164,2178,No gesture,0.6592,0.0539
+rgb,normal,S02_R5,SwipeRight,direita,2275,2294,Doing other things,0.804,0.0763
+rgb,normal,S02_R5,Tap,esquerda,2380,2390,No gesture,0.294,0.0603
+rgb,normal,S02_R5,Tap,direita,2501,2511,Zooming Out With Two Fingers,0.1783,0.1783
+rgb,normal,S02_R5,SwipeRight,esquerda,2601,2617,No gesture,0.5742,0.0249
+rgb,normal,S02_R5,Tap,esquerda,2707,2716,No gesture,0.3802,0.0845
+rgb,normal,S02_R5,SwipeLeft,esquerda,2823,2835,No gesture,0.4129,0.1449
+rgb,normal,S02_R5,Tap,direita,2930,2942,No gesture,0.782,0.0218
+rgb,normal,S02_R5,FlickUp,direita,3039,3051,No gesture,0.5771,0.0733
+rgb,normal,S02_R5,SwipeRight,esquerda,3150,3168,Doing other things,0.8747,0.0096
+rgb,normal,S02_R5,FlickDown,esquerda,3259,3275,No gesture,0.7969,0.029
+rgb,normal,S02_R5,SwipeRight,esquerda,3374,3395,Doing other things,0.9555,0.0027
+rgb,normal,S02_R5,None,direita,0,30,No gesture,0.6208,0.0507
+rgb,normal,S02_R5,None,direita,435,450,No gesture,0.9759,0.002
+rgb,normal,S02_R5,None,direita,2340,2378,Doing other things,0.4689,0.1718
+rgb,normal,S02_R5,None,esquerda,145,172,No gesture,0.9155,0.0056
+rgb,normal,S02_R5,None,esquerda,1246,1260,No gesture,0.9624,0.002
+rgb,normal,S02_R5,None,esquerda,1775,1800,No gesture,0.9712,0.0018
+rgb,normal,S02_R5,Other,direita,32,42,Doing other things,0.9866,0.0108
+rgb,normal,S02_R5,Other,direita,883,912,Doing other things,0.9383,0.019
+rgb,normal,S02_R5,Other,direita,1632,1656,Doing other things,0.8133,0.1092
+rgb,normal,S02_R5,Other,esquerda,275,302,Doing other things,0.9778,0.0127
+rgb,normal,S02_R5,Other,esquerda,387,397,Doing other things,0.688,0.1403
+rgb,normal,S02_R5,Other,esquerda,2520,2533,Doing other things,0.7931,0.0829
+rgb,normal,S10_R1,FlickUp,esquerda,140,175,No gesture,0.5856,0.031
+rgb,normal,S10_R1,FlickUp,direita,334,370,No gesture,0.4878,0.0973
+rgb,normal,S10_R1,SwipeRight,direita,540,580,Doing other things,0.9877,0.0069
+rgb,normal,S10_R1,SwipeRight,esquerda,743,774,Doing other things,0.9056,0.0628
+rgb,normal,S10_R1,FlickUp,esquerda,943,976,Doing other things,0.7969,0.1503
+rgb,normal,S10_R1,SwipeRight,direita,1145,1189,Zooming In With Two Fingers,0.2733,0.2733
+rgb,normal,S10_R1,FlickDown,direita,1348,1384,Doing other things,0.9815,0.0077
+rgb,normal,S10_R1,FlickDown,esquerda,1554,1574,No gesture,0.4128,0.0628
+rgb,normal,S10_R1,SwipeRight,esquerda,1756,1796,Doing other things,0.52,0.1861
+rgb,normal,S10_R1,SwipeRight,direita,1980,2029,Zooming Out With Full Hand,0.1698,0.1698
+rgb,normal,S10_R1,SwipeLeft,esquerda,2158,2201,Doing other things,0.5027,0.1407
+rgb,normal,S10_R1,Tap,direita,2363,2398,Doing other things,0.8014,0.0667
+rgb,normal,S10_R1,FlickDown,direita,2570,2628,Doing other things,0.3647,0.2439
+rgb,normal,S10_R1,SwipeLeft,direita,2778,2823,Doing other things,0.8225,0.0801
+rgb,normal,S10_R1,SwipeLeft,direita,2969,2998,Doing other things,0.994,0.0023
+rgb,normal,S10_R1,SwipeLeft,esquerda,3164,3190,No gesture,0.411,0.1132
+rgb,normal,S10_R1,Tap,direita,3366,3391,No gesture,0.2617,0.1001
+rgb,normal,S10_R1,SwipeLeft,esquerda,3573,3604,Doing other things,0.9897,0.0018
+rgb,normal,S10_R1,Tap,esquerda,3765,3787,Doing other things,0.999,0.0002
+rgb,normal,S10_R1,SwipeLeft,direita,4004,4038,Doing other things,0.3435,0.2325
+rgb,normal,S10_R1,FlickUp,direita,4072,4094,No gesture,0.3342,0.0806
+rgb,normal,S10_R1,FlickUp,esquerda,4163,4206,Doing other things,0.7689,0.1072
+rgb,normal,S10_R1,Tap,esquerda,4359,4387,Doing other things,0.5976,0.0466
+rgb,normal,S10_R1,FlickUp,direita,4568,4598,Drumming Fingers,0.2521,0.2521
+rgb,normal,S10_R1,FlickDown,direita,4772,4805,Doing other things,0.7594,0.0517
+rgb,normal,S10_R1,FlickDown,esquerda,4973,5005,Doing other things,0.9978,0.0007
+rgb,normal,S10_R1,SwipeLeft,direita,5178,5224,No gesture,0.5592,0.0479
+rgb,normal,S10_R1,FlickDown,esquerda,5385,5421,Doing other things,0.3665,0.2899
+rgb,normal,S10_R1,Tap,esquerda,5579,5602,Thumb Down,0.1744,0.1744
+rgb,normal,S10_R1,SwipeRight,esquerda,5778,5814,Thumb Down,0.2562,0.2562
+rgb,normal,S10_R1,Tap,direita,5986,6007,Doing other things,0.9698,0.0049
+rgb,normal,S10_R1,None,direita,0,32,No gesture,0.9257,0.0053
+rgb,normal,S10_R1,None,direita,2048,2078,No gesture,0.9202,0.0077
+rgb,normal,S10_R1,None,direita,4301,4348,No gesture,0.9577,0.0027
+rgb,normal,S10_R1,None,esquerda,0,32,No gesture,0.9257,0.0053
+rgb,normal,S10_R1,None,esquerda,2048,2078,No gesture,0.9202,0.0077
+rgb,normal,S10_R1,None,esquerda,4301,4348,No gesture,0.9577,0.0027
+rgb,normal,S10_R1,Other,direita,273,288,Doing other things,0.9917,0.0072
+rgb,normal,S10_R1,Other,direita,2693,2729,Doing other things,0.4981,0.1772
+rgb,normal,S10_R1,Other,direita,3189,3241,Doing other things,0.9656,0.0217
+rgb,normal,S10_R1,Other,esquerda,249,265,Doing other things,0.998,0.001
+rgb,normal,S10_R1,Other,esquerda,2889,2914,Doing other things,0.9919,0.0026
+rgb,normal,S10_R1,Other,esquerda,3189,3241,Doing other things,0.9656,0.0217
+rgb,normal,S10_R2,SwipeRight,direita,134,180,Doing other things,0.6171,0.2493
+rgb,normal,S10_R2,SwipeRight,esquerda,338,365,Doing other things,0.2253,0.1438
+rgb,normal,S10_R2,FlickUp,esquerda,527,564,Thumb Down,0.4828,0.4828
+rgb,normal,S10_R2,SwipeLeft,esquerda,715,749,No gesture,0.4163,0.145
+rgb,normal,S10_R2,Tap,direita,905,938,Zooming In With Two Fingers,0.3899,0.3899
+rgb,normal,S10_R2,FlickDown,esquerda,1095,1136,Doing other things,0.8906,0.0305
+rgb,normal,S10_R2,SwipeRight,esquerda,1260,1301,Thumb Down,0.3437,0.3437
+rgb,normal,S10_R2,FlickDown,direita,1468,1527,No gesture,0.579,0.1371
+rgb,normal,S10_R2,SwipeLeft,esquerda,1664,1690,Thumb Down,0.6442,0.6442
+rgb,normal,S10_R2,FlickUp,direita,1846,1867,No gesture,0.1393,0.1164
+rgb,normal,S10_R2,FlickUp,direita,2040,2061,No gesture,0.2887,0.0824
+rgb,normal,S10_R2,Tap,esquerda,2235,2245,Stop Sign,0.1771,0.1771
+rgb,normal,S10_R2,SwipeLeft,direita,2417,2447,No gesture,0.5493,0.113
+rgb,normal,S10_R2,SwipeLeft,esquerda,2609,2640,Doing other things,0.55,0.2055
+rgb,normal,S10_R2,FlickUp,esquerda,2790,2822,No gesture,0.5933,0.0899
+rgb,normal,S10_R2,FlickUp,esquerda,2988,3001,No gesture,0.659,0.136
+rgb,normal,S10_R2,FlickUp,direita,3174,3194,No gesture,0.7325,0.0272
+rgb,normal,S10_R2,Tap,esquerda,3377,3393,Thumb Down,0.3929,0.3929
+rgb,normal,S10_R2,SwipeRight,esquerda,3572,3601,Doing other things,0.2588,0.1629
+rgb,normal,S10_R2,SwipeLeft,direita,3756,3785,No gesture,0.3055,0.3019
+rgb,normal,S10_R2,FlickDown,direita,3956,3989,Doing other things,0.4783,0.1007
+rgb,normal,S10_R2,SwipeRight,direita,4150,4180,Doing other things,0.849,0.0585
+rgb,normal,S10_R2,Tap,direita,4327,4357,Doing other things,0.909,0.0274
+rgb,normal,S10_R2,FlickDown,esquerda,4509,4541,Doing other things,0.9172,0.0305
+rgb,normal,S10_R2,SwipeRight,direita,4704,4729,Sliding Two Fingers Down,0.2983,0.2983
+rgb,normal,S10_R2,Tap,esquerda,4884,4912,Doing other things,0.7699,0.1289
+rgb,normal,S10_R2,Tap,direita,5068,5089,Zooming In With Two Fingers,0.1748,0.1748
+rgb,normal,S10_R2,SwipeLeft,direita,5253,5276,Zooming In With Two Fingers,0.2129,0.2129
+rgb,normal,S10_R2,FlickDown,direita,5438,5480,Doing other things,0.9732,0.0074
+rgb,normal,S10_R2,FlickDown,esquerda,5635,5689,Thumb Down,0.2347,0.2347
+rgb,normal,S10_R2,None,direita,772,810,No gesture,0.9657,0.0023
+rgb,normal,S10_R2,None,direita,2339,2374,No gesture,0.9577,0.0026
+rgb,normal,S10_R2,None,direita,3233,3276,No gesture,0.9735,0.0018
+rgb,normal,S10_R2,None,esquerda,772,810,No gesture,0.9657,0.0023
+rgb,normal,S10_R2,None,esquerda,2339,2374,No gesture,0.9577,0.0026
+rgb,normal,S10_R2,None,esquerda,3233,3276,No gesture,0.9735,0.0018
+rgb,normal,S10_R2,Other,direita,31,77,Doing other things,0.9972,0.0004
+rgb,normal,S10_R2,Other,direita,2122,2146,No gesture,0.5579,0.1028
+rgb,normal,S10_R2,Other,direita,3707,3744,Doing other things,0.9907,0.0024
+rgb,normal,S10_R2,Other,esquerda,33,79,Doing other things,0.9943,0.001
+rgb,normal,S10_R2,Other,esquerda,2122,2146,No gesture,0.5579,0.1028
+rgb,normal,S10_R2,Other,esquerda,3707,3744,Doing other things,0.9907,0.0024
+rgb,normal,S10_R3,FlickDown,direita,131,173,Zooming Out With Two Fingers,0.2776,0.2776
+rgb,normal,S10_R3,FlickUp,direita,314,335,No gesture,0.6128,0.0401
+rgb,normal,S10_R3,SwipeRight,direita,509,529,Zooming Out With Two Fingers,0.8983,0.8983
+rgb,normal,S10_R3,FlickUp,esquerda,676,706,Doing other things,0.5128,0.0288
+rgb,normal,S10_R3,FlickDown,direita,859,884,Thumb Down,0.7256,0.7256
+rgb,normal,S10_R3,FlickUp,esquerda,1063,1087,Doing other things,0.5293,0.2923
+rgb,normal,S10_R3,SwipeRight,direita,1248,1268,Doing other things,0.9973,0.0008
+rgb,normal,S10_R3,Tap,direita,1423,1447,No gesture,0.1592,0.1314
+rgb,normal,S10_R3,FlickUp,direita,1627,1660,Doing other things,0.34,0.1011
+rgb,normal,S10_R3,FlickUp,esquerda,1816,1841,Thumb Down,0.6377,0.6377
+rgb,normal,S10_R3,SwipeRight,esquerda,1987,2023,Zooming In With Two Fingers,0.3977,0.3977
+rgb,normal,S10_R3,FlickDown,esquerda,2199,2224,Doing other things,0.6633,0.1423
+rgb,normal,S10_R3,FlickDown,esquerda,2365,2391,Doing other things,0.6579,0.0683
+rgb,normal,S10_R3,Tap,esquerda,2555,2571,Doing other things,0.7649,0.0988
+rgb,normal,S10_R3,SwipeLeft,esquerda,2720,2745,Doing other things,0.5156,0.1942
+rgb,normal,S10_R3,SwipeRight,direita,2906,2932,Doing other things,0.7501,0.0539
+rgb,normal,S10_R3,FlickUp,direita,3090,3117,Doing other things,0.3482,0.177
+rgb,normal,S10_R3,SwipeRight,esquerda,3296,3315,Doing other things,0.7582,0.0931
+rgb,normal,S10_R3,SwipeRight,esquerda,3462,3491,Doing other things,0.9951,0.0018
+rgb,normal,S10_R3,Tap,esquerda,3642,3660,Doing other things,0.4712,0.1286
+rgb,normal,S10_R3,FlickDown,esquerda,3843,3873,Doing other things,0.3372,0.2705
+rgb,normal,S10_R3,Tap,direita,4016,4032,Zooming In With Two Fingers,0.2439,0.2439
+rgb,normal,S10_R3,Tap,esquerda,4191,4207,Doing other things,0.4381,0.1122
+rgb,normal,S10_R3,FlickDown,direita,4371,4412,Doing other things,0.9181,0.0384
+rgb,normal,S10_R3,Tap,direita,4572,4595,Doing other things,0.1624,0.0643
+rgb,normal,S10_R3,SwipeLeft,direita,4773,4805,No gesture,0.282,0.1267
+rgb,normal,S10_R3,SwipeLeft,direita,4954,4989,Thumb Down,0.525,0.525
+rgb,normal,S10_R3,SwipeLeft,esquerda,5146,5165,Doing other things,0.5062,0.1715
+rgb,normal,S10_R3,SwipeLeft,esquerda,5331,5356,Doing other things,0.5815,0.0663
+rgb,normal,S10_R3,Tap,direita,5514,5535,Doing other things,0.6203,0.0823
+rgb,normal,S10_R3,None,direita,0,50,No gesture,0.9779,0.0017
+rgb,normal,S10_R3,None,direita,775,800,No gesture,0.9609,0.0025
+rgb,normal,S10_R3,None,direita,3047,3071,No gesture,0.9194,0.0112
+rgb,normal,S10_R3,None,esquerda,0,50,No gesture,0.9779,0.0017
+rgb,normal,S10_R3,None,esquerda,775,800,No gesture,0.9609,0.0025
+rgb,normal,S10_R3,None,esquerda,3047,3071,No gesture,0.9194,0.0112
+rgb,normal,S10_R3,Other,direita,824,839,Doing other things,0.4194,0.2036
+rgb,normal,S10_R3,Other,direita,1525,1583,Doing other things,0.9866,0.0098
+rgb,normal,S10_R3,Other,direita,2796,2834,Doing other things,0.866,0.0524
+rgb,normal,S10_R3,Other,esquerda,1778,1793,Doing other things,0.9968,0.0012
+rgb,normal,S10_R3,Other,esquerda,3141,3166,Doing other things,0.994,0.0009
+rgb,normal,S10_R3,Other,esquerda,3896,3921,Doing other things,0.9983,0.0006
+rgb,normal,S10_R4,FlickUp,esquerda,160,182,Thumb Down,0.2283,0.2283
+rgb,normal,S10_R4,SwipeLeft,esquerda,340,363,No gesture,0.4349,0.0649
+rgb,normal,S10_R4,SwipeRight,direita,534,560,Zooming Out With Two Fingers,0.3763,0.3763
+rgb,normal,S10_R4,SwipeRight,esquerda,742,769,Doing other things,0.2933,0.1177
+rgb,normal,S10_R4,FlickDown,direita,933,961,No gesture,0.1453,0.1194
+rgb,normal,S10_R4,FlickDown,esquerda,1131,1163,Doing other things,0.3214,0.1001
+rgb,normal,S10_R4,Tap,direita,1330,1344,Zooming In With Two Fingers,0.2248,0.2248
+rgb,normal,S10_R4,SwipeLeft,direita,1532,1563,Doing other things,0.9309,0.0289
+rgb,normal,S10_R4,SwipeLeft,direita,1728,1760,Doing other things,0.7474,0.0602
+rgb,normal,S10_R4,FlickUp,direita,1922,1947,No gesture,0.5026,0.0436
+rgb,normal,S10_R4,FlickUp,esquerda,2116,2149,Doing other things,0.6478,0.1256
+rgb,normal,S10_R4,SwipeLeft,esquerda,2325,2348,Doing other things,0.8475,0.0825
+rgb,normal,S10_R4,SwipeRight,esquerda,2525,2555,Zooming In With Two Fingers,0.3738,0.3738
+rgb,normal,S10_R4,SwipeLeft,esquerda,2728,2749,Doing other things,1.0,0.0
+rgb,normal,S10_R4,FlickDown,direita,2921,2945,Doing other things,0.9973,0.0007
+rgb,normal,S10_R4,Tap,esquerda,3123,3135,Doing other things,0.6019,0.1725
+rgb,normal,S10_R4,Tap,esquerda,3313,3326,Doing other things,0.7021,0.0937
+rgb,normal,S10_R4,FlickDown,esquerda,3520,3560,Doing other things,0.9235,0.0419
+rgb,normal,S10_R4,FlickDown,esquerda,3736,3763,Drumming Fingers,0.1702,0.1702
+rgb,normal,S10_R4,FlickUp,esquerda,3927,3956,Doing other things,0.9324,0.0358
+rgb,normal,S10_R4,SwipeRight,direita,4116,4140,Thumb Down,0.3114,0.3114
+rgb,normal,S10_R4,SwipeRight,esquerda,4311,4334,Doing other things,0.776,0.0389
+rgb,normal,S10_R4,SwipeRight,direita,4502,4531,Doing other things,0.7818,0.0371
+rgb,normal,S10_R4,SwipeLeft,direita,4705,4737,Zooming In With Two Fingers,0.6548,0.6548
+rgb,normal,S10_R4,FlickUp,direita,4908,4927,Doing other things,0.9768,0.0071
+rgb,normal,S10_R4,Tap,esquerda,5109,5124,Doing other things,0.5635,0.1004
+rgb,normal,S10_R4,FlickUp,direita,5308,5327,No gesture,0.4267,0.0575
+rgb,normal,S10_R4,Tap,direita,5511,5526,No gesture,0.6587,0.0345
+rgb,normal,S10_R4,Tap,direita,5706,5723,No gesture,0.3398,0.1875
+rgb,normal,S10_R4,FlickDown,direita,5921,5947,Doing other things,0.2308,0.1375
+rgb,normal,S10_R4,None,direita,590,614,No gesture,0.9738,0.002
+rgb,normal,S10_R4,None,direita,1018,1046,No gesture,0.948,0.0035
+rgb,normal,S10_R4,None,direita,2237,2273,No gesture,0.9439,0.0051
+rgb,normal,S10_R4,None,esquerda,590,614,No gesture,0.9738,0.002
+rgb,normal,S10_R4,None,esquerda,1018,1046,No gesture,0.948,0.0035
+rgb,normal,S10_R4,None,esquerda,2237,2273,No gesture,0.9439,0.0051
+rgb,normal,S10_R4,Other,direita,618,635,Doing other things,0.8522,0.0891
+rgb,normal,S10_R4,Other,direita,1485,1505,Doing other things,0.9975,0.0005
+rgb,normal,S10_R4,Other,direita,1981,2019,Doing other things,0.9999,0.0
+rgb,normal,S10_R4,Other,esquerda,1275,1297,Doing other things,0.9996,0.0001
+rgb,normal,S10_R4,Other,esquerda,1420,1438,Doing other things,0.9954,0.0004
+rgb,normal,S10_R4,Other,esquerda,1883,1901,Doing other things,0.9993,0.0004
+rgb,normal,S10_R5,FlickUp,esquerda,126,150,No gesture,0.3716,0.1202
+rgb,normal,S10_R5,SwipeRight,esquerda,301,322,Drumming Fingers,0.2986,0.2986
+rgb,normal,S10_R5,Tap,direita,484,500,Doing other things,0.6222,0.081
+rgb,normal,S10_R5,FlickDown,direita,670,710,Zooming Out With Two Fingers,0.1883,0.1883
+rgb,normal,S10_R5,Tap,direita,840,861,Doing other things,0.3435,0.1734
+rgb,normal,S10_R5,Tap,esquerda,1041,1063,Doing other things,0.9181,0.0243
+rgb,normal,S10_R5,Tap,esquerda,1214,1231,Doing other things,0.9175,0.0266
+rgb,normal,S10_R5,SwipeLeft,direita,1387,1402,No gesture,0.3197,0.0964
+rgb,normal,S10_R5,SwipeLeft,esquerda,1568,1594,Doing other things,0.3691,0.3283
+rgb,normal,S10_R5,SwipeRight,esquerda,1755,1786,Thumb Down,0.2651,0.2651
+rgb,normal,S10_R5,Tap,esquerda,1932,1950,Doing other things,0.8477,0.0195
+rgb,normal,S10_R5,FlickUp,esquerda,2110,2144,Thumb Down,0.3799,0.3799
+rgb,normal,S10_R5,SwipeLeft,direita,2297,2326,No gesture,0.5097,0.0619
+rgb,normal,S10_R5,FlickDown,esquerda,2483,2517,Drumming Fingers,0.2174,0.2174
+rgb,normal,S10_R5,SwipeLeft,direita,2658,2694,Zooming In With Two Fingers,0.1864,0.1864
+rgb,normal,S10_R5,SwipeRight,direita,2834,2858,Sliding Two Fingers Down,0.2314,0.2314
+rgb,normal,S10_R5,FlickDown,esquerda,3014,3039,Drumming Fingers,0.2484,0.2484
+rgb,normal,S10_R5,FlickUp,direita,3184,3213,No gesture,0.3658,0.0746
+rgb,normal,S10_R5,SwipeLeft,esquerda,3377,3396,Thumb Down,0.4023,0.4023
+rgb,normal,S10_R5,FlickUp,direita,3571,3588,No gesture,0.5423,0.0791
+rgb,normal,S10_R5,SwipeLeft,esquerda,3764,3783,Thumb Down,0.4134,0.4134
+rgb,normal,S10_R5,FlickDown,esquerda,4120,4145,Doing other things,0.316,0.1601
+rgb,normal,S10_R5,FlickDown,direita,4295,4316,Zooming Out With Two Fingers,0.1596,0.1596
+rgb,normal,S10_R5,SwipeRight,esquerda,4477,4499,Doing other things,0.303,0.1941
+rgb,normal,S10_R5,Tap,direita,4660,4686,Doing other things,0.1653,0.1634
+rgb,normal,S10_R5,FlickDown,direita,4865,4887,Shaking Hand,0.1043,0.1043
+rgb,normal,S10_R5,SwipeRight,direita,5026,5055,Zooming Out With Two Fingers,0.2513,0.2513
+rgb,normal,S10_R5,FlickUp,direita,5207,5232,Zooming Out With Two Fingers,0.1598,0.1598
+rgb,normal,S10_R5,FlickUp,esquerda,5401,5425,No gesture,0.2096,0.1016
+rgb,normal,S10_R5,None,direita,0,29,No gesture,0.8172,0.01
+rgb,normal,S10_R5,None,direita,401,430,No gesture,0.9695,0.0019
+rgb,normal,S10_R5,None,direita,3906,3936,No gesture,0.9528,0.0033
+rgb,normal,S10_R5,None,esquerda,0,29,No gesture,0.8172,0.01
+rgb,normal,S10_R5,None,esquerda,401,430,No gesture,0.9695,0.0019
+rgb,normal,S10_R5,None,esquerda,3906,3936,No gesture,0.9528,0.0033
+rgb,normal,S10_R5,Other,direita,48,67,Thumb Down,0.7396,0.7396
+rgb,normal,S10_R5,Other,direita,2203,2250,Doing other things,0.8542,0.0521
+rgb,normal,S10_R5,Other,direita,3847,3905,Doing other things,0.9972,0.0006
+rgb,normal,S10_R5,Other,esquerda,56,74,Thumb Down,0.3794,0.3794
+rgb,normal,S10_R5,Other,esquerda,2203,2250,Doing other things,0.8542,0.0521
+rgb,normal,S10_R5,Other,esquerda,3847,3905,Doing other things,0.9972,0.0006
+rgb,normal,S11_R1,FlickDown,esquerda,148,180,No gesture,0.7623,0.0462
+rgb,normal,S11_R1,Tap,direita,342,365,No gesture,0.4417,0.0498
+rgb,normal,S11_R1,FlickDown,esquerda,524,543,No gesture,0.7441,0.0324
+rgb,normal,S11_R1,SwipeRight,esquerda,686,716,No gesture,0.4158,0.135
+rgb,normal,S11_R1,Tap,esquerda,862,880,Doing other things,0.2573,0.1895
+rgb,normal,S11_R1,FlickUp,direita,1032,1051,Doing other things,0.9058,0.0609
+rgb,normal,S11_R1,FlickDown,direita,1218,1255,Doing other things,0.3122,0.1356
+rgb,normal,S11_R1,FlickUp,esquerda,1411,1430,No gesture,0.7003,0.0836
+rgb,normal,S11_R1,SwipeRight,esquerda,1540,1571,No gesture,0.7878,0.0404
+rgb,normal,S11_R1,FlickUp,direita,1698,1712,No gesture,0.8366,0.0104
+rgb,normal,S11_R1,FlickDown,direita,1865,1899,Doing other things,0.3099,0.0874
+rgb,normal,S11_R1,SwipeLeft,direita,2033,2049,No gesture,0.3803,0.0996
+rgb,normal,S11_R1,Tap,direita,2183,2206,No gesture,0.8506,0.0098
+rgb,normal,S11_R1,Tap,esquerda,2351,2361,Doing other things,0.5994,0.1396
+rgb,normal,S11_R1,FlickDown,esquerda,2500,2515,No gesture,0.695,0.0763
+rgb,normal,S11_R1,Tap,direita,2652,2664,No gesture,0.6037,0.0356
+rgb,normal,S11_R1,SwipeRight,direita,2810,2829,Doing other things,0.1654,0.1374
+rgb,normal,S11_R1,SwipeRight,direita,2982,3018,Thumb Down,0.2084,0.2084
+rgb,normal,S11_R1,SwipeLeft,esquerda,3150,3175,No gesture,0.5086,0.0582
+rgb,normal,S11_R1,SwipeLeft,esquerda,3306,3339,No gesture,0.7241,0.0264
+rgb,normal,S11_R1,SwipeRight,esquerda,3489,3520,No gesture,0.8014,0.0717
+rgb,normal,S11_R1,FlickUp,esquerda,3670,3681,Doing other things,0.9531,0.0044
+rgb,normal,S11_R1,FlickUp,esquerda,3808,3833,No gesture,0.6676,0.0579
+rgb,normal,S11_R1,FlickUp,esquerda,3975,4003,No gesture,0.7596,0.0248
+rgb,normal,S11_R1,FlickUp,direita,4145,4159,Thumb Down,0.1523,0.1523
+rgb,normal,S11_R1,SwipeLeft,direita,4303,4332,Doing other things,0.9571,0.0149
+rgb,normal,S11_R1,SwipeLeft,esquerda,4467,4491,No gesture,0.7804,0.0199
+rgb,normal,S11_R1,SwipeLeft,direita,4622,4646,Thumb Down,0.2226,0.2226
+rgb,normal,S11_R1,SwipeRight,direita,4787,4813,Drumming Fingers,0.181,0.181
+rgb,normal,S11_R1,FlickDown,direita,4962,4990,Turning Hand Counterclockwise,0.1216,0.1216
+rgb,normal,S11_R1,None,direita,0,18,No gesture,0.9763,0.0014
+rgb,normal,S11_R1,None,direita,2122,2158,No gesture,0.9107,0.0064
+rgb,normal,S11_R1,None,direita,3868,3900,No gesture,0.817,0.0079
+rgb,normal,S11_R1,None,esquerda,0,18,No gesture,0.9763,0.0014
+rgb,normal,S11_R1,None,esquerda,2122,2158,No gesture,0.9107,0.0064
+rgb,normal,S11_R1,None,esquerda,3868,3900,No gesture,0.817,0.0079
+rgb,normal,S11_R1,Other,direita,1335,1379,Doing other things,0.9957,0.0008
+rgb,normal,S11_R1,Other,direita,2378,2407,Doing other things,0.9879,0.0016
+rgb,normal,S11_R1,Other,direita,3239,3269,Doing other things,0.9986,0.0005
+rgb,normal,S11_R1,Other,esquerda,1335,1379,Doing other things,0.9957,0.0008
+rgb,normal,S11_R1,Other,esquerda,2250,2278,Doing other things,0.9834,0.0075
+rgb,normal,S11_R1,Other,esquerda,3239,3269,Doing other things,0.9986,0.0005
+rgb,girado,S01_R1,FlickDown,direita,113,146,Doing other things,0.3011,0.1287
+rgb,girado,S01_R1,SwipeLeft,direita,254,282,Turning Hand Clockwise,0.2018,0.2018
+rgb,girado,S01_R1,Tap,esquerda,420,448,Turning Hand Clockwise,0.3947,0.3947
+rgb,girado,S01_R1,FlickUp,direita,590,620,Zooming Out With Full Hand,0.3106,0.3106
+rgb,girado,S01_R1,FlickUp,direita,785,812,Turning Hand Clockwise,0.4312,0.4312
+rgb,girado,S01_R1,SwipeRight,esquerda,941,970,Zooming Out With Full Hand,0.3455,0.3455
+rgb,girado,S01_R1,SwipeRight,direita,1107,1141,Doing other things,0.9649,0.0084
+rgb,girado,S01_R1,SwipeLeft,direita,1275,1309,Zooming In With Full Hand,0.2919,0.2919
+rgb,girado,S01_R1,FlickUp,direita,1436,1466,Zooming Out With Two Fingers,0.5036,0.5036
+rgb,girado,S01_R1,Tap,direita,1602,1632,Zooming Out With Full Hand,0.3943,0.3943
+rgb,girado,S01_R1,Tap,direita,1772,1803,Turning Hand Clockwise,0.2187,0.2187
+rgb,girado,S01_R1,FlickUp,esquerda,1952,1984,Turning Hand Clockwise,0.5534,0.5534
+rgb,girado,S01_R1,SwipeRight,esquerda,2115,2161,Turning Hand Counterclockwise,0.2321,0.2321
+rgb,girado,S01_R1,Tap,esquerda,2290,2329,Drumming Fingers,0.5574,0.5574
+rgb,girado,S01_R1,FlickDown,esquerda,2457,2497,Turning Hand Counterclockwise,0.1913,0.1913
+rgb,girado,S01_R1,SwipeLeft,esquerda,2613,2646,Turning Hand Clockwise,0.4024,0.4024
+rgb,girado,S01_R1,SwipeRight,esquerda,2784,2830,Turning Hand Counterclockwise,0.1668,0.1668
+rgb,girado,S01_R1,FlickDown,esquerda,2964,2990,Doing other things,0.1575,0.1352
+rgb,girado,S01_R1,SwipeRight,direita,3118,3154,Turning Hand Clockwise,0.4514,0.4514
+rgb,girado,S01_R1,Tap,esquerda,3289,3320,Doing other things,0.4825,0.1395
+rgb,girado,S01_R1,SwipeLeft,esquerda,3466,3498,Zooming In With Full Hand,0.3301,0.3301
+rgb,girado,S01_R1,FlickDown,esquerda,3642,3688,Doing other things,0.2778,0.1317
+rgb,girado,S01_R1,SwipeLeft,esquerda,3799,3839,Turning Hand Clockwise,0.4344,0.4344
+rgb,girado,S01_R1,SwipeLeft,direita,3955,3993,Turning Hand Clockwise,0.2763,0.2763
+rgb,girado,S01_R1,FlickDown,direita,4126,4181,Doing other things,0.4864,0.3317
+rgb,girado,S01_R1,SwipeRight,direita,4304,4346,Doing other things,0.446,0.3018
+rgb,girado,S01_R1,Tap,direita,4472,4510,Doing other things,0.4143,0.1318
+rgb,girado,S01_R1,FlickUp,esquerda,4640,4677,Turning Hand Clockwise,0.7584,0.7584
+rgb,girado,S01_R1,FlickUp,esquerda,4810,4845,Turning Hand Clockwise,0.4724,0.4724
+rgb,girado,S01_R1,FlickDown,direita,4979,5020,Doing other things,0.3881,0.2258
+rgb,girado,S01_R1,None,direita,0,35,No gesture,0.3602,0.0598
+rgb,girado,S01_R1,None,direita,210,250,No gesture,0.9467,0.0039
+rgb,girado,S01_R1,None,direita,1223,1258,Doing other things,0.6113,0.151
+rgb,girado,S01_R1,None,esquerda,83,113,Zooming Out With Two Fingers,0.2852,0.2852
+rgb,girado,S01_R1,None,esquerda,295,340,No gesture,0.4976,0.0335
+rgb,girado,S01_R1,None,esquerda,2083,2108,No gesture,0.9813,0.0014
+rgb,girado,S01_R1,Other,direita,3063,3096,Turning Hand Clockwise,0.5834,0.5834
+rgb,girado,S01_R1,Other,direita,1904,1944,Doing other things,0.9926,0.0033
+rgb,girado,S01_R1,Other,direita,450,469,Doing other things,0.993,0.0022
+rgb,girado,S01_R1,Other,esquerda,1049,1104,Doing other things,0.9786,0.0111
+rgb,girado,S01_R1,Other,esquerda,3036,3062,Doing other things,0.9896,0.0042
+rgb,girado,S01_R1,Other,esquerda,358,387,Doing other things,0.9828,0.0027
+rgb,girado,S01_R2,SwipeLeft,direita,118,146,Turning Hand Counterclockwise,0.3466,0.3466
+rgb,girado,S01_R2,Tap,direita,280,311,Doing other things,0.6384,0.0799
+rgb,girado,S01_R2,SwipeLeft,esquerda,459,488,Zooming In With Full Hand,0.4399,0.4399
+rgb,girado,S01_R2,FlickDown,direita,607,638,Doing other things,0.463,0.2654
+rgb,girado,S01_R2,SwipeRight,direita,788,825,Doing other things,0.682,0.162
+rgb,girado,S01_R2,FlickUp,esquerda,923,955,Turning Hand Clockwise,0.7216,0.7216
+rgb,girado,S01_R2,FlickUp,direita,1097,1129,Turning Hand Clockwise,0.584,0.584
+rgb,girado,S01_R2,Tap,direita,1262,1297,Doing other things,0.6485,0.0598
+rgb,girado,S01_R2,Tap,esquerda,1433,1460,Doing other things,0.7109,0.0579
+rgb,girado,S01_R2,SwipeLeft,esquerda,1596,1631,Zooming In With Full Hand,0.4492,0.4492
+rgb,girado,S01_R2,Tap,direita,1751,1775,Zooming In With Two Fingers,0.3876,0.3876
+rgb,girado,S01_R2,SwipeRight,direita,1898,1931,Doing other things,0.758,0.0911
+rgb,girado,S01_R2,SwipeLeft,direita,2059,2087,Turning Hand Counterclockwise,0.3549,0.3549
+rgb,girado,S01_R2,SwipeRight,esquerda,2228,2270,Doing other things,0.2225,0.1929
+rgb,girado,S01_R2,SwipeLeft,esquerda,2416,2441,Zooming Out With Full Hand,0.3854,0.3854
+rgb,girado,S01_R2,Tap,esquerda,2571,2602,Zooming Out With Two Fingers,0.3149,0.3149
+rgb,girado,S01_R2,FlickUp,esquerda,2745,2777,Doing other things,0.5956,0.1683
+rgb,girado,S01_R2,SwipeRight,direita,2919,2962,Doing other things,0.4664,0.1093
+rgb,girado,S01_R2,FlickDown,esquerda,3098,3119,Pulling Two Fingers In,0.2778,0.2778
+rgb,girado,S01_R2,SwipeRight,esquerda,3280,3314,Zooming In With Full Hand,0.5121,0.5121
+rgb,girado,S01_R2,FlickDown,direita,3423,3450,Doing other things,0.8685,0.0256
+rgb,girado,S01_R2,Tap,esquerda,3580,3606,Turning Hand Clockwise,0.3134,0.3134
+rgb,girado,S01_R2,FlickDown,direita,3748,3787,Turning Hand Clockwise,0.5095,0.5095
+rgb,girado,S01_R2,FlickDown,esquerda,3947,3970,Turning Hand Clockwise,0.2587,0.2587
+rgb,girado,S01_R2,FlickDown,esquerda,4131,4150,Zooming Out With Full Hand,0.272,0.272
+rgb,girado,S01_R2,FlickUp,direita,4264,4290,Turning Hand Counterclockwise,0.5731,0.5731
+rgb,girado,S01_R2,SwipeRight,esquerda,4420,4460,Doing other things,0.523,0.176
+rgb,girado,S01_R2,FlickUp,direita,4591,4624,Turning Hand Counterclockwise,0.4621,0.4621
+rgb,girado,S01_R2,FlickUp,esquerda,4764,4789,Zooming In With Full Hand,0.5581,0.5581
+rgb,girado,S01_R2,SwipeLeft,direita,4918,4954,Turning Hand Clockwise,0.4119,0.4119
+rgb,girado,S01_R2,None,direita,0,50,No gesture,0.9784,0.0013
+rgb,girado,S01_R2,None,direita,543,584,Doing other things,0.5195,0.1275
+rgb,girado,S01_R2,None,direita,1015,1053,Doing other things,0.3249,0.1414
+rgb,girado,S01_R2,None,esquerda,51,100,No gesture,0.9814,0.0011
+rgb,girado,S01_R2,None,esquerda,904,916,No gesture,0.9631,0.0028
+rgb,girado,S01_R2,None,esquerda,1342,1380,Doing other things,0.4198,0.2977
+rgb,girado,S01_R2,Other,direita,143,162,Zooming In With Full Hand,0.2348,0.2348
+rgb,girado,S01_R2,Other,direita,858,876,Zooming Out With Full Hand,0.354,0.354
+rgb,girado,S01_R2,Other,direita,1847,1868,Zooming Out With Full Hand,0.5649,0.5649
+rgb,girado,S01_R2,Other,esquerda,709,730,Doing other things,0.9971,0.0008
+rgb,girado,S01_R2,Other,esquerda,1137,1168,Doing other things,0.9992,0.0002
+rgb,girado,S01_R2,Other,esquerda,1806,1823,Doing other things,0.6789,0.1017
+rgb,girado,S01_R3,SwipeLeft,direita,77,107,Turning Hand Counterclockwise,0.3828,0.3828
+rgb,girado,S01_R3,FlickDown,direita,197,225,Doing other things,0.5199,0.2193
+rgb,girado,S01_R3,FlickUp,esquerda,322,348,Turning Hand Clockwise,0.5099,0.5099
+rgb,girado,S01_R3,SwipeLeft,esquerda,460,476,Zooming In With Full Hand,0.4169,0.4169
+rgb,girado,S01_R3,FlickUp,esquerda,557,582,Turning Hand Clockwise,0.5462,0.5462
+rgb,girado,S01_R3,SwipeRight,esquerda,674,692,Zooming In With Two Fingers,0.2538,0.2538
+rgb,girado,S01_R3,FlickUp,direita,795,825,Turning Hand Counterclockwise,0.4248,0.4248
+rgb,girado,S01_R3,FlickDown,esquerda,897,921,Doing other things,0.41,0.3
+rgb,girado,S01_R3,Tap,direita,993,1014,Zooming In With Full Hand,0.3373,0.3373
+rgb,girado,S01_R3,FlickUp,direita,1105,1124,Turning Hand Counterclockwise,0.362,0.362
+rgb,girado,S01_R3,FlickUp,esquerda,1222,1247,Turning Hand Clockwise,0.4213,0.4213
+rgb,girado,S01_R3,SwipeRight,esquerda,1333,1359,Doing other things,0.5204,0.2084
+rgb,girado,S01_R3,Tap,esquerda,1449,1470,Zooming In With Full Hand,0.1889,0.1889
+rgb,girado,S01_R3,Tap,esquerda,1560,1581,Doing other things,0.2347,0.2228
+rgb,girado,S01_R3,Tap,direita,1677,1700,Doing other things,0.6641,0.0844
+rgb,girado,S01_R3,FlickUp,direita,1791,1818,Doing other things,0.25,0.2457
+rgb,girado,S01_R3,SwipeRight,direita,1901,1927,Doing other things,0.9934,0.0028
+rgb,girado,S01_R3,SwipeLeft,esquerda,2012,2037,Turning Hand Counterclockwise,0.2987,0.2987
+rgb,girado,S01_R3,FlickDown,esquerda,2125,2147,Doing other things,0.6301,0.155
+rgb,girado,S01_R3,FlickDown,direita,2253,2262,Doing other things,0.9281,0.0151
+rgb,girado,S01_R3,FlickDown,direita,2354,2375,Doing other things,0.9865,0.0026
+rgb,girado,S01_R3,SwipeLeft,direita,2459,2481,Doing other things,0.5426,0.1616
+rgb,girado,S01_R3,FlickDown,esquerda,2574,2593,Turning Hand Counterclockwise,0.1516,0.1516
+rgb,girado,S01_R3,SwipeLeft,direita,2671,2692,Doing other things,0.2905,0.2772
+rgb,girado,S01_R3,Tap,esquerda,2791,2811,Doing other things,0.9925,0.006
+rgb,girado,S01_R3,SwipeRight,direita,2903,2931,Doing other things,0.7378,0.1188
+rgb,girado,S01_R3,Tap,direita,3015,3037,Doing other things,0.976,0.005
+rgb,girado,S01_R3,SwipeRight,esquerda,3133,3157,Zooming In With Full Hand,0.3119,0.3119
+rgb,girado,S01_R3,SwipeRight,direita,3244,3266,Doing other things,0.5074,0.2197
+rgb,girado,S01_R3,SwipeLeft,esquerda,3371,3385,Zooming In With Full Hand,0.4537,0.4537
+rgb,girado,S01_R3,None,direita,0,40,No gesture,0.9794,0.0018
+rgb,girado,S01_R3,None,direita,134,170,No gesture,0.6513,0.0222
+rgb,girado,S01_R3,None,direita,847,871,Doing other things,0.3762,0.2486
+rgb,girado,S01_R3,None,esquerda,41,75,No gesture,0.9854,0.001
+rgb,girado,S01_R3,None,esquerda,254,270,No gesture,0.9835,0.0011
+rgb,girado,S01_R3,None,esquerda,600,636,No gesture,0.9565,0.003
+rgb,girado,S01_R3,Other,direita,295,311,Doing other things,0.981,0.0051
+rgb,girado,S01_R3,Other,direita,646,665,Doing other things,0.9954,0.0009
+rgb,girado,S01_R3,Other,direita,704,721,Doing other things,0.9045,0.0481
+rgb,girado,S01_R3,Other,esquerda,349,398,Doing other things,0.9972,0.0007
+rgb,girado,S01_R3,Other,esquerda,487,502,Doing other things,0.8471,0.077
+rgb,girado,S01_R3,Other,esquerda,760,799,Doing other things,0.9505,0.0381
+rgb,girado,S01_R4,FlickDown,direita,82,117,Thumb Up,0.6482,0.6482
+rgb,girado,S01_R4,SwipeLeft,esquerda,208,230,Zooming Out With Full Hand,0.2934,0.2934
+rgb,girado,S01_R4,FlickDown,esquerda,316,337,Pulling Two Fingers In,0.7433,0.7433
+rgb,girado,S01_R4,FlickUp,direita,435,458,Turning Hand Counterclockwise,0.2501,0.2501
+rgb,girado,S01_R4,SwipeRight,esquerda,540,560,Pulling Two Fingers In,0.1932,0.1932
+rgb,girado,S01_R4,FlickUp,esquerda,631,651,Turning Hand Clockwise,0.5013,0.5013
+rgb,girado,S01_R4,SwipeLeft,esquerda,737,752,Zooming In With Two Fingers,0.1965,0.1965
+rgb,girado,S01_R4,SwipeLeft,direita,823,844,Doing other things,0.3681,0.2215
+rgb,girado,S01_R4,Tap,esquerda,944,961,Doing other things,0.9727,0.0102
+rgb,girado,S01_R4,SwipeRight,esquerda,1020,1038,Thumb Up,0.2448,0.2448
+rgb,girado,S01_R4,FlickDown,direita,1120,1133,Thumb Up,0.3967,0.3967
+rgb,girado,S01_R4,SwipeLeft,esquerda,1208,1227,Turning Hand Counterclockwise,0.4498,0.4498
+rgb,girado,S01_R4,Tap,esquerda,1310,1327,Doing other things,0.4706,0.3068
+rgb,girado,S01_R4,SwipeRight,direita,1403,1432,Thumb Up,0.5345,0.5345
+rgb,girado,S01_R4,SwipeLeft,direita,1501,1520,Turning Hand Counterclockwise,0.2845,0.2845
+rgb,girado,S01_R4,FlickUp,esquerda,1621,1635,Turning Hand Clockwise,0.8891,0.8891
+rgb,girado,S01_R4,SwipeRight,direita,1694,1718,Thumb Up,0.9028,0.9028
+rgb,girado,S01_R4,FlickDown,direita,1795,1819,Thumb Up,0.2337,0.2337
+rgb,girado,S01_R4,Tap,direita,1896,1910,Zooming In With Full Hand,0.2569,0.2569
+rgb,girado,S01_R4,FlickDown,esquerda,1990,2015,Doing other things,0.575,0.062
+rgb,girado,S01_R4,FlickUp,direita,2111,2130,Turning Hand Counterclockwise,0.4353,0.4353
+rgb,girado,S01_R4,SwipeRight,esquerda,2187,2210,Turning Hand Clockwise,0.3242,0.3242
+rgb,girado,S01_R4,FlickDown,esquerda,2292,2309,Pulling Two Fingers In,0.356,0.356
+rgb,girado,S01_R4,SwipeLeft,direita,2382,2403,Turning Hand Clockwise,0.3217,0.3217
+rgb,girado,S01_R4,FlickUp,esquerda,2475,2494,Turning Hand Clockwise,0.4558,0.4558
+rgb,girado,S01_R4,Tap,direita,2576,2586,Doing other things,0.2426,0.1331
+rgb,girado,S01_R4,Tap,direita,2671,2692,Thumb Up,0.2642,0.2642
+rgb,girado,S01_R4,FlickUp,direita,2771,2789,Zooming Out With Two Fingers,0.4319,0.4319
+rgb,girado,S01_R4,SwipeRight,direita,2867,2883,Pushing Two Fingers Away,0.1625,0.1625
+rgb,girado,S01_R4,Tap,esquerda,2975,2995,Turning Hand Clockwise,0.4492,0.4492
+rgb,girado,S01_R4,None,direita,135,150,No gesture,0.9311,0.0049
+rgb,girado,S01_R4,None,direita,1089,1117,Thumb Down,0.2201,0.2201
+rgb,girado,S01_R4,None,direita,508,522,No gesture,0.9325,0.0039
+rgb,girado,S01_R4,None,esquerda,508,522,No gesture,0.9325,0.0039
+rgb,girado,S01_R4,None,esquerda,1231,1250,Doing other things,0.3643,0.1111
+rgb,girado,S01_R4,None,esquerda,1439,1468,No gesture,0.9497,0.0028
+rgb,girado,S01_R4,Other,direita,0,20,Sliding Two Fingers Up,0.4809,0.4809
+rgb,girado,S01_R4,Other,direita,371,385,Doing other things,0.9689,0.0096
+rgb,girado,S01_R4,Other,direita,714,730,Doing other things,0.9971,0.0007
+rgb,girado,S01_R4,Other,esquerda,158,181,Doing other things,0.9928,0.0022
+rgb,girado,S01_R4,Other,esquerda,234,251,Doing other things,0.6428,0.1407
+rgb,girado,S01_R4,Other,esquerda,871,900,Doing other things,0.7422,0.0577
+rgb,girado,S01_R5,FlickDown,esquerda,101,124,Zooming Out With Full Hand,0.5077,0.5077
+rgb,girado,S01_R5,Tap,direita,230,250,Doing other things,0.5919,0.1339
+rgb,girado,S01_R5,FlickUp,esquerda,360,379,Turning Hand Clockwise,0.4687,0.4687
+rgb,girado,S01_R5,FlickDown,esquerda,499,525,Doing other things,0.9838,0.0027
+rgb,girado,S01_R5,SwipeRight,direita,638,670,Doing other things,0.5443,0.3741
+rgb,girado,S01_R5,SwipeRight,direita,769,792,Doing other things,0.9904,0.0039
+rgb,girado,S01_R5,SwipeLeft,esquerda,890,913,Turning Hand Clockwise,0.367,0.367
+rgb,girado,S01_R5,Tap,esquerda,1017,1047,Doing other things,0.8783,0.0371
+rgb,girado,S01_R5,Tap,esquerda,1114,1136,Doing other things,0.9115,0.0234
+rgb,girado,S01_R5,FlickDown,esquerda,1232,1270,Doing other things,0.492,0.0992
+rgb,girado,S01_R5,FlickDown,direita,1346,1367,Doing other things,0.8493,0.034
+rgb,girado,S01_R5,SwipeLeft,direita,1471,1492,Shaking Hand,0.3416,0.3416
+rgb,girado,S01_R5,FlickUp,esquerda,1570,1591,Turning Hand Clockwise,0.7268,0.7268
+rgb,girado,S01_R5,FlickUp,direita,1683,1711,Turning Hand Counterclockwise,0.3628,0.3628
+rgb,girado,S01_R5,FlickDown,direita,1793,1812,Doing other things,0.2778,0.1873
+rgb,girado,S01_R5,FlickUp,direita,1909,1930,Turning Hand Counterclockwise,0.7077,0.7077
+rgb,girado,S01_R5,FlickUp,esquerda,2018,2036,Doing other things,0.8825,0.0334
+rgb,girado,S01_R5,SwipeRight,direita,2117,2145,Doing other things,0.5176,0.3264
+rgb,girado,S01_R5,SwipeLeft,esquerda,2230,2254,Turning Hand Clockwise,0.4068,0.4068
+rgb,girado,S01_R5,SwipeLeft,esquerda,2360,2374,Zooming In With Two Fingers,0.7339,0.7339
+rgb,girado,S01_R5,Tap,direita,2456,2475,Doing other things,0.4376,0.0982
+rgb,girado,S01_R5,FlickDown,direita,2594,2615,Doing other things,0.7779,0.0779
+rgb,girado,S01_R5,FlickUp,direita,2681,2703,Zooming Out With Two Fingers,0.3069,0.3069
+rgb,girado,S01_R5,SwipeRight,esquerda,2797,2823,Doing other things,0.3711,0.1882
+rgb,girado,S01_R5,Tap,esquerda,2909,2927,Doing other things,0.5027,0.2328
+rgb,girado,S01_R5,SwipeRight,esquerda,3020,3049,Turning Hand Clockwise,0.3686,0.3686
+rgb,girado,S01_R5,SwipeRight,esquerda,3141,3162,Pushing Two Fingers Away,0.2175,0.2175
+rgb,girado,S01_R5,Tap,direita,3241,3265,Doing other things,0.3855,0.2815
+rgb,girado,S01_R5,SwipeLeft,direita,3360,3378,Zooming In With Two Fingers,0.423,0.423
+rgb,girado,S01_R5,SwipeLeft,direita,3495,3508,Turning Hand Counterclockwise,0.2899,0.2899
+rgb,girado,S01_R5,None,direita,0,50,No gesture,0.9693,0.0022
+rgb,girado,S01_R5,None,direita,680,702,No gesture,0.2907,0.0826
+rgb,girado,S01_R5,None,direita,942,971,No gesture,0.8576,0.0236
+rgb,girado,S01_R5,None,esquerda,51,90,No gesture,0.9814,0.0011
+rgb,girado,S01_R5,None,esquerda,680,702,No gesture,0.2907,0.0826
+rgb,girado,S01_R5,None,esquerda,1160,1199,Doing other things,0.7318,0.0578
+rgb,girado,S01_R5,Other,direita,794,808,Doing other things,0.4981,0.1829
+rgb,girado,S01_R5,Other,direita,1055,1103,Doing other things,0.902,0.0375
+rgb,girado,S01_R5,Other,direita,1616,1633,Doing other things,0.8553,0.0338
+rgb,girado,S01_R5,Other,esquerda,453,468,Doing other things,0.3746,0.3139
+rgb,girado,S01_R5,Other,esquerda,1375,1391,Doing other things,0.4303,0.2376
+rgb,girado,S01_R5,Other,esquerda,1858,1882,Doing other things,0.9941,0.0011
+rgb,girado,S02_R1,FlickUp,esquerda,119,141,Doing other things,0.2753,0.183
+rgb,girado,S02_R1,FlickDown,esquerda,287,316,Doing other things,0.9941,0.0011
+rgb,girado,S02_R1,Tap,esquerda,454,469,Doing other things,0.3242,0.3139
+rgb,girado,S02_R1,Tap,direita,614,631,Doing other things,0.2357,0.1062
+rgb,girado,S02_R1,Tap,direita,787,802,Doing other things,0.5877,0.045
+rgb,girado,S02_R1,FlickDown,esquerda,935,968,Doing other things,0.6345,0.1492
+rgb,girado,S02_R1,FlickDown,direita,1104,1126,Doing other things,0.9567,0.0189
+rgb,girado,S02_R1,SwipeLeft,esquerda,1255,1274,Turning Hand Counterclockwise,0.3727,0.3727
+rgb,girado,S02_R1,Tap,esquerda,1410,1422,Zooming Out With Full Hand,0.3345,0.3345
+rgb,girado,S02_R1,FlickUp,direita,1546,1563,Turning Hand Counterclockwise,0.2538,0.2538
+rgb,girado,S02_R1,Tap,direita,1692,1710,Doing other things,0.3515,0.0772
+rgb,girado,S02_R1,SwipeLeft,esquerda,1868,1889,Doing other things,0.8926,0.0185
+rgb,girado,S02_R1,SwipeRight,esquerda,2028,2064,Zooming In With Two Fingers,0.2603,0.2603
+rgb,girado,S02_R1,FlickUp,direita,2205,2230,Turning Hand Counterclockwise,0.254,0.254
+rgb,girado,S02_R1,SwipeRight,esquerda,2370,2404,Doing other things,0.995,0.002
+rgb,girado,S02_R1,FlickDown,esquerda,2529,2556,Doing other things,0.8072,0.0892
+rgb,girado,S02_R1,FlickUp,esquerda,2681,2712,Doing other things,0.4911,0.1992
+rgb,girado,S02_R1,Tap,esquerda,2857,2871,Zooming Out With Full Hand,0.3267,0.3267
+rgb,girado,S02_R1,FlickUp,esquerda,3004,3038,Zooming In With Full Hand,0.3237,0.3237
+rgb,girado,S02_R1,SwipeLeft,direita,3178,3207,Zooming In With Two Fingers,0.6194,0.6194
+rgb,girado,S02_R1,SwipeLeft,esquerda,3354,3374,Zooming In With Two Fingers,0.8653,0.8653
+rgb,girado,S02_R1,SwipeRight,direita,3508,3532,Turning Hand Clockwise,0.4385,0.4385
+rgb,girado,S02_R1,FlickDown,direita,3675,3693,Doing other things,0.7871,0.0561
+rgb,girado,S02_R1,FlickDown,direita,3836,3864,Doing other things,0.3429,0.2051
+rgb,girado,S02_R1,FlickUp,direita,4005,4031,Turning Hand Counterclockwise,0.2902,0.2902
+rgb,girado,S02_R1,FlickUp,esquerda,4173,4190,Zooming In With Full Hand,0.3618,0.3618
+rgb,girado,S02_R1,SwipeRight,direita,4330,4358,Doing other things,0.4136,0.1946
+rgb,girado,S02_R1,SwipeRight,esquerda,4502,4527,Turning Hand Counterclockwise,0.2454,0.2454
+rgb,girado,S02_R1,SwipeLeft,direita,4641,4658,Zooming In With Full Hand,0.4305,0.4305
+rgb,girado,S02_R1,SwipeLeft,direita,4799,4823,Zooming In With Full Hand,0.5248,0.5248
+rgb,girado,S02_R1,None,direita,0,40,No gesture,0.9185,0.0075
+rgb,girado,S02_R1,None,direita,1964,1994,No gesture,0.9134,0.0082
+rgb,girado,S02_R1,None,direita,41,90,No gesture,0.9159,0.0123
+rgb,girado,S02_R1,None,esquerda,41,90,No gesture,0.9159,0.0123
+rgb,girado,S02_R1,None,esquerda,1964,1994,No gesture,0.9134,0.0082
+rgb,girado,S02_R1,None,esquerda,2803,2837,No gesture,0.3882,0.1657
+rgb,girado,S02_R1,Other,direita,1314,1329,Turning Hand Clockwise,0.2339,0.2339
+rgb,girado,S02_R1,Other,direita,1463,1479,Doing other things,0.9822,0.0086
+rgb,girado,S02_R1,Other,direita,2072,2089,Doing other things,0.988,0.0051
+rgb,girado,S02_R1,Other,esquerda,859,877,Zooming In With Two Fingers,0.3152,0.3152
+rgb,girado,S02_R1,Other,esquerda,1359,1385,Doing other things,0.9205,0.0398
+rgb,girado,S02_R1,Other,esquerda,2006,2027,Zooming In With Full Hand,0.4624,0.4624
+rgb,girado,S02_R2,FlickDown,esquerda,118,148,Doing other things,0.79,0.0654
+rgb,girado,S02_R2,FlickDown,esquerda,293,319,Zooming In With Full Hand,0.4465,0.4465
+rgb,girado,S02_R2,SwipeRight,direita,457,483,Doing other things,0.845,0.0585
+rgb,girado,S02_R2,FlickUp,direita,610,629,Zooming Out With Full Hand,0.3246,0.3246
+rgb,girado,S02_R2,Tap,direita,768,785,Zooming Out With Two Fingers,0.7568,0.7568
+rgb,girado,S02_R2,SwipeRight,direita,944,972,Doing other things,0.3398,0.3217
+rgb,girado,S02_R2,SwipeLeft,esquerda,1127,1146,Turning Hand Counterclockwise,0.4563,0.4563
+rgb,girado,S02_R2,FlickDown,direita,1278,1304,Doing other things,0.5527,0.2936
+rgb,girado,S02_R2,FlickUp,direita,1475,1501,Turning Hand Clockwise,0.1972,0.1972
+rgb,girado,S02_R2,FlickUp,direita,1635,1651,Zooming In With Full Hand,0.5601,0.5601
+rgb,girado,S02_R2,Tap,esquerda,1798,1811,Zooming In With Two Fingers,0.2276,0.2276
+rgb,girado,S02_R2,SwipeLeft,direita,1964,1990,Turning Hand Counterclockwise,0.4606,0.4606
+rgb,girado,S02_R2,FlickDown,direita,2116,2135,Doing other things,0.7164,0.1154
+rgb,girado,S02_R2,Tap,direita,2287,2304,Zooming Out With Two Fingers,0.668,0.668
+rgb,girado,S02_R2,Tap,esquerda,2471,2489,Zooming In With Full Hand,0.318,0.318
+rgb,girado,S02_R2,SwipeRight,esquerda,2645,2677,Doing other things,0.7517,0.0733
+rgb,girado,S02_R2,SwipeLeft,esquerda,2815,2838,Zooming In With Full Hand,0.1587,0.1587
+rgb,girado,S02_R2,Tap,esquerda,2976,2991,Zooming In With Full Hand,0.3998,0.3998
+rgb,girado,S02_R2,SwipeLeft,direita,3146,3165,Zooming Out With Full Hand,0.1859,0.1859
+rgb,girado,S02_R2,FlickUp,esquerda,3300,3314,Turning Hand Counterclockwise,0.462,0.462
+rgb,girado,S02_R2,FlickDown,esquerda,3478,3503,Doing other things,0.9794,0.0038
+rgb,girado,S02_R2,SwipeRight,direita,3636,3661,Doing other things,0.95,0.0179
+rgb,girado,S02_R2,FlickUp,esquerda,3813,3828,Zooming In With Full Hand,0.2851,0.2851
+rgb,girado,S02_R2,FlickUp,esquerda,3984,4008,Zooming Out With Full Hand,0.2048,0.2048
+rgb,girado,S02_R2,SwipeLeft,direita,4176,4191,Zooming In With Full Hand,0.3852,0.3852
+rgb,girado,S02_R2,Tap,direita,4344,4358,Doing other things,0.9385,0.0141
+rgb,girado,S02_R2,SwipeLeft,esquerda,4519,4534,Zooming In With Two Fingers,0.4989,0.4989
+rgb,girado,S02_R2,FlickDown,direita,4698,4711,Zooming In With Two Fingers,0.2125,0.2125
+rgb,girado,S02_R2,SwipeRight,esquerda,4858,4877,Doing other things,0.9101,0.0118
+rgb,girado,S02_R2,SwipeRight,esquerda,5007,5022,Doing other things,0.4908,0.0561
+rgb,girado,S02_R2,None,direita,0,40,Doing other things,0.4176,0.198
+rgb,girado,S02_R2,None,direita,190,210,No gesture,0.9623,0.0021
+rgb,girado,S02_R2,None,direita,700,750,Doing other things,0.6029,0.14
+rgb,girado,S02_R2,None,esquerda,41,70,No gesture,0.9669,0.002
+rgb,girado,S02_R2,None,esquerda,700,750,Doing other things,0.6029,0.14
+rgb,girado,S02_R2,None,esquerda,2069,2100,Doing other things,0.7554,0.095
+rgb,girado,S02_R2,Other,direita,496,517,Doing other things,0.7303,0.0715
+rgb,girado,S02_R2,Other,direita,869,887,Doing other things,0.8864,0.0405
+rgb,girado,S02_R2,Other,direita,1553,1584,Doing other things,0.9626,0.0362
+rgb,girado,S02_R2,Other,esquerda,218,240,Turning Hand Clockwise,0.341,0.341
+rgb,girado,S02_R2,Other,esquerda,335,356,Doing other things,0.4776,0.1641
+rgb,girado,S02_R2,Other,esquerda,1367,1390,Doing other things,0.6603,0.2546
+rgb,girado,S02_R3,SwipeLeft,direita,91,106,Zooming In With Full Hand,0.3936,0.3936
+rgb,girado,S02_R3,Tap,esquerda,199,210,Zooming In With Two Fingers,0.4368,0.4368
+rgb,girado,S02_R3,FlickDown,direita,319,332,Zooming In With Two Fingers,0.2379,0.2379
+rgb,girado,S02_R3,FlickUp,esquerda,444,456,Zooming In With Two Fingers,0.3988,0.3988
+rgb,girado,S02_R3,FlickUp,esquerda,565,579,Turning Hand Counterclockwise,0.221,0.221
+rgb,girado,S02_R3,FlickDown,direita,702,714,Doing other things,0.7396,0.1176
+rgb,girado,S02_R3,FlickUp,direita,811,820,Stop Sign,0.2104,0.2104
+rgb,girado,S02_R3,SwipeRight,direita,922,941,Doing other things,0.9242,0.0344
+rgb,girado,S02_R3,SwipeRight,direita,1034,1050,Doing other things,0.6629,0.0696
+rgb,girado,S02_R3,FlickDown,esquerda,1149,1167,Doing other things,0.783,0.0633
+rgb,girado,S02_R3,SwipeRight,esquerda,1264,1282,Zooming In With Full Hand,0.3666,0.3666
+rgb,girado,S02_R3,SwipeLeft,direita,1380,1394,Zooming Out With Two Fingers,0.268,0.268
+rgb,girado,S02_R3,FlickDown,direita,1489,1501,Doing other things,0.6021,0.1854
+rgb,girado,S02_R3,SwipeLeft,direita,1605,1619,Zooming In With Full Hand,0.3749,0.3749
+rgb,girado,S02_R3,Tap,esquerda,1717,1728,Zooming In With Two Fingers,0.4022,0.4022
+rgb,girado,S02_R3,Tap,direita,1829,1839,Zooming Out With Two Fingers,0.3513,0.3513
+rgb,girado,S02_R3,SwipeRight,direita,1941,1961,Doing other things,0.3834,0.1221
+rgb,girado,S02_R3,FlickUp,direita,2057,2068,Doing other things,0.6592,0.1089
+rgb,girado,S02_R3,SwipeRight,esquerda,2165,2183,Zooming In With Full Hand,0.2696,0.2696
+rgb,girado,S02_R3,Tap,direita,2275,2285,Zooming In With Two Fingers,0.7046,0.7046
+rgb,girado,S02_R3,Tap,direita,2385,2397,Doing other things,0.7944,0.0699
+rgb,girado,S02_R3,Tap,esquerda,2502,2511,Zooming In With Full Hand,0.321,0.321
+rgb,girado,S02_R3,SwipeLeft,esquerda,2615,2624,Zooming In With Full Hand,0.2842,0.2842
+rgb,girado,S02_R3,FlickUp,esquerda,2718,2731,Doing other things,0.3624,0.1562
+rgb,girado,S02_R3,SwipeRight,esquerda,2824,2851,Doing other things,0.9907,0.0041
+rgb,girado,S02_R3,FlickDown,esquerda,2938,2949,Doing other things,0.7276,0.0767
+rgb,girado,S02_R3,SwipeLeft,esquerda,3041,3052,Zooming In With Full Hand,0.4021,0.4021
+rgb,girado,S02_R3,FlickUp,direita,3151,3162,Doing other things,0.4828,0.0715
+rgb,girado,S02_R3,FlickDown,esquerda,3269,3280,Doing other things,0.834,0.0326
+rgb,girado,S02_R3,SwipeLeft,esquerda,3376,3392,Zooming In With Two Fingers,0.2827,0.2827
+rgb,girado,S02_R3,None,direita,0,20,No gesture,0.7854,0.0134
+rgb,girado,S02_R3,None,direita,775,802,No gesture,0.9375,0.0042
+rgb,girado,S02_R3,None,direita,1783,1809,Doing other things,0.2724,0.1533
+rgb,girado,S02_R3,None,esquerda,40,60,No gesture,0.9674,0.0018
+rgb,girado,S02_R3,None,esquerda,1330,1362,No gesture,0.9609,0.003
+rgb,girado,S02_R3,None,esquerda,2448,2472,No gesture,0.9128,0.0074
+rgb,girado,S02_R3,Other,direita,460,494,Turning Hand Clockwise,0.505,0.505
+rgb,girado,S02_R3,Other,direita,608,621,Pulling Two Fingers In,0.3539,0.3539
+rgb,girado,S02_R3,Other,direita,1559,1570,Turning Hand Counterclockwise,0.5109,0.5109
+rgb,girado,S02_R3,Other,esquerda,134,148,Zooming In With Two Fingers,0.3087,0.3087
+rgb,girado,S02_R3,Other,esquerda,342,359,Doing other things,0.8928,0.0251
+rgb,girado,S02_R3,Other,esquerda,1549,1558,Doing other things,0.4228,0.2344
+rgb,girado,S02_R4,FlickDown,esquerda,107,122,Zooming In With Full Hand,0.3687,0.3687
+rgb,girado,S02_R4,SwipeLeft,direita,229,245,Zooming Out With Two Fingers,0.4569,0.4569
+rgb,girado,S02_R4,Tap,esquerda,344,355,Doing other things,0.2407,0.134
+rgb,girado,S02_R4,FlickUp,direita,451,461,Thumb Up,0.2112,0.2112
+rgb,girado,S02_R4,SwipeLeft,esquerda,568,580,Turning Hand Counterclockwise,0.3617,0.3617
+rgb,girado,S02_R4,Tap,direita,669,678,Zooming Out With Two Fingers,0.4636,0.4636
+rgb,girado,S02_R4,FlickDown,esquerda,789,803,Zooming In With Full Hand,0.243,0.243
+rgb,girado,S02_R4,SwipeLeft,direita,897,911,Zooming Out With Full Hand,0.2854,0.2854
+rgb,girado,S02_R4,FlickUp,esquerda,1010,1020,Zooming In With Full Hand,0.4234,0.4234
+rgb,girado,S02_R4,SwipeRight,direita,1119,1136,Doing other things,0.3587,0.1595
+rgb,girado,S02_R4,Tap,esquerda,1231,1238,Zooming In With Two Fingers,0.2542,0.2542
+rgb,girado,S02_R4,SwipeRight,esquerda,1337,1357,Doing other things,0.8373,0.0423
+rgb,girado,S02_R4,Tap,esquerda,1436,1446,Zooming Out With Full Hand,0.3791,0.3791
+rgb,girado,S02_R4,Tap,direita,1551,1560,Doing other things,0.2842,0.1419
+rgb,girado,S02_R4,SwipeLeft,direita,1665,1676,Zooming In With Full Hand,0.3647,0.3647
+rgb,girado,S02_R4,SwipeRight,esquerda,1764,1786,Doing other things,0.9403,0.0206
+rgb,girado,S02_R4,FlickUp,direita,1881,1889,Doing other things,0.6577,0.0624
+rgb,girado,S02_R4,Tap,direita,1983,1993,Doing other things,0.838,0.0473
+rgb,girado,S02_R4,SwipeLeft,esquerda,2088,2100,Zooming In With Full Hand,0.6457,0.6457
+rgb,girado,S02_R4,FlickUp,direita,2200,2209,Doing other things,0.4389,0.2491
+rgb,girado,S02_R4,FlickDown,esquerda,2318,2329,Doing other things,0.9979,0.0009
+rgb,girado,S02_R4,FlickUp,esquerda,2427,2438,Turning Hand Clockwise,0.2725,0.2725
+rgb,girado,S02_R4,SwipeRight,esquerda,2531,2548,Doing other things,0.4554,0.2595
+rgb,girado,S02_R4,SwipeLeft,esquerda,2641,2653,Zooming In With Full Hand,0.4551,0.4551
+rgb,girado,S02_R4,FlickDown,direita,2760,2770,Doing other things,0.5532,0.095
+rgb,girado,S02_R4,FlickDown,direita,2872,2882,Doing other things,0.8875,0.0444
+rgb,girado,S02_R4,FlickUp,esquerda,2977,2986,Zooming In With Full Hand,0.3062,0.3062
+rgb,girado,S02_R4,FlickDown,direita,3086,3100,Doing other things,0.9638,0.0072
+rgb,girado,S02_R4,SwipeRight,direita,3188,3204,Doing other things,0.9714,0.0135
+rgb,girado,S02_R4,SwipeRight,direita,3297,3315,Doing other things,0.9357,0.0229
+rgb,girado,S02_R4,None,direita,0,25,No gesture,0.9747,0.0018
+rgb,girado,S02_R4,None,direita,752,777,Doing other things,0.4159,0.107
+rgb,girado,S02_R4,None,direita,2070,2083,No gesture,0.6494,0.0263
+rgb,girado,S02_R4,None,esquerda,50,70,Doing other things,0.5342,0.2266
+rgb,girado,S02_R4,None,esquerda,1274,1305,No gesture,0.9789,0.0019
+rgb,girado,S02_R4,None,esquerda,2712,2750,No gesture,0.9523,0.0041
+rgb,girado,S02_R4,Other,direita,932,955,Doing other things,0.586,0.124
+rgb,girado,S02_R4,Other,direita,1374,1379,Doing other things,0.9995,0.0001
+rgb,girado,S02_R4,Other,direita,2678,2690,Zooming In With Two Fingers,0.351,0.351
+rgb,girado,S02_R4,Other,esquerda,296,322,Zooming Out With Two Fingers,0.5558,0.5558
+rgb,girado,S02_R4,Other,esquerda,1154,1171,Doing other things,0.9839,0.0085
+rgb,girado,S02_R4,Other,esquerda,2502,2515,Doing other things,0.4391,0.1154
+rgb,girado,S02_R5,SwipeLeft,direita,96,108,Zooming In With Full Hand,0.5557,0.5557
+rgb,girado,S02_R5,FlickUp,esquerda,228,240,Zooming In With Full Hand,0.571,0.571
+rgb,girado,S02_R5,SwipeLeft,esquerda,345,360,Zooming In With Full Hand,0.3293,0.3293
+rgb,girado,S02_R5,Tap,direita,462,476,Zooming Out With Two Fingers,0.4794,0.4794
+rgb,girado,S02_R5,Tap,esquerda,589,599,Zooming In With Two Fingers,0.8349,0.8349
+rgb,girado,S02_R5,FlickDown,direita,712,724,Doing other things,0.8861,0.0236
+rgb,girado,S02_R5,FlickDown,esquerda,824,834,Zooming In With Full Hand,0.3369,0.3369
+rgb,girado,S02_R5,SwipeLeft,esquerda,935,946,Zooming In With Full Hand,0.5077,0.5077
+rgb,girado,S02_R5,SwipeRight,direita,1051,1066,Doing other things,0.9288,0.0221
+rgb,girado,S02_R5,FlickDown,direita,1164,1178,Doing other things,0.8119,0.0832
+rgb,girado,S02_R5,FlickUp,direita,1270,1284,Turning Hand Counterclockwise,0.3123,0.3123
+rgb,girado,S02_R5,FlickUp,esquerda,1384,1397,Zooming In With Full Hand,0.2316,0.2316
+rgb,girado,S02_R5,FlickDown,esquerda,1498,1509,Doing other things,0.4023,0.2861
+rgb,girado,S02_R5,FlickUp,esquerda,1609,1618,Zooming In With Full Hand,0.4391,0.4391
+rgb,girado,S02_R5,FlickDown,direita,1714,1727,Doing other things,0.8347,0.0559
+rgb,girado,S02_R5,SwipeRight,direita,1824,1842,Doing other things,0.8776,0.0289
+rgb,girado,S02_R5,SwipeLeft,direita,1936,1949,Zooming Out With Two Fingers,0.2818,0.2818
+rgb,girado,S02_R5,SwipeLeft,direita,2060,2075,Zooming Out With Full Hand,0.5266,0.5266
+rgb,girado,S02_R5,FlickUp,direita,2164,2178,Zooming In With Full Hand,0.2599,0.2599
+rgb,girado,S02_R5,SwipeRight,direita,2275,2294,Doing other things,0.6786,0.127
+rgb,girado,S02_R5,Tap,esquerda,2380,2390,Doing other things,0.5232,0.1111
+rgb,girado,S02_R5,Tap,direita,2501,2511,Doing other things,0.3463,0.1345
+rgb,girado,S02_R5,SwipeRight,esquerda,2601,2617,Doing other things,0.9449,0.0163
+rgb,girado,S02_R5,Tap,esquerda,2707,2716,Drumming Fingers,0.1664,0.1664
+rgb,girado,S02_R5,SwipeLeft,esquerda,2823,2835,Zooming In With Two Fingers,0.2743,0.2743
+rgb,girado,S02_R5,Tap,direita,2930,2942,Zooming Out With Two Fingers,0.3323,0.3323
+rgb,girado,S02_R5,FlickUp,direita,3039,3051,Doing other things,0.4526,0.0857
+rgb,girado,S02_R5,SwipeRight,esquerda,3150,3168,Doing other things,0.8179,0.1416
+rgb,girado,S02_R5,FlickDown,esquerda,3259,3275,Doing other things,0.6329,0.099
+rgb,girado,S02_R5,SwipeRight,esquerda,3374,3395,Doing other things,0.9863,0.0051
+rgb,girado,S02_R5,None,direita,0,30,No gesture,0.2706,0.0854
+rgb,girado,S02_R5,None,direita,435,450,No gesture,0.9781,0.0024
+rgb,girado,S02_R5,None,direita,2340,2378,Doing other things,0.8132,0.0504
+rgb,girado,S02_R5,None,esquerda,145,172,No gesture,0.5149,0.07
+rgb,girado,S02_R5,None,esquerda,1246,1260,No gesture,0.9761,0.002
+rgb,girado,S02_R5,None,esquerda,1775,1800,No gesture,0.971,0.0021
+rgb,girado,S02_R5,Other,direita,32,42,Doing other things,0.9993,0.0003
+rgb,girado,S02_R5,Other,direita,883,912,Doing other things,0.9865,0.0041
+rgb,girado,S02_R5,Other,direita,1632,1656,Doing other things,0.4392,0.1445
+rgb,girado,S02_R5,Other,esquerda,275,302,Doing other things,0.9987,0.0003
+rgb,girado,S02_R5,Other,esquerda,387,397,Doing other things,0.562,0.1149
+rgb,girado,S02_R5,Other,esquerda,2520,2533,Doing other things,0.9986,0.0007
+rgb,girado,S10_R1,FlickUp,esquerda,140,175,Turning Hand Clockwise,0.3636,0.3636
+rgb,girado,S10_R1,FlickUp,direita,334,370,Zooming Out With Full Hand,0.19,0.19
+rgb,girado,S10_R1,SwipeRight,direita,540,580,Doing other things,0.9357,0.031
+rgb,girado,S10_R1,SwipeRight,esquerda,743,774,Doing other things,0.6851,0.111
+rgb,girado,S10_R1,FlickUp,esquerda,943,976,Turning Hand Counterclockwise,0.3623,0.3623
+rgb,girado,S10_R1,SwipeRight,direita,1145,1189,Zooming Out With Full Hand,0.2572,0.2572
+rgb,girado,S10_R1,FlickDown,direita,1348,1384,Doing other things,0.8703,0.0437
+rgb,girado,S10_R1,FlickDown,esquerda,1554,1574,Doing other things,0.4396,0.1095
+rgb,girado,S10_R1,SwipeRight,esquerda,1756,1796,Doing other things,0.615,0.0669
+rgb,girado,S10_R1,SwipeRight,direita,1980,2029,Doing other things,0.2135,0.1848
+rgb,girado,S10_R1,SwipeLeft,esquerda,2158,2201,Turning Hand Clockwise,0.2877,0.2877
+rgb,girado,S10_R1,Tap,direita,2363,2398,Zooming Out With Two Fingers,0.4569,0.4569
+rgb,girado,S10_R1,FlickDown,direita,2570,2628,Turning Hand Clockwise,0.4403,0.4403
+rgb,girado,S10_R1,SwipeLeft,direita,2778,2823,Doing other things,0.9869,0.0052
+rgb,girado,S10_R1,SwipeLeft,direita,2969,2998,Zooming Out With Two Fingers,0.3905,0.3905
+rgb,girado,S10_R1,SwipeLeft,esquerda,3164,3190,Zooming In With Two Fingers,0.4307,0.4307
+rgb,girado,S10_R1,Tap,direita,3366,3391,Doing other things,0.4734,0.1967
+rgb,girado,S10_R1,SwipeLeft,esquerda,3573,3604,Doing other things,0.8374,0.0422
+rgb,girado,S10_R1,Tap,esquerda,3765,3787,Turning Hand Clockwise,0.471,0.471
+rgb,girado,S10_R1,SwipeLeft,direita,4004,4038,Zooming Out With Two Fingers,0.6488,0.6488
+rgb,girado,S10_R1,FlickUp,direita,4072,4094,Doing other things,0.3697,0.1344
+rgb,girado,S10_R1,FlickUp,esquerda,4163,4206,Turning Hand Clockwise,0.292,0.292
+rgb,girado,S10_R1,Tap,esquerda,4359,4387,Zooming In With Two Fingers,0.3501,0.3501
+rgb,girado,S10_R1,FlickUp,direita,4568,4598,Shaking Hand,0.1895,0.1895
+rgb,girado,S10_R1,FlickDown,direita,4772,4805,Doing other things,0.9258,0.0091
+rgb,girado,S10_R1,FlickDown,esquerda,4973,5005,Doing other things,0.9458,0.018
+rgb,girado,S10_R1,SwipeLeft,direita,5178,5224,Zooming In With Full Hand,0.5981,0.5981
+rgb,girado,S10_R1,FlickDown,esquerda,5385,5421,Doing other things,0.5676,0.0992
+rgb,girado,S10_R1,Tap,esquerda,5579,5602,Drumming Fingers,0.3445,0.3445
+rgb,girado,S10_R1,SwipeRight,esquerda,5778,5814,Zooming In With Full Hand,0.3646,0.3646
+rgb,girado,S10_R1,Tap,direita,5986,6007,Zooming Out With Two Fingers,0.665,0.665
+rgb,girado,S10_R1,None,direita,0,32,No gesture,0.9494,0.0029
+rgb,girado,S10_R1,None,direita,2048,2078,No gesture,0.5675,0.0201
+rgb,girado,S10_R1,None,direita,4301,4348,No gesture,0.9547,0.0028
+rgb,girado,S10_R1,None,esquerda,0,32,No gesture,0.9494,0.0029
+rgb,girado,S10_R1,None,esquerda,2048,2078,No gesture,0.5675,0.0201
+rgb,girado,S10_R1,None,esquerda,4301,4348,No gesture,0.9547,0.0028
+rgb,girado,S10_R1,Other,direita,273,288,Doing other things,0.9955,0.0009
+rgb,girado,S10_R1,Other,direita,2693,2729,Doing other things,0.9937,0.003
+rgb,girado,S10_R1,Other,direita,3189,3241,Doing other things,0.9955,0.0014
+rgb,girado,S10_R1,Other,esquerda,249,265,Doing other things,0.9798,0.0034
+rgb,girado,S10_R1,Other,esquerda,2889,2914,Zooming In With Full Hand,0.4899,0.4899
+rgb,girado,S10_R1,Other,esquerda,3189,3241,Doing other things,0.9955,0.0014
+rgb,girado,S10_R2,SwipeRight,direita,134,180,Doing other things,0.3535,0.1121
+rgb,girado,S10_R2,SwipeRight,esquerda,338,365,Zooming Out With Full Hand,0.6388,0.6388
+rgb,girado,S10_R2,FlickUp,esquerda,527,564,Doing other things,0.2866,0.2161
+rgb,girado,S10_R2,SwipeLeft,esquerda,715,749,Zooming In With Full Hand,0.3701,0.3701
+rgb,girado,S10_R2,Tap,direita,905,938,Doing other things,0.2465,0.2306
+rgb,girado,S10_R2,FlickDown,esquerda,1095,1136,Doing other things,0.9232,0.024
+rgb,girado,S10_R2,SwipeRight,esquerda,1260,1301,Zooming In With Full Hand,0.3282,0.3282
+rgb,girado,S10_R2,FlickDown,direita,1468,1527,Zooming In With Full Hand,0.3663,0.3663
+rgb,girado,S10_R2,SwipeLeft,esquerda,1664,1690,Zooming Out With Full Hand,0.4809,0.4809
+rgb,girado,S10_R2,FlickUp,direita,1846,1867,Turning Hand Counterclockwise,0.2164,0.2164
+rgb,girado,S10_R2,FlickUp,direita,2040,2061,Zooming In With Full Hand,0.2369,0.2369
+rgb,girado,S10_R2,Tap,esquerda,2235,2245,Zooming In With Full Hand,0.3157,0.3157
+rgb,girado,S10_R2,SwipeLeft,direita,2417,2447,Zooming In With Full Hand,0.23,0.23
+rgb,girado,S10_R2,SwipeLeft,esquerda,2609,2640,Zooming In With Two Fingers,0.4229,0.4229
+rgb,girado,S10_R2,FlickUp,esquerda,2790,2822,Turning Hand Clockwise,0.3184,0.3184
+rgb,girado,S10_R2,FlickUp,esquerda,2988,3001,Zooming In With Full Hand,0.4054,0.4054
+rgb,girado,S10_R2,FlickUp,direita,3174,3194,Zooming Out With Full Hand,0.1497,0.1497
+rgb,girado,S10_R2,Tap,esquerda,3377,3393,Zooming In With Two Fingers,0.3192,0.3192
+rgb,girado,S10_R2,SwipeRight,esquerda,3572,3601,Zooming In With Full Hand,0.431,0.431
+rgb,girado,S10_R2,SwipeLeft,direita,3756,3785,Zooming In With Full Hand,0.5137,0.5137
+rgb,girado,S10_R2,FlickDown,direita,3956,3989,Doing other things,0.2296,0.1471
+rgb,girado,S10_R2,SwipeRight,direita,4150,4180,Doing other things,0.4246,0.1712
+rgb,girado,S10_R2,Tap,direita,4327,4357,Zooming In With Two Fingers,0.5079,0.5079
+rgb,girado,S10_R2,FlickDown,esquerda,4509,4541,Doing other things,0.9645,0.0118
+rgb,girado,S10_R2,SwipeRight,direita,4704,4729,Doing other things,0.4381,0.2829
+rgb,girado,S10_R2,Tap,esquerda,4884,4912,Zooming In With Full Hand,0.4818,0.4818
+rgb,girado,S10_R2,Tap,direita,5068,5089,Zooming In With Full Hand,0.3385,0.3385
+rgb,girado,S10_R2,SwipeLeft,direita,5253,5276,Zooming In With Full Hand,0.5324,0.5324
+rgb,girado,S10_R2,FlickDown,direita,5438,5480,Doing other things,0.6613,0.2326
+rgb,girado,S10_R2,FlickDown,esquerda,5635,5689,Zooming In With Full Hand,0.2222,0.2222
+rgb,girado,S10_R2,None,direita,772,810,No gesture,0.9484,0.0036
+rgb,girado,S10_R2,None,direita,2339,2374,No gesture,0.9749,0.0016
+rgb,girado,S10_R2,None,direita,3233,3276,No gesture,0.976,0.0015
+rgb,girado,S10_R2,None,esquerda,772,810,No gesture,0.9484,0.0036
+rgb,girado,S10_R2,None,esquerda,2339,2374,No gesture,0.9749,0.0016
+rgb,girado,S10_R2,None,esquerda,3233,3276,No gesture,0.976,0.0015
+rgb,girado,S10_R2,Other,direita,31,77,Doing other things,0.9763,0.0045
+rgb,girado,S10_R2,Other,direita,2122,2146,No gesture,0.3016,0.1703
+rgb,girado,S10_R2,Other,direita,3707,3744,Doing other things,0.8867,0.0433
+rgb,girado,S10_R2,Other,esquerda,33,79,Doing other things,0.9788,0.0038
+rgb,girado,S10_R2,Other,esquerda,2122,2146,No gesture,0.3016,0.1703
+rgb,girado,S10_R2,Other,esquerda,3707,3744,Doing other things,0.8867,0.0433
+rgb,girado,S10_R3,FlickDown,direita,131,173,Doing other things,0.5773,0.1451
+rgb,girado,S10_R3,FlickUp,direita,314,335,Turning Hand Counterclockwise,0.2043,0.2043
+rgb,girado,S10_R3,SwipeRight,direita,509,529,Zooming Out With Two Fingers,0.4836,0.4836
+rgb,girado,S10_R3,FlickUp,esquerda,676,706,Doing other things,0.6944,0.0879
+rgb,girado,S10_R3,FlickDown,direita,859,884,Doing other things,0.8997,0.0166
+rgb,girado,S10_R3,FlickUp,esquerda,1063,1087,Zooming In With Full Hand,0.5693,0.5693
+rgb,girado,S10_R3,SwipeRight,direita,1248,1268,Doing other things,0.8364,0.063
+rgb,girado,S10_R3,Tap,direita,1423,1447,Zooming Out With Two Fingers,0.2004,0.2004
+rgb,girado,S10_R3,FlickUp,direita,1627,1660,Turning Hand Counterclockwise,0.4947,0.4947
+rgb,girado,S10_R3,FlickUp,esquerda,1816,1841,Zooming Out With Two Fingers,0.4241,0.4241
+rgb,girado,S10_R3,SwipeRight,esquerda,1987,2023,Zooming In With Two Fingers,0.3663,0.3663
+rgb,girado,S10_R3,FlickDown,esquerda,2199,2224,Zooming In With Full Hand,0.2205,0.2205
+rgb,girado,S10_R3,FlickDown,esquerda,2365,2391,Doing other things,0.1736,0.1485
+rgb,girado,S10_R3,Tap,esquerda,2555,2571,Zooming In With Two Fingers,0.5555,0.5555
+rgb,girado,S10_R3,SwipeLeft,esquerda,2720,2745,Zooming In With Full Hand,0.4113,0.4113
+rgb,girado,S10_R3,SwipeRight,direita,2906,2932,Doing other things,0.7935,0.0948
+rgb,girado,S10_R3,FlickUp,direita,3090,3117,Stop Sign,0.3456,0.3456
+rgb,girado,S10_R3,SwipeRight,esquerda,3296,3315,Zooming In With Full Hand,0.3926,0.3926
+rgb,girado,S10_R3,SwipeRight,esquerda,3462,3491,Doing other things,0.7998,0.0455
+rgb,girado,S10_R3,Tap,esquerda,3642,3660,Zooming In With Two Fingers,0.6292,0.6292
+rgb,girado,S10_R3,FlickDown,esquerda,3843,3873,Zooming Out With Full Hand,0.5311,0.5311
+rgb,girado,S10_R3,Tap,direita,4016,4032,Doing other things,0.3209,0.1607
+rgb,girado,S10_R3,Tap,esquerda,4191,4207,Zooming In With Two Fingers,0.2229,0.2229
+rgb,girado,S10_R3,FlickDown,direita,4371,4412,Zooming In With Two Fingers,0.4724,0.4724
+rgb,girado,S10_R3,Tap,direita,4572,4595,Sliding Two Fingers Right,0.6107,0.6107
+rgb,girado,S10_R3,SwipeLeft,direita,4773,4805,Zooming In With Full Hand,0.37,0.37
+rgb,girado,S10_R3,SwipeLeft,direita,4954,4989,Zooming In With Two Fingers,0.3009,0.3009
+rgb,girado,S10_R3,SwipeLeft,esquerda,5146,5165,Zooming In With Full Hand,0.3597,0.3597
+rgb,girado,S10_R3,SwipeLeft,esquerda,5331,5356,Zooming In With Full Hand,0.2936,0.2936
+rgb,girado,S10_R3,Tap,direita,5514,5535,Zooming In With Two Fingers,0.3473,0.3473
+rgb,girado,S10_R3,None,direita,0,50,No gesture,0.9685,0.0017
+rgb,girado,S10_R3,None,direita,775,800,No gesture,0.9728,0.0019
+rgb,girado,S10_R3,None,direita,3047,3071,No gesture,0.7056,0.0459
+rgb,girado,S10_R3,None,esquerda,0,50,No gesture,0.9685,0.0017
+rgb,girado,S10_R3,None,esquerda,775,800,No gesture,0.9728,0.0019
+rgb,girado,S10_R3,None,esquerda,3047,3071,No gesture,0.7056,0.0459
+rgb,girado,S10_R3,Other,direita,824,839,Doing other things,0.5158,0.1523
+rgb,girado,S10_R3,Other,direita,1525,1583,Stop Sign,0.531,0.531
+rgb,girado,S10_R3,Other,direita,2796,2834,Doing other things,0.9223,0.0294
+rgb,girado,S10_R3,Other,esquerda,1778,1793,Doing other things,0.995,0.0026
+rgb,girado,S10_R3,Other,esquerda,3141,3166,Doing other things,0.7939,0.1444
+rgb,girado,S10_R3,Other,esquerda,3896,3921,Doing other things,0.6816,0.2587
+rgb,girado,S10_R4,FlickUp,esquerda,160,182,Zooming Out With Full Hand,0.3447,0.3447
+rgb,girado,S10_R4,SwipeLeft,esquerda,340,363,Zooming In With Full Hand,0.3343,0.3343
+rgb,girado,S10_R4,SwipeRight,direita,534,560,Doing other things,0.4086,0.3411
+rgb,girado,S10_R4,SwipeRight,esquerda,742,769,Zooming In With Full Hand,0.5454,0.5454
+rgb,girado,S10_R4,FlickDown,direita,933,961,Zooming In With Full Hand,0.2318,0.2318
+rgb,girado,S10_R4,FlickDown,esquerda,1131,1163,Zooming In With Full Hand,0.4251,0.4251
+rgb,girado,S10_R4,Tap,direita,1330,1344,Doing other things,0.8195,0.0439
+rgb,girado,S10_R4,SwipeLeft,direita,1532,1563,Zooming In With Two Fingers,0.4318,0.4318
+rgb,girado,S10_R4,SwipeLeft,direita,1728,1760,Zooming In With Full Hand,0.4958,0.4958
+rgb,girado,S10_R4,FlickUp,direita,1922,1947,Zooming In With Full Hand,0.2318,0.2318
+rgb,girado,S10_R4,FlickUp,esquerda,2116,2149,Zooming Out With Two Fingers,0.3998,0.3998
+rgb,girado,S10_R4,SwipeLeft,esquerda,2325,2348,Zooming In With Full Hand,0.4552,0.4552
+rgb,girado,S10_R4,SwipeRight,esquerda,2525,2555,Zooming Out With Full Hand,0.2623,0.2623
+rgb,girado,S10_R4,SwipeLeft,esquerda,2728,2749,Doing other things,0.999,0.0006
+rgb,girado,S10_R4,FlickDown,direita,2921,2945,Zooming In With Two Fingers,0.6273,0.6273
+rgb,girado,S10_R4,Tap,esquerda,3123,3135,Zooming In With Two Fingers,0.3463,0.3463
+rgb,girado,S10_R4,Tap,esquerda,3313,3326,Zooming Out With Full Hand,0.3053,0.3053
+rgb,girado,S10_R4,FlickDown,esquerda,3520,3560,Doing other things,0.3559,0.2904
+rgb,girado,S10_R4,FlickDown,esquerda,3736,3763,Doing other things,0.4951,0.1456
+rgb,girado,S10_R4,FlickUp,esquerda,3927,3956,Doing other things,0.3179,0.3057
+rgb,girado,S10_R4,SwipeRight,direita,4116,4140,Doing other things,0.4757,0.4122
+rgb,girado,S10_R4,SwipeRight,esquerda,4311,4334,Doing other things,0.6118,0.1295
+rgb,girado,S10_R4,SwipeRight,direita,4502,4531,Thumb Down,0.3232,0.3232
+rgb,girado,S10_R4,SwipeLeft,direita,4705,4737,Zooming In With Full Hand,0.6224,0.6224
+rgb,girado,S10_R4,FlickUp,direita,4908,4927,Zooming In With Two Fingers,0.364,0.364
+rgb,girado,S10_R4,Tap,esquerda,5109,5124,Zooming In With Full Hand,0.2489,0.2489
+rgb,girado,S10_R4,FlickUp,direita,5308,5327,Zooming Out With Full Hand,0.2122,0.2122
+rgb,girado,S10_R4,Tap,direita,5511,5526,Doing other things,0.302,0.1682
+rgb,girado,S10_R4,Tap,direita,5706,5723,Zooming Out With Two Fingers,0.2535,0.2535
+rgb,girado,S10_R4,FlickDown,direita,5921,5947,Drumming Fingers,0.1973,0.1973
+rgb,girado,S10_R4,None,direita,590,614,No gesture,0.9439,0.0031
+rgb,girado,S10_R4,None,direita,1018,1046,No gesture,0.9666,0.0019
+rgb,girado,S10_R4,None,direita,2237,2273,No gesture,0.9199,0.0057
+rgb,girado,S10_R4,None,esquerda,590,614,No gesture,0.9439,0.0031
+rgb,girado,S10_R4,None,esquerda,1018,1046,No gesture,0.9666,0.0019
+rgb,girado,S10_R4,None,esquerda,2237,2273,No gesture,0.9199,0.0057
+rgb,girado,S10_R4,Other,direita,618,635,Doing other things,0.9688,0.0104
+rgb,girado,S10_R4,Other,direita,1485,1505,Doing other things,0.9919,0.0045
+rgb,girado,S10_R4,Other,direita,1981,2019,Doing other things,0.9967,0.0008
+rgb,girado,S10_R4,Other,esquerda,1275,1297,Doing other things,0.9938,0.0016
+rgb,girado,S10_R4,Other,esquerda,1420,1438,Doing other things,0.9927,0.0038
+rgb,girado,S10_R4,Other,esquerda,1883,1901,Doing other things,0.8534,0.0294
+rgb,girado,S10_R5,FlickUp,esquerda,126,150,Zooming In With Full Hand,0.3901,0.3901
+rgb,girado,S10_R5,SwipeRight,esquerda,301,322,Zooming Out With Full Hand,0.2572,0.2572
+rgb,girado,S10_R5,Tap,direita,484,500,Doing other things,0.5217,0.0832
+rgb,girado,S10_R5,FlickDown,direita,670,710,Shaking Hand,0.2131,0.2131
+rgb,girado,S10_R5,Tap,direita,840,861,Doing other things,0.7698,0.0902
+rgb,girado,S10_R5,Tap,esquerda,1041,1063,Zooming In With Full Hand,0.2666,0.2666
+rgb,girado,S10_R5,Tap,esquerda,1214,1231,Zooming Out With Full Hand,0.3705,0.3705
+rgb,girado,S10_R5,SwipeLeft,direita,1387,1402,Zooming In With Full Hand,0.4448,0.4448
+rgb,girado,S10_R5,SwipeLeft,esquerda,1568,1594,Zooming Out With Full Hand,0.2966,0.2966
+rgb,girado,S10_R5,SwipeRight,esquerda,1755,1786,Zooming In With Full Hand,0.5073,0.5073
+rgb,girado,S10_R5,Tap,esquerda,1932,1950,Zooming In With Full Hand,0.4301,0.4301
+rgb,girado,S10_R5,FlickUp,esquerda,2110,2144,Zooming In With Full Hand,0.2173,0.2173
+rgb,girado,S10_R5,SwipeLeft,direita,2297,2326,Zooming In With Two Fingers,0.4296,0.4296
+rgb,girado,S10_R5,FlickDown,esquerda,2483,2517,Zooming In With Full Hand,0.2774,0.2774
+rgb,girado,S10_R5,SwipeLeft,direita,2658,2694,Zooming In With Two Fingers,0.3269,0.3269
+rgb,girado,S10_R5,SwipeRight,direita,2834,2858,Zooming In With Two Fingers,0.0957,0.0957
+rgb,girado,S10_R5,FlickDown,esquerda,3014,3039,Doing other things,0.2771,0.1454
+rgb,girado,S10_R5,FlickUp,direita,3184,3213,Shaking Hand,0.3621,0.3621
+rgb,girado,S10_R5,SwipeLeft,esquerda,3377,3396,Turning Hand Clockwise,0.3978,0.3978
+rgb,girado,S10_R5,FlickUp,direita,3571,3588,Zooming Out With Two Fingers,0.1801,0.1801
+rgb,girado,S10_R5,SwipeLeft,esquerda,3764,3783,Zooming In With Full Hand,0.449,0.449
+rgb,girado,S10_R5,FlickDown,esquerda,4120,4145,Zooming Out With Full Hand,0.3052,0.3052
+rgb,girado,S10_R5,FlickDown,direita,4295,4316,Turning Hand Counterclockwise,0.2792,0.2792
+rgb,girado,S10_R5,SwipeRight,esquerda,4477,4499,Doing other things,0.1806,0.1175
+rgb,girado,S10_R5,Tap,direita,4660,4686,Turning Hand Counterclockwise,0.1291,0.1291
+rgb,girado,S10_R5,FlickDown,direita,4865,4887,Zooming In With Full Hand,0.507,0.507
+rgb,girado,S10_R5,SwipeRight,direita,5026,5055,Zooming Out With Two Fingers,0.2522,0.2522
+rgb,girado,S10_R5,FlickUp,direita,5207,5232,Zooming In With Full Hand,0.2263,0.2263
+rgb,girado,S10_R5,FlickUp,esquerda,5401,5425,Pulling Two Fingers In,0.3801,0.3801
+rgb,girado,S10_R5,None,direita,0,29,No gesture,0.7366,0.0153
+rgb,girado,S10_R5,None,direita,401,430,No gesture,0.9625,0.0023
+rgb,girado,S10_R5,None,direita,3906,3936,No gesture,0.7734,0.0227
+rgb,girado,S10_R5,None,esquerda,0,29,No gesture,0.7366,0.0153
+rgb,girado,S10_R5,None,esquerda,401,430,No gesture,0.9625,0.0023
+rgb,girado,S10_R5,None,esquerda,3906,3936,No gesture,0.7734,0.0227
+rgb,girado,S10_R5,Other,direita,48,67,Zooming Out With Full Hand,0.2907,0.2907
+rgb,girado,S10_R5,Other,direita,2203,2250,Doing other things,0.7642,0.0927
+rgb,girado,S10_R5,Other,direita,3847,3905,Doing other things,0.7432,0.1199
+rgb,girado,S10_R5,Other,esquerda,56,74,Pulling Two Fingers In,0.3076,0.3076
+rgb,girado,S10_R5,Other,esquerda,2203,2250,Doing other things,0.7642,0.0927
+rgb,girado,S10_R5,Other,esquerda,3847,3905,Doing other things,0.7432,0.1199
+rgb,girado,S11_R1,FlickDown,esquerda,148,180,Turning Hand Counterclockwise,0.1958,0.1958
+rgb,girado,S11_R1,Tap,direita,342,365,Doing other things,0.2221,0.1844
+rgb,girado,S11_R1,FlickDown,esquerda,524,543,Zooming In With Full Hand,0.2356,0.2356
+rgb,girado,S11_R1,SwipeRight,esquerda,686,716,Doing other things,0.2334,0.1714
+rgb,girado,S11_R1,Tap,esquerda,862,880,Zooming In With Full Hand,0.4592,0.4592
+rgb,girado,S11_R1,FlickUp,direita,1032,1051,Doing other things,0.9857,0.0041
+rgb,girado,S11_R1,FlickDown,direita,1218,1255,Doing other things,0.4155,0.304
+rgb,girado,S11_R1,FlickUp,esquerda,1411,1430,Zooming In With Two Fingers,0.6476,0.6476
+rgb,girado,S11_R1,SwipeRight,esquerda,1540,1571,Turning Hand Counterclockwise,0.3004,0.3004
+rgb,girado,S11_R1,FlickUp,direita,1698,1712,Zooming Out With Two Fingers,0.2245,0.2245
+rgb,girado,S11_R1,FlickDown,direita,1865,1899,Doing other things,0.3769,0.1493
+rgb,girado,S11_R1,SwipeLeft,direita,2033,2049,Zooming In With Two Fingers,0.4443,0.4443
+rgb,girado,S11_R1,Tap,direita,2183,2206,Doing other things,0.2878,0.0815
+rgb,girado,S11_R1,Tap,esquerda,2351,2361,Zooming Out With Full Hand,0.2976,0.2976
+rgb,girado,S11_R1,FlickDown,esquerda,2500,2515,Zooming Out With Two Fingers,0.1876,0.1876
+rgb,girado,S11_R1,Tap,direita,2652,2664,Doing other things,0.5136,0.1366
+rgb,girado,S11_R1,SwipeRight,direita,2810,2829,Zooming In With Full Hand,0.2744,0.2744
+rgb,girado,S11_R1,SwipeRight,direita,2982,3018,Turning Hand Counterclockwise,0.1825,0.1825
+rgb,girado,S11_R1,SwipeLeft,esquerda,3150,3175,Turning Hand Counterclockwise,0.4313,0.4313
+rgb,girado,S11_R1,SwipeLeft,esquerda,3306,3339,Turning Hand Clockwise,0.5144,0.5144
+rgb,girado,S11_R1,SwipeRight,esquerda,3489,3520,Zooming Out With Full Hand,0.2125,0.2125
+rgb,girado,S11_R1,FlickUp,esquerda,3670,3681,Doing other things,0.5068,0.143
+rgb,girado,S11_R1,FlickUp,esquerda,3808,3833,Turning Hand Counterclockwise,0.2384,0.2384
+rgb,girado,S11_R1,FlickUp,esquerda,3975,4003,Turning Hand Clockwise,0.2952,0.2952
+rgb,girado,S11_R1,FlickUp,direita,4145,4159,Zooming Out With Two Fingers,0.464,0.464
+rgb,girado,S11_R1,SwipeLeft,direita,4303,4332,Zooming In With Two Fingers,0.7582,0.7582
+rgb,girado,S11_R1,SwipeLeft,esquerda,4467,4491,Turning Hand Clockwise,0.2647,0.2647
+rgb,girado,S11_R1,SwipeLeft,direita,4622,4646,Zooming In With Full Hand,0.4752,0.4752
+rgb,girado,S11_R1,SwipeRight,direita,4787,4813,Doing other things,0.2128,0.1904
+rgb,girado,S11_R1,FlickDown,direita,4962,4990,Zooming In With Full Hand,0.5486,0.5486
+rgb,girado,S11_R1,None,direita,0,18,No gesture,0.9685,0.0015
+rgb,girado,S11_R1,None,direita,2122,2158,No gesture,0.5907,0.0225
+rgb,girado,S11_R1,None,direita,3868,3900,Doing other things,0.6247,0.0291
+rgb,girado,S11_R1,None,esquerda,0,18,No gesture,0.9685,0.0015
+rgb,girado,S11_R1,None,esquerda,2122,2158,No gesture,0.5907,0.0225
+rgb,girado,S11_R1,None,esquerda,3868,3900,Doing other things,0.6247,0.0291
+rgb,girado,S11_R1,Other,direita,1335,1379,Doing other things,0.8603,0.0505
+rgb,girado,S11_R1,Other,direita,2378,2407,Doing other things,0.9693,0.0098
+rgb,girado,S11_R1,Other,direita,3239,3269,Doing other things,0.8425,0.0694
+rgb,girado,S11_R1,Other,esquerda,1335,1379,Doing other things,0.8603,0.0505
+rgb,girado,S11_R1,Other,esquerda,2250,2278,Doing other things,0.9554,0.0129
+rgb,girado,S11_R1,Other,esquerda,3239,3269,Doing other things,0.8425,0.0694
+ir,normal,S01_R1,FlickDown,direita,113,146,No gesture,0.9286,0.0121
+ir,normal,S01_R1,SwipeLeft,direita,254,282,No gesture,0.9551,0.0031
+ir,normal,S01_R1,Tap,esquerda,420,448,No gesture,0.574,0.0239
+ir,normal,S01_R1,FlickUp,direita,590,620,Doing other things,0.9197,0.0152
+ir,normal,S01_R1,FlickUp,direita,785,812,No gesture,0.8281,0.0257
+ir,normal,S01_R1,SwipeRight,esquerda,941,970,No gesture,0.8897,0.0279
+ir,normal,S01_R1,SwipeRight,direita,1107,1141,No gesture,0.6458,0.0504
+ir,normal,S01_R1,SwipeLeft,direita,1275,1309,No gesture,0.9556,0.0023
+ir,normal,S01_R1,FlickUp,direita,1436,1466,No gesture,0.6607,0.0196
+ir,normal,S01_R1,Tap,direita,1602,1632,No gesture,0.7861,0.0053
+ir,normal,S01_R1,Tap,direita,1772,1803,No gesture,0.8407,0.0053
+ir,normal,S01_R1,FlickUp,esquerda,1952,1984,Doing other things,0.8801,0.0116
+ir,normal,S01_R1,SwipeRight,esquerda,2115,2161,No gesture,0.8894,0.0395
+ir,normal,S01_R1,Tap,esquerda,2290,2329,No gesture,0.7814,0.0174
+ir,normal,S01_R1,FlickDown,esquerda,2457,2497,No gesture,0.714,0.1033
+ir,normal,S01_R1,SwipeLeft,esquerda,2613,2646,No gesture,0.8934,0.0208
+ir,normal,S01_R1,SwipeRight,esquerda,2784,2830,No gesture,0.8924,0.0289
+ir,normal,S01_R1,FlickDown,esquerda,2964,2990,No gesture,0.8386,0.036
+ir,normal,S01_R1,SwipeRight,direita,3118,3154,No gesture,0.791,0.0219
+ir,normal,S01_R1,Tap,esquerda,3289,3320,Doing other things,0.678,0.0239
+ir,normal,S01_R1,SwipeLeft,esquerda,3466,3498,No gesture,0.8594,0.0153
+ir,normal,S01_R1,FlickDown,esquerda,3642,3688,No gesture,0.9146,0.0152
+ir,normal,S01_R1,SwipeLeft,esquerda,3799,3839,No gesture,0.8058,0.0243
+ir,normal,S01_R1,SwipeLeft,direita,3955,3993,No gesture,0.9452,0.0044
+ir,normal,S01_R1,FlickDown,direita,4126,4181,No gesture,0.9087,0.0175
+ir,normal,S01_R1,SwipeRight,direita,4304,4346,No gesture,0.9394,0.008
+ir,normal,S01_R1,Tap,direita,4472,4510,No gesture,0.8848,0.0044
+ir,normal,S01_R1,FlickUp,esquerda,4640,4677,No gesture,0.92,0.0128
+ir,normal,S01_R1,FlickUp,esquerda,4810,4845,No gesture,0.9283,0.0067
+ir,normal,S01_R1,FlickDown,direita,4979,5020,No gesture,0.9231,0.017
+ir,normal,S01_R1,None,direita,0,35,No gesture,0.9748,0.0012
+ir,normal,S01_R1,None,direita,210,250,No gesture,0.9679,0.0015
+ir,normal,S01_R1,None,direita,1223,1258,No gesture,0.9637,0.0029
+ir,normal,S01_R1,None,esquerda,83,113,No gesture,0.9689,0.0014
+ir,normal,S01_R1,None,esquerda,295,340,No gesture,0.9759,0.0012
+ir,normal,S01_R1,None,esquerda,2083,2108,No gesture,0.9769,0.001
+ir,normal,S01_R1,Other,direita,3063,3096,Doing other things,0.6297,0.0475
+ir,normal,S01_R1,Other,direita,1904,1944,Doing other things,0.9748,0.0063
+ir,normal,S01_R1,Other,direita,450,469,Doing other things,0.5755,0.041
+ir,normal,S01_R1,Other,esquerda,1049,1104,Doing other things,0.8314,0.0187
+ir,normal,S01_R1,Other,esquerda,3036,3062,Doing other things,0.9851,0.0019
+ir,normal,S01_R1,Other,esquerda,358,387,Doing other things,0.7923,0.0118
+ir,normal,S01_R2,SwipeLeft,direita,118,146,No gesture,0.9566,0.0089
+ir,normal,S01_R2,Tap,direita,280,311,No gesture,0.8171,0.0121
+ir,normal,S01_R2,SwipeLeft,esquerda,459,488,No gesture,0.9117,0.0075
+ir,normal,S01_R2,FlickDown,direita,607,638,No gesture,0.8903,0.0152
+ir,normal,S01_R2,SwipeRight,direita,788,825,Doing other things,0.7793,0.0077
+ir,normal,S01_R2,FlickUp,esquerda,923,955,Doing other things,0.9299,0.0023
+ir,normal,S01_R2,FlickUp,direita,1097,1129,No gesture,0.6616,0.0118
+ir,normal,S01_R2,Tap,direita,1262,1297,Doing other things,0.8209,0.0057
+ir,normal,S01_R2,Tap,esquerda,1433,1460,No gesture,0.4251,0.0367
+ir,normal,S01_R2,SwipeLeft,esquerda,1596,1631,No gesture,0.8986,0.0077
+ir,normal,S01_R2,Tap,direita,1751,1775,No gesture,0.419,0.0196
+ir,normal,S01_R2,SwipeRight,direita,1898,1931,No gesture,0.8666,0.0049
+ir,normal,S01_R2,SwipeLeft,direita,2059,2087,No gesture,0.8528,0.0068
+ir,normal,S01_R2,SwipeRight,esquerda,2228,2270,No gesture,0.8839,0.0081
+ir,normal,S01_R2,SwipeLeft,esquerda,2416,2441,No gesture,0.8643,0.0145
+ir,normal,S01_R2,Tap,esquerda,2571,2602,No gesture,0.6287,0.0233
+ir,normal,S01_R2,FlickUp,esquerda,2745,2777,Doing other things,0.9338,0.0066
+ir,normal,S01_R2,SwipeRight,direita,2919,2962,No gesture,0.8415,0.0108
+ir,normal,S01_R2,FlickDown,esquerda,3098,3119,No gesture,0.9517,0.0083
+ir,normal,S01_R2,SwipeRight,esquerda,3280,3314,No gesture,0.5686,0.0248
+ir,normal,S01_R2,FlickDown,direita,3423,3450,No gesture,0.8364,0.0446
+ir,normal,S01_R2,Tap,esquerda,3580,3606,Doing other things,0.7209,0.0121
+ir,normal,S01_R2,FlickDown,direita,3748,3787,No gesture,0.9161,0.0097
+ir,normal,S01_R2,FlickDown,esquerda,3947,3970,Doing other things,0.4189,0.0326
+ir,normal,S01_R2,FlickDown,esquerda,4131,4150,No gesture,0.6811,0.0515
+ir,normal,S01_R2,FlickUp,direita,4264,4290,No gesture,0.9555,0.0038
+ir,normal,S01_R2,SwipeRight,esquerda,4420,4460,No gesture,0.8929,0.018
+ir,normal,S01_R2,FlickUp,direita,4591,4624,No gesture,0.9617,0.0026
+ir,normal,S01_R2,FlickUp,esquerda,4764,4789,Doing other things,0.4072,0.0496
+ir,normal,S01_R2,SwipeLeft,direita,4918,4954,No gesture,0.9372,0.007
+ir,normal,S01_R2,None,direita,0,50,No gesture,0.9743,0.0012
+ir,normal,S01_R2,None,direita,543,584,No gesture,0.9505,0.0028
+ir,normal,S01_R2,None,direita,1015,1053,No gesture,0.9708,0.0013
+ir,normal,S01_R2,None,esquerda,51,100,No gesture,0.974,0.0013
+ir,normal,S01_R2,None,esquerda,904,916,No gesture,0.9559,0.002
+ir,normal,S01_R2,None,esquerda,1342,1380,No gesture,0.9565,0.0024
+ir,normal,S01_R2,Other,direita,143,162,No gesture,0.8763,0.0112
+ir,normal,S01_R2,Other,direita,858,876,No gesture,0.7582,0.0624
+ir,normal,S01_R2,Other,direita,1847,1868,No gesture,0.8568,0.0114
+ir,normal,S01_R2,Other,esquerda,709,730,Doing other things,0.8873,0.0187
+ir,normal,S01_R2,Other,esquerda,1137,1168,Doing other things,0.9383,0.0048
+ir,normal,S01_R2,Other,esquerda,1806,1823,Doing other things,0.9327,0.0072
+ir,normal,S01_R3,SwipeLeft,direita,77,107,No gesture,0.9546,0.0072
+ir,normal,S01_R3,FlickDown,direita,197,225,No gesture,0.9026,0.0254
+ir,normal,S01_R3,FlickUp,esquerda,322,348,Doing other things,0.7389,0.0401
+ir,normal,S01_R3,SwipeLeft,esquerda,460,476,No gesture,0.8259,0.05
+ir,normal,S01_R3,FlickUp,esquerda,557,582,No gesture,0.8818,0.0069
+ir,normal,S01_R3,SwipeRight,esquerda,674,692,Doing other things,0.4201,0.0905
+ir,normal,S01_R3,FlickUp,direita,795,825,No gesture,0.9363,0.0183
+ir,normal,S01_R3,FlickDown,esquerda,897,921,No gesture,0.7173,0.1588
+ir,normal,S01_R3,Tap,direita,993,1014,No gesture,0.4768,0.0269
+ir,normal,S01_R3,FlickUp,direita,1105,1124,No gesture,0.9077,0.0201
+ir,normal,S01_R3,FlickUp,esquerda,1222,1247,No gesture,0.6065,0.014
+ir,normal,S01_R3,SwipeRight,esquerda,1333,1359,No gesture,0.4343,0.1897
+ir,normal,S01_R3,Tap,esquerda,1449,1470,Doing other things,0.7234,0.0148
+ir,normal,S01_R3,Tap,esquerda,1560,1581,No gesture,0.4543,0.0204
+ir,normal,S01_R3,Tap,direita,1677,1700,No gesture,0.8733,0.004
+ir,normal,S01_R3,FlickUp,direita,1791,1818,No gesture,0.6137,0.0246
+ir,normal,S01_R3,SwipeRight,direita,1901,1927,Thumb Down,0.754,0.754
+ir,normal,S01_R3,SwipeLeft,esquerda,2012,2037,No gesture,0.893,0.0167
+ir,normal,S01_R3,FlickDown,esquerda,2125,2147,No gesture,0.6349,0.068
+ir,normal,S01_R3,FlickDown,direita,2253,2262,No gesture,0.6064,0.1486
+ir,normal,S01_R3,FlickDown,direita,2354,2375,No gesture,0.3991,0.1632
+ir,normal,S01_R3,SwipeLeft,direita,2459,2481,No gesture,0.3719,0.2042
+ir,normal,S01_R3,FlickDown,esquerda,2574,2593,No gesture,0.6496,0.1294
+ir,normal,S01_R3,SwipeLeft,direita,2671,2692,No gesture,0.9219,0.0077
+ir,normal,S01_R3,Tap,esquerda,2791,2811,Doing other things,0.9862,0.0018
+ir,normal,S01_R3,SwipeRight,direita,2903,2931,No gesture,0.5942,0.2807
+ir,normal,S01_R3,Tap,direita,3015,3037,No gesture,0.662,0.0345
+ir,normal,S01_R3,SwipeRight,esquerda,3133,3157,No gesture,0.8321,0.0383
+ir,normal,S01_R3,SwipeRight,direita,3244,3266,No gesture,0.5681,0.2902
+ir,normal,S01_R3,SwipeLeft,esquerda,3371,3385,No gesture,0.6259,0.0682
+ir,normal,S01_R3,None,direita,0,40,No gesture,0.9504,0.0024
+ir,normal,S01_R3,None,direita,134,170,No gesture,0.9685,0.0015
+ir,normal,S01_R3,None,direita,847,871,No gesture,0.9484,0.0026
+ir,normal,S01_R3,None,esquerda,41,75,No gesture,0.9486,0.0026
+ir,normal,S01_R3,None,esquerda,254,270,No gesture,0.9607,0.0019
+ir,normal,S01_R3,None,esquerda,600,636,No gesture,0.9521,0.0024
+ir,normal,S01_R3,Other,direita,295,311,Doing other things,0.9741,0.0034
+ir,normal,S01_R3,Other,direita,646,665,Doing other things,0.9242,0.0087
+ir,normal,S01_R3,Other,direita,704,721,Doing other things,0.9735,0.0087
+ir,normal,S01_R3,Other,esquerda,349,398,Doing other things,0.7581,0.021
+ir,normal,S01_R3,Other,esquerda,487,502,No gesture,0.2912,0.2295
+ir,normal,S01_R3,Other,esquerda,760,799,Doing other things,0.9359,0.0179
+ir,normal,S01_R4,FlickDown,direita,82,117,No gesture,0.9579,0.0082
+ir,normal,S01_R4,SwipeLeft,esquerda,208,230,No gesture,0.788,0.0224
+ir,normal,S01_R4,FlickDown,esquerda,316,337,Doing other things,0.7743,0.0338
+ir,normal,S01_R4,FlickUp,direita,435,458,No gesture,0.8426,0.0212
+ir,normal,S01_R4,SwipeRight,esquerda,540,560,No gesture,0.8118,0.0226
+ir,normal,S01_R4,FlickUp,esquerda,631,651,No gesture,0.858,0.0101
+ir,normal,S01_R4,SwipeLeft,esquerda,737,752,No gesture,0.7631,0.0276
+ir,normal,S01_R4,SwipeLeft,direita,823,844,Doing other things,0.6261,0.2241
+ir,normal,S01_R4,Tap,esquerda,944,961,Doing other things,0.9132,0.0082
+ir,normal,S01_R4,SwipeRight,esquerda,1020,1038,No gesture,0.6837,0.0508
+ir,normal,S01_R4,FlickDown,direita,1120,1133,Doing other things,0.5197,0.053
+ir,normal,S01_R4,SwipeLeft,esquerda,1208,1227,No gesture,0.9364,0.0137
+ir,normal,S01_R4,Tap,esquerda,1310,1327,Doing other things,0.5102,0.016
+ir,normal,S01_R4,SwipeRight,direita,1403,1432,No gesture,0.9506,0.0119
+ir,normal,S01_R4,SwipeLeft,direita,1501,1520,Doing other things,0.6048,0.0128
+ir,normal,S01_R4,FlickUp,esquerda,1621,1635,Doing other things,0.7885,0.0076
+ir,normal,S01_R4,SwipeRight,direita,1694,1718,No gesture,0.9356,0.0059
+ir,normal,S01_R4,FlickDown,direita,1795,1819,No gesture,0.9281,0.013
+ir,normal,S01_R4,Tap,direita,1896,1910,Doing other things,0.7637,0.0199
+ir,normal,S01_R4,FlickDown,esquerda,1990,2015,No gesture,0.9456,0.0044
+ir,normal,S01_R4,FlickUp,direita,2111,2130,No gesture,0.9395,0.0034
+ir,normal,S01_R4,SwipeRight,esquerda,2187,2210,No gesture,0.8843,0.0359
+ir,normal,S01_R4,FlickDown,esquerda,2292,2309,No gesture,0.753,0.014
+ir,normal,S01_R4,SwipeLeft,direita,2382,2403,No gesture,0.9534,0.0046
+ir,normal,S01_R4,FlickUp,esquerda,2475,2494,No gesture,0.7077,0.0179
+ir,normal,S01_R4,Tap,direita,2576,2586,No gesture,0.5085,0.0547
+ir,normal,S01_R4,Tap,direita,2671,2692,Doing other things,0.5212,0.0246
+ir,normal,S01_R4,FlickUp,direita,2771,2789,No gesture,0.8157,0.0233
+ir,normal,S01_R4,SwipeRight,direita,2867,2883,No gesture,0.5356,0.0172
+ir,normal,S01_R4,Tap,esquerda,2975,2995,Doing other things,0.6399,0.0159
+ir,normal,S01_R4,None,direita,135,150,No gesture,0.9687,0.0015
+ir,normal,S01_R4,None,direita,1089,1117,Doing other things,0.5942,0.0368
+ir,normal,S01_R4,None,direita,508,522,No gesture,0.9724,0.0012
+ir,normal,S01_R4,None,esquerda,508,522,No gesture,0.9724,0.0012
+ir,normal,S01_R4,None,esquerda,1231,1250,No gesture,0.9309,0.0046
+ir,normal,S01_R4,None,esquerda,1439,1468,No gesture,0.9666,0.0016
+ir,normal,S01_R4,Other,direita,0,20,No gesture,0.564,0.0907
+ir,normal,S01_R4,Other,direita,371,385,Doing other things,0.6089,0.0336
+ir,normal,S01_R4,Other,direita,714,730,Doing other things,0.9223,0.0189
+ir,normal,S01_R4,Other,esquerda,158,181,Doing other things,0.8415,0.0168
+ir,normal,S01_R4,Other,esquerda,234,251,Doing other things,0.7152,0.0367
+ir,normal,S01_R4,Other,esquerda,871,900,Doing other things,0.9109,0.0117
+ir,normal,S01_R5,FlickDown,esquerda,101,124,No gesture,0.7098,0.035
+ir,normal,S01_R5,Tap,direita,230,250,Doing other things,0.6825,0.0692
+ir,normal,S01_R5,FlickUp,esquerda,360,379,Doing other things,0.7738,0.0253
+ir,normal,S01_R5,FlickDown,esquerda,499,525,Doing other things,0.8901,0.008
+ir,normal,S01_R5,SwipeRight,direita,638,670,Doing other things,0.5953,0.0966
+ir,normal,S01_R5,SwipeRight,direita,769,792,Doing other things,0.9316,0.0091
+ir,normal,S01_R5,SwipeLeft,esquerda,890,913,No gesture,0.6877,0.0211
+ir,normal,S01_R5,Tap,esquerda,1017,1047,Doing other things,0.955,0.0104
+ir,normal,S01_R5,Tap,esquerda,1114,1136,Doing other things,0.9808,0.0036
+ir,normal,S01_R5,FlickDown,esquerda,1232,1270,Doing other things,0.4773,0.0389
+ir,normal,S01_R5,FlickDown,direita,1346,1367,Doing other things,0.8301,0.0157
+ir,normal,S01_R5,SwipeLeft,direita,1471,1492,No gesture,0.7077,0.0082
+ir,normal,S01_R5,FlickUp,esquerda,1570,1591,No gesture,0.7817,0.0166
+ir,normal,S01_R5,FlickUp,direita,1683,1711,No gesture,0.8321,0.0071
+ir,normal,S01_R5,FlickDown,direita,1793,1812,Doing other things,0.81,0.0401
+ir,normal,S01_R5,FlickUp,direita,1909,1930,No gesture,0.8522,0.0107
+ir,normal,S01_R5,FlickUp,esquerda,2018,2036,Doing other things,0.7589,0.0168
+ir,normal,S01_R5,SwipeRight,direita,2117,2145,No gesture,0.4857,0.0578
+ir,normal,S01_R5,SwipeLeft,esquerda,2230,2254,No gesture,0.7279,0.0252
+ir,normal,S01_R5,SwipeLeft,esquerda,2360,2374,Doing other things,0.6244,0.0444
+ir,normal,S01_R5,Tap,direita,2456,2475,Doing other things,0.9426,0.0039
+ir,normal,S01_R5,FlickDown,direita,2594,2615,Doing other things,0.7711,0.1142
+ir,normal,S01_R5,FlickUp,direita,2681,2703,Doing other things,0.9526,0.0059
+ir,normal,S01_R5,SwipeRight,esquerda,2797,2823,Doing other things,0.9036,0.0097
+ir,normal,S01_R5,Tap,esquerda,2909,2927,Doing other things,0.9217,0.0112
+ir,normal,S01_R5,SwipeRight,esquerda,3020,3049,Doing other things,0.5794,0.0413
+ir,normal,S01_R5,SwipeRight,esquerda,3141,3162,No gesture,0.6332,0.1135
+ir,normal,S01_R5,Tap,direita,3241,3265,No gesture,0.7434,0.0069
+ir,normal,S01_R5,SwipeLeft,direita,3360,3378,Doing other things,0.7579,0.04
+ir,normal,S01_R5,SwipeLeft,direita,3495,3508,No gesture,0.5201,0.0958
+ir,normal,S01_R5,None,direita,0,50,No gesture,0.9485,0.0024
+ir,normal,S01_R5,None,direita,680,702,No gesture,0.9258,0.0034
+ir,normal,S01_R5,None,direita,942,971,No gesture,0.9293,0.0036
+ir,normal,S01_R5,None,esquerda,51,90,No gesture,0.9487,0.0023
+ir,normal,S01_R5,None,esquerda,680,702,No gesture,0.9258,0.0034
+ir,normal,S01_R5,None,esquerda,1160,1199,Doing other things,0.9842,0.0021
+ir,normal,S01_R5,Other,direita,794,808,Doing other things,0.8575,0.0231
+ir,normal,S01_R5,Other,direita,1055,1103,Doing other things,0.9869,0.0019
+ir,normal,S01_R5,Other,direita,1616,1633,Doing other things,0.9871,0.0017
+ir,normal,S01_R5,Other,esquerda,453,468,Doing other things,0.8858,0.0193
+ir,normal,S01_R5,Other,esquerda,1375,1391,Doing other things,0.4143,0.1622
+ir,normal,S01_R5,Other,esquerda,1858,1882,Doing other things,0.9607,0.0091
+ir,normal,S02_R1,FlickUp,esquerda,119,141,No gesture,0.5674,0.0377
+ir,normal,S02_R1,FlickDown,esquerda,287,316,Doing other things,0.5368,0.038
+ir,normal,S02_R1,Tap,esquerda,454,469,No gesture,0.2609,0.105
+ir,normal,S02_R1,Tap,direita,614,631,No gesture,0.768,0.0162
+ir,normal,S02_R1,Tap,direita,787,802,No gesture,0.6118,0.0405
+ir,normal,S02_R1,FlickDown,esquerda,935,968,Doing other things,0.4866,0.0231
+ir,normal,S02_R1,FlickDown,direita,1104,1126,Doing other things,0.5761,0.0496
+ir,normal,S02_R1,SwipeLeft,esquerda,1255,1274,No gesture,0.6347,0.006
+ir,normal,S02_R1,Tap,esquerda,1410,1422,No gesture,0.623,0.017
+ir,normal,S02_R1,FlickUp,direita,1546,1563,No gesture,0.8759,0.0094
+ir,normal,S02_R1,Tap,direita,1692,1710,No gesture,0.742,0.0139
+ir,normal,S02_R1,SwipeLeft,esquerda,1868,1889,Doing other things,0.6485,0.0489
+ir,normal,S02_R1,SwipeRight,esquerda,2028,2064,No gesture,0.8501,0.0362
+ir,normal,S02_R1,FlickUp,direita,2205,2230,No gesture,0.4978,0.0255
+ir,normal,S02_R1,SwipeRight,esquerda,2370,2404,Doing other things,0.4539,0.0751
+ir,normal,S02_R1,FlickDown,esquerda,2529,2556,No gesture,0.5682,0.0684
+ir,normal,S02_R1,FlickUp,esquerda,2681,2712,No gesture,0.3984,0.0319
+ir,normal,S02_R1,Tap,esquerda,2857,2871,No gesture,0.5106,0.0678
+ir,normal,S02_R1,FlickUp,esquerda,3004,3038,Doing other things,0.4861,0.0476
+ir,normal,S02_R1,SwipeLeft,direita,3178,3207,No gesture,0.7954,0.0252
+ir,normal,S02_R1,SwipeLeft,esquerda,3354,3374,No gesture,0.427,0.0518
+ir,normal,S02_R1,SwipeRight,direita,3508,3532,No gesture,0.6081,0.0213
+ir,normal,S02_R1,FlickDown,direita,3675,3693,Doing other things,0.8689,0.0073
+ir,normal,S02_R1,FlickDown,direita,3836,3864,Doing other things,0.4796,0.0212
+ir,normal,S02_R1,FlickUp,direita,4005,4031,No gesture,0.708,0.0278
+ir,normal,S02_R1,FlickUp,esquerda,4173,4190,No gesture,0.6532,0.0561
+ir,normal,S02_R1,SwipeRight,direita,4330,4358,No gesture,0.5579,0.0309
+ir,normal,S02_R1,SwipeRight,esquerda,4502,4527,No gesture,0.4331,0.0584
+ir,normal,S02_R1,SwipeLeft,direita,4641,4658,No gesture,0.824,0.0159
+ir,normal,S02_R1,SwipeLeft,direita,4799,4823,No gesture,0.8288,0.0235
+ir,normal,S02_R1,None,direita,0,40,No gesture,0.9632,0.0018
+ir,normal,S02_R1,None,direita,1964,1994,No gesture,0.9526,0.0021
+ir,normal,S02_R1,None,direita,41,90,No gesture,0.9661,0.0016
+ir,normal,S02_R1,None,esquerda,41,90,No gesture,0.9661,0.0016
+ir,normal,S02_R1,None,esquerda,1964,1994,No gesture,0.9526,0.0021
+ir,normal,S02_R1,None,esquerda,2803,2837,No gesture,0.9565,0.002
+ir,normal,S02_R1,Other,direita,1314,1329,Doing other things,0.21,0.0852
+ir,normal,S02_R1,Other,direita,1463,1479,Doing other things,0.7953,0.0535
+ir,normal,S02_R1,Other,direita,2072,2089,Doing other things,0.8683,0.054
+ir,normal,S02_R1,Other,esquerda,859,877,Doing other things,0.5186,0.0741
+ir,normal,S02_R1,Other,esquerda,1359,1385,Doing other things,0.9546,0.0078
+ir,normal,S02_R1,Other,esquerda,2006,2027,Doing other things,0.6589,0.0671
+ir,normal,S02_R2,FlickDown,esquerda,118,148,No gesture,0.8814,0.0073
+ir,normal,S02_R2,FlickDown,esquerda,293,319,No gesture,0.8899,0.0116
+ir,normal,S02_R2,SwipeRight,direita,457,483,Doing other things,0.509,0.0089
+ir,normal,S02_R2,FlickUp,direita,610,629,No gesture,0.8818,0.0099
+ir,normal,S02_R2,Tap,direita,768,785,No gesture,0.8138,0.0115
+ir,normal,S02_R2,SwipeRight,direita,944,972,No gesture,0.9024,0.0067
+ir,normal,S02_R2,SwipeLeft,esquerda,1127,1146,No gesture,0.7489,0.0606
+ir,normal,S02_R2,FlickDown,direita,1278,1304,No gesture,0.5723,0.0104
+ir,normal,S02_R2,FlickUp,direita,1475,1501,No gesture,0.6593,0.0226
+ir,normal,S02_R2,FlickUp,direita,1635,1651,No gesture,0.9036,0.0106
+ir,normal,S02_R2,Tap,esquerda,1798,1811,No gesture,0.4753,0.0154
+ir,normal,S02_R2,SwipeLeft,direita,1964,1990,No gesture,0.8918,0.0207
+ir,normal,S02_R2,FlickDown,direita,2116,2135,No gesture,0.7781,0.0152
+ir,normal,S02_R2,Tap,direita,2287,2304,No gesture,0.9136,0.0039
+ir,normal,S02_R2,Tap,esquerda,2471,2489,No gesture,0.5512,0.0539
+ir,normal,S02_R2,SwipeRight,esquerda,2645,2677,No gesture,0.9098,0.0174
+ir,normal,S02_R2,SwipeLeft,esquerda,2815,2838,No gesture,0.9088,0.007
+ir,normal,S02_R2,Tap,esquerda,2976,2991,No gesture,0.8265,0.0175
+ir,normal,S02_R2,SwipeLeft,direita,3146,3165,No gesture,0.9288,0.0033
+ir,normal,S02_R2,FlickUp,esquerda,3300,3314,No gesture,0.7823,0.0109
+ir,normal,S02_R2,FlickDown,esquerda,3478,3503,Doing other things,0.3554,0.1034
+ir,normal,S02_R2,SwipeRight,direita,3636,3661,No gesture,0.844,0.0167
+ir,normal,S02_R2,FlickUp,esquerda,3813,3828,No gesture,0.7851,0.0421
+ir,normal,S02_R2,FlickUp,esquerda,3984,4008,No gesture,0.7782,0.0699
+ir,normal,S02_R2,SwipeLeft,direita,4176,4191,No gesture,0.8954,0.0148
+ir,normal,S02_R2,Tap,direita,4344,4358,Doing other things,0.3342,0.0757
+ir,normal,S02_R2,SwipeLeft,esquerda,4519,4534,No gesture,0.7764,0.0188
+ir,normal,S02_R2,FlickDown,direita,4698,4711,No gesture,0.8125,0.0105
+ir,normal,S02_R2,SwipeRight,esquerda,4858,4877,No gesture,0.8968,0.0087
+ir,normal,S02_R2,SwipeRight,esquerda,5007,5022,No gesture,0.8225,0.015
+ir,normal,S02_R2,None,direita,0,40,No gesture,0.9637,0.0018
+ir,normal,S02_R2,None,direita,190,210,No gesture,0.9517,0.0023
+ir,normal,S02_R2,None,direita,700,750,No gesture,0.9638,0.0018
+ir,normal,S02_R2,None,esquerda,41,70,No gesture,0.9622,0.0017
+ir,normal,S02_R2,None,esquerda,700,750,No gesture,0.9638,0.0018
+ir,normal,S02_R2,None,esquerda,2069,2100,No gesture,0.9464,0.003
+ir,normal,S02_R2,Other,direita,496,517,Doing other things,0.8458,0.0089
+ir,normal,S02_R2,Other,direita,869,887,No gesture,0.6253,0.06
+ir,normal,S02_R2,Other,direita,1553,1584,Doing other things,0.9024,0.0071
+ir,normal,S02_R2,Other,esquerda,218,240,Doing other things,0.6075,0.0698
+ir,normal,S02_R2,Other,esquerda,335,356,Doing other things,0.9283,0.0112
+ir,normal,S02_R2,Other,esquerda,1367,1390,Doing other things,0.9891,0.0019
+ir,normal,S02_R3,SwipeLeft,direita,91,106,No gesture,0.6153,0.0793
+ir,normal,S02_R3,Tap,esquerda,199,210,Stop Sign,0.1664,0.1664
+ir,normal,S02_R3,FlickDown,direita,319,332,Doing other things,0.4107,0.0378
+ir,normal,S02_R3,FlickUp,esquerda,444,456,Doing other things,0.8906,0.011
+ir,normal,S02_R3,FlickUp,esquerda,565,579,No gesture,0.7537,0.0206
+ir,normal,S02_R3,FlickDown,direita,702,714,Doing other things,0.7579,0.0222
+ir,normal,S02_R3,FlickUp,direita,811,820,No gesture,0.6593,0.0321
+ir,normal,S02_R3,SwipeRight,direita,922,941,No gesture,0.7562,0.0293
+ir,normal,S02_R3,SwipeRight,direita,1034,1050,No gesture,0.7128,0.0379
+ir,normal,S02_R3,FlickDown,esquerda,1149,1167,Doing other things,0.5655,0.024
+ir,normal,S02_R3,SwipeRight,esquerda,1264,1282,No gesture,0.7935,0.0242
+ir,normal,S02_R3,SwipeLeft,direita,1380,1394,No gesture,0.5361,0.1102
+ir,normal,S02_R3,FlickDown,direita,1489,1501,No gesture,0.7177,0.0464
+ir,normal,S02_R3,SwipeLeft,direita,1605,1619,No gesture,0.7548,0.0569
+ir,normal,S02_R3,Tap,esquerda,1717,1728,Doing other things,0.1873,0.1052
+ir,normal,S02_R3,Tap,direita,1829,1839,No gesture,0.3885,0.0302
+ir,normal,S02_R3,SwipeRight,direita,1941,1961,No gesture,0.6779,0.047
+ir,normal,S02_R3,FlickUp,direita,2057,2068,No gesture,0.3443,0.0612
+ir,normal,S02_R3,SwipeRight,esquerda,2165,2183,Doing other things,0.4684,0.0469
+ir,normal,S02_R3,Tap,direita,2275,2285,Doing other things,0.6009,0.0258
+ir,normal,S02_R3,Tap,direita,2385,2397,No gesture,0.6871,0.0158
+ir,normal,S02_R3,Tap,esquerda,2502,2511,Doing other things,0.2841,0.1251
+ir,normal,S02_R3,SwipeLeft,esquerda,2615,2624,Doing other things,0.4246,0.0843
+ir,normal,S02_R3,FlickUp,esquerda,2718,2731,No gesture,0.7036,0.0388
+ir,normal,S02_R3,SwipeRight,esquerda,2824,2851,Doing other things,0.8122,0.0429
+ir,normal,S02_R3,FlickDown,esquerda,2938,2949,No gesture,0.5854,0.0323
+ir,normal,S02_R3,SwipeLeft,esquerda,3041,3052,No gesture,0.2672,0.1128
+ir,normal,S02_R3,FlickUp,direita,3151,3162,No gesture,0.7636,0.0199
+ir,normal,S02_R3,FlickDown,esquerda,3269,3280,No gesture,0.4173,0.0833
+ir,normal,S02_R3,SwipeLeft,esquerda,3376,3392,Doing other things,0.2665,0.0829
+ir,normal,S02_R3,None,direita,0,20,No gesture,0.9498,0.0027
+ir,normal,S02_R3,None,direita,775,802,No gesture,0.9067,0.0045
+ir,normal,S02_R3,None,direita,1783,1809,No gesture,0.9028,0.0048
+ir,normal,S02_R3,None,esquerda,40,60,No gesture,0.9481,0.0027
+ir,normal,S02_R3,None,esquerda,1330,1362,No gesture,0.9271,0.0034
+ir,normal,S02_R3,None,esquerda,2448,2472,No gesture,0.9274,0.0036
+ir,normal,S02_R3,Other,direita,460,494,Turning Hand Counterclockwise,0.2052,0.2052
+ir,normal,S02_R3,Other,direita,608,621,No gesture,0.3045,0.1728
+ir,normal,S02_R3,Other,direita,1559,1570,No gesture,0.3191,0.2449
+ir,normal,S02_R3,Other,esquerda,134,148,Doing other things,0.26,0.1271
+ir,normal,S02_R3,Other,esquerda,342,359,Doing other things,0.6971,0.0189
+ir,normal,S02_R3,Other,esquerda,1549,1558,Doing other things,0.9424,0.0069
+ir,normal,S02_R4,FlickDown,esquerda,107,122,No gesture,0.5598,0.0854
+ir,normal,S02_R4,SwipeLeft,direita,229,245,No gesture,0.7892,0.0263
+ir,normal,S02_R4,Tap,esquerda,344,355,No gesture,0.3101,0.1099
+ir,normal,S02_R4,FlickUp,direita,451,461,No gesture,0.7745,0.0134
+ir,normal,S02_R4,SwipeLeft,esquerda,568,580,Thumb Down,0.2878,0.2878
+ir,normal,S02_R4,Tap,direita,669,678,No gesture,0.7842,0.0106
+ir,normal,S02_R4,FlickDown,esquerda,789,803,No gesture,0.5376,0.0758
+ir,normal,S02_R4,SwipeLeft,direita,897,911,No gesture,0.8201,0.0305
+ir,normal,S02_R4,FlickUp,esquerda,1010,1020,No gesture,0.8359,0.0113
+ir,normal,S02_R4,SwipeRight,direita,1119,1136,No gesture,0.6465,0.0558
+ir,normal,S02_R4,Tap,esquerda,1231,1238,No gesture,0.3062,0.0471
+ir,normal,S02_R4,SwipeRight,esquerda,1337,1357,No gesture,0.4363,0.0422
+ir,normal,S02_R4,Tap,esquerda,1436,1446,No gesture,0.4343,0.0491
+ir,normal,S02_R4,Tap,direita,1551,1560,No gesture,0.4549,0.0731
+ir,normal,S02_R4,SwipeLeft,direita,1665,1676,No gesture,0.7917,0.0443
+ir,normal,S02_R4,SwipeRight,esquerda,1764,1786,Doing other things,0.404,0.0844
+ir,normal,S02_R4,FlickUp,direita,1881,1889,No gesture,0.5336,0.0836
+ir,normal,S02_R4,Tap,direita,1983,1993,No gesture,0.5696,0.0455
+ir,normal,S02_R4,SwipeLeft,esquerda,2088,2100,No gesture,0.3171,0.0969
+ir,normal,S02_R4,FlickUp,direita,2200,2209,No gesture,0.7298,0.0485
+ir,normal,S02_R4,FlickDown,esquerda,2318,2329,Doing other things,0.6821,0.0188
+ir,normal,S02_R4,FlickUp,esquerda,2427,2438,No gesture,0.6706,0.0444
+ir,normal,S02_R4,SwipeRight,esquerda,2531,2548,No gesture,0.7485,0.0262
+ir,normal,S02_R4,SwipeLeft,esquerda,2641,2653,No gesture,0.4345,0.0427
+ir,normal,S02_R4,FlickDown,direita,2760,2770,No gesture,0.7341,0.0335
+ir,normal,S02_R4,FlickDown,direita,2872,2882,No gesture,0.4039,0.0984
+ir,normal,S02_R4,FlickUp,esquerda,2977,2986,No gesture,0.6058,0.0587
+ir,normal,S02_R4,FlickDown,direita,3086,3100,No gesture,0.8179,0.0242
+ir,normal,S02_R4,SwipeRight,direita,3188,3204,No gesture,0.7114,0.0489
+ir,normal,S02_R4,SwipeRight,direita,3297,3315,No gesture,0.755,0.0373
+ir,normal,S02_R4,None,direita,0,25,No gesture,0.9479,0.0024
+ir,normal,S02_R4,None,direita,752,777,No gesture,0.9213,0.0042
+ir,normal,S02_R4,None,direita,2070,2083,No gesture,0.9114,0.0042
+ir,normal,S02_R4,None,esquerda,50,70,No gesture,0.8968,0.0074
+ir,normal,S02_R4,None,esquerda,1274,1305,No gesture,0.9471,0.0026
+ir,normal,S02_R4,None,esquerda,2712,2750,No gesture,0.9274,0.0038
+ir,normal,S02_R4,Other,direita,932,955,Doing other things,0.8229,0.0477
+ir,normal,S02_R4,Other,direita,1374,1379,Doing other things,0.8853,0.0365
+ir,normal,S02_R4,Other,direita,2678,2690,Doing other things,0.5926,0.0902
+ir,normal,S02_R4,Other,esquerda,296,322,Doing other things,0.8096,0.0518
+ir,normal,S02_R4,Other,esquerda,1154,1171,Doing other things,0.8645,0.02
+ir,normal,S02_R4,Other,esquerda,2502,2515,No gesture,0.6654,0.0253
+ir,normal,S02_R5,SwipeLeft,direita,96,108,No gesture,0.684,0.053
+ir,normal,S02_R5,FlickUp,esquerda,228,240,No gesture,0.7404,0.0504
+ir,normal,S02_R5,SwipeLeft,esquerda,345,360,No gesture,0.3907,0.0465
+ir,normal,S02_R5,Tap,direita,462,476,No gesture,0.8498,0.006
+ir,normal,S02_R5,Tap,esquerda,589,599,Doing other things,0.4161,0.1012
+ir,normal,S02_R5,FlickDown,direita,712,724,No gesture,0.5571,0.0416
+ir,normal,S02_R5,FlickDown,esquerda,824,834,No gesture,0.5063,0.0376
+ir,normal,S02_R5,SwipeLeft,esquerda,935,946,No gesture,0.351,0.0439
+ir,normal,S02_R5,SwipeRight,direita,1051,1066,No gesture,0.8411,0.0192
+ir,normal,S02_R5,FlickDown,direita,1164,1178,No gesture,0.5447,0.104
+ir,normal,S02_R5,FlickUp,direita,1270,1284,No gesture,0.8256,0.0182
+ir,normal,S02_R5,FlickUp,esquerda,1384,1397,No gesture,0.4947,0.0196
+ir,normal,S02_R5,FlickDown,esquerda,1498,1509,No gesture,0.4044,0.0926
+ir,normal,S02_R5,FlickUp,esquerda,1609,1618,No gesture,0.505,0.0291
+ir,normal,S02_R5,FlickDown,direita,1714,1727,No gesture,0.6006,0.0236
+ir,normal,S02_R5,SwipeRight,direita,1824,1842,No gesture,0.7238,0.0145
+ir,normal,S02_R5,SwipeLeft,direita,1936,1949,No gesture,0.7215,0.0642
+ir,normal,S02_R5,SwipeLeft,direita,2060,2075,No gesture,0.7705,0.0219
+ir,normal,S02_R5,FlickUp,direita,2164,2178,No gesture,0.8992,0.0112
+ir,normal,S02_R5,SwipeRight,direita,2275,2294,No gesture,0.4635,0.0459
+ir,normal,S02_R5,Tap,esquerda,2380,2390,Doing other things,0.3272,0.0583
+ir,normal,S02_R5,Tap,direita,2501,2511,No gesture,0.8037,0.0155
+ir,normal,S02_R5,SwipeRight,esquerda,2601,2617,No gesture,0.6284,0.0568
+ir,normal,S02_R5,Tap,esquerda,2707,2716,No gesture,0.4673,0.0362
+ir,normal,S02_R5,SwipeLeft,esquerda,2823,2835,No gesture,0.3876,0.0431
+ir,normal,S02_R5,Tap,direita,2930,2942,No gesture,0.6855,0.0197
+ir,normal,S02_R5,FlickUp,direita,3039,3051,No gesture,0.6848,0.0479
+ir,normal,S02_R5,SwipeRight,esquerda,3150,3168,No gesture,0.5038,0.0331
+ir,normal,S02_R5,FlickDown,esquerda,3259,3275,Doing other things,0.2772,0.0746
+ir,normal,S02_R5,SwipeRight,esquerda,3374,3395,Doing other things,0.6945,0.0265
+ir,normal,S02_R5,None,direita,0,30,No gesture,0.8869,0.0076
+ir,normal,S02_R5,None,direita,435,450,No gesture,0.9283,0.0035
+ir,normal,S02_R5,None,direita,2340,2378,No gesture,0.6656,0.0287
+ir,normal,S02_R5,None,esquerda,145,172,No gesture,0.9143,0.0046
+ir,normal,S02_R5,None,esquerda,1246,1260,No gesture,0.8834,0.0058
+ir,normal,S02_R5,None,esquerda,1775,1800,No gesture,0.9432,0.0026
+ir,normal,S02_R5,Other,direita,32,42,Doing other things,0.9214,0.0216
+ir,normal,S02_R5,Other,direita,883,912,Doing other things,0.6387,0.0463
+ir,normal,S02_R5,Other,direita,1632,1656,Doing other things,0.7781,0.0419
+ir,normal,S02_R5,Other,esquerda,275,302,Doing other things,0.8664,0.0272
+ir,normal,S02_R5,Other,esquerda,387,397,No gesture,0.3929,0.0303
+ir,normal,S02_R5,Other,esquerda,2520,2533,Doing other things,0.7091,0.0927
+ir,normal,S10_R1,FlickUp,esquerda,140,175,No gesture,0.919,0.0155
+ir,normal,S10_R1,FlickUp,direita,334,370,No gesture,0.8928,0.0079
+ir,normal,S10_R1,SwipeRight,direita,540,580,Doing other things,0.8467,0.0074
+ir,normal,S10_R1,SwipeRight,esquerda,743,774,Doing other things,0.5494,0.1722
+ir,normal,S10_R1,FlickUp,esquerda,943,976,No gesture,0.5589,0.2056
+ir,normal,S10_R1,SwipeRight,direita,1145,1189,No gesture,0.7564,0.0271
+ir,normal,S10_R1,FlickDown,direita,1348,1384,Doing other things,0.5768,0.0136
+ir,normal,S10_R1,FlickDown,esquerda,1554,1574,No gesture,0.7934,0.0691
+ir,normal,S10_R1,SwipeRight,esquerda,1756,1796,No gesture,0.4065,0.0599
+ir,normal,S10_R1,SwipeRight,direita,1980,2029,No gesture,0.8239,0.0189
+ir,normal,S10_R1,SwipeLeft,esquerda,2158,2201,No gesture,0.4047,0.0875
+ir,normal,S10_R1,Tap,direita,2363,2398,No gesture,0.8196,0.007
+ir,normal,S10_R1,FlickDown,direita,2570,2628,No gesture,0.8687,0.0106
+ir,normal,S10_R1,SwipeLeft,direita,2778,2823,Doing other things,0.4292,0.0447
+ir,normal,S10_R1,SwipeLeft,direita,2969,2998,No gesture,0.7454,0.0236
+ir,normal,S10_R1,SwipeLeft,esquerda,3164,3190,No gesture,0.9207,0.012
+ir,normal,S10_R1,Tap,direita,3366,3391,No gesture,0.9138,0.0051
+ir,normal,S10_R1,SwipeLeft,esquerda,3573,3604,Doing other things,0.566,0.0438
+ir,normal,S10_R1,Tap,esquerda,3765,3787,Doing other things,0.9344,0.0077
+ir,normal,S10_R1,SwipeLeft,direita,4004,4038,No gesture,0.8676,0.0097
+ir,normal,S10_R1,FlickUp,direita,4072,4094,No gesture,0.9132,0.0051
+ir,normal,S10_R1,FlickUp,esquerda,4163,4206,Thumb Down,0.2821,0.2821
+ir,normal,S10_R1,Tap,esquerda,4359,4387,No gesture,0.6942,0.0224
+ir,normal,S10_R1,FlickUp,direita,4568,4598,No gesture,0.8573,0.0099
+ir,normal,S10_R1,FlickDown,direita,4772,4805,No gesture,0.8557,0.0079
+ir,normal,S10_R1,FlickDown,esquerda,4973,5005,Doing other things,0.7104,0.0487
+ir,normal,S10_R1,SwipeLeft,direita,5178,5224,No gesture,0.9523,0.0038
+ir,normal,S10_R1,FlickDown,esquerda,5385,5421,Thumb Down,0.3509,0.3509
+ir,normal,S10_R1,Tap,esquerda,5579,5602,No gesture,0.7045,0.0269
+ir,normal,S10_R1,SwipeRight,esquerda,5778,5814,Thumb Down,0.6285,0.6285
+ir,normal,S10_R1,Tap,direita,5986,6007,Doing other things,0.6361,0.044
+ir,normal,S10_R1,None,direita,0,32,No gesture,0.9753,0.0012
+ir,normal,S10_R1,None,direita,2048,2078,No gesture,0.9686,0.0016
+ir,normal,S10_R1,None,direita,4301,4348,No gesture,0.9607,0.0019
+ir,normal,S10_R1,None,esquerda,0,32,No gesture,0.9753,0.0012
+ir,normal,S10_R1,None,esquerda,2048,2078,No gesture,0.9686,0.0016
+ir,normal,S10_R1,None,esquerda,4301,4348,No gesture,0.9607,0.0019
+ir,normal,S10_R1,Other,direita,273,288,Doing other things,0.5751,0.1675
+ir,normal,S10_R1,Other,direita,2693,2729,Zooming In With Two Fingers,0.5508,0.5508
+ir,normal,S10_R1,Other,direita,3189,3241,Doing other things,0.7125,0.0402
+ir,normal,S10_R1,Other,esquerda,249,265,Doing other things,0.7508,0.0432
+ir,normal,S10_R1,Other,esquerda,2889,2914,Doing other things,0.5098,0.0685
+ir,normal,S10_R1,Other,esquerda,3189,3241,Doing other things,0.7125,0.0402
+ir,normal,S10_R2,SwipeRight,direita,134,180,Thumb Down,0.5228,0.5228
+ir,normal,S10_R2,SwipeRight,esquerda,338,365,Thumb Down,0.215,0.215
+ir,normal,S10_R2,FlickUp,esquerda,527,564,No gesture,0.661,0.1633
+ir,normal,S10_R2,SwipeLeft,esquerda,715,749,No gesture,0.5479,0.0393
+ir,normal,S10_R2,Tap,direita,905,938,Doing other things,0.5214,0.0394
+ir,normal,S10_R2,FlickDown,esquerda,1095,1136,Doing other things,0.4506,0.4008
+ir,normal,S10_R2,SwipeRight,esquerda,1260,1301,Thumb Down,0.6135,0.6135
+ir,normal,S10_R2,FlickDown,direita,1468,1527,No gesture,0.6899,0.0909
+ir,normal,S10_R2,SwipeLeft,esquerda,1664,1690,Doing other things,0.6455,0.1684
+ir,normal,S10_R2,FlickUp,direita,1846,1867,No gesture,0.8128,0.0164
+ir,normal,S10_R2,FlickUp,direita,2040,2061,No gesture,0.8558,0.0165
+ir,normal,S10_R2,Tap,esquerda,2235,2245,No gesture,0.2723,0.1207
+ir,normal,S10_R2,SwipeLeft,direita,2417,2447,No gesture,0.8942,0.008
+ir,normal,S10_R2,SwipeLeft,esquerda,2609,2640,No gesture,0.4361,0.1254
+ir,normal,S10_R2,FlickUp,esquerda,2790,2822,No gesture,0.6468,0.0822
+ir,normal,S10_R2,FlickUp,esquerda,2988,3001,No gesture,0.5809,0.1139
+ir,normal,S10_R2,FlickUp,direita,3174,3194,No gesture,0.896,0.0099
+ir,normal,S10_R2,Tap,esquerda,3377,3393,No gesture,0.5486,0.0367
+ir,normal,S10_R2,SwipeRight,esquerda,3572,3601,Thumb Down,0.2551,0.2551
+ir,normal,S10_R2,SwipeLeft,direita,3756,3785,No gesture,0.8677,0.0111
+ir,normal,S10_R2,FlickDown,direita,3956,3989,No gesture,0.595,0.0268
+ir,normal,S10_R2,SwipeRight,direita,4150,4180,No gesture,0.4107,0.1982
+ir,normal,S10_R2,Tap,direita,4327,4357,Doing other things,0.7564,0.034
+ir,normal,S10_R2,FlickDown,esquerda,4509,4541,Thumb Down,0.2273,0.2273
+ir,normal,S10_R2,SwipeRight,direita,4704,4729,No gesture,0.7202,0.0864
+ir,normal,S10_R2,Tap,esquerda,4884,4912,Doing other things,0.7181,0.0421
+ir,normal,S10_R2,Tap,direita,5068,5089,Doing other things,0.4505,0.067
+ir,normal,S10_R2,SwipeLeft,direita,5253,5276,No gesture,0.8365,0.0134
+ir,normal,S10_R2,FlickDown,direita,5438,5480,No gesture,0.6289,0.0319
+ir,normal,S10_R2,FlickDown,esquerda,5635,5689,Thumb Down,0.2824,0.2824
+ir,normal,S10_R2,None,direita,772,810,No gesture,0.9183,0.0039
+ir,normal,S10_R2,None,direita,2339,2374,No gesture,0.9282,0.0034
+ir,normal,S10_R2,None,direita,3233,3276,No gesture,0.9531,0.0022
+ir,normal,S10_R2,None,esquerda,772,810,No gesture,0.9183,0.0039
+ir,normal,S10_R2,None,esquerda,2339,2374,No gesture,0.9282,0.0034
+ir,normal,S10_R2,None,esquerda,3233,3276,No gesture,0.9531,0.0022
+ir,normal,S10_R2,Other,direita,31,77,Doing other things,0.8796,0.0199
+ir,normal,S10_R2,Other,direita,2122,2146,No gesture,0.6898,0.0143
+ir,normal,S10_R2,Other,direita,3707,3744,Doing other things,0.6189,0.0254
+ir,normal,S10_R2,Other,esquerda,33,79,Doing other things,0.7628,0.043
+ir,normal,S10_R2,Other,esquerda,2122,2146,No gesture,0.6898,0.0143
+ir,normal,S10_R2,Other,esquerda,3707,3744,Doing other things,0.6189,0.0254
+ir,normal,S10_R3,FlickDown,direita,131,173,No gesture,0.6919,0.0482
+ir,normal,S10_R3,FlickUp,direita,314,335,No gesture,0.8677,0.011
+ir,normal,S10_R3,SwipeRight,direita,509,529,No gesture,0.4918,0.0601
+ir,normal,S10_R3,FlickUp,esquerda,676,706,No gesture,0.4542,0.0984
+ir,normal,S10_R3,FlickDown,direita,859,884,No gesture,0.8475,0.0221
+ir,normal,S10_R3,FlickUp,esquerda,1063,1087,Doing other things,0.2894,0.1649
+ir,normal,S10_R3,SwipeRight,direita,1248,1268,Doing other things,0.8403,0.0491
+ir,normal,S10_R3,Tap,direita,1423,1447,No gesture,0.7521,0.0131
+ir,normal,S10_R3,FlickUp,direita,1627,1660,No gesture,0.7623,0.0176
+ir,normal,S10_R3,FlickUp,esquerda,1816,1841,No gesture,0.419,0.1911
+ir,normal,S10_R3,SwipeRight,esquerda,1987,2023,Thumb Down,0.606,0.606
+ir,normal,S10_R3,FlickDown,esquerda,2199,2224,Doing other things,0.3971,0.2399
+ir,normal,S10_R3,FlickDown,esquerda,2365,2391,Thumb Down,0.2927,0.2927
+ir,normal,S10_R3,Tap,esquerda,2555,2571,Doing other things,0.5083,0.0462
+ir,normal,S10_R3,SwipeLeft,esquerda,2720,2745,No gesture,0.284,0.2186
+ir,normal,S10_R3,SwipeRight,direita,2906,2932,No gesture,0.7884,0.0486
+ir,normal,S10_R3,FlickUp,direita,3090,3117,No gesture,0.5316,0.0656
+ir,normal,S10_R3,SwipeRight,esquerda,3296,3315,No gesture,0.1907,0.1305
+ir,normal,S10_R3,SwipeRight,esquerda,3462,3491,Doing other things,0.9216,0.0154
+ir,normal,S10_R3,Tap,esquerda,3642,3660,No gesture,0.4781,0.0283
+ir,normal,S10_R3,FlickDown,esquerda,3843,3873,Doing other things,0.301,0.2281
+ir,normal,S10_R3,Tap,direita,4016,4032,Doing other things,0.5226,0.0224
+ir,normal,S10_R3,Tap,esquerda,4191,4207,Doing other things,0.368,0.0286
+ir,normal,S10_R3,FlickDown,direita,4371,4412,Doing other things,0.7444,0.0136
+ir,normal,S10_R3,Tap,direita,4572,4595,No gesture,0.7186,0.0227
+ir,normal,S10_R3,SwipeLeft,direita,4773,4805,No gesture,0.8443,0.0077
+ir,normal,S10_R3,SwipeLeft,direita,4954,4989,No gesture,0.4057,0.2234
+ir,normal,S10_R3,SwipeLeft,esquerda,5146,5165,No gesture,0.4941,0.1016
+ir,normal,S10_R3,SwipeLeft,esquerda,5331,5356,Doing other things,0.3584,0.0861
+ir,normal,S10_R3,Tap,direita,5514,5535,No gesture,0.4742,0.0203
+ir,normal,S10_R3,None,direita,0,50,No gesture,0.925,0.0035
+ir,normal,S10_R3,None,direita,775,800,No gesture,0.9096,0.0042
+ir,normal,S10_R3,None,direita,3047,3071,No gesture,0.8877,0.0055
+ir,normal,S10_R3,None,esquerda,0,50,No gesture,0.925,0.0035
+ir,normal,S10_R3,None,esquerda,775,800,No gesture,0.9096,0.0042
+ir,normal,S10_R3,None,esquerda,3047,3071,No gesture,0.8877,0.0055
+ir,normal,S10_R3,Other,direita,824,839,Thumb Down,0.2933,0.2933
+ir,normal,S10_R3,Other,direita,1525,1583,Doing other things,0.7004,0.0676
+ir,normal,S10_R3,Other,direita,2796,2834,Doing other things,0.7907,0.0314
+ir,normal,S10_R3,Other,esquerda,1778,1793,Doing other things,0.9432,0.0099
+ir,normal,S10_R3,Other,esquerda,3141,3166,Doing other things,0.787,0.0411
+ir,normal,S10_R3,Other,esquerda,3896,3921,Doing other things,0.9954,0.0007
+ir,normal,S10_R4,FlickUp,esquerda,160,182,No gesture,0.8144,0.0085
+ir,normal,S10_R4,SwipeLeft,esquerda,340,363,No gesture,0.5318,0.0654
+ir,normal,S10_R4,SwipeRight,direita,534,560,No gesture,0.5363,0.0599
+ir,normal,S10_R4,SwipeRight,esquerda,742,769,Thumb Down,0.5084,0.5084
+ir,normal,S10_R4,FlickDown,direita,933,961,No gesture,0.813,0.0182
+ir,normal,S10_R4,FlickDown,esquerda,1131,1163,Thumb Down,0.4081,0.4081
+ir,normal,S10_R4,Tap,direita,1330,1344,No gesture,0.6117,0.0334
+ir,normal,S10_R4,SwipeLeft,direita,1532,1563,Doing other things,0.5803,0.023
+ir,normal,S10_R4,SwipeLeft,direita,1728,1760,Doing other things,0.8656,0.019
+ir,normal,S10_R4,FlickUp,direita,1922,1947,No gesture,0.913,0.006
+ir,normal,S10_R4,FlickUp,esquerda,2116,2149,No gesture,0.6555,0.0922
+ir,normal,S10_R4,SwipeLeft,esquerda,2325,2348,No gesture,0.2918,0.1844
+ir,normal,S10_R4,SwipeRight,esquerda,2525,2555,Zooming In With Two Fingers,0.2558,0.2558
+ir,normal,S10_R4,SwipeLeft,esquerda,2728,2749,Doing other things,0.996,0.0007
+ir,normal,S10_R4,FlickDown,direita,2921,2945,Doing other things,0.9571,0.0073
+ir,normal,S10_R4,Tap,esquerda,3123,3135,Doing other things,0.3215,0.041
+ir,normal,S10_R4,Tap,esquerda,3313,3326,Doing other things,0.3099,0.0307
+ir,normal,S10_R4,FlickDown,esquerda,3520,3560,Doing other things,0.6138,0.0459
+ir,normal,S10_R4,FlickDown,esquerda,3736,3763,No gesture,0.3567,0.1561
+ir,normal,S10_R4,FlickUp,esquerda,3927,3956,Thumb Down,0.312,0.312
+ir,normal,S10_R4,SwipeRight,direita,4116,4140,Thumb Down,0.3379,0.3379
+ir,normal,S10_R4,SwipeRight,esquerda,4311,4334,Doing other things,0.3843,0.1539
+ir,normal,S10_R4,SwipeRight,direita,4502,4531,No gesture,0.4176,0.1443
+ir,normal,S10_R4,SwipeLeft,direita,4705,4737,No gesture,0.7267,0.0248
+ir,normal,S10_R4,FlickUp,direita,4908,4927,Doing other things,0.8288,0.0236
+ir,normal,S10_R4,Tap,esquerda,5109,5124,No gesture,0.4365,0.0311
+ir,normal,S10_R4,FlickUp,direita,5308,5327,No gesture,0.8511,0.0103
+ir,normal,S10_R4,Tap,direita,5511,5526,No gesture,0.7934,0.0083
+ir,normal,S10_R4,Tap,direita,5706,5723,No gesture,0.8586,0.0073
+ir,normal,S10_R4,FlickDown,direita,5921,5947,No gesture,0.8751,0.0111
+ir,normal,S10_R4,None,direita,590,614,No gesture,0.9427,0.0028
+ir,normal,S10_R4,None,direita,1018,1046,No gesture,0.9551,0.0022
+ir,normal,S10_R4,None,direita,2237,2273,No gesture,0.9194,0.0037
+ir,normal,S10_R4,None,esquerda,590,614,No gesture,0.9427,0.0028
+ir,normal,S10_R4,None,esquerda,1018,1046,No gesture,0.9551,0.0022
+ir,normal,S10_R4,None,esquerda,2237,2273,No gesture,0.9194,0.0037
+ir,normal,S10_R4,Other,direita,618,635,Doing other things,0.6464,0.0497
+ir,normal,S10_R4,Other,direita,1485,1505,Doing other things,0.4891,0.0174
+ir,normal,S10_R4,Other,direita,1981,2019,Doing other things,0.9913,0.0022
+ir,normal,S10_R4,Other,esquerda,1275,1297,Doing other things,0.9437,0.0138
+ir,normal,S10_R4,Other,esquerda,1420,1438,Doing other things,0.5559,0.0644
+ir,normal,S10_R4,Other,esquerda,1883,1901,Doing other things,0.7191,0.1315
+ir,normal,S10_R5,FlickUp,esquerda,126,150,No gesture,0.6298,0.0771
+ir,normal,S10_R5,SwipeRight,esquerda,301,322,No gesture,0.4367,0.0957
+ir,normal,S10_R5,Tap,direita,484,500,No gesture,0.7848,0.008
+ir,normal,S10_R5,FlickDown,direita,670,710,No gesture,0.7857,0.0143
+ir,normal,S10_R5,Tap,direita,840,861,No gesture,0.371,0.063
+ir,normal,S10_R5,Tap,esquerda,1041,1063,Doing other things,0.459,0.0696
+ir,normal,S10_R5,Tap,esquerda,1214,1231,Doing other things,0.2911,0.0824
+ir,normal,S10_R5,SwipeLeft,direita,1387,1402,No gesture,0.9207,0.0044
+ir,normal,S10_R5,SwipeLeft,esquerda,1568,1594,No gesture,0.7426,0.0689
+ir,normal,S10_R5,SwipeRight,esquerda,1755,1786,No gesture,0.5217,0.1077
+ir,normal,S10_R5,Tap,esquerda,1932,1950,Doing other things,0.3436,0.1294
+ir,normal,S10_R5,FlickUp,esquerda,2110,2144,No gesture,0.2866,0.1105
+ir,normal,S10_R5,SwipeLeft,direita,2297,2326,No gesture,0.9249,0.0063
+ir,normal,S10_R5,FlickDown,esquerda,2483,2517,No gesture,0.4636,0.1356
+ir,normal,S10_R5,SwipeLeft,direita,2658,2694,No gesture,0.8762,0.0213
+ir,normal,S10_R5,SwipeRight,direita,2834,2858,No gesture,0.6996,0.0558
+ir,normal,S10_R5,FlickDown,esquerda,3014,3039,No gesture,0.3883,0.1253
+ir,normal,S10_R5,FlickUp,direita,3184,3213,No gesture,0.9039,0.0072
+ir,normal,S10_R5,SwipeLeft,esquerda,3377,3396,No gesture,0.8581,0.0358
+ir,normal,S10_R5,FlickUp,direita,3571,3588,No gesture,0.949,0.0035
+ir,normal,S10_R5,SwipeLeft,esquerda,3764,3783,No gesture,0.8064,0.0398
+ir,normal,S10_R5,FlickDown,esquerda,4120,4145,No gesture,0.3509,0.1444
+ir,normal,S10_R5,FlickDown,direita,4295,4316,No gesture,0.4846,0.0334
+ir,normal,S10_R5,SwipeRight,esquerda,4477,4499,No gesture,0.348,0.2328
+ir,normal,S10_R5,Tap,direita,4660,4686,No gesture,0.6451,0.014
+ir,normal,S10_R5,FlickDown,direita,4865,4887,No gesture,0.5612,0.0647
+ir,normal,S10_R5,SwipeRight,direita,5026,5055,No gesture,0.8676,0.0221
+ir,normal,S10_R5,FlickUp,direita,5207,5232,No gesture,0.8533,0.0082
+ir,normal,S10_R5,FlickUp,esquerda,5401,5425,No gesture,0.9146,0.005
+ir,normal,S10_R5,None,direita,0,29,No gesture,0.9662,0.0015
+ir,normal,S10_R5,None,direita,401,430,No gesture,0.967,0.0015
+ir,normal,S10_R5,None,direita,3906,3936,No gesture,0.9493,0.0028
+ir,normal,S10_R5,None,esquerda,0,29,No gesture,0.9662,0.0015
+ir,normal,S10_R5,None,esquerda,401,430,No gesture,0.967,0.0015
+ir,normal,S10_R5,None,esquerda,3906,3936,No gesture,0.9493,0.0028
+ir,normal,S10_R5,Other,direita,48,67,No gesture,0.1807,0.1312
+ir,normal,S10_R5,Other,direita,2203,2250,Doing other things,0.7881,0.0644
+ir,normal,S10_R5,Other,direita,3847,3905,Doing other things,0.7546,0.0241
+ir,normal,S10_R5,Other,esquerda,56,74,Zooming In With Two Fingers,0.19,0.19
+ir,normal,S10_R5,Other,esquerda,2203,2250,Doing other things,0.7881,0.0644
+ir,normal,S10_R5,Other,esquerda,3847,3905,Doing other things,0.7546,0.0241
+ir,normal,S11_R1,FlickDown,esquerda,148,180,No gesture,0.7218,0.0465
+ir,normal,S11_R1,Tap,direita,342,365,No gesture,0.8605,0.007
+ir,normal,S11_R1,FlickDown,esquerda,524,543,No gesture,0.7478,0.0314
+ir,normal,S11_R1,SwipeRight,esquerda,686,716,No gesture,0.352,0.2873
+ir,normal,S11_R1,Tap,esquerda,862,880,Doing other things,0.3815,0.058
+ir,normal,S11_R1,FlickUp,direita,1032,1051,Thumb Down,0.3908,0.3908
+ir,normal,S11_R1,FlickDown,direita,1218,1255,No gesture,0.3012,0.1685
+ir,normal,S11_R1,FlickUp,esquerda,1411,1430,No gesture,0.7921,0.0275
+ir,normal,S11_R1,SwipeRight,esquerda,1540,1571,No gesture,0.8356,0.0357
+ir,normal,S11_R1,FlickUp,direita,1698,1712,No gesture,0.9238,0.0077
+ir,normal,S11_R1,FlickDown,direita,1865,1899,No gesture,0.3451,0.1053
+ir,normal,S11_R1,SwipeLeft,direita,2033,2049,No gesture,0.8358,0.0231
+ir,normal,S11_R1,Tap,direita,2183,2206,No gesture,0.7335,0.0111
+ir,normal,S11_R1,Tap,esquerda,2351,2361,Doing other things,0.4052,0.1163
+ir,normal,S11_R1,FlickDown,esquerda,2500,2515,No gesture,0.5979,0.0684
+ir,normal,S11_R1,Tap,direita,2652,2664,No gesture,0.3269,0.0764
+ir,normal,S11_R1,SwipeRight,direita,2810,2829,No gesture,0.342,0.0951
+ir,normal,S11_R1,SwipeRight,direita,2982,3018,No gesture,0.6945,0.0765
+ir,normal,S11_R1,SwipeLeft,esquerda,3150,3175,No gesture,0.5051,0.0191
+ir,normal,S11_R1,SwipeLeft,esquerda,3306,3339,No gesture,0.7745,0.018
+ir,normal,S11_R1,SwipeRight,esquerda,3489,3520,No gesture,0.8209,0.0343
+ir,normal,S11_R1,FlickUp,esquerda,3670,3681,Doing other things,0.7146,0.0239
+ir,normal,S11_R1,FlickUp,esquerda,3808,3833,No gesture,0.7374,0.0503
+ir,normal,S11_R1,FlickUp,esquerda,3975,4003,No gesture,0.7734,0.0319
+ir,normal,S11_R1,FlickUp,direita,4145,4159,No gesture,0.7628,0.0265
+ir,normal,S11_R1,SwipeLeft,direita,4303,4332,Doing other things,0.6834,0.012
+ir,normal,S11_R1,SwipeLeft,esquerda,4467,4491,No gesture,0.7422,0.0256
+ir,normal,S11_R1,SwipeLeft,direita,4622,4646,No gesture,0.7602,0.0127
+ir,normal,S11_R1,SwipeRight,direita,4787,4813,No gesture,0.8141,0.022
+ir,normal,S11_R1,FlickDown,direita,4962,4990,No gesture,0.6587,0.0331
+ir,normal,S11_R1,None,direita,0,18,No gesture,0.9468,0.0027
+ir,normal,S11_R1,None,direita,2122,2158,No gesture,0.9451,0.003
+ir,normal,S11_R1,None,direita,3868,3900,No gesture,0.9145,0.0045
+ir,normal,S11_R1,None,esquerda,0,18,No gesture,0.9468,0.0027
+ir,normal,S11_R1,None,esquerda,2122,2158,No gesture,0.9451,0.003
+ir,normal,S11_R1,None,esquerda,3868,3900,No gesture,0.9145,0.0045
+ir,normal,S11_R1,Other,direita,1335,1379,Doing other things,0.9764,0.0065
+ir,normal,S11_R1,Other,direita,2378,2407,Doing other things,0.7561,0.0686
+ir,normal,S11_R1,Other,direita,3239,3269,Doing other things,0.9712,0.0034
+ir,normal,S11_R1,Other,esquerda,1335,1379,Doing other things,0.9764,0.0065
+ir,normal,S11_R1,Other,esquerda,2250,2278,Doing other things,0.739,0.0513
+ir,normal,S11_R1,Other,esquerda,3239,3269,Doing other things,0.9712,0.0034

@@ -1,0 +1,7 @@
+Por época: 8246 vídeos de esquerda e direita x2 + 20000 de outras classes
+Modelo de origem: top1 0.9330; esquerda 0.9474; direita 0.9506; esq->dir 0.0142; dir->esq 0.0103
+Época 1/4: top1 0.9205; esquerda 0.9696; direita 0.9691; esq->dir 0.0182; dir->esq 0.0185; 4.4 min
+Época 2/4: top1 0.9207; esquerda 0.9696; direita 0.9774; esq->dir 0.0162; dir->esq 0.0165; 4.4 min
+Época 3/4: top1 0.9198; esquerda 0.9717; direita 0.9753; esq->dir 0.0162; dir->esq 0.0206; 5.1 min
+Época 4/4: top1 0.9208; esquerda 0.9717; direita 0.9774; esq->dir 0.0162; dir->esq 0.0185; 4.9 min
+Nenhuma época manteve o acerto geral: fica o modelo de origem.

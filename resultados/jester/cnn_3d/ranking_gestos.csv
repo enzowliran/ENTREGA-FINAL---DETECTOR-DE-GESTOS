@@ -1,0 +1,26 @@
+gesto,videos,detectados,disparos_corretos,mais_confundido_com,falsos_sem_gesto
+Polegar para baixo,536,0.9123134328358209,0.9630102040816326,Tamborilar os dedos,0
+Tamborilar os dedos,535,0.8728971962616823,0.952443857331572,Acenar,0
+Empurrar a mão,538,0.8680297397769516,0.9221105527638191,Deslizar para cima,0
+Acenar,528,0.8390151515151515,0.9484808454425363,Tamborilar os dedos,0
+Rolar a mão para trás,493,0.8133874239350912,0.9222797927461139,Rolar a mão para frente,0
+Polegar para cima,539,0.8051948051948052,0.9608482871125612,Polegar para baixo,2
+Puxar a mão,526,0.7623574144486692,0.957968476357268,Tamborilar os dedos,0
+Zoom in com a mão,526,0.7623574144486692,0.9305331179321487,Empurrar a mão,0
+Sinal de pare,536,0.7555970149253731,0.9718045112781954,Empurrar a mão,0
+Puxar com dois dedos,519,0.7514450867052023,0.959114139693356,Rolar a mão para trás,0
+Deslizar para a esquerda,494,0.7408906882591093,0.9484536082474226,Tamborilar os dedos,0
+Zoom out com a mão,526,0.7395437262357415,0.9548611111111112,Zoom in com a mão,0
+Rolar a mão para frente,521,0.727447216890595,0.9343629343629344,Rolar a mão para trás,0
+Zoom out com dois dedos,530,0.7113207547169811,0.967680608365019,Zoom in com dois dedos,0
+Empurrar com dois dedos,531,0.6930320150659134,0.9617590822179732,Polegar para cima,0
+Zoom in com dois dedos,522,0.6896551724137931,0.9696969696969697,Zoom in com a mão,0
+Deslizar para a direita,486,0.6893004115226338,0.9675925925925926,Deslizar para a esquerda,1
+Dois dedos para a esquerda,519,0.6878612716763006,0.9832635983263598,Deslizar para a esquerda,0
+Deslizar para baixo,520,0.6557692307692308,0.981859410430839,Empurrar a mão,0
+Deslizar para cima,508,0.6299212598425197,0.9457547169811321,Puxar a mão,0
+Dois dedos para cima,522,0.6245210727969349,0.9846547314578005,Deslizar para cima,0
+Dois dedos para baixo,531,0.6120527306967984,0.9807692307692307,Empurrar com dois dedos,0
+Dois dedos para a direita,516,0.6065891472868217,0.9812646370023419,Deslizar para a direita,0
+Girar a mão no sentido anti-horário,399,0.5238095238095238,0.831858407079646,Girar a mão no sentido horário,0
+Girar a mão no sentido horário,385,0.509090909090909,0.8605442176870748,Girar a mão no sentido anti-horário,0

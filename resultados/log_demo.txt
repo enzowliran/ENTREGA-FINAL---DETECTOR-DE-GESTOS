@@ -1,1 +1,1 @@
-Modelo: resultados\jester\cnn_3d_medio\melhor.pt (época 10, validação 85.0%), dispositivo cuda
+Modelo: resultados\jester\cnn_3d\melhor.pt (época 19, validação 93.3%), dispositivo cuda

@@ -11,13 +11,14 @@ import argparse
 import collections
 import json
 import queue
+import re
 import sys
 import threading
 import time
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from urllib.parse import parse_qs, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 import cv2
 import numpy as np
@@ -28,6 +29,9 @@ import ao_vivo as V
 
 RAIZ = Path(__file__).resolve().parent
 COMANDOS = {"Swiping Left": "anterior", "Swiping Right": "proxima", "Stop Sign": "alternar"}
+COMANDOS_VOLUME = {"Thumb Up": "volume_mais", "Thumb Down": "volume_menos"}
+COMANDOS_PAINEL = {**COMANDOS_VOLUME, "Drumming Fingers": "tamborilar", "Pulling Hand In": "funcao", "Pushing Hand Away": "ajuda"}
+TIPOS_AUDIO = {".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".wav": "audio/wav", ".ogg": "audio/ogg"}
 
 
 class Estado:
@@ -49,21 +53,34 @@ class Estado:
 
 
 class Gatilho:
-    """Só dispara com a mesma classe em N janelas seguidas e exige soltar o gesto para repetir."""
+    """Só dispara com a mesma classe em N janelas seguidas e exige soltar o gesto para repetir.
 
-    def __init__(self, limiar, seguidas, pausa):
+    Os gestos de `repetiveis` são a exceção: mantidos, voltam a disparar a cada `repetir` segundos.
+    A repetição exige o gesto na janela mais curta (`presente`): as janelas longas ainda enxergam um
+    gesto rápido alguns segundos depois de a mão sair, o que contaria como se ele continuasse.
+    """
+
+    def __init__(self, limiar, seguidas, pausa, repetiveis=(), repetir=2.0):
         self.limiar, self.seguidas, self.pausa = limiar, seguidas, pausa
+        self.repetiveis, self.repetir = set(repetiveis), repetir
         self.atual, self.contagem, self.fim_pausa, self.armado = None, 0, 0.0, True
+        self.proxima_repeticao, self.foi_repeticao = 0.0, False
 
-    def atualizar(self, nome, confianca, agora):
+    def atualizar(self, nome, confianca, agora, presente=True):
         if nome not in COMANDOS or confianca < self.limiar:
             self.atual, self.contagem, self.armado = None, 0, True
             return None
         if nome != self.atual:
             self.atual, self.contagem, self.armado = nome, 0, True
         self.contagem += 1
+        self.foi_repeticao = False
         if self.armado and self.contagem >= self.seguidas and agora >= self.fim_pausa:
             self.armado, self.fim_pausa = False, agora + self.pausa
+            self.proxima_repeticao = agora + self.repetir
+            return nome
+        if not self.armado and presente and nome in self.repetiveis and agora >= self.proxima_repeticao:
+            self.proxima_repeticao, self.fim_pausa = agora + self.repetir, agora + self.pausa
+            self.foi_repeticao = True
             return nome
         return None
 
@@ -90,7 +107,7 @@ def laco_modelo(args, estado, parar):
     maximo = int(round(max(args.janelas) * V.QUADROS_POR_SEGUNDO))
     minimo = int(round(min(args.janelas) * V.QUADROS_POR_SEGUNDO))
     buffer, historico = collections.deque(maxlen=maximo), collections.deque(maxlen=args.suavizar)
-    gatilho = Gatilho(args.limiar, args.seguidas, args.pausa)
+    gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if args.painel else (), args.repetir)
     ultimo_quadro, ultima_inferencia, ultimo_video, ultimo_estado = 0.0, 0.0, 0.0, 0.0
     tempos = collections.deque(maxlen=30)
     nome_atual, confianca, ms = "Aquecendo", 0.0, 0.0
@@ -127,11 +144,13 @@ def laco_modelo(args, estado, parar):
             nome_atual, confianca = nomes[melhor], float(media[melhor])
             ms = (time.perf_counter() - t0) * 1000
             ultima_inferencia = agora
-            disparo = gatilho.atualizar(nome_atual, confianca, agora)
+            curta = todas[0]  # lotes segue a ordem de --janelas, da mais curta para a mais longa
+            presente = nomes[int(curta.argmax())] == nome_atual and float(curta.max()) >= args.limiar
+            disparo = gatilho.atualizar(nome_atual, confianca, agora, presente)
             if disparo:
                 estado.disparos += 1
                 estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "gesto": V.TRADUCAO[disparo],
-                                 "confianca": confianca})
+                                 "confianca": confianca, "repeticao": gatilho.foi_repeticao})
         if agora - ultimo_video >= 0.08:
             pequena = cv2.resize(cv2.flip(quadro, 1), (480, 270), interpolation=cv2.INTER_AREA)
             ok, codificado = cv2.imencode(".jpg", pequena, [cv2.IMWRITE_JPEG_QUALITY, 70])
@@ -151,11 +170,49 @@ def laco_modelo(args, estado, parar):
 
 
 def criar_servidor(args, estado, parar):
-    html = (RAIZ / "player.html").read_bytes()
+    html = (RAIZ / args.pagina).read_bytes()
 
     class Atendente(BaseHTTPRequestHandler):
         def log_message(self, *a):
             pass
+
+        def enviar_audio(self, arquivo):
+            """Entrega o áudio, inclusive em partes, para o navegador poder avançar na faixa."""
+            if arquivo.suffix.lower() not in TIPOS_AUDIO or not arquivo.is_file():
+                self.send_response(404)
+                self.end_headers()
+                return
+            tamanho = arquivo.stat().st_size
+            inicio, fim, parcial = 0, tamanho - 1, False
+            faixa = re.fullmatch(r"bytes=(\d*)-(\d*)", self.headers.get("Range", ""))
+            if faixa and (faixa[1] or faixa[2]):
+                parcial = True
+                if faixa[1]:
+                    inicio = int(faixa[1])
+                    fim = min(int(faixa[2]), tamanho - 1) if faixa[2] else tamanho - 1
+                else:
+                    inicio = max(tamanho - int(faixa[2]), 0)
+                if inicio > fim:
+                    self.send_response(416)
+                    self.send_header("Content-Range", f"bytes */{tamanho}")
+                    self.end_headers()
+                    return
+            self.send_response(206 if parcial else 200)
+            self.send_header("Content-Type", TIPOS_AUDIO[arquivo.suffix.lower()])
+            self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Content-Length", str(fim - inicio + 1))
+            if parcial:
+                self.send_header("Content-Range", f"bytes {inicio}-{fim}/{tamanho}")
+            self.end_headers()
+            try:
+                with arquivo.open("rb") as f:
+                    f.seek(inicio)
+                    restante = fim - inicio + 1
+                    while restante > 0 and (bloco := f.read(min(65536, restante))):
+                        self.wfile.write(bloco)
+                        restante -= len(bloco)
+            except OSError:
+                pass
 
         def do_GET(self):
             url = urlparse(self.path)
@@ -165,6 +222,28 @@ def criar_servidor(args, estado, parar):
                 self.send_header("Cache-Control", "no-store")
                 self.end_headers()
                 self.wfile.write(html)
+            elif url.path.startswith("/vendor/"):
+                # Só arquivos diretos de demo/vendor, sem subpastas.
+                arquivo = RAIZ / "vendor" / Path(url.path).name
+                if not arquivo.is_file():
+                    self.send_response(404)
+                    self.end_headers()
+                    return
+                self.send_response(200)
+                self.send_header("Content-Type", "text/javascript; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(arquivo.read_bytes())
+            elif url.path == "/musicas/lista":
+                pasta = Path(args.musicas)
+                nomes = sorted(a.name for a in pasta.iterdir() if a.suffix.lower() in TIPOS_AUDIO) if pasta.is_dir() else []
+                corpo = json.dumps(nomes, ensure_ascii=False).encode()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json; charset=utf-8")
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write(corpo)
+            elif url.path.startswith("/musicas/"):
+                self.enviar_audio(Path(args.musicas) / Path(unquote(url.path)).name)
             elif url.path == "/eventos":
                 self.send_response(200)
                 self.send_header("Content-Type", "text/event-stream")
@@ -222,10 +301,16 @@ def main():
     a.add_argument("--intervalo", type=float, default=0.15)
     a.add_argument("--janelas", type=float, nargs="+", default=[1.0, 1.5, 3.0])
     a.add_argument("--porta", type=int, default=8765)
+    a.add_argument("--pagina", default="player.html", help="Página de demo/ a servir")
     a.add_argument("--cpu", action="store_true")
     a.add_argument("--simular", action="store_true", help="Teste sem câmera, com ruído e a rota /testar")
     a.add_argument("--nao-abrir", action="store_true", help="Não abre o navegador")
+    a.add_argument("--musicas", default=str(RAIZ / "musicas"), help="Pasta com os áudios servidos em /musicas/")
+    a.add_argument("--repetir", type=float, default=2.0, help="Segundos entre repetições de um polegar mantido, no painel")
+    a.add_argument("--painel", action="store_true", help="Liga os gestos extras do painel: polegares, tamborilar, puxar e empurrar a mão")
     args = a.parse_args()
+    if args.painel:
+        COMANDOS.update(COMANDOS_PAINEL)
 
     estado, parar = Estado(), threading.Event()
     servidor = criar_servidor(args, estado, parar)

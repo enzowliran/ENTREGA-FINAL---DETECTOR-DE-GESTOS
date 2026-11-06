@@ -1,3 +1,5 @@
+# Com GPU NVIDIA, instale o torch antes: pip install torch --index-url https://download.pytorch.org/whl/cu130
+torch
 numpy
 pandas
 matplotlib

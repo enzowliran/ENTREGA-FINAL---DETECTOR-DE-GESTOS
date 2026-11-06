@@ -1,0 +1,2 @@
+Player em http://127.0.0.1:8767/ (Ctrl+C encerra)
+Modelo: cnn_3d (validação 93.3%), cuda

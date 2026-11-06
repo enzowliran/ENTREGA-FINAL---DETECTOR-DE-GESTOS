@@ -1,0 +1,29 @@
+Fluxo sem gesto: 2001 vídeos, 100.2 min, 24027 janelas
+Vídeos com gesto: 1500/12786
+Vídeos com gesto: 3000/12786
+Vídeos com gesto: 4500/12786
+Vídeos com gesto: 6000/12786
+Vídeos com gesto: 7500/12786
+Vídeos com gesto: 9000/12786
+Vídeos com gesto: 10500/12786
+Vídeos com gesto: 12000/12786
+Vídeos com gesto: 12786/12786
+Conferência com o CSV: 3 falsos; 0.718 nos primeiros 1500 vídeos
+Curvas por gesto prontas
+Dobra 0: falsos 0 -> 0; detecção 0.728 -> 0.790
+Dobra 1: falsos 0 -> 0; detecção 0.728 -> 0.789
+Dobra 2: falsos 0 -> 1; detecção 0.729 -> 0.792
+Dobra 3: falsos 2 -> 4; detecção 0.711 -> 0.779
+Dobra 4: falsos 1 -> 1; detecção 0.725 -> 0.796
+
+Fluxo de 100.2 min; 12786 vídeos com gesto
+Limiar único:    3 falsos (0.030/min); detecção 72.4%; classe errada 5.1%
+Limiar por gesto: 6 falsos (0.060/min); detecção 79.0%; classe errada 7.3%
+Diferença de detecção: +6.5% (IC 95% +6.1% a +7.0%)
+
+Comandos da demo:
+  Swiping Left    limiar 0.60; detecção 74.1% -> 81.0%
+  Swiping Right   limiar 0.75; detecção 68.9% -> 67.3%
+  Stop Sign       limiar 0.55; detecção 75.6% -> 84.1%
+  Thumb Up        limiar 0.70; detecção 80.5% -> 81.8%
+  Thumb Down      limiar 0.70; detecção 91.2% -> 91.2%

@@ -1,0 +1,322 @@
+{
+  "rgb_normal": {
+    "acerto_equivalentes": 0.3125,
+    "n_equivalentes": 576,
+    "dispara_em_sem_gesto": 0.015625,
+    "n_sem_gesto": 192,
+    "dispara_em_gesto": 0.035416666666666666,
+    "n_gesto": 480,
+    "mais_previstos": {
+      "FlickDown": [
+        [
+          "Doing other things",
+          54
+        ],
+        [
+          "No gesture",
+          21
+        ],
+        [
+          "Thumb Down",
+          10
+        ]
+      ],
+      "FlickUp": [
+        [
+          "No gesture",
+          52
+        ],
+        [
+          "Doing other things",
+          34
+        ],
+        [
+          "Thumb Down",
+          8
+        ]
+      ],
+      "None": [
+        [
+          "No gesture",
+          91
+        ],
+        [
+          "Doing other things",
+          4
+        ],
+        [
+          "Thumb Down",
+          1
+        ]
+      ],
+      "Other": [
+        [
+          "Doing other things",
+          82
+        ],
+        [
+          "Thumb Down",
+          7
+        ],
+        [
+          "No gesture",
+          3
+        ]
+      ],
+      "SwipeLeft": [
+        [
+          "No gesture",
+          46
+        ],
+        [
+          "Doing other things",
+          24
+        ],
+        [
+          "Thumb Down",
+          19
+        ]
+      ],
+      "SwipeRight": [
+        [
+          "Doing other things",
+          45
+        ],
+        [
+          "Thumb Down",
+          19
+        ],
+        [
+          "No gesture",
+          18
+        ]
+      ],
+      "Tap": [
+        [
+          "Doing other things",
+          53
+        ],
+        [
+          "No gesture",
+          28
+        ],
+        [
+          "Thumb Down",
+          4
+        ]
+      ]
+    }
+  },
+  "rgb_girado": {
+    "acerto_equivalentes": 0.296875,
+    "n_equivalentes": 576,
+    "dispara_em_sem_gesto": 0.0,
+    "n_sem_gesto": 192,
+    "dispara_em_gesto": 0.052083333333333336,
+    "n_gesto": 480,
+    "mais_previstos": {
+      "FlickDown": [
+        [
+          "Doing other things",
+          59
+        ],
+        [
+          "Zooming In With Full Hand",
+          13
+        ],
+        [
+          "Turning Hand Counterclockwise",
+          4
+        ]
+      ],
+      "FlickUp": [
+        [
+          "Turning Hand Clockwise",
+          20
+        ],
+        [
+          "Turning Hand Counterclockwise",
+          19
+        ],
+        [
+          "Zooming In With Full Hand",
+          18
+        ]
+      ],
+      "None": [
+        [
+          "No gesture",
+          77
+        ],
+        [
+          "Doing other things",
+          17
+        ],
+        [
+          "Zooming Out With Two Fingers",
+          1
+        ]
+      ],
+      "Other": [
+        [
+          "Doing other things",
+          75
+        ],
+        [
+          "Turning Hand Clockwise",
+          4
+        ],
+        [
+          "Zooming In With Full Hand",
+          3
+        ]
+      ],
+      "SwipeLeft": [
+        [
+          "Zooming In With Full Hand",
+          36
+        ],
+        [
+          "Zooming In With Two Fingers",
+          16
+        ],
+        [
+          "Turning Hand Clockwise",
+          12
+        ]
+      ],
+      "SwipeRight": [
+        [
+          "Doing other things",
+          55
+        ],
+        [
+          "Zooming In With Full Hand",
+          11
+        ],
+        [
+          "Zooming Out With Full Hand",
+          6
+        ]
+      ],
+      "Tap": [
+        [
+          "Doing other things",
+          39
+        ],
+        [
+          "Zooming In With Two Fingers",
+          15
+        ],
+        [
+          "Zooming In With Full Hand",
+          13
+        ]
+      ]
+    }
+  },
+  "ir_normal": {
+    "acerto_equivalentes": 0.3263888888888889,
+    "n_equivalentes": 576,
+    "dispara_em_sem_gesto": 0.0,
+    "n_sem_gesto": 192,
+    "dispara_em_gesto": 0.008333333333333333,
+    "n_gesto": 480,
+    "mais_previstos": {
+      "FlickDown": [
+        [
+          "No gesture",
+          64
+        ],
+        [
+          "Doing other things",
+          27
+        ],
+        [
+          "Thumb Down",
+          5
+        ]
+      ],
+      "FlickUp": [
+        [
+          "No gesture",
+          80
+        ],
+        [
+          "Doing other things",
+          15
+        ],
+        [
+          "Thumb Down",
+          3
+        ]
+      ],
+      "None": [
+        [
+          "No gesture",
+          94
+        ],
+        [
+          "Doing other things",
+          2
+        ]
+      ],
+      "Other": [
+        [
+          "Doing other things",
+          79
+        ],
+        [
+          "No gesture",
+          13
+        ],
+        [
+          "Zooming In With Two Fingers",
+          2
+        ]
+      ],
+      "SwipeLeft": [
+        [
+          "No gesture",
+          80
+        ],
+        [
+          "Doing other things",
+          15
+        ],
+        [
+          "Thumb Down",
+          1
+        ]
+      ],
+      "SwipeRight": [
+        [
+          "No gesture",
+          67
+        ],
+        [
+          "Doing other things",
+          17
+        ],
+        [
+          "Thumb Down",
+          9
+        ]
+      ],
+      "Tap": [
+        [
+          "No gesture",
+          58
+        ],
+        [
+          "Doing other things",
+          37
+        ],
+        [
+          "Stop Sign",
+          1
+        ]
+      ]
+    }
+  }
+}

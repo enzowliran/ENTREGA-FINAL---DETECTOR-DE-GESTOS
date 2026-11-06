@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel do Carro</title>
+<style>
+  :root { --fundo: #07090b; --painel: #15181b; --painel2: #1f2327; --texto: #f4f3ef; --apoio: #9ea5aa; --destaque: #5fd6a0; --acento: #5fd6a0; --aviso: #f4bd62; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--fundo); color: var(--texto); font-family: "Segoe UI", system-ui, sans-serif; }
+  #palco { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: 0 0; overflow: hidden; background: #000; }
+  #palco > * { position: absolute; }
+  #estrada { left: 0; top: 0; width: 1600px; height: 560px; }
+  #carroceria, #volante { left: 0; top: 0; pointer-events: none; }
+  /* A imagem da webcam aparece no retrovisor, de onde um carro real poderia olhar a mão. */
+  #retrovisor { left: 625px; top: 14px; width: 350px; height: 104px; border-radius: 34px; padding: 6px; background: #0b0d0f; box-shadow: 0 8px 22px rgba(0,0,0,.55); }
+  #video { width: 100%; height: 100%; object-fit: cover; border-radius: 28px; display: block; background: #111; }
+  #hud { left: 50%; top: 372px; transform: translate(-50%, 16px); min-width: 330px; text-align: center; padding: 10px 26px; border-radius: 10px; opacity: 0; transition: opacity .18s, transform .18s; color: #b9ffe0; background: rgba(4,18,14,.55); border: 1px solid rgba(120,255,200,.35); font-size: 28px; font-weight: 700; text-shadow: 0 0 14px rgba(95,214,160,.8); pointer-events: none; white-space: nowrap; max-width: 760px; overflow: hidden; text-overflow: ellipsis; }
+  #hud.ver { opacity: 1; transform: translate(-50%, 0); }
+
+  #lcd { left: 300px; top: 505px; width: 140px; height: 112px; text-align: center; padding-top: 8px; }
+  #gesto { font-size: 17px; font-weight: 700; line-height: 1.15; min-height: 40px; display: flex; align-items: center; justify-content: center; }
+  #gesto.comando { color: var(--destaque); }
+  .barra { height: 5px; border-radius: 3px; background: #2b3035; overflow: hidden; margin: 5px 8px; }
+  #confianca { height: 100%; width: 0; background: var(--apoio); transition: width .12s; }
+  #contador { font-size: 13px; color: var(--apoio); font-variant-numeric: tabular-nums; margin-top: 6px; }
+  #contador b { color: var(--texto); }
+
+  #tela { left: 665px; top: 448px; width: 590px; height: 372px; border-radius: 18px; background: linear-gradient(160deg, #1b1f23, #0e1012 70%); border: 6px solid #050607; box-shadow: 0 14px 36px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.06); padding: 12px 20px 14px; display: flex; flex-direction: column; overflow: hidden; }
+  #tela::before { content: ""; position: absolute; inset: 0; background: radial-gradient(600px 300px at 12% 0%, color-mix(in srgb, var(--acento) 26%, transparent), transparent 70%); transition: background .5s; pointer-events: none; }
+  #tela > * { position: relative; }
+  .topo { display: flex; justify-content: space-between; align-items: center; font-size: 15px; color: var(--apoio); font-variant-numeric: tabular-nums; }
+  .topo b { color: var(--texto); font-weight: 600; }
+  #ponto { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #666; margin-right: 6px; }
+  #ponto.ok { background: var(--destaque); }
+  #abas { display: flex; gap: 6px; margin-top: 8px; }
+  #abas button { flex: 1; width: auto; height: 30px; border-radius: 15px; font-size: 14px; font-weight: 600; color: var(--apoio); background: #24282c; }
+  #abas button.ativa { background: var(--texto); color: #101214; }
+  .pagina { display: none; flex: 1; min-height: 0; flex-direction: column; }
+  .pagina.ativa { display: flex; }
+  .faixa { display: flex; gap: 18px; margin-top: 10px; }
+  .campos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; flex: 1; }
+  .campo { background: #1d2125; border: 2px solid transparent; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8px; }
+  .campo.ativo { border-color: var(--texto); background: #282d32; }
+  .campo small { color: var(--apoio); font-size: 14px; }
+  .campo b { font-size: 36px; line-height: 1.25; font-variant-numeric: tabular-nums; }
+  .campo b.texto { font-size: 24px; }
+  .situacao { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 16px; color: var(--apoio); }
+  .situacao b { color: var(--texto); }
+  .destaque { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 6px; }
+  .destaque svg { width: 84px; height: 84px; }
+  .destaque h3 { margin: 0; font-size: 32px; }
+  .destaque p { margin: 0; color: var(--apoio); font-size: 16px; }
+  #velocidades { display: flex; gap: 8px; width: 100%; margin-top: 8px; }
+  #velocidades span { flex: 1; padding: 10px 2px; border-radius: 10px; background: #1d2125; font-size: 15px; font-weight: 600; color: var(--apoio); }
+  #velocidades span.ativo { background: var(--texto); color: #101214; }
+  #chamada { position: absolute; inset: 0; z-index: 2; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 8px; text-align: center; background: #0d1a14; padding: 16px; }
+  #chamada.aberta { display: flex; }
+  #chamada small { font-size: 17px; color: #9fd9bd; }
+  #chamada h3 { margin: 0; font-size: 42px; }
+  #chamada p { margin: 4px 0 0; font-size: 17px; color: #d5ded9; line-height: 1.5; }
+  #indicadores { display: flex; justify-content: center; gap: 6px; margin-top: 5px; font-size: 11px; font-weight: 700; }
+  #indicadores span { color: #3b4146; }
+  #indicadores span.ligado { color: var(--destaque); }
+  #arSaida { left: 1310px; top: 506px; width: 230px; height: 44px; overflow: hidden; opacity: 0; transition: opacity .4s; pointer-events: none; }
+  #arSaida.ligado { opacity: .9; }
+  #arSaida i { position: absolute; left: -40%; width: 40%; height: 3px; border-radius: 2px; background: var(--ar, #8fd0ff); animation: sopro var(--sopro, 1.2s) linear infinite; }
+  #arSaida i:nth-child(1) { top: 7px; }
+  #arSaida i:nth-child(2) { top: 21px; animation-delay: -.45s; }
+  #arSaida i:nth-child(3) { top: 35px; animation-delay: -.8s; }
+  @keyframes sopro { to { left: 110%; } }
+  @media (prefers-reduced-motion: reduce) { #arSaida i { animation: none; left: 30%; } }
+  #capa { flex: none; width: 190px; height: 190px; border-radius: 10px; background: var(--acento); display: flex; align-items: flex-end; gap: 3px; padding: 10px; overflow: hidden; transition: background .5s; box-shadow: 0 6px 18px rgba(0,0,0,.5); }
+  #capa i { flex: 1; height: 6%; background: rgba(255,255,255,.82); border-radius: 2px 2px 0 0; }
+  .info { flex: 1; min-width: 0; padding-right: 20px; }
+  #titulo { font-size: 30px; font-weight: 700; line-height: 1.12; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  #artista { color: var(--apoio); font-size: 17px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tempo { height: 5px; border-radius: 3px; background: #30353a; margin-top: 12px; overflow: hidden; }
+  #progresso { height: 100%; width: 0; background: var(--acento); }
+  .horas { display: flex; justify-content: space-between; color: var(--apoio); font-size: 13px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .botoes { display: flex; justify-content: center; align-items: center; gap: 22px; margin-top: 14px; }
+  button { font: inherit; color: var(--texto); background: #2a2f34; border: 0; border-radius: 50%; width: 50px; height: 50px; cursor: pointer; display: grid; place-items: center; padding: 0; }
+  button:hover { background: #363c42; }
+  button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  button svg { width: 24px; height: 24px; fill: currentColor; }
+  #bAlternar { width: 62px; height: 62px; background: var(--texto); color: #101214; }
+  .proximas { margin-top: auto; display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid rgba(255,255,255,.1); padding-top: 9px; font-size: 14px; color: var(--apoio); }
+  .proximas span { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .proximas b { color: var(--texto); font-weight: 600; }
+  #volumeCaixa { position: absolute; right: 12px; top: 40px; bottom: 58px; width: 10px; border-radius: 5px; background: #30353a; overflow: hidden; }
+  #volumeBarra { position: absolute; left: 0; right: 0; bottom: 0; background: var(--texto); }
+
+  #menu { position: absolute; inset: 0; z-index: 1; display: none; flex-direction: column; padding: 12px 20px 12px; background: #0e1012; }
+  #menu.aberto { display: flex; }
+  #menu h2 { margin: 0 0 8px; font-size: 21px; font-weight: 700; }
+  #lista { list-style: none; margin: 0; padding: 0; flex: 1; min-height: 0; overflow: hidden; position: relative; }
+  #lista li { display: flex; align-items: center; gap: 12px; height: 50px; padding: 0 12px; border-radius: 8px; cursor: pointer; }
+  #lista li.selecionada { background: var(--texto); color: #101214; }
+  #lista .numero { flex: none; width: 22px; color: var(--apoio); font-variant-numeric: tabular-nums; }
+  #lista li.selecionada .numero, #lista li.selecionada small { color: #4a5055; }
+  #lista .nome { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #lista .nome b { font-weight: 600; font-size: 17px; }
+  #lista small { display: block; color: var(--apoio); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #lista .atual { flex: none; font-size: 12px; font-weight: 700; color: var(--destaque); }
+  #lista li.selecionada .atual { color: #16704a; }
+
+  #legenda { left: 1282px; top: 590px; width: 300px; font-size: 15px; color: #aab0b4; line-height: 1.7; }
+  #legenda b { color: #eef0ee; font-weight: 600; }
+  #led { left: 640px; top: 830px; width: 640px; height: 4px; border-radius: 2px; background: var(--acento); filter: blur(3px); opacity: .3; }
+
+  #inicio { inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(4,6,8,.78); text-align: center; z-index: 2; }
+  #inicio h1 { font-size: 54px; margin: 0 0 10px; }
+  #inicio p { font-size: 22px; color: #c9cdd0; margin: 0 0 30px; }
+  #ligar { margin: 0 auto; width: 148px; height: 148px; background: #b5312c; color: #fff; font-size: 22px; font-weight: 700; box-shadow: 0 0 0 7px #2a2f34, 0 0 34px rgba(235,80,70,.55); }
+  #ligar:hover { background: #cb3d37; }
+  #erro { left: 50%; top: 132px; transform: translateX(-50%); color: #ffd4cf; background: rgba(60,10,10,.8); border-radius: 8px; padding: 6px 14px; font-size: 16px; display: none; max-width: 800px; }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div id="palco">
+  <canvas id="estrada" width="1600" height="560" role="img" aria-label="Estrada vista pelo para-brisa"></canvas>
+
+  <svg id="carroceria" width="1600" height="900" viewBox="0 0 1600 900" aria-hidden="true">
+    <defs>
+      <linearGradient id="gPainel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#23272b"/><stop offset=".3" stop-color="#14171a"/><stop offset="1" stop-color="#090b0c"/></linearGradient>
+      <linearGradient id="gColuna" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0a0c0e"/><stop offset="1" stop-color="#1b1e22"/></linearGradient>
+      <linearGradient id="gCapo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a2b3f"/><stop offset="1" stop-color="#0c1520"/></linearGradient>
+      <radialGradient id="gMostrador" cx=".5" cy=".42"><stop offset="0" stop-color="#1b2024"/><stop offset="1" stop-color="#090b0d"/></radialGradient>
+    </defs>
+    <!-- Capô, colunas e teto -->
+    <path d="M250 500 Q800 438 1350 500 L1400 560 L200 560 Z" fill="url(#gCapo)"/>
+    <path d="M0 0 H150 L0 470 Z" fill="url(#gColuna)"/>
+    <path d="M1600 0 H1450 L1600 470 Z" fill="url(#gColuna)"/>
+    <rect width="1600" height="12" fill="#0c0e10"/>
+    <rect x="792" y="0" width="16" height="22" fill="#0b0d0f"/>
+    <!-- Painel -->
+    <path d="M0 470 Q160 492 300 482 L1000 482 Q1320 482 1600 470 V900 H0 Z" fill="url(#gPainel)"/>
+    <path d="M0 470 Q160 492 300 482 L1000 482 Q1320 482 1600 470" fill="none" stroke="#3a4046" stroke-width="2"/>
+    <!-- Friso do lado do passageiro -->
+    <path d="M1262 570 H1600" stroke="#42484e" stroke-width="3"/>
+    <path d="M1262 576 H1600" stroke="#0a0c0e" stroke-width="3"/>
+    <!-- Saída de ar direita -->
+    <g transform="translate(1300 494)">
+      <rect width="250" height="64" rx="12" fill="#07090a" stroke="#2f343a" stroke-width="2"/>
+      <path d="M12 16 H238 M12 32 H238 M12 48 H238" stroke="#262b30" stroke-width="5"/>
+    </g>
+    <!-- Comandos abaixo da tela -->
+    <g transform="translate(700 834)">
+      <rect width="520" height="52" rx="10" fill="#0c0e10" stroke="#2c3136" stroke-width="2"/>
+      <g id="botaoTemp"><circle cx="62" cy="26" r="20" fill="#1d2125" stroke="#3e444a" stroke-width="2"/><path d="M62 11 V21" stroke="#c8ccd0" stroke-width="3"/></g>
+      <g id="botaoVent"><circle cx="458" cy="26" r="20" fill="#1d2125" stroke="#3e444a" stroke-width="2"/><path d="M458 11 V21" stroke="#c8ccd0" stroke-width="3"/></g>
+      <text id="txtTemp" x="94" y="33" fill="#d8dcde" font-size="20" font-weight="700">22°C</text>
+      <text id="txtVent" x="426" y="33" fill="#d8dcde" font-size="20" font-weight="700" text-anchor="end">Vent 2</text>
+      <path d="M190 16 H330 M190 26 H330 M190 36 H330" stroke="#20252a" stroke-width="4"/>
+    </g>
+    <!-- Painel de instrumentos -->
+    <path d="M122 610 Q118 492 200 486 H540 Q622 492 618 610 Q618 650 590 650 H150 Q122 650 122 610 Z" fill="#050607" stroke="#23272b" stroke-width="3"/>
+    <g id="mostradores"></g>
+  </svg>
+
+  <div id="lcd">
+    <div id="gesto">Aquecendo...</div>
+    <div class="barra"><div id="confianca"></div></div>
+    <div id="contador"><b id="nDisparos">0</b> comandos · <b id="nMs">0</b> ms</div>
+    <div id="indicadores"><span id="indAr">A/C</span><span id="indLimp">LIMP</span><span id="indFarol">FAROL</span></div>
+  </div>
+
+  <svg id="volante" width="1600" height="900" viewBox="0 0 1600 900" aria-hidden="true">
+    <defs><linearGradient id="gAro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a6168"/><stop offset=".35" stop-color="#2b2f34"/></linearGradient></defs>
+    <g id="giro" transform="rotate(0 370 880)">
+      <circle cx="370" cy="880" r="232" fill="none" stroke="url(#gAro)" stroke-width="36"/>
+      <path d="M145 880 Q250 842 300 846 H440 Q490 842 595 880 L595 915 H145 Z" fill="#25292d"/>
+      <rect x="295" y="815" width="150" height="110" rx="26" fill="#1f2226" stroke="#34383d" stroke-width="2"/>
+      <circle cx="370" cy="866" r="24" fill="none" stroke="#878d92" stroke-width="3"/>
+      <path d="M350 866 H390 M370 866 V890" stroke="#878d92" stroke-width="3"/>
+    </g>
+  </svg>
+
+  <div id="tela" aria-label="Central multimídia">
+    <div class="topo"><span><i id="ponto"></i><b id="conexao">Conectando</b></span><span id="origem"></span><span id="hora"></span></div>
+    <div id="abas">
+      <button data-pagina="musica">Música</button><button data-pagina="clima">Clima</button><button data-pagina="telefone">Telefone</button><button data-pagina="limpador">Limpador</button><button data-pagina="farois">Faróis</button>
+    </div>
+    <div class="pagina" id="pag_musica">
+    <div class="faixa">
+      <div id="capa" aria-hidden="true"></div>
+      <div class="info">
+        <div id="titulo">-</div>
+        <div id="artista">-</div>
+        <div class="tempo"><div id="progresso"></div></div>
+        <div class="horas"><span id="decorrido">0:00</span><span id="duracao">0:00</span></div>
+        <div class="botoes">
+          <button id="bAnterior" aria-label="Música anterior"><svg viewBox="0 0 24 24"><path d="M6 5h2.5v14H6zM20 5v14L9 12z"/></svg></button>
+          <button id="bAlternar" aria-label="Tocar ou pausar"><svg viewBox="0 0 24 24"><path id="iconeAlternar" d="M7 5l13 7-13 7z"/></svg></button>
+          <button id="bProxima" aria-label="Próxima música"><svg viewBox="0 0 24 24"><path d="M15.5 5H18v14h-2.5zM4 5v14l11-7z"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <div class="proximas"><span>A seguir: <b id="aSeguir">-</b></span><span id="posicao"></span></div>
+    <div id="volumeCaixa" aria-hidden="true"><div id="volumeBarra"></div></div>
+    </div>
+    <div class="pagina" id="pag_clima">
+      <div class="campos">
+        <div class="campo" data-campo="temperatura"><small>Temperatura</small><b id="cTemp">22°C</b></div>
+        <div class="campo" data-campo="ventilacao"><small>Ventilação</small><b id="cVent">2</b></div>
+        <div class="campo" data-campo="direcao"><small>Direção do ar</small><b class="texto" id="cDir">Rosto</b></div>
+      </div>
+      <div class="situacao"><span>Ar-condicionado: <b id="cEstado">desligado</b></span><span>Simulado</span></div>
+    </div>
+    <div class="pagina" id="pag_telefone">
+      <div class="destaque">
+        <svg viewBox="0 0 24 24" fill="#e8eae8" aria-hidden="true"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11 11 0 0 0 3.6.6 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11 11 0 0 0 .6 3.6 1 1 0 0 1-.25 1z"/></svg>
+        <h3>Telefone</h3>
+        <p id="ultimaChamada">Nenhuma chamada recente</p>
+        <p>Sinal de pare simula uma chamada</p>
+      </div>
+    </div>
+    <div class="pagina" id="pag_limpador">
+      <div class="destaque">
+        <h3 id="limpTitulo">Desligado</h3>
+        <p>Chuva e limpadores simulados</p>
+        <div id="velocidades"><span>Desligado</span><span>Intermitente</span><span>Normal</span><span>Rápido</span></div>
+      </div>
+    </div>
+    <div class="pagina" id="pag_farois">
+      <div class="destaque">
+        <svg id="iconeFarol" viewBox="0 0 24 24" fill="none" stroke="#6d7479" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M13 5c5 0 8 3.5 8 7s-3 7-8 7c-1.5-4-1.5-10 0-14z"/><path d="M9 7H3M9 12H3M9 17H3"/></svg>
+        <h3 id="farolTitulo">Desligados</h3>
+        <p>Com os faróis ligados, a cena escurece e a pista fica iluminada</p>
+      </div>
+    </div>
+    <div id="chamada" role="alertdialog" aria-label="Chamada">
+      <small id="chamadaEstado">Chamada recebida</small>
+      <h3 id="chamadaNome">-</h3>
+      <p id="chamadaAjuda"></p>
+    </div>
+    <div id="menu" role="dialog" aria-label="Lista de músicas">
+      <h2>Músicas</h2>
+      <ol id="lista"></ol>
+    </div>
+  </div>
+
+  <div id="legenda"></div>
+  <div id="led" aria-hidden="true"></div>
+  <div id="arSaida" aria-hidden="true"><i></i><i></i><i></i></div>
+
+  <div id="retrovisor"><img id="video" alt="Imagem da webcam no retrovisor"></div>
+  <div id="hud" role="status" aria-live="polite"></div>
+  <div id="erro" role="alert"></div>
+
+  <div id="inicio"><div>
+    <h1>Painel por Gestos</h1>
+    <p>Controle as músicas com a mão, sem tirar os olhos da estrada.</p>
+    <button id="ligar">LIGAR</button>
+  </div></div>
+</div>
+
+<script src="/vendor/sintese_musicas.js"></script>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const REDUZIR = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Escala o palco de 1600 x 900 para caber em qualquer janela.
+function ajustarPalco() {
+  const e = Math.min(innerWidth / 1600, innerHeight / 900), palco = $("palco");
+  palco.style.transform = `scale(${e}) translate(-50%, -50%)`;
+}
+addEventListener("resize", ajustarPalco); ajustarPalco();
+
+// ---- Mostradores ----
+const SVG = "http://www.w3.org/2000/svg";
+function criar(pai, tipo, attrs, texto) {
+  const n = document.createElementNS(SVG, tipo);
+  Object.entries(attrs).forEach(([k, v]) => n.setAttribute(k, v));
+  if (texto !== undefined) n.textContent = texto;
+  pai.appendChild(n); return n;
+}
+function mostrador(cx, cy, r, maximo, passo, rotulo, cor) {
+  const g = $("mostradores");
+  criar(g, "circle", { cx, cy, r, fill: "url(#gMostrador)", stroke: "#343a40", "stroke-width": 3 });
+  const angulo = v => -225 + (v / maximo) * 270;
+  for (let v = 0; v <= maximo + 1e-6; v += passo / 2) {
+    const grande = Math.round(v / passo * 2) % 2 === 0, a = angulo(v) * Math.PI / 180, r1 = r - 5, r2 = r - (grande ? 15 : 10);
+    criar(g, "line", { x1: cx + Math.cos(a) * r1, y1: cy + Math.sin(a) * r1, x2: cx + Math.cos(a) * r2, y2: cy + Math.sin(a) * r2, stroke: "#d8dcde", "stroke-width": grande ? 2.4 : 1.2 });
+    if (grande) criar(g, "text", { x: cx + Math.cos(a) * (r - 27), y: cy + Math.sin(a) * (r - 27) + 4, fill: "#c5cacd", "font-size": 12, "font-weight": 600, "text-anchor": "middle" }, v);
+  }
+  criar(g, "text", { x: cx, y: cy + r - 15, fill: "#8d9499", "font-size": 12, "text-anchor": "middle" }, rotulo);
+  const ponteiro = criar(g, "line", { x1: cx, y1: cy + 8, x2: cx, y2: cy - r + 16, stroke: cor, "stroke-width": 3, "stroke-linecap": "round" });
+  criar(g, "circle", { cx, cy, r: 6, fill: "#2c3136", stroke: "#535a60", "stroke-width": 1.5 });
+  return (v) => ponteiro.setAttribute("transform", `rotate(${angulo(v) + 90} ${cx} ${cy})`);
+}
+const ponteiroVelocidade = mostrador(218, 570, 76, 200, 40, "km/h", "#ff8a4c");
+const ponteiroGiro = mostrador(522, 570, 76, 8, 2, "x1000 rpm", "#ff8a4c");
+
+// ---- Estrada: faixas desenhadas linha a linha, com perspectiva e curvas suaves ----
+const tela = $("estrada").getContext("2d");
+const LARG = 1600, ALT = 560, HORIZONTE = 250;
+const CENARIO = document.createElement("canvas"); CENARIO.width = LARG; CENARIO.height = HORIZONTE + 10;
+(function pintarCenario() {
+  const c = CENARIO.getContext("2d");
+  const ceu = c.createLinearGradient(0, 0, 0, HORIZONTE);
+  ceu.addColorStop(0, "#1c2452"); ceu.addColorStop(.55, "#8a4a78"); ceu.addColorStop(.88, "#f09a5e"); ceu.addColorStop(1, "#ffcf7f");
+  c.fillStyle = ceu; c.fillRect(0, 0, LARG, HORIZONTE + 10);
+  const sol = c.createRadialGradient(1090, HORIZONTE - 34, 6, 1090, HORIZONTE - 34, 150);
+  sol.addColorStop(0, "rgba(255,240,190,1)"); sol.addColorStop(.2, "rgba(255,210,140,.7)"); sol.addColorStop(1, "rgba(255,180,110,0)");
+  c.fillStyle = sol; c.fillRect(800, 40, 800, HORIZONTE);
+  let semente = 7; const r = () => (semente = (semente * 16807) % 2147483647) / 2147483647;
+  c.fillStyle = "rgba(255,255,255,.75)";
+  for (let i = 0; i < 70; i++) c.fillRect(r() * LARG, r() * 90, 1.6, 1.6);
+  [["#4d3a64", 62, .0052], ["#2c2846", 36, .0091]].forEach(([cor, altura, f], k) => {
+    c.fillStyle = cor; c.beginPath(); c.moveTo(0, HORIZONTE + 2);
+    for (let x = 0; x <= LARG; x += 8) c.lineTo(x, HORIZONTE - altura * (.55 + .3 * Math.sin(x * f + k * 2) + .15 * Math.sin(x * f * 3.1 + k)));
+    c.lineTo(LARG, HORIZONTE + 2); c.fill();
+  });
+})();
+const POSTES = Array.from({ length: 14 }, (_, i) => ({ z: i / 14, lado: i % 2 ? 1 : -1, tipo: i % 3 }));
+let percorrido = 0, curvaAtual = 0, velocidade = 88;
+function curvaEm(s) { return Math.sin(s * 0.11) * 0.7 + Math.sin(s * 0.043 + 1.3) * 0.5; }
+function desenharEstrada(dt) {
+  percorrido += dt * velocidade / 18;
+  curvaAtual = curvaEm(percorrido);
+  const desloc = -curvaAtual * 34;
+  tela.drawImage(CENARIO, desloc - 40, 0, LARG + 80, HORIZONTE + 10);
+  const altura = ALT - HORIZONTE;
+  for (let y = 0; y < altura; y++) {
+    const t = (y + 1) / altura, escala = t * t, z = 1 / (t + 0.03);
+    const centro = LARG / 2 + curvaAtual * 620 * Math.pow(1 - t, 2.1);
+    const meia = 42 + 760 * t;
+    const faixa = (Math.floor(z * 2.3 + percorrido * 2.2) % 2 + 2) % 2 === 0;
+    tela.fillStyle = faixa ? "#3a5f3f" : "#335637";
+    tela.fillRect(0, HORIZONTE + y, LARG, 1);
+    tela.fillStyle = faixa ? "#4b4d55" : "#44464e";
+    tela.fillRect(centro - meia, HORIZONTE + y, meia * 2, 1);
+    const borda = Math.max(1, meia * 0.05);
+    tela.fillStyle = faixa ? "#e8e6df" : "#c63f39";
+    tela.fillRect(centro - meia - borda, HORIZONTE + y, borda, 1);
+    tela.fillRect(centro + meia, HORIZONTE + y, borda, 1);
+    if (faixa) { tela.fillStyle = "#f2d564"; const l = Math.max(1, meia * 0.022); tela.fillRect(centro - l / 2, HORIZONTE + y, l, 1); }
+    if (t < .03) { tela.globalAlpha = (.03 - t) / .03; tela.fillStyle = "#e7a877"; tela.fillRect(0, HORIZONTE + y, LARG, 1); tela.globalAlpha = 1; }
+  }
+  const ordem = POSTES.map(p => { p.z -= dt * velocidade / 900; if (p.z <= 0.02) p.z += 1; return p; }).sort((a, b) => b.z - a.z);
+  ordem.forEach(p => {
+    const t = Math.pow(1 - p.z, 2.2); if (t < .01) return;
+    const y = HORIZONTE + t * altura, centro = LARG / 2 + curvaAtual * 620 * Math.pow(1 - t, 2.1), meia = 42 + 760 * t;
+    const x = centro + p.lado * meia * 1.36, h = 230 * t;
+    if (p.tipo === 0) {
+      tela.fillStyle = "#3a2b23"; tela.fillRect(x - h * .035, y - h * .4, h * .07, h * .4);
+      tela.fillStyle = "#1e3f2b"; tela.beginPath(); tela.moveTo(x, y - h * 1.2); tela.lineTo(x + h * .28, y - h * .3); tela.lineTo(x - h * .28, y - h * .3); tela.fill();
+    } else {
+      tela.fillStyle = "#d9d9d3"; tela.fillRect(x - h * .018, y - h * .3, h * .036, h * .3);
+      tela.fillStyle = "#e6523e"; tela.fillRect(x - h * .018, y - h * .3, h * .036, h * .05);
+    }
+  });
+  desenharFarois(dt);
+  desenharChuva(dt);
+}
+let nivelFarol = 0;
+function desenharFarois(dt) {
+  nivelFarol += ((farois ? 1 : 0) - nivelFarol) * Math.min(1, dt * 2.5 || (REDUZIR ? 1 : 0));
+  if (nivelFarol < 0.01) return;
+  tela.fillStyle = `rgba(5, 8, 28, ${0.74 * nivelFarol})`;
+  tela.fillRect(0, 0, LARG, ALT);
+  const ponta = LARG / 2 + curvaAtual * 620 * Math.pow(0.72, 2.1), topo = HORIZONTE + 54;
+  const luz = tela.createLinearGradient(0, ALT, 0, topo);
+  luz.addColorStop(0, `rgba(255, 238, 190, ${0.5 * nivelFarol})`);
+  luz.addColorStop(1, "rgba(255, 238, 190, 0)");
+  tela.save();
+  tela.globalCompositeOperation = "lighter";
+  tela.fillStyle = luz;
+  tela.beginPath(); tela.moveTo(160, ALT); tela.lineTo(ponta - 70, topo); tela.lineTo(ponta + 70, topo); tela.lineTo(1440, ALT); tela.fill();
+  tela.restore();
+}
+const ESTEIRAS = [[560, 490], [1060, 490]], COMPRIMENTO = 440, GRAU = Math.PI / 180;
+const REPOUSO = -176 * GRAU, MAXIMO = -62 * GRAU, RITMOS = [0, 1.1, 1.1, 0.65], PAUSAS = [0, 1.6, 0, 0];
+let gotas = [], faseLimpador = 0, esperaLimpador = 0, anguloLimpador = REPOUSO;
+function desenharChuva(dt) {
+  const v = limpador;
+  if (v > 0) {
+    tela.fillStyle = "rgba(90, 105, 125, .2)"; tela.fillRect(0, 0, LARG, ALT);
+    tela.strokeStyle = "rgba(220, 232, 245, .35)"; tela.lineWidth = 1.2; tela.beginPath();
+    for (let i = 0; i < 70; i++) { const x = Math.random() * LARG, y = Math.random() * ALT; tela.moveTo(x, y); tela.lineTo(x - 3, y + 16); }
+    tela.stroke();
+    const novas = Math.floor(dt * 170 + Math.random());
+    for (let i = 0; i < novas && gotas.length < 320; i++) gotas.push({ x: 90 + Math.random() * 1420, y: Math.random() * 480, r: 1.5 + Math.random() * 2.5 });
+    if (esperaLimpador > 0) esperaLimpador -= dt;
+    else {
+      faseLimpador += dt / RITMOS[v];
+      if (faseLimpador >= 1) { faseLimpador = 0; esperaLimpador = PAUSAS[v]; }
+    }
+  } else if (faseLimpador > 0) {
+    // Ao desligar, termina a passada e volta ao repouso.
+    faseLimpador = Math.min(1, faseLimpador + dt / 1.1);
+    if (faseLimpador >= 1) faseLimpador = 0;
+  } else if (gotas.length) gotas.splice(0, Math.ceil(dt * 60));
+  anguloLimpador = REPOUSO + (MAXIMO - REPOUSO) * (0.5 - 0.5 * Math.cos(faseLimpador * 2 * Math.PI));
+  gotas = gotas.filter(g => !ESTEIRAS.some(([px, py]) => {
+    const dx = g.x - px, dy = g.y - py;
+    return Math.hypot(dx, dy) < COMPRIMENTO && Math.abs(Math.atan2(dy, dx) - anguloLimpador) < 5 * GRAU;
+  }));
+  tela.fillStyle = "rgba(225, 238, 250, .55)";
+  gotas.forEach(g => { tela.beginPath(); tela.arc(g.x, g.y, g.r, 0, 7); tela.fill(); });
+  if (v > 0 || faseLimpador > 0) {
+    ESTEIRAS.forEach(([px, py]) => {
+      const x = px + Math.cos(anguloLimpador) * COMPRIMENTO, y = py + Math.sin(anguloLimpador) * COMPRIMENTO;
+      tela.strokeStyle = "#0a0b0d"; tela.lineWidth = 7; tela.lineCap = "round";
+      tela.beginPath(); tela.moveTo(px + Math.cos(anguloLimpador) * 40, py + Math.sin(anguloLimpador) * 40); tela.lineTo(x, y); tela.stroke();
+    });
+  }
+}
+
+// ---- Áudio: arquivos da pasta demo/musicas ou, sem eles, as músicas sintetizadas ----
+let faixas = [], atual = 0, ligado = false, audioEl = null, volume = 0.7, historico = [], menuAberto = false, selecionada = 0, comandos = 0;
+const PAGINAS = ["musica", "clima", "telefone", "limpador", "farois"];
+const NOMES_PAGINA = { musica: "Música", clima: "Clima", telefone: "Telefone", limpador: "Limpador", farois: "Faróis" };
+const NOMES_LIMPADOR = ["Desligado", "Intermitente", "Normal", "Rápido"];
+const CAMPOS = ["temperatura", "ventilacao", "direcao"], DIRECOES = ["Rosto", "Pés", "Rosto e pés", "Para-brisa"];
+const CONTATOS = ["Casa", "Trabalho", "Oficina"];
+const clima = { ligado: false, temperatura: 22, ventilacao: 2, direcao: 0, campo: 0 };
+let pagina = "musica", farois = false, limpador = 0, ultimoLimpador = 2, chamada = null, indiceContato = 0, fatorAudio = 1, fatorVoz = 1, volumeToque = 0.1;
+const FORMATO = /\.(mp3|m4a|wav|ogg)$/i;
+function corDoNome(nome) {
+  let h = 0; for (const c of nome) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return `hsl(${h} 52% 42%)`;
+}
+function faixaDeArquivo(arquivo) {
+  const base = arquivo.replace(FORMATO, "").replace(/_/g, " "), partes = base.split(" - ");
+  return { arquivo, titulo: partes.slice(1).join(" - ") || base, artista: partes.length > 1 ? partes[0] : "Arquivo de áudio", cor: corDoNome(base) };
+}
+async function carregarFaixas() {
+  let nomes = [];
+  try { nomes = await (await fetch("/musicas/lista")).json(); } catch (e) { nomes = []; }
+  if (nomes.length) { faixas = nomes.map(faixaDeArquivo); $("origem").textContent = "Suas músicas"; }
+  else { faixas = MUSICAS.map((m, i) => ({ indice: i, titulo: m.titulo, artista: m.estilo, cor: m.cor })); $("origem").textContent = "Músicas sintetizadas"; }
+  atualizarFaixa();
+}
+const usaArquivos = () => faixas.length > 0 && faixas[0].arquivo !== undefined;
+
+function prepararAudio() {
+  iniciarAudio();
+  mestre.gain.value = volume * fatorAudio * fatorVoz;
+  if (usaArquivos() && !audioEl) {
+    audioEl = new Audio(); audioEl.preload = "auto";
+    ctx.createMediaElementSource(audioEl).connect(mestre);
+    audioEl.addEventListener("ended", () => trocar(1));
+    audioEl.addEventListener("error", () => {
+      if (!audioEl.getAttribute("src")) return;
+      mostrarErro("Não consegui tocar " + faixas[atual].arquivo);
+      if (faixas.length > 1 && ++errosSeguidos < faixas.length) trocar(1); else pausar();
+    });
+    audioEl.addEventListener("playing", () => { errosSeguidos = 0; $("erro").style.display = "none"; });
+  }
+}
+let errosSeguidos = 0, tempoErro;
+function mostrarErro(texto) {
+  $("erro").textContent = texto; $("erro").style.display = "block";
+  clearTimeout(tempoErro); tempoErro = setTimeout(() => $("erro").style.display = "none", 4000);
+}
+function agendarSintese() {
+  const m = MUSICAS[faixa], semicolcheia = 60 / m.bpm / 4, total = m.compassos * 16;
+  while (proximoTempo < ctx.currentTime + 0.25) {
+    if (passo >= total) { trocar(1); return; }
+    tocarPasso(m, passo, proximoTempo + (passo % 2 ? semicolcheia * m.swing : 0), semicolcheia);
+    proximoTempo += semicolcheia;
+    passo++;
+  }
+}
+function carregarArquivo() {
+  const url = "/musicas/" + encodeURIComponent(faixas[atual].arquivo);
+  if (audioEl.getAttribute("src") !== url) audioEl.src = url;
+}
+function tocar() {
+  prepararAudio(); ctx.resume();
+  if (usaArquivos()) {
+    carregarArquivo();
+    audioEl.play().catch(e => { if (e.name !== "AbortError") mostrarErro("O navegador bloqueou o som: clique na página."); });
+  } else if (!tocando) {
+    if (proximoTempo < ctx.currentTime) proximoTempo = ctx.currentTime + 0.05;
+    relogio = setInterval(agendarSintese, 40);
+  }
+  tocando = true; atualizarBotao();
+}
+function pausar() {
+  tocando = false; clearInterval(relogio);
+  if (audioEl) audioEl.pause(); else if (ctx) ctx.suspend();
+  atualizarBotao();
+}
+function trocar(d) { irPara((atual + d + faixas.length) % faixas.length); }
+// Volta para a última faixa tocada; sem histórico, para a anterior da lista.
+function voltarUltima() {
+  if (historico.length) irPara(historico.pop(), false);
+  else irPara((atual - 1 + faixas.length) % faixas.length, false);
+}
+function irPara(indice, registrar = true) {
+  if (registrar && indice !== atual) historico.push(atual);
+  atual = indice;
+  if (usaArquivos()) {
+    if (audioEl) { carregarArquivo(); audioEl.currentTime = 0; if (tocando) audioEl.play().catch(() => {}); }
+  } else {
+    faixa = atual; passo = 0;
+    if (ctx) {
+      novaFaixaBus();
+      ctx.eco.delayTime.setTargetAtTime(60 / MUSICAS[faixa].bpm * 0.75, ctx.currentTime, 0.02);
+      proximoTempo = ctx.currentTime + 0.05;
+    }
+  }
+  atualizarFaixa();
+}
+function aplicarGanho() { if (mestre) mestre.gain.setTargetAtTime(volume * fatorAudio * fatorVoz, ctx.currentTime, 0.05); }
+function mudarVolume(d) {
+  volume = Math.max(0, Math.min(1, Math.round((volume + d) * 10) / 10));
+  aplicarGanho();
+  $("volumeBarra").style.height = volume * 100 + "%";
+}
+
+// ---- Interface ----
+function formatar(s) {
+  if (!isFinite(s) || s < 0) return "0:00";
+  return Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+}
+function atualizarBotao() {
+  $("iconeAlternar").setAttribute("d", tocando ? "M6 5h4.5v14H6zM13.5 5H18v14h-4.5z" : "M7 5l13 7-13 7z");
+  atualizarLegenda();
+}
+function comandosAtuais() {
+  const FUNCAO = ["Puxar a mão", "troca de função"];
+  let linhas;
+  if (chamada && chamada.estado === "tocando") linhas = [["Manter polegar para cima", "atende"], ["Manter polegar para baixo", "recusa"]];
+  else if (chamada) linhas = [["Sinal de pare", "encerra"]];
+  else if (menuAberto) linhas = [["Polegar para cima ou baixo", "navega"], ["Sinal de pare", "seleciona"], ["Tamborilar os dedos", "volta"]];
+  else if (pagina === "clima") linhas = [["Deslizar para os lados", "troca o ajuste"], ["Polegar para cima ou baixo", "muda o valor"], ["Sinal de pare", clima.ligado ? "desliga" : "liga"], FUNCAO];
+  else if (pagina === "telefone") linhas = [["Sinal de pare", "simula uma chamada"], FUNCAO];
+  else if (pagina === "limpador") linhas = [["Polegar para cima ou baixo", "muda a velocidade"], ["Sinal de pare", limpador ? "desliga" : "liga"], FUNCAO];
+  else if (pagina === "farois") linhas = [["Sinal de pare", farois ? "desliga" : "liga"], FUNCAO];
+  else {
+    linhas = [["Para a direita", "próxima", "Deslizar para a direita"], ["Para a esquerda", "última tocada", "Deslizar para a esquerda"], ["Sinal de pare", tocando ? "pausa" : "toca"], ["Polegar", "volume", "Polegar para cima ou baixo"]];
+    if (!tocando) linhas.push(["Tamborilar os dedos", "abre o menu"]);
+    linhas.push(FUNCAO);
+  }
+  return linhas;
+}
+function atualizarLegenda() {
+  $("legenda").innerHTML = [...comandosAtuais(), ["Empurrar a mão", "explica os comandos"]].map(([g, a]) => `<b>${g}:</b> ${a}`).join("<br>");
+}
+function abrirMenu() {
+  menuAberto = true; selecionada = atual;
+  montarLista();
+  $("menu").classList.add("aberto");
+  atualizarLegenda();
+  narrarTela();
+}
+function montarLista() {
+  const lista = $("lista"), rolagem = lista.scrollTop; lista.replaceChildren();
+  faixas.forEach((f, i) => {
+    const li = document.createElement("li");
+    const numero = document.createElement("span"); numero.className = "numero"; numero.textContent = i + 1;
+    const nome = document.createElement("div"); nome.className = "nome";
+    const titulo = document.createElement("b"); titulo.textContent = f.titulo;
+    const artista = document.createElement("small"); artista.textContent = f.artista;
+    nome.append(titulo, artista); li.append(numero, nome);
+    if (i === atual) { const m = document.createElement("span"); m.className = "atual"; m.textContent = "ATUAL"; li.append(m); }
+    li.onclick = () => { selecionada = i; confirmarMenu(); };
+    lista.append(li);
+  });
+  lista.scrollTop = rolagem;
+  destacarMenu();
+}
+function fecharMenu() { menuAberto = false; $("menu").classList.remove("aberto"); atualizarLegenda(); narrarTela(); }
+function destacarMenu() {
+  const lista = $("lista");
+  [...lista.children].forEach((li, i) => li.classList.toggle("selecionada", i === selecionada));
+  const li = lista.children[selecionada];
+  if (li.offsetTop < lista.scrollTop) lista.scrollTop = li.offsetTop;
+  else if (li.offsetTop + li.offsetHeight > lista.scrollTop + lista.clientHeight) lista.scrollTop = li.offsetTop + li.offsetHeight - lista.clientHeight;
+}
+function moverMenu(d) {
+  selecionada = (selecionada + d + faixas.length) % faixas.length;
+  destacarMenu(); avisar(faixas[selecionada].titulo);
+}
+// Só escolhe a faixa: ela começa quando a pessoa voltar à tela principal e der play.
+function confirmarMenu() {
+  if (selecionada !== atual) irPara(selecionada);
+  montarLista();
+  avisar("Selecionada: " + faixas[atual].titulo);
+}
+function atualizarFaixa() {
+  const f = faixas[atual]; if (!f) return;
+  $("titulo").textContent = f.titulo; $("artista").textContent = f.artista;
+  document.documentElement.style.setProperty("--acento", f.cor);
+  $("capa").style.background = f.cor;
+  $("aSeguir").textContent = faixas[(atual + 1) % faixas.length].titulo;
+  $("posicao").textContent = "Faixa " + (atual + 1) + " de " + faixas.length;
+  $("progresso").style.width = "0"; $("decorrido").textContent = "0:00";
+}
+function atualizarTempo() {
+  let agora = 0, total = 0;
+  if (usaArquivos() && audioEl) { agora = audioEl.currentTime; total = audioEl.duration; }
+  else if (!usaArquivos() && faixas.length) { const m = MUSICAS[faixa], s = 60 / m.bpm / 4; agora = passo * s; total = m.compassos * 16 * s; }
+  $("progresso").style.width = total > 0 ? Math.min(agora / total * 100, 100) + "%" : "0";
+  $("decorrido").textContent = formatar(agora); $("duracao").textContent = formatar(total);
+}
+const capa = $("capa");
+for (let i = 0; i < 16; i++) capa.appendChild(document.createElement("i"));
+
+let tempoHud;
+function avisar(texto) {
+  const h = $("hud"); h.textContent = texto; h.classList.add("ver");
+  clearTimeout(tempoHud); tempoHud = setTimeout(() => h.classList.remove("ver"), 1700);
+}
+// ---- Voz: ao trocar de tela, diz onde a pessoa está; os comandos só são lidos quando ela pede ----
+const temVoz = "speechSynthesis" in window;
+let vozPt = null, vozesLidas = false, idFala = 0, tempoFala, tempoGuarda, falaAtual = null, avisouSemVoz = false;
+function escolherVoz() {
+  const todas = speechSynthesis.getVoices();
+  if (!todas.length) return;
+  vozesLidas = true;
+  const br = todas.filter(v => /^pt[-_]BR/i.test(v.lang)), pt = br.length ? br : todas.filter(v => /^pt/i.test(v.lang));
+  vozPt = pt.find(v => /natural|online|google/i.test(v.name)) || pt[0] || null;
+}
+if (temVoz) { escolherVoz(); speechSynthesis.addEventListener("voiceschanged", escolherVoz); }
+function semVoz() {
+  terminarFala();
+  if (!avisouSemVoz) { avisouSemVoz = true; mostrarErro("Sem voz em português disponível neste navegador."); }
+}
+function terminarFala() { clearTimeout(tempoGuarda); falaAtual = null; fatorVoz = 1; aplicarGanho(); }
+function calarVoz() {
+  idFala++; clearTimeout(tempoFala);
+  if (temVoz) speechSynthesis.cancel();
+  terminarFala();
+}
+// Uma frase por vez: o Chrome corta falas longas, e cada comando vira uma pausa natural.
+function falarFrase(frases, i, id) {
+  if (id !== idFala) return;
+  if (i >= frases.length) { terminarFala(); return; }
+  const u = new SpeechSynthesisUtterance(frases[i]);
+  u.lang = "pt-BR"; u.rate = 1.05;
+  if (vozPt) u.voice = vozPt;
+  falaAtual = u; // guarda a referência para o navegador não descartar a fala no meio
+  const seguir = () => { clearTimeout(tempoGuarda); falarFrase(frases, i + 1, id); };
+  u.onend = seguir;
+  u.onerror = e => { if (id === idFala && e.error !== "canceled" && e.error !== "interrupted") semVoz(); };
+  clearTimeout(tempoGuarda);
+  tempoGuarda = setTimeout(() => { if (id === idFala) { speechSynthesis.cancel(); semVoz(); } }, 10000); // voz que não responde não pode deixar a música baixa
+  speechSynthesis.speak(u);
+}
+function falar(frases) {
+  calarVoz();
+  if (!temVoz) { semVoz(); return; }
+  if (vozesLidas && !vozPt) { semVoz(); return; } // uma voz em inglês lendo português não seria entendida
+  const id = idFala;
+  fatorVoz = 0.3; aplicarGanho();
+  tempoFala = setTimeout(() => falarFrase(frases, 0, id), 150);
+}
+function tituloTela() {
+  return chamada ? (chamada.estado === "tocando" ? "Chamada de " + chamada.nome : "Em chamada") : menuAberto ? "Menu de músicas" : NOMES_PAGINA[pagina];
+}
+function narrarTela(inicio) { falar([...(inicio ? [inicio] : []), tituloTela()]); }
+function explicarComandos() {
+  falar([tituloTela(), ...comandosAtuais().map(([gesto, acao, falado]) => (falado || gesto) + ": " + acao)]);
+}
+function mostrarPagina(nova) {
+  pagina = nova;
+  PAGINAS.forEach(p => $("pag_" + p).classList.toggle("ativa", p === nova));
+  document.querySelectorAll("#abas button").forEach(b => b.classList.toggle("ativa", b.dataset.pagina === nova));
+  atualizarLegenda();
+  if (ligado) narrarTela();
+}
+function atualizarClima() {
+  $("cTemp").textContent = $("txtTemp").textContent = clima.temperatura + "°C";
+  $("cVent").textContent = clima.ventilacao; $("txtVent").textContent = "Vent " + clima.ventilacao;
+  $("cDir").textContent = DIRECOES[clima.direcao];
+  $("cEstado").textContent = clima.ligado ? "ligado" : "desligado";
+  document.querySelectorAll(".campo").forEach(c => c.classList.toggle("ativo", c.dataset.campo === CAMPOS[clima.campo]));
+  $("botaoTemp").setAttribute("transform", `rotate(${(clima.temperatura - 23) * 22} 62 26)`);
+  $("botaoVent").setAttribute("transform", `rotate(${(clima.ventilacao - 3) * 45} 458 26)`);
+  $("indAr").classList.toggle("ligado", clima.ligado);
+  $("arSaida").classList.toggle("ligado", clima.ligado);
+  $("arSaida").style.setProperty("--ar", clima.temperatura <= 22 ? "#8fd0ff" : clima.temperatura >= 25 ? "#ffab7a" : "#e5e9ec");
+  $("arSaida").style.setProperty("--sopro", (1.9 - clima.ventilacao * 0.3) + "s");
+}
+function ajustarClima(d) {
+  const campo = CAMPOS[clima.campo];
+  if (campo === "temperatura") clima.temperatura = Math.max(18, Math.min(28, clima.temperatura + d));
+  else if (campo === "ventilacao") clima.ventilacao = Math.max(1, Math.min(5, clima.ventilacao + d));
+  else clima.direcao = (clima.direcao + d + DIRECOES.length) % DIRECOES.length;
+  atualizarClima();
+  avisar(campo === "temperatura" ? clima.temperatura + "°C" : campo === "ventilacao" ? "Ventilação " + clima.ventilacao : DIRECOES[clima.direcao]);
+}
+function atualizarLimpador() {
+  $("limpTitulo").textContent = NOMES_LIMPADOR[limpador];
+  [...$("velocidades").children].forEach((s, i) => s.classList.toggle("ativo", i === limpador));
+  $("indLimp").classList.toggle("ligado", limpador > 0);
+}
+function definirLimpador(v) {
+  limpador = v; if (v > 0) ultimoLimpador = v;
+  atualizarLimpador(); atualizarLegenda(); avisar("Limpador: " + NOMES_LIMPADOR[v]);
+}
+function atualizarFarois() {
+  $("farolTitulo").textContent = farois ? "Ligados" : "Desligados";
+  $("iconeFarol").setAttribute("stroke", farois ? "#ffe29a" : "#6d7479");
+  $("indFarol").classList.toggle("ligado", farois);
+}
+// ---- Chamada simulada: atender ou recusar exige manter o polegar, para evitar disparo por engano ----
+function tocarToque() {
+  if (!ctx) return;
+  [0, 0.28].forEach(atraso => {
+    const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + atraso;
+    o.frequency.value = 880;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(Math.max(volumeToque, 0.0002), t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+    o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + 0.25);
+  });
+}
+function mostrarChamada() {
+  const c = chamada;
+  $("chamada").classList.toggle("aberta", !!c);
+  if (c) {
+    $("chamadaNome").textContent = c.nome;
+    $("chamadaEstado").textContent = c.estado === "tocando" ? "Chamada recebida (simulada)" : "Em chamada · " + formatar((performance.now() - c.inicio) / 1000);
+    $("chamadaAjuda").innerHTML = c.estado === "tocando" ? "Manter polegar para cima: atende<br>Manter polegar para baixo: recusa" : "Sinal de pare: encerra";
+  }
+  atualizarLegenda();
+}
+function iniciarChamada() {
+  const nome = CONTATOS[indiceContato++ % CONTATOS.length];
+  chamada = { nome, estado: "tocando", pendente: null, inicio: 0, retomar: false };
+  if (ctx) ctx.resume();
+  fatorAudio = 0.25; aplicarGanho();
+  tocarToque();
+  chamada.toque = setInterval(tocarToque, 2000);
+  chamada.limite = setTimeout(() => terminarChamada("Chamada perdida: " + nome), 20000);
+  mostrarChamada(); avisar("Chamada de " + nome); narrarTela();
+}
+function atenderChamada() {
+  clearInterval(chamada.toque); clearTimeout(chamada.limite);
+  chamada.retomar = tocando;
+  if (tocando) pausar();
+  chamada.estado = "atendida"; chamada.inicio = performance.now();
+  mostrarChamada(); avisar("Chamada atendida"); narrarTela();
+}
+function terminarChamada(texto) {
+  clearInterval(chamada.toque); clearTimeout(chamada.limite);
+  const retomar = chamada.retomar;
+  chamada = null;
+  fatorAudio = 1; aplicarGanho();
+  if (retomar) tocar();
+  else if (!tocando && !audioEl && ctx) ctx.suspend();
+  $("ultimaChamada").textContent = texto;
+  mostrarChamada(); avisar(texto);
+  narrarTela(texto.startsWith("Última") ? "Chamada encerrada" : texto.replace(":", ","));
+}
+function comandoChamada(c, repeticao) {
+  if (chamada.estado === "atendida") {
+    if (c !== "alternar" || repeticao) return false;
+    terminarChamada("Última chamada: " + chamada.nome + ", " + formatar((performance.now() - chamada.inicio) / 1000));
+    return true;
+  }
+  if (c !== "volume_mais" && c !== "volume_menos") return false;
+  if (!repeticao) {
+    chamada.pendente = c;
+    avisar(c === "volume_mais" ? "Mantenha para atender" : "Mantenha para recusar");
+    return false;
+  }
+  if (chamada.pendente !== c) return false;
+  if (c === "volume_mais") atenderChamada();
+  else terminarChamada("Chamada recusada: " + chamada.nome);
+  return true;
+}
+function comandoPagina(c, repeticao) {
+  if (pagina === "clima") {
+    if (c === "volume_mais" || c === "volume_menos") { ajustarClima(c === "volume_mais" ? 1 : -1); return true; }
+    if (repeticao) return false;
+    if (c === "proxima" || c === "anterior") {
+      clima.campo = (clima.campo + (c === "proxima" ? 1 : -1) + CAMPOS.length) % CAMPOS.length;
+      atualizarClima(); avisar(["Temperatura", "Ventilação", "Direção do ar"][clima.campo]); return true;
+    }
+    if (c === "alternar") { clima.ligado = !clima.ligado; atualizarClima(); atualizarLegenda(); avisar("Ar-condicionado " + (clima.ligado ? "ligado" : "desligado")); return true; }
+    return false;
+  }
+  if (repeticao) return false;
+  if (pagina === "telefone") { if (c === "alternar") { iniciarChamada(); return true; } return false; }
+  if (pagina === "limpador") {
+    if (c === "volume_mais") { if (limpador < 3) definirLimpador(limpador + 1); return true; }
+    if (c === "volume_menos") { if (limpador > 0) definirLimpador(limpador - 1); return true; }
+    if (c === "alternar") { definirLimpador(limpador ? 0 : ultimoLimpador); return true; }
+    return false;
+  }
+  if (pagina === "farois") {
+    if (c === "alternar") { farois = !farois; atualizarFarois(); atualizarLegenda(); avisar("Faróis " + (farois ? "ligados" : "desligados")); return true; }
+    return false;
+  }
+  return null;
+}
+function executar(c, repeticao = false) {
+  if (!faixas.length || !ligado) return;
+  if (c === "ajuda") {
+    if (!repeticao) { explicarComandos(); avisar("Comandos de " + tituloTela()); $("nDisparos").textContent = ++comandos; }
+    return;
+  }
+  let feito = true;
+  const falaAntes = idFala;
+  if (chamada) feito = comandoChamada(c, repeticao);
+  else if (c === "funcao" && !menuAberto) {
+    if (repeticao) return;
+    const nova = PAGINAS[(PAGINAS.indexOf(pagina) + 1) % PAGINAS.length];
+    mostrarPagina(nova); avisar(NOMES_PAGINA[nova]);
+  }
+  else if (!menuAberto && pagina !== "musica") feito = comandoPagina(c, repeticao);
+  else if (repeticao && !menuAberto) feito = false;
+  else if (menuAberto) {
+    // Com o menu aberto, só valem navegar, confirmar e fechar.
+    if (c === "volume_mais") moverMenu(-1);
+    else if (c === "volume_menos") moverMenu(1);
+    else if (c === "alternar") confirmarMenu();
+    else if (c === "tamborilar") { fecharMenu(); avisar("Menu fechado"); }
+    else feito = false;
+  }
+  else if (c === "proxima") { trocar(1); if (!tocando) tocar(); avisar("▶ " + faixas[atual].titulo); }
+  else if (c === "anterior") { voltarUltima(); if (!tocando) tocar(); avisar("◀ " + faixas[atual].titulo); }
+  else if (c === "alternar") { tocando ? pausar() : tocar(); avisar(tocando ? "Tocando" : "Pausado"); }
+  else if (c === "volume_mais") { mudarVolume(0.1); avisar("Volume " + Math.round(volume * 100) + "%"); }
+  else if (c === "volume_menos") { mudarVolume(-0.1); avisar("Volume " + Math.round(volume * 100) + "%"); }
+  else if (c === "tamborilar" && !tocando) { abrirMenu(); avisar("Menu de músicas"); }
+  else feito = false;
+  // O contador mostra só os comandos que tiveram efeito neste estado.
+  if (feito) $("nDisparos").textContent = ++comandos;
+  // Quem já sabe os comandos não precisa ouvir tudo: um comando interrompe a explicação.
+  if (feito && idFala === falaAntes) calarVoz();
+}
+$("bProxima").onclick = () => executar("proxima");
+$("bAnterior").onclick = () => executar("anterior");
+$("bAlternar").onclick = () => executar("alternar");
+$("ligar").onclick = () => { ligado = true; $("inicio").style.display = "none"; tocar(); falar([tituloTela(), "Empurre a mão para ouvir os comandos"]); };
+addEventListener("keydown", e => {
+  if (e.key === "ArrowRight") executar("proxima");
+  if (e.key === "ArrowLeft") executar("anterior");
+  if (e.key === "ArrowUp") { e.preventDefault(); executar("volume_mais", e.repeat); }
+  if (e.key === "ArrowDown") { e.preventDefault(); executar("volume_menos", e.repeat); }
+  if (e.key.toLowerCase() === "r") executar("funcao");
+  if (e.key.toLowerCase() === "m") executar("tamborilar");
+  if (e.key.toLowerCase() === "e") executar("ajuda");
+  if (e.key === " " && e.target.tagName !== "BUTTON") { e.preventDefault(); executar("alternar"); }
+  if (e.key.toLowerCase() === "f") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+});
+
+// ---- Laço visual ----
+let ultimo = 0, relogioTempo = 0, volanteAtual = 0;
+function quadro(agora) {
+  requestAnimationFrame(quadro);
+  const dt = Math.min(0.05, (agora - ultimo) / 1000 || 0); ultimo = agora;
+  avancar(dt, agora);
+}
+function avancar(dt, agora) {
+  velocidade = 88 + Math.sin(agora / 5200) * 6;
+  desenharEstrada(REDUZIR ? 0 : dt);
+  ponteiroVelocidade(velocidade);
+  ponteiroGiro(2.1 + (velocidade - 80) * 0.03);
+  volanteAtual += (curvaAtual * 13 - volanteAtual) * Math.min(1, dt * 3);
+  $("giro").setAttribute("transform", `rotate(${volanteAtual} 370 880)`);
+  const barras = capa.children;
+  if (analisador && tocando) {
+    const d = new Uint8Array(analisador.frequencyBinCount); analisador.getByteFrequencyData(d);
+    let soma = 0;
+    for (let i = 0; i < barras.length; i++) { barras[i].style.height = Math.max(6, d[i] / 2.55) + "%"; soma += d[i]; }
+    $("led").style.opacity = .25 + .75 * Math.min(1, soma / barras.length / 150);
+  } else {
+    for (const b of barras) b.style.height = "6%";
+    $("led").style.opacity = .25;
+  }
+  if (agora - relogioTempo > 250) {
+    relogioTempo = agora; atualizarTempo();
+    if (chamada && chamada.estado === "atendida") $("chamadaEstado").textContent = "Em chamada · " + formatar((performance.now() - chamada.inicio) / 1000);
+    $("hora").textContent = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  }
+}
+avancar(0, 0);
+requestAnimationFrame(quadro);
+$("volumeBarra").style.height = volume * 100 + "%";
+document.querySelectorAll("#abas button").forEach(b => b.onclick = () => { if (ligado && !chamada && !menuAberto) mostrarPagina(b.dataset.pagina); });
+mostrarPagina("musica"); atualizarClima(); atualizarLimpador(); atualizarFarois();
+carregarFaixas();
+
+// ---- Modelo ----
+$("video").src = "/video";
+const fonte = new EventSource("/eventos");
+fonte.onopen = () => { $("conexao").textContent = "Gestos ligados"; $("ponto").className = "ok"; };
+fonte.onerror = () => { $("conexao").textContent = "Sem conexão com o modelo"; $("ponto").className = ""; };
+fonte.onmessage = ev => {
+  const e = JSON.parse(ev.data);
+  if (e.tipo === "erro") { $("conexao").textContent = e.mensagem; $("ponto").className = ""; }
+  // Manter o polegar repete no menu e no clima, e confirma a chamada; o volume muda um passo por gesto.
+  if (e.tipo === "comando") executar(e.comando, !!e.repeticao);
+  if (e.tipo === "estado") {
+    $("gesto").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
+    $("gesto").className = e.e_comando ? "comando" : "";
+    $("confianca").style.width = (e.confianca * 100) + "%";
+    $("nMs").textContent = Math.round(e.ms);
+  }
+};
+</script>
+</body>
+</html>

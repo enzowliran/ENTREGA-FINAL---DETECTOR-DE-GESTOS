@@ -1,0 +1,84 @@
+{
+  "minutos_sem_gesto": 100.15833333333333,
+  "n_videos_com_gesto": 12786,
+  "dobras": [
+    {
+      "dobra": 0,
+      "falsos_unico": 0,
+      "falsos_por_gesto": 0,
+      "det_unico": 0.7279124315871774,
+      "det_por_gesto": 0.7904612978889758
+    },
+    {
+      "dobra": 1,
+      "falsos_unico": 0,
+      "falsos_por_gesto": 0,
+      "det_unico": 0.7278060226828315,
+      "det_por_gesto": 0.7892061008994916
+    },
+    {
+      "dobra": 2,
+      "falsos_unico": 0,
+      "falsos_por_gesto": 1,
+      "det_unico": 0.7285881892843176,
+      "det_por_gesto": 0.7923347673054361
+    },
+    {
+      "dobra": 3,
+      "falsos_unico": 2,
+      "falsos_por_gesto": 4,
+      "det_unico": 0.7109894407508799,
+      "det_por_gesto": 0.7794290183809152
+    },
+    {
+      "dobra": 4,
+      "falsos_unico": 1,
+      "falsos_por_gesto": 1,
+      "det_unico": 0.7254595228783731,
+      "det_por_gesto": 0.7962456003128666
+    }
+  ],
+  "unico": {
+    "falsos": 3,
+    "falsos_por_min": 0.029952575089441717,
+    "deteccao": 0.7241514156108243,
+    "classe_errada": 0.05091506335053965
+  },
+  "por_gesto_fora_da_amostra": {
+    "falsos": 6,
+    "falsos_por_min": 0.05990515017888343,
+    "deteccao": 0.7895354293758798,
+    "classe_errada": 0.07320506804317221
+  },
+  "diferenca_deteccao_ic95": [
+    0.06069138119818551,
+    0.07007664633192545
+  ],
+  "limiares_finais": {
+    "Swiping Left": 0.6,
+    "Swiping Right": 0.75,
+    "Swiping Down": 0.6,
+    "Swiping Up": 0.5,
+    "Pushing Hand Away": 0.75,
+    "Pulling Hand In": 0.75,
+    "Sliding Two Fingers Left": 0.5,
+    "Sliding Two Fingers Right": 0.5,
+    "Sliding Two Fingers Down": 0.5,
+    "Sliding Two Fingers Up": 0.5,
+    "Pushing Two Fingers Away": 0.5,
+    "Pulling Two Fingers In": 0.6,
+    "Rolling Hand Forward": 0.5,
+    "Rolling Hand Backward": 0.6,
+    "Turning Hand Clockwise": 0.6,
+    "Turning Hand Counterclockwise": 0.5,
+    "Zooming In With Full Hand": 0.55,
+    "Zooming Out With Full Hand": 0.6,
+    "Zooming In With Two Fingers": 0.5,
+    "Zooming Out With Two Fingers": 0.5,
+    "Thumb Up": 0.7,
+    "Thumb Down": 0.7,
+    "Shaking Hand": 0.75,
+    "Stop Sign": 0.55,
+    "Drumming Fingers": 0.5
+  }
+}
