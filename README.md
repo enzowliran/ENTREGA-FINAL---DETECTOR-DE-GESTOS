@@ -43,7 +43,7 @@ Com `--simular`, a rota `/testar?c=proxima` envia um comando sem precisar da câ
 
 ### Painel do carro
 
-Clique em **LIGAR** para liberar o som. Sem arquivos em `demo/musicas/`, ele usa músicas sintetizadas. Para ouvir as suas, coloque MP3 nessa pasta, que não vai para o git.
+Clique em **LIGAR** para liberar o som. Ele toca os 5 MP3 de `demo/musicas/`. Para usar outras músicas, coloque os arquivos nessa pasta; se ela estiver vazia, o painel usa músicas sintetizadas.
 
 A voz diz o nome da página a cada troca, e **empurrar a mão** faz ela ler os comandos da tela. A voz em português usa o Chrome e precisa de internet; sem ela, o painel mostra um aviso e continua funcionando sem voz.
 
@@ -136,7 +136,6 @@ Tentativas já descartadas, para não repetir: limiar por gesto e ajuste fino de
 | Vídeos e rótulos do Jester (26 GB) | Tamanho e licença | Comandos em "Novos treinos" |
 | DriverMHG (12 GB baixados, 82 de 125 gravações) | A licença proíbe redistribuir | Comandos em "Novos treinos"; o download recomeça do zero em cada máquina |
 | Amostras de frames do DriverMHG (`data/interno/*.png`, `data/DriverMHG/amostra/`) | Limite de frames publicáveis | Geradas a partir do dataset com `scripts_auxiliares/ver_gestos.py` |
-| MP3 do painel | Direitos autorais, e o repositório é público | Coloque os seus em `demo/musicas/`; sem eles, o painel usa músicas sintetizadas |
 
 Versões que usamos: Python 3.12.14, PyTorch 2.14.1 (CUDA 13.0), NumPy 2.5.4, OpenCV 5.0.0 e scikit-learn 1.9.1.
 
@@ -144,7 +143,7 @@ Versões que usamos: Python 3.12.14, PyTorch 2.14.1 (CUDA 13.0), NumPy 2.5.4, Op
 
 ```
 demo/          demos, páginas HTML e atalhos .bat
-  musicas/     seus MP3 (fora do git)
+  musicas/     MP3 tocados no painel
   vendor/      bibliotecas usadas pelas páginas
 src/           download, preparação, treino e avaliação
 resultados/    pesos melhor.pt e ultimo.pt, métricas e logs de cada treino
@@ -164,7 +163,7 @@ data/          datasets (fora do git, exceto as confianças em data/interno/)
 
 ## Licenças: este repositório é público
 
-- **Nunca envie para cá** a pasta `data/`, frames ou vídeos dos datasets, nem os MP3.
+- **Nunca envie para cá** a pasta `data/` nem frames ou vídeos dos datasets.
 - **DriverMHG:** proíbe redistribuir os dados e limita o que pode ser publicado a 10 frames e 2 clipes, salvo autorização da TUM.
 - **Jester:** uso em pesquisa, sem frames no paper ou na apresentação.
 
