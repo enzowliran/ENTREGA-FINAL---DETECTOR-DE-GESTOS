@@ -9,6 +9,7 @@ Uso:
 import argparse
 import collections
 import sys
+import threading
 import time
 from pathlib import Path
 
@@ -99,6 +100,9 @@ def desenhar(quadro, legenda, confianca, destaque, top3, disparos, minutos, ms_i
 
 def rodar(args):
     dispositivo = "cuda" if torch.cuda.is_available() and not args.cpu else "cpu"
+    if args.janelas is None:
+        # Sem NVIDIA, 2 trechos em vez de 3 deixam cada análise cerca de 30% mais rápida.
+        args.janelas = [1.0, 1.5, 3.0] if dispositivo == "cuda" else [1.0, 1.5]
     caminho = Path(args.modelo) if args.modelo else next((p for p in MODELOS_PADRAO if p.exists()), None)
     if caminho is None or not caminho.exists():
         raise SystemExit("Nenhum modelo treinado encontrado em resultados/jester.")
@@ -115,6 +119,11 @@ def rodar(args):
             raise SystemExit(f"Não consegui abrir a câmera {args.camera}. Feche outros apps que a usem ou tente --camera 1.")
         cv2.namedWindow("Gestos ao vivo", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("Gestos ao vivo", 1100, 620)
+
+    if dispositivo == "cpu":
+        # Sem NVIDIA, câmera e modelo rodam separados. Com NVIDIA, o laço abaixo segue igual.
+        rodar_separado(args, modelo, nomes, captura, fontes)
+        return
 
     maximo = int(round(max(args.janelas) * QUADROS_POR_SEGUNDO))
     janela = collections.deque(maxlen=maximo)
@@ -201,6 +210,128 @@ def rodar(args):
         cv2.destroyAllWindows()
 
 
+def rodar_separado(args, modelo, nomes, captura, fontes):
+    """Versão de rodar para quando o modelo roda no processador, sem NVIDIA.
+
+    No processador, cada análise leva cerca de meio segundo. No laço único de rodar, a janela
+    congelaria durante cada análise e o buffer receberia menos quadros que os 12 por segundo que o
+    modelo espera. Aqui a câmera e a janela ficam neste laço, que nunca espera o modelo, e o modelo
+    roda em uma thread própria, sempre sobre os quadros mais recentes.
+
+    O autocast em bfloat16 fica de fora: em processadores sem suporte a ele, uma única análise
+    passou de 4 minutos, contra cerca de 0,5 s em float32.
+    """
+    maximo = int(round(max(args.janelas) * QUADROS_POR_SEGUNDO))
+    minimo = int(round(min(args.janelas) * QUADROS_POR_SEGUNDO))
+    janela = collections.deque(maxlen=maximo)
+    trava = threading.Lock()  # a câmera acrescenta quadros enquanto o modelo copia o buffer
+    resultado = {"novo": None}
+    parar = threading.Event()
+    indices_gesto = [i for i, nome in enumerate(nomes) if nome not in SEM_GESTO]
+
+    def analisar():
+        ultima = 0.0
+        while not parar.is_set():
+            with trava:
+                buffer = list(janela)
+            if len(buffer) < minimo or time.time() - ultima < args.intervalo:
+                time.sleep(0.01)
+                continue
+            ultima = time.time()
+            t0 = time.perf_counter()
+            lotes_janela, usadas = [], []
+            for duracao in args.janelas:
+                n = int(round(duracao * QUADROS_POR_SEGUNDO))
+                if len(buffer) >= n:
+                    indices = np.round(np.linspace(len(buffer) - n, len(buffer) - 1, N_FRAMES)).astype(int)
+                    lotes_janela.append(np.stack([buffer[i] for i in indices]))
+                    usadas.append(duracao)
+            with torch.no_grad():
+                x = (torch.from_numpy(np.stack(lotes_janela)) - 127.5) / 127.5
+                todas = modelo(x).float().softmax(1).numpy()
+            with trava:
+                resultado["novo"] = (todas, usadas, (time.perf_counter() - t0) * 1000)
+
+    analisador = threading.Thread(target=analisar, daemon=True)
+    analisador.start()
+
+    tempos = collections.deque(maxlen=30)
+    janela_ativa = None
+    historico = collections.deque(maxlen=args.suavizar)
+    ultimo_quadro = 0.0
+    legenda, confianca, destaque = "Aquecendo...", 0.0, False
+    ativo, fim_legenda, disparos, top3, ms = None, 0.0, 0, [], 0.0
+    inicio = time.time()
+    simulados = 0
+
+    while True:
+        if args.simular:
+            quadro = np.random.randint(0, 255, (720, 1280, 3), dtype=np.uint8)
+            simulados += 1
+            time.sleep(0.03)
+        else:
+            ok, quadro = captura.read()
+            if not ok:
+                print("A câmera parou de enviar imagens.")
+                break
+        agora = time.time()
+        tempos.append(agora)
+        fps = (len(tempos) - 1) / (tempos[-1] - tempos[0]) if len(tempos) > 1 and tempos[-1] > tempos[0] else 0.0
+        # A entrada do modelo não é espelhada, como no treino. Só a imagem exibida é espelhada.
+        if agora - ultimo_quadro >= 1 / QUADROS_POR_SEGUNDO:
+            preparado = preparar_quadro(quadro)
+            with trava:
+                janela.append(preparado)
+            ultimo_quadro = agora
+        with trava:
+            novo, resultado["novo"] = resultado["novo"], None
+            n_quadros = len(janela)
+        if novo is not None:
+            todas, usadas, ms = novo
+            # Fica a janela com o gesto mais confiante. Isso favorece detectar, então pode aumentar os falsos disparos.
+            escolhida = int(np.argmax([q[indices_gesto].max() for q in todas]))
+            p, janela_ativa = todas[escolhida], usadas[escolhida]
+            historico.append(p)
+            media = np.mean(historico, axis=0)
+            ordem = media.argsort()[::-1][:3]
+            top3 = [(TRADUCAO.get(nomes[i], nomes[i]), float(media[i])) for i in ordem]
+            melhor = nomes[ordem[0]]
+            confianca = float(media[ordem[0]])
+            if melhor not in SEM_GESTO and confianca >= args.limiar:
+                if melhor != ativo:
+                    disparos += 1
+                    ativo = melhor
+                legenda, destaque, fim_legenda = TRADUCAO.get(melhor, melhor), True, agora + args.segurar
+            elif agora >= fim_legenda:
+                ativo, destaque = None, False
+                legenda = "Sem gesto" if melhor in SEM_GESTO else "Incerto"
+        elif n_quadros < minimo:
+            legenda = f"Aquecendo... {n_quadros}/{minimo}"
+
+        tela = cv2.flip(quadro, 1) if not args.nao_espelhar else quadro
+        with trava:
+            ultimo = janela[-1] if janela else None
+        tela = desenhar(tela, legenda, confianca, destaque, top3, disparos, (agora - inicio) / 60, ms, n_quadros < minimo, fontes,
+                        entrada=ultimo, fps=fps, janela_ativa=janela_ativa)
+        if args.simular:
+            if simulados >= args.simular:
+                cv2.imwrite(args.saida, tela)
+                print(f"Simulação: {simulados} quadros, inferência {ms:.1f} ms, top3 {top3[:1]}; imagem em {args.saida}")
+                break
+            continue
+        cv2.imshow("Gestos ao vivo", tela)
+        tecla = cv2.waitKey(1) & 0xFF
+        if tecla in (ord("q"), ord("Q"), 27) or cv2.getWindowProperty("Gestos ao vivo", cv2.WND_PROP_VISIBLE) < 1:
+            break
+        if tecla in (ord("z"), ord("Z")):
+            disparos, inicio = 0, time.time()
+    parar.set()
+    analisador.join(timeout=2)
+    if captura is not None:
+        captura.release()
+        cv2.destroyAllWindows()
+
+
 if __name__ == "__main__":
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("--camera", type=int, default=0)
@@ -208,7 +339,8 @@ if __name__ == "__main__":
     a.add_argument("--limiar", type=float, default=0.5, help="Confiança mínima para mostrar um gesto")
     a.add_argument("--suavizar", type=int, default=2, help="Número de predições na média móvel")
     a.add_argument("--intervalo", type=float, default=0.15, help="Segundos entre inferências")
-    a.add_argument("--janelas", type=float, nargs="+", default=[1.0, 1.5, 3.0], help="Durações das janelas, em segundos")
+    a.add_argument("--janelas", type=float, nargs="+", default=None,
+                   help="Durações das janelas, em segundos (padrão: 1 1,5 3 com NVIDIA, 1 1,5 sem)")
     a.add_argument("--segurar", type=float, default=1.5, help="Segundos que a legenda permanece")
     a.add_argument("--nao-espelhar", action="store_true", help="Não espelha a imagem exibida")
     a.add_argument("--cpu", action="store_true")

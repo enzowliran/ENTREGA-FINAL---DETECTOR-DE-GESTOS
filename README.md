@@ -33,7 +33,9 @@ Depois, dê dois cliques em um arquivo de `demo/` (no Windows, com a pasta `.ven
 | `abrir_player.bat` | Player de música simples | http://127.0.0.1:8765/ |
 | `abrir_camera.bat` | Janela da webcam com o gesto reconhecido | |
 
-Sem GPU, rode o comando do `.bat` com `--cpu` no final. Para testar sem webcam, use `--simular`:
+**Sem GPU NVIDIA**, os mesmos atalhos funcionam, sem nenhuma opção a mais: o modelo roda no processador. Cada análise leva cerca de 0,4 s em vez de uma fração disso, então a demo responde cerca de 1 s mais devagar. Para compensar, ela passa sozinha a exigir 2 janelas seguidas em vez de 3 e a analisar 2 trechos (1 e 1,5 s) em vez de 3; valores passados no comando, como os do tênis, continuam valendo. Os gestos rápidos, principalmente puxar a mão, são reconhecidos com mais dificuldade que com GPU. Os falsos disparos por minuto de "Onde estamos" foram medidos com a configuração da GPU e não valem para esse modo.
+
+Para testar sem webcam, use `--simular`:
 
 ```bash
 python demo/player.py --pagina painel_carro.html --porta 8770 --painel --simular
