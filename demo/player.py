@@ -31,6 +31,9 @@ RAIZ = Path(__file__).resolve().parent
 COMANDOS = {"Swiping Left": "anterior", "Swiping Right": "proxima", "Stop Sign": "alternar"}
 COMANDOS_VOLUME = {"Thumb Up": "volume_mais", "Thumb Down": "volume_menos"}
 COMANDOS_PAINEL = {**COMANDOS_VOLUME, "Drumming Fingers": "tamborilar", "Pulling Hand In": "funcao", "Pushing Hand Away": "ajuda"}
+# No hospital, empurrar a mão fica de fora: o modelo a confunde com o zoom in.
+COMANDOS_HOSPITAL = {"Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking Hand": "normal",
+                     "Zooming In With Full Hand": "zoom_mais", "Zooming Out With Full Hand": "zoom_menos"}
 TIPOS_AUDIO = {".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".wav": "audio/wav", ".ogg": "audio/ogg"}
 
 
@@ -418,9 +421,12 @@ def main():
     a.add_argument("--musicas", default=str(RAIZ / "musicas"), help="Pasta com os áudios servidos em /musicas/")
     a.add_argument("--repetir", type=float, default=2.0, help="Segundos entre repetições de um polegar mantido, no painel")
     a.add_argument("--painel", action="store_true", help="Liga os gestos extras do painel: polegares, tamborilar, puxar e empurrar a mão")
+    a.add_argument("--hospital", action="store_true", help="Liga os gestos extras do hospital: polegares, acenar e zoom com a mão inteira")
     args = a.parse_args()
     if args.painel:
         COMANDOS.update(COMANDOS_PAINEL)
+    if args.hospital:
+        COMANDOS.update(COMANDOS_HOSPITAL)
 
     estado, parar = Estado(), threading.Event()
     servidor = criar_servidor(args, estado, parar)

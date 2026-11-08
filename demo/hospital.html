@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sala Cirúrgica por Gestos</title>
+<style>
+  :root { --fundo: #0c1418; --painel: #142026; --borda: #22333b; --texto: #eef3f5; --apoio: #a9b8bf; --verde: #5fd39a; --vermelho: #ff8b80; --amarelo: #f4c464; --azul: #6cc4ea; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--fundo); color: var(--texto); font-family: "Segoe UI", system-ui, sans-serif; }
+  #app { display: grid; grid-template-columns: 1fr 350px; grid-template-rows: auto 1fr; gap: 14px; padding: 14px; height: 100%; }
+  .painel { background: var(--painel); border: 1px solid var(--borda); border-radius: 10px; padding: 12px 16px; }
+  #topo { grid-column: 1 / 3; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  #topo h1 { font-size: 20px; margin: 0; }
+  #topo .sub { color: var(--apoio); font-size: 14px; margin-top: 2px; }
+  #trava { font-size: 18px; font-weight: 800; padding: 10px 18px; border-radius: 999px; letter-spacing: .02em; transition: background .15s; white-space: nowrap; }
+  #trava.travada { background: rgba(255,139,128,.18); color: var(--vermelho); border: 2px solid var(--vermelho); }
+  #trava.ativa { background: rgba(95,211,154,.18); color: var(--verde); border: 2px solid var(--verde); }
+  #esquerda { display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+  #visor { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+  #visor header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  #tituloExame { font-size: 18px; font-weight: 700; }
+  #zoomTexto { color: var(--azul); font-weight: 700; font-variant-numeric: tabular-nums; }
+  #direcao { color: var(--amarelo); font-weight: 700; font-size: 15px; margin-right: 14px; min-width: 120px; display: inline-block; text-align: right; }
+  #moldura { flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; background: #000; border-radius: 6px; }
+  #exame { max-width: 100%; max-height: 100%; transition: transform .25s ease; transform-origin: center; }
+  #pontos { display: flex; justify-content: center; gap: 8px; margin-top: 8px; }
+  #pontos span { width: 9px; height: 9px; border-radius: 50%; background: var(--borda); }
+  #pontos span.atual { background: var(--azul); }
+  #ajuda { font-size: 14px; line-height: 1.55; color: var(--apoio); display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; }
+  #ajuda b { color: var(--texto); }
+  #direita { display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+  #checklist h2, #camera h2, #numeros h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--apoio); margin: 0 0 8px; font-weight: 600; }
+  #checklist ol { list-style: none; margin: 0; padding: 0; }
+  #checklist li { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 6px; font-size: 15px; }
+  #checklist li .caixa { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--apoio); flex: none; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #0d1a12; }
+  #checklist li.feito { color: var(--apoio); text-decoration: line-through; }
+  #checklist li.feito .caixa { background: var(--verde); border-color: var(--verde); }
+  #checklist li.proximo { background: rgba(108,196,234,.12); }
+  #checklist li.proximo .caixa { border-color: var(--azul); }
+  #numeros table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  #numeros td { padding: 3px 0; }
+  #numeros td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #video { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; border-radius: 4px; display: block; }
+  #gesto { font-size: 16px; font-weight: 700; margin-top: 7px; min-height: 22px; }
+  #gesto.comando { color: var(--verde); }
+  .barra { height: 5px; background: rgba(255,255,255,.18); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+  #confianca { height: 100%; width: 0; background: var(--apoio); transition: width .12s; }
+  #estado { color: var(--apoio); font-size: 13px; margin-top: 6px; }
+  #mensagem { position: fixed; left: 50%; top: 42%; transform: translate(-50%,-50%); font-size: 46px; font-weight: 800; pointer-events: none; opacity: 0; transition: opacity .15s; text-shadow: 0 3px 14px rgba(0,0,0,.75); text-align: center; z-index: 2; padding: 0 16px; }
+  #mensagem.ver { opacity: 1; }
+  #aviso { grid-column: 1 / 3; text-align: center; color: var(--apoio); font-size: 12px; margin-top: -6px; }
+  #inicio { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(6,10,12,.9); text-align: center; padding: 16px; z-index: 3; }
+  #inicio h1 { font-size: 40px; margin: 0 0 12px; }
+  #inicio p { font-size: 19px; color: var(--apoio); margin: 0 0 8px; line-height: 1.45; max-width: 760px; }
+  button { margin-top: 18px; border: 0; border-radius: 8px; background: var(--verde); color: #0d1a12; font: 700 20px "Segoe UI", system-ui, sans-serif; padding: 13px 34px; cursor: pointer; }
+  button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  @media (max-width: 900px) {
+    html, body { overflow: auto; }
+    #app { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; }
+    #topo, #aviso { grid-column: 1; }
+    #topo { flex-direction: column; align-items: flex-start; }
+    #moldura { aspect-ratio: 4 / 3; }
+    #ajuda { grid-template-columns: 1fr; }
+    #mensagem { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="painel" id="topo">
+    <div>
+      <h1>Hospital Modelo · Sala cirúrgica 3</h1>
+      <div class="sub">Paciente M. S., 54 anos · Leito 12 · dados fictícios</div>
+    </div>
+    <div id="trava" class="travada" role="status" aria-live="polite">🔒 TRAVADA · sinal de pare para destravar</div>
+  </div>
+
+  <div id="esquerda">
+    <section class="painel" id="visor">
+      <header><span id="tituloExame"></span><span><span id="direcao" role="status" aria-live="polite"></span><span id="zoomTexto">100%</span></span></header>
+      <div id="moldura"><canvas id="exame" width="960" height="720" aria-label="Imagem de exame fictícia"></canvas></div>
+      <div id="pontos"></div>
+    </section>
+    <div class="painel" id="ajuda">
+      <div>
+        <b>Sinal de pare:</b> trava ou destrava a tela<br>
+        <b>Abrir a mão (zoom in):</b> aproxima o exame<br>
+        <b>Fechar a mão (zoom out):</b> afasta o exame<br>
+        <b>Acenar:</b> volta ao tamanho original
+      </div>
+      <div>
+        <b>Deslizar para a direita ou esquerda:</b> troca o exame<br>
+        <b>Polegar para cima:</b> confirma o próximo item do checklist<br>
+        <b>Polegar para baixo:</b> desfaz o último item<br>
+        <i>O primeiro zoom define a direção; repita o gesto para continuar. Para inverter, 3 s de pausa ou baixe a mão.</i>
+      </div>
+    </div>
+  </div>
+
+  <div id="direita">
+    <section class="painel" id="checklist">
+      <h2>Checklist de segurança cirúrgica</h2>
+      <ol id="itens"></ol>
+    </section>
+    <section class="painel" id="numeros">
+      <h2>Comandos</h2>
+      <table>
+        <tr><td>Aceitos</td><td id="aceitos">0</td></tr>
+        <tr><td>Bloqueados pela trava</td><td id="ignorados">0</td></tr>
+        <tr><td>Disparos do modelo</td><td id="disparos">0</td></tr>
+      </table>
+    </section>
+    <section class="painel" id="camera">
+      <h2>Câmera</h2>
+      <img id="video" alt="Imagem da webcam">
+      <div id="gesto">Conectando...</div>
+      <div class="barra"><div id="confianca"></div></div>
+      <div id="estado">Sem conexão com o modelo</div>
+    </section>
+  </div>
+
+  <div id="aviso">Demonstração de conceito do reconhecedor de gestos. Não é um dispositivo médico; as imagens são desenhadas pela própria página.</div>
+</div>
+<div id="mensagem" role="status" aria-live="polite"></div>
+
+<div id="inicio"><div>
+  <h1>Sala Cirúrgica por Gestos</h1>
+  <p>Durante a cirurgia, o médico não pode tocar na tela. Aqui ele consulta os exames e o checklist só com gestos.</p>
+  <p>A tela começa <b>travada</b> e ignora qualquer gesto até o <b>sinal de pare</b>. É o mesmo cuidado do carro: um comando sem querer pode custar caro.</p>
+  <p>Para aproximar, abra a mão; repita para aproximar mais. Para afastar, chegue com a mão aberta e feche. <b>Acenar</b> volta ao tamanho original.</p>
+  <p>Pelo teclado: setas trocam o exame, <b>+</b> e <b>-</b> dão zoom, <b>0</b> volta ao normal, <b>espaço</b> trava, <b>C</b> confirma, <b>X</b> desfaz, <b>F</b> tela cheia.</p>
+  <button id="comecar">Começar</button>
+</div></div>
+
+<script>
+"use strict";
+const el = id => document.getElementById(id);
+const ZOOMS = [1, 1.5, 2.2, 3.2];
+const RODADA_MS = 3000;  // tempo sem zoom que encerra uma rodada e libera a troca de direção
+const ITENS = [
+  "Identidade do paciente confirmada",
+  "Lado e local da cirurgia marcados",
+  "Alergias verificadas",
+  "Antibiótico profilático administrado",
+  "Instrumentos e compressas contados",
+];
+const estado = { travada: true, exame: 0, zoom: 0, feitos: 0, aceitos: 0, ignorados: 0, direcao: 0, ultimoZoom: 0 };
+
+// As imagens são desenhadas aqui mesmo: nada de exame real, nem de paciente real.
+function base() {
+  const c = document.createElement("canvas"); c.width = 960; c.height = 720;
+  return [c, c.getContext("2d")];
+}
+function elipse(g, x, y, rx, ry, rot) { g.beginPath(); g.ellipse(x, y, rx, ry, rot || 0, 0, Math.PI * 2); }
+function ruido(g, forca) {
+  const d = g.getImageData(0, 0, 960, 720), p = d.data;
+  for (let i = 0; i < p.length; i += 4) { const r = (Math.random() - 0.5) * forca; p[i] += r; p[i + 1] += r; p[i + 2] += r; }
+  g.putImageData(d, 0, 0);
+}
+function torax() {
+  const [c, g] = base();
+  g.fillStyle = "#06080a"; g.fillRect(0, 0, 960, 720);
+  const grad = g.createRadialGradient(480, 380, 40, 480, 380, 380);
+  grad.addColorStop(0, "#3a3f44"); grad.addColorStop(1, "#0b0d0f");
+  g.fillStyle = grad; elipse(g, 480, 400, 330, 370); g.fill();
+  g.fillStyle = "rgba(4,6,8,.78)";
+  [-1, 1].forEach(l => { elipse(g, 480 + l * 150, 390, 125, 235); g.fill(); });
+  g.fillStyle = "rgba(200,205,210,.5)"; elipse(g, 545, 440, 105, 130, 0.35); g.fill();
+  g.strokeStyle = "rgba(235,238,240,.55)"; g.lineWidth = 11;
+  for (let i = 0; i < 9; i++) { g.beginPath(); g.ellipse(480, 190 + i * 52, 290, 105, 0, Math.PI, Math.PI * 2); g.stroke(); }
+  g.lineWidth = 14; g.lineCap = "round";
+  g.beginPath(); g.moveTo(320, 125); g.lineTo(465, 160); g.moveTo(640, 125); g.lineTo(495, 160); g.stroke();
+  g.fillStyle = "rgba(228,231,235,.75)";
+  for (let y = 110; y < 720; y += 34) g.fillRect(455, y, 50, 26);
+  ruido(g, 24);
+  return c;
+}
+function cranio() {
+  const [c, g] = base();
+  g.fillStyle = "#050607"; g.fillRect(0, 0, 960, 720);
+  g.fillStyle = "#e9ecef"; elipse(g, 480, 370, 300, 345); g.fill();
+  g.fillStyle = "#6c7278"; elipse(g, 480, 370, 268, 312); g.fill();
+  g.save(); elipse(g, 480, 370, 268, 312); g.clip();
+  const sorteio = (a, b) => a + Math.random() * (b - a);
+  g.lineCap = "round";
+  for (let k = 0; k < 90; k++) {
+    g.strokeStyle = k % 2 ? "rgba(145,151,158,.9)" : "rgba(58,62,68,.85)"; g.lineWidth = k % 2 ? 11 : 5;
+    const inicio = sorteio(0, Math.PI * 2);
+    g.beginPath(); g.arc(sorteio(230, 730), sorteio(80, 660), sorteio(18, 48), inicio, inicio + sorteio(1, 2.6)); g.stroke();
+  }
+  g.restore();
+  g.strokeStyle = "rgba(40,44,48,.9)"; g.lineWidth = 5; g.beginPath(); g.moveTo(480, 70); g.lineTo(480, 670); g.stroke();
+  g.fillStyle = "#2a2e33"; elipse(g, 447, 380, 26, 78, 0.18); g.fill(); elipse(g, 513, 380, 26, 78, -0.18); g.fill();
+  ruido(g, 18);
+  return c;
+}
+function joelho() {
+  const [c, g] = base();
+  g.fillStyle = "#07090b"; g.fillRect(0, 0, 960, 720);
+  const grad = g.createRadialGradient(480, 360, 30, 480, 360, 360);
+  grad.addColorStop(0, "#30353a"); grad.addColorStop(1, "#0b0d10");
+  g.fillStyle = grad; elipse(g, 480, 360, 215, 370); g.fill();
+  g.fillStyle = "#dfe3e6"; g.strokeStyle = "#f5f7f8"; g.lineWidth = 6; g.lineJoin = "round";
+  g.beginPath(); g.moveTo(400, -10); g.lineTo(400, 250); g.quadraticCurveTo(360, 300, 372, 340);
+  g.quadraticCurveTo(480, 385, 588, 340); g.quadraticCurveTo(600, 300, 560, 250); g.lineTo(560, -10); g.closePath(); g.fill(); g.stroke();
+  g.beginPath(); g.moveTo(380, 402); g.quadraticCurveTo(480, 372, 580, 402); g.quadraticCurveTo(570, 440, 550, 470);
+  g.lineTo(545, 730); g.lineTo(415, 730); g.lineTo(410, 470); g.quadraticCurveTo(390, 440, 380, 402); g.closePath(); g.fill(); g.stroke();
+  g.beginPath(); g.roundRect(592, 445, 30, 290, 12); g.fill(); g.stroke();
+  g.fillStyle = "#9aa0a6"; elipse(g, 480, 348, 30, 20); g.fill();
+  g.fillStyle = "rgba(240,243,245,.85)"; elipse(g, 480, 296, 44, 58); g.fill();
+  ruido(g, 20);
+  return c;
+}
+const EXAMES = [
+  { titulo: "Raio-X de tórax (PA)", imagem: torax() },
+  { titulo: "Tomografia de crânio, corte axial", imagem: cranio() },
+  { titulo: "Raio-X do joelho direito", imagem: joelho() },
+];
+
+let tempoMsg;
+function mensagem(texto, cor, duracao) {
+  const m = el("mensagem"); m.textContent = texto; m.style.color = cor || "#fff"; m.classList.add("ver");
+  clearTimeout(tempoMsg); tempoMsg = setTimeout(() => m.classList.remove("ver"), duracao || 1000);
+}
+function mostrarExame() {
+  const ex = EXAMES[estado.exame];
+  el("exame").getContext("2d").drawImage(ex.imagem, 0, 0);
+  el("tituloExame").textContent = ex.titulo + " · " + (estado.exame + 1) + " de " + EXAMES.length;
+  el("pontos").innerHTML = EXAMES.map((_, i) => `<span class="${i === estado.exame ? "atual" : ""}"></span>`).join("");
+  mostrarZoom();
+}
+function mostrarZoom() {
+  el("exame").style.transform = "scale(" + ZOOMS[estado.zoom] + ")";
+  el("zoomTexto").textContent = Math.round(ZOOMS[estado.zoom] * 100) + "%";
+}
+function mostrarChecklist() {
+  el("itens").innerHTML = ITENS.map((t, i) => {
+    const classe = i < estado.feitos ? "feito" : i === estado.feitos ? "proximo" : "";
+    return `<li class="${classe}"><span class="caixa">${i < estado.feitos ? "✓" : ""}</span>${t}</li>`;
+  }).join("");
+}
+function mostrarTrava() {
+  const t = el("trava");
+  t.className = estado.travada ? "travada" : "ativa";
+  t.textContent = estado.travada ? "🔒 TRAVADA · sinal de pare para destravar" : "🔓 ATIVA · sinal de pare para travar";
+}
+function mostrarContadores() { el("aceitos").textContent = estado.aceitos; el("ignorados").textContent = estado.ignorados; }
+let tempoDirecao;
+function mostrarDirecao() {
+  el("direcao").textContent = estado.direcao > 0 ? "▲ aproximando" : estado.direcao < 0 ? "▼ afastando" : "";
+  clearTimeout(tempoDirecao);
+  if (estado.direcao) tempoDirecao = setTimeout(() => { estado.direcao = 0; mostrarDirecao(); }, RODADA_MS);
+}
+function encerrarRodada() { estado.direcao = 0; mostrarDirecao(); }
+
+function trocar(passo) {
+  estado.exame = (estado.exame + passo + EXAMES.length) % EXAMES.length; estado.zoom = 0; encerrarRodada();
+  mostrarExame(); mensagem(passo > 0 ? "Próximo exame" : "Exame anterior", "#6cc4ea", 800);
+}
+function zoom(passo) {
+  // Abrir e fechar a mão vêm sempre em par: para fechar, antes é preciso abrir, e vice-versa. Por isso
+  // o primeiro zoom de uma rodada define a direção, e o gesto oposto, enquanto a rodada durar, é só a
+  // mão voltando à posição. Repetir o gesto dá mais um passo; 3 s sem zoom encerram a rodada.
+  const agora = Date.now();
+  const emRodada = estado.direcao && agora - estado.ultimoZoom < RODADA_MS;
+  estado.ultimoZoom = agora;
+  if (!emRodada) estado.direcao = passo;
+  mostrarDirecao();
+  if (passo !== estado.direcao) return false;
+  const novo = Math.min(ZOOMS.length - 1, Math.max(0, estado.zoom + passo));
+  if (novo === estado.zoom) { mensagem(passo > 0 ? "Zoom máximo" : "Tamanho original", "#f4c464", 800); return true; }
+  estado.zoom = novo; mostrarZoom(); mensagem("Zoom " + Math.round(ZOOMS[novo] * 100) + "%", "#6cc4ea", 800);
+  return true;
+}
+function normal() {
+  encerrarRodada();
+  if (estado.zoom === 0) { mensagem("Já está no tamanho original", "#f4c464", 800); return; }
+  estado.zoom = 0; mostrarZoom(); mensagem("Tamanho original", "#6cc4ea", 800);
+}
+function confirmar() {
+  if (estado.feitos >= ITENS.length) { mensagem("Checklist completo", "#5fd39a"); return; }
+  estado.feitos++; mostrarChecklist();
+  mensagem(estado.feitos === ITENS.length ? "Checklist completo!" : "Item confirmado", "#5fd39a");
+}
+function desfazer() {
+  if (estado.feitos === 0) { mensagem("Nada a desfazer", "#f4c464", 800); return; }
+  estado.feitos--; mostrarChecklist(); mensagem("Item desfeito", "#f4c464");
+}
+function alternarTrava() {
+  estado.travada = !estado.travada; mostrarTrava();
+  mensagem(estado.travada ? "Tela travada" : "Tela destravada", estado.travada ? "#ff8b80" : "#5fd39a");
+}
+const ACOES = { anterior: () => trocar(-1), proxima: () => trocar(1), zoom_mais: () => zoom(1), zoom_menos: () => zoom(-1), normal, confirmar, desfazer };
+function comando(nome) {
+  if (nome === "alternar") { alternarTrava(); return; }
+  if (!ACOES[nome]) return;
+  // Travada, a tela só obedece ao sinal de pare: é a defesa contra o gesto sem querer.
+  if (estado.travada) { estado.ignorados++; mostrarContadores(); mensagem("Tela travada: gesto ignorado", "#f4c464"); return; }
+  if (ACOES[nome]() === false) return;  // zoom oposto dentro da rodada: a mão só voltou à posição
+  estado.aceitos++; mostrarContadores();
+}
+
+addEventListener("keydown", e => {
+  const k = e.key;
+  if (k === "ArrowLeft") { e.preventDefault(); comando("anterior"); }
+  else if (k === "ArrowRight") { e.preventDefault(); comando("proxima"); }
+  else if (k === "+" || k === "=") comando("zoom_mais");
+  else if (k === "-") comando("zoom_menos");
+  else if (k === "0" || k.toLowerCase() === "r") comando("normal");
+  else if (k === " ") { e.preventDefault(); comando("alternar"); }
+  else if (k === "Enter" || k.toLowerCase() === "c") comando("confirmar");
+  else if (k === "Backspace" || k.toLowerCase() === "x") comando("desfazer");
+  else if (k.toLowerCase() === "f") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+});
+el("comecar").onclick = () => { el("inicio").style.display = "none"; };
+
+mostrarExame(); mostrarChecklist(); mostrarTrava(); mostrarContadores();
+el("video").src = "/video";
+const fonte = new EventSource("/eventos");
+fonte.onopen = () => { el("estado").textContent = "Modelo conectado"; };
+fonte.onerror = () => { el("estado").textContent = "Sem conexão com o modelo: use o teclado"; };
+fonte.onmessage = ev => {
+  const e = JSON.parse(ev.data);
+  if (e.tipo === "erro") el("estado").textContent = e.mensagem;
+  if (e.tipo === "estado") {
+    el("gesto").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
+    el("gesto").className = e.e_comando ? "comando" : "";
+    el("confianca").style.width = (e.confianca * 100) + "%";
+    el("disparos").textContent = e.disparos + " (" + e.por_minuto.toFixed(1) + "/min)";
+    el("estado").textContent = "Modelo conectado · " + e.fps.toFixed(0) + " fps · " + e.ms.toFixed(0) + " ms";
+  }
+  if (e.tipo === "comando") comando(e.comando);
+};
+</script>
+</body>
+</html>

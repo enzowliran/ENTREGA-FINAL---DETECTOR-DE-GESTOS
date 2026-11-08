@@ -28,6 +28,7 @@ Depois, dê dois cliques em um arquivo de `demo/` (no Windows, com a pasta `.ven
 | Arquivo | O que abre | Endereço |
 |---|---|---|
 | `abrir_painel.bat` | Painel do carro: música, clima, telefone, limpador e faróis | http://127.0.0.1:8770/ |
+| `abrir_hospital.bat` | Sala cirúrgica: exames com zoom e checklist, sem tocar na tela | http://127.0.0.1:8771/ |
 | `abrir_tenis.bat` | Jogo de tênis | http://127.0.0.1:8769/ |
 | `abrir_apresentacao.bat` | Apresentação controlada por gestos | http://127.0.0.1:8767/ |
 | `abrir_player.bat` | Player de música simples | http://127.0.0.1:8765/ |
@@ -60,6 +61,21 @@ A voz diz o nome da página a cada troca, e **empurrar a mão** faz ela ler os c
 | Empurrar a mão | Explica os comandos |
 
 Os gestos mudam em cada tela, e a legenda à direita mostra os da tela atual. Pelo teclado: setas, espaço, `M` (tamborilar), `R` (função), `E` (explicação) e `F` (tela cheia).
+
+### Sala cirúrgica
+
+Demonstração de que o mesmo modelo serve fora do carro: durante a cirurgia, o médico consulta exames e o checklist sem tocar em nada. As imagens são desenhadas pela própria página, sem dados de paciente. A tela começa **travada** e ignora qualquer gesto até o sinal de pare; os gestos bloqueados aparecem num contador, para mostrar a defesa contra o disparo sem querer.
+
+| Gesto | Na tela |
+|---|---|
+| Sinal de pare | Trava ou destrava a tela |
+| Zoom in com a mão (abrir) | Aproxima o exame |
+| Zoom out com a mão (fechar) | Afasta o exame |
+| Acenar | Volta ao tamanho original |
+| Deslizar para a direita ou esquerda | Troca o exame |
+| Polegar para cima ou baixo | Confirma ou desfaz um item do checklist |
+
+Abrir e fechar a mão vêm sempre em par, porque para fechar é preciso abrir antes, e o modelo enxerga os dois movimentos. Por isso o **primeiro zoom define a direção**: repetir o gesto dá mais um passo, o gesto oposto é ignorado enquanto a rodada durar, e 3 s sem zoom (ou baixar a mão) liberam a troca de direção. Pelo teclado: setas, `+`, `-`, `0` (tamanho original), espaço (trava), `C`, `X` e `F`.
 
 ## Novos treinos
 
