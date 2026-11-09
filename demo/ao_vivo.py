@@ -43,6 +43,8 @@ TRADUCAO = {
     "Thumb Up": "Polegar para cima", "Thumb Down": "Polegar para baixo", "Shaking Hand": "Acenar",
     "Stop Sign": "Sinal de pare", "Drumming Fingers": "Tamborilar os dedos",
     "No gesture": "Sem gesto", "Doing other things": "Outro movimento",
+    "One Finger": "Um dedo", "Two Fingers": "Dois dedos", "Three Fingers": "Três dedos", "Four Fingers": "Quatro dedos",
+    "Fist": "Punho",
 }
 
 

@@ -30,7 +30,10 @@ import ao_vivo as V
 RAIZ = Path(__file__).resolve().parent
 COMANDOS = {"Swiping Left": "anterior", "Swiping Right": "proxima", "Stop Sign": "alternar"}
 COMANDOS_VOLUME = {"Thumb Up": "volume_mais", "Thumb Down": "volume_menos"}
-COMANDOS_PAINEL = {**COMANDOS_VOLUME, "Drumming Fingers": "tamborilar", "Pulling Hand In": "funcao", "Pushing Hand Away": "ajuda"}
+COMANDOS_PAINEL = {**COMANDOS_VOLUME, "Drumming Fingers": "tamborilar", "Pulling Hand In": "funcao", "Pushing Hand Away": "ajuda",
+                   # Só existem no modelo cnn_3d_mais_gestos: cada gesto abre uma página, na ordem das abas.
+                   "One Finger": "pagina_1", "Two Fingers": "pagina_2", "Three Fingers": "pagina_3",
+                   "Four Fingers": "pagina_4", "Fist": "pagina_5"}
 # No hospital, empurrar a mão fica de fora: o modelo a confunde com o zoom in.
 COMANDOS_HOSPITAL = {"Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking Hand": "normal",
                      "Zooming In With Full Hand": "zoom_mais", "Zooming Out With Full Hand": "zoom_menos"}
