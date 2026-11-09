@@ -1,0 +1,21 @@
+Fluxo sem gesto: 2001 vídeos, 100.2 min, 24027 janelas
+Vídeos com gesto: 1500/12786
+Vídeos com gesto: 3000/12786
+Vídeos com gesto: 4500/12786
+Vídeos com gesto: 6000/12786
+Vídeos com gesto: 7500/12786
+Vídeos com gesto: 9000/12786
+Vídeos com gesto: 10500/12786
+Vídeos com gesto: 12000/12786
+Vídeos com gesto: 12786/12786
+Acerto nos gestos antigos, validação completa: 0.9270 (critério: pelo menos 0.923)
+Medida                               origem       novo
+falsos                               3.0000     6.0000
+falsos_por_min                       0.0300     0.0599
+falsos_de_gestos_novos               0.0000     0.0000
+deteccao_antigos                     0.7242     0.7094
+classe_errada                        0.0509     0.0512
+gestos_antigos_disparando_novo       0.0000     0.0000
+Falsos por classe no novo: {'Swiping Down': 1, 'Thumb Up': 4, 'Shaking Hand': 1}
+Critério de acerto nos gestos antigos: PASSOU
+Critério de falsos por minuto: PASSOU

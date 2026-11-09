@@ -1,0 +1,38 @@
+Treino: 6000 vídeos do Jester por época + 3900 fotos. Validação: 3000 vídeos + 780 fotos
+Modelo de origem nestes vídeos: top1 0.9323; sem gesto que dispara a 0,7: 0.0026
+ ep0 passo 0/206 perda 1.861 top1 0.604 6 clipes/s GPU 5797 MB
+ ep0 passo 100/206 perda 1.862 top1 0.575 119 clipes/s GPU 5797 MB
+ ep0 passo 200/206 perda 1.708 top1 0.597 132 clipes/s GPU 5797 MB
+Época 0: 1.3 min | Jester top1 0.9227 (origem 0.9323), virou gesto novo 0.0063 | novos: acerto 0.1283, sem tremor 0.1143 | sem gesto dispara a 0,7: Jester 0.0053 (origem 0.0026), gestos novos 0.0000, HaGRID 0.0250
+   por classe: {'Thumb Up': 0.633, 'Thumb Down': 0.333, 'Stop Sign': 0.908, 'No gesture': 0.267, 'Doing other things': 0.383, 'One Finger': 0.0, 'Two Fingers': 0.133, 'Three Fingers': 0.508, 'Four Fingers': 0.0, 'Fist': 0.0}
+   detectados a 0,7: {'One Finger': 0.0, 'Two Fingers': 0.0, 'Three Fingers': 0.0, 'Four Fingers': 0.0, 'Fist': 0.0} | confunde: {'One Finger': 'Three Fingers', 'Two Fingers': 'Three Fingers', 'Three Fingers': 'Stop Sign', 'Four Fingers': 'Stop Sign', 'Fist': 'Doing other things'}
+ ep1 passo 0/206 perda 1.446 top1 0.708 93 clipes/s GPU 5797 MB
+ ep1 passo 100/206 perda 1.449 top1 0.649 145 clipes/s GPU 5797 MB
+ ep1 passo 200/206 perda 1.423 top1 0.661 147 clipes/s GPU 5797 MB
+Época 1: 1.1 min | Jester top1 0.9213 (origem 0.9323), virou gesto novo 0.0010 | novos: acerto 0.2183, sem tremor 0.3190 | sem gesto dispara a 0,7: Jester 0.0079 (origem 0.0026), gestos novos 0.0000, HaGRID 0.0250
+   por classe: {'Thumb Up': 0.7, 'Thumb Down': 0.733, 'Stop Sign': 0.892, 'No gesture': 0.45, 'Doing other things': 0.45, 'One Finger': 0.117, 'Two Fingers': 0.483, 'Three Fingers': 0.225, 'Four Fingers': 0.0, 'Fist': 0.267}
+   detectados a 0,7: {'One Finger': 0.0, 'Two Fingers': 0.0, 'Three Fingers': 0.0, 'Four Fingers': 0.0, 'Fist': 0.0} | confunde: {'One Finger': 'Two Fingers', 'Two Fingers': 'Doing other things', 'Three Fingers': 'Two Fingers', 'Four Fingers': 'Stop Sign', 'Fist': 'Doing other things'}
+ ep2 passo 0/206 perda 1.226 top1 0.708 97 clipes/s GPU 5797 MB
+ ep2 passo 100/206 perda 1.333 top1 0.685 151 clipes/s GPU 5797 MB
+ ep2 passo 200/206 perda 1.301 top1 0.698 151 clipes/s GPU 5797 MB
+Época 2: 1.1 min | Jester top1 0.9230 (origem 0.9323), virou gesto novo 0.0017 | novos: acerto 0.3800, sem tremor 0.3571 | sem gesto dispara a 0,7: Jester 0.0053 (origem 0.0026), gestos novos 0.0000, HaGRID 0.0333
+   por classe: {'Thumb Up': 0.733, 'Thumb Down': 0.833, 'Stop Sign': 0.892, 'No gesture': 0.55, 'Doing other things': 0.533, 'One Finger': 0.25, 'Two Fingers': 0.617, 'Three Fingers': 0.3, 'Four Fingers': 0.083, 'Fist': 0.65}
+   detectados a 0,7: {'One Finger': 0.0, 'Two Fingers': 0.008, 'Three Fingers': 0.0, 'Four Fingers': 0.0, 'Fist': 0.183} | confunde: {'One Finger': 'Two Fingers', 'Two Fingers': 'Doing other things', 'Three Fingers': 'Two Fingers', 'Four Fingers': 'Stop Sign', 'Fist': 'Doing other things'}
+ ep3 passo 0/206 perda 1.328 top1 0.708 93 clipes/s GPU 5797 MB
+ ep3 passo 100/206 perda 1.233 top1 0.724 152 clipes/s GPU 5797 MB
+ ep3 passo 200/206 perda 1.229 top1 0.724 152 clipes/s GPU 5797 MB
+Época 3: 1.1 min | Jester top1 0.9207 (origem 0.9323), virou gesto novo 0.0010 | novos: acerto 0.4750, sem tremor 0.4286 | sem gesto dispara a 0,7: Jester 0.0053 (origem 0.0026), gestos novos 0.0000, HaGRID 0.0333
+   por classe: {'Thumb Up': 0.817, 'Thumb Down': 0.8, 'Stop Sign': 0.883, 'No gesture': 0.7, 'Doing other things': 0.4, 'One Finger': 0.333, 'Two Fingers': 0.617, 'Three Fingers': 0.408, 'Four Fingers': 0.2, 'Fist': 0.817}
+   detectados a 0,7: {'One Finger': 0.0, 'Two Fingers': 0.033, 'Three Fingers': 0.0, 'Four Fingers': 0.0, 'Fist': 0.367} | confunde: {'One Finger': 'Two Fingers', 'Two Fingers': 'Three Fingers', 'Three Fingers': 'Two Fingers', 'Four Fingers': 'Stop Sign', 'Fist': 'Doing other things'}
+ ep4 passo 0/206 perda 1.068 top1 0.792 94 clipes/s GPU 5797 MB
+ ep4 passo 100/206 perda 1.181 top1 0.742 150 clipes/s GPU 5797 MB
+ ep4 passo 200/206 perda 1.172 top1 0.743 151 clipes/s GPU 5797 MB
+Época 4: 1.1 min | Jester top1 0.9210 (origem 0.9323), virou gesto novo 0.0007 | novos: acerto 0.5017, sem tremor 0.4857 | sem gesto dispara a 0,7: Jester 0.0053 (origem 0.0026), gestos novos 0.0000, HaGRID 0.0417
+   por classe: {'Thumb Up': 0.733, 'Thumb Down': 0.833, 'Stop Sign': 0.875, 'No gesture': 0.733, 'Doing other things': 0.433, 'One Finger': 0.383, 'Two Fingers': 0.65, 'Three Fingers': 0.342, 'Four Fingers': 0.283, 'Fist': 0.85}
+   detectados a 0,7: {'One Finger': 0.017, 'Two Fingers': 0.05, 'Three Fingers': 0.0, 'Four Fingers': 0.0, 'Fist': 0.417} | confunde: {'One Finger': 'Two Fingers', 'Two Fingers': 'Three Fingers', 'Three Fingers': 'Two Fingers', 'Four Fingers': 'Stop Sign', 'Fist': 'Doing other things'}
+ ep5 passo 0/206 perda 1.298 top1 0.750 90 clipes/s GPU 5797 MB
+ ep5 passo 100/206 perda 1.159 top1 0.756 150 clipes/s GPU 5797 MB
+ ep5 passo 200/206 perda 1.159 top1 0.754 151 clipes/s GPU 5797 MB
+Época 5: 1.1 min | Jester top1 0.9220 (origem 0.9323), virou gesto novo 0.0010 | novos: acerto 0.4900, sem tremor 0.4929 | sem gesto dispara a 0,7: Jester 0.0053 (origem 0.0026), gestos novos 0.0000, HaGRID 0.0417
+   por classe: {'Thumb Up': 0.783, 'Thumb Down': 0.817, 'Stop Sign': 0.917, 'No gesture': 0.733, 'Doing other things': 0.417, 'One Finger': 0.367, 'Two Fingers': 0.642, 'Three Fingers': 0.375, 'Four Fingers': 0.217, 'Fist': 0.85}
+   detectados a 0,7: {'One Finger': 0.017, 'Two Fingers': 0.05, 'Three Fingers': 0.0, 'Four Fingers': 0.0, 'Fist': 0.417} | confunde: {'One Finger': 'Two Fingers', 'Two Fingers': 'Three Fingers', 'Three Fingers': 'Two Fingers', 'Four Fingers': 'Stop Sign', 'Fist': 'Doing other things'}

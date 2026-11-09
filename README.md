@@ -145,6 +145,25 @@ O fluxo é simulado com vídeos sem gesto colados em sequência, ou seja, é uma
 | CNN + GRU x CNN 3D | Não concluído; a GRU foi interrompida |
 | CNN + Transformer | Sem conclusão: 15,2% em um treino pequeno, sem ajuste próprio de taxa de aprendizado |
 
+### Gestos novos: um a quatro dedos e punho
+
+O modelo `resultados/jester/cnn_3d_mais_gestos/melhor.pt` reconhece os 27 gestos do Jester e mais 5 gestos parados, aprendidos com fotos do [HaGRIDv2](https://github.com/hukenovs/hagrid). A licença dele exige citar a fonte.
+
+| Medida (validação) | Modelo atual | Com gestos novos |
+|---|---:|---:|
+| Acerto em toda a validação do Jester | 93,3% | 92,7% |
+| Falsos disparos por minuto no fluxo simulado | 0,03 | 0,06 |
+| Acerto nos gestos novos, fotos | | 92,7% |
+| Gestos novos na webcam | | **ainda não medido** |
+
+Ele ainda não está nas demos. Para medir na webcam, cada pessoa grava seus vídeos com `demo/abrir_gravacao.bat`, que salva em `data/webcam/`, fora do git, porque mostra rostos. Depois:
+
+```bash
+python src/avaliar_webcam.py --modelo resultados/jester/cnn_3d_mais_gestos/melhor.pt
+```
+
+Para refazer: `python src/baixar_hagrid.py --por-classe 4000 --fracao-val 0.1` (cerca de 6,4 GB) e `python src/treinar_gestos_novos.py --nome outro_nome --epocas 8 --jester-por-epoca 60000 --dividir-outros 1`. Na GPU que usamos, levou cerca de 1h40.
+
 Tentativas já descartadas, para não repetir: limiar por gesto e ajuste fino de esquerda e direita. Os dois não trouxeram ganho real, e os resultados estão no notebook.
 
 ## O que não está no repositório

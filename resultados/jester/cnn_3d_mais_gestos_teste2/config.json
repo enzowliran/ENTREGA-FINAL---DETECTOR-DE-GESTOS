@@ -1,0 +1,16 @@
+{
+  "origem": "resultados/jester/cnn_3d/melhor.pt",
+  "nome": "cnn_3d_mais_gestos_teste2",
+  "dados": "data/Jester",
+  "hagrid": "data/HaGRID",
+  "epocas": 6,
+  "jester_por_epoca": 6000,
+  "val_jester": 3000,
+  "lote": 48,
+  "lr": 0.0003,
+  "lr_cabeca": 0.001,
+  "peso_falso": 1.0,
+  "suavizacao": 0.05,
+  "frac_sinteticos": 0.0,
+  "seed": 42
+}

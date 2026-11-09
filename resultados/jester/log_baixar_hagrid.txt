@@ -1,0 +1,73 @@
+A baixar: 47976 imagens, cerca de 5.58 GB
+500/47976, 59 MB, 2.1 MB/s, 0 erros
+1000/47976, 118 MB, 2.2 MB/s, 0 erros
+1500/47976, 177 MB, 2.3 MB/s, 0 erros
+2000/47976, 235 MB, 2.3 MB/s, 0 erros
+2500/47976, 294 MB, 2.3 MB/s, 0 erros
+3000/47976, 352 MB, 2.3 MB/s, 0 erros
+3500/47976, 410 MB, 2.3 MB/s, 0 erros
+4000/47976, 470 MB, 2.3 MB/s, 0 erros
+4500/47976, 528 MB, 2.3 MB/s, 0 erros
+5000/47976, 585 MB, 2.3 MB/s, 0 erros
+5500/47976, 644 MB, 2.3 MB/s, 0 erros
+6000/47976, 703 MB, 2.3 MB/s, 0 erros
+6500/47976, 761 MB, 2.3 MB/s, 0 erros
+7000/47976, 820 MB, 2.3 MB/s, 0 erros
+7500/47976, 879 MB, 2.3 MB/s, 0 erros
+8000/47976, 938 MB, 2.3 MB/s, 0 erros
+8500/47976, 998 MB, 2.3 MB/s, 0 erros
+9000/47976, 1057 MB, 2.3 MB/s, 0 erros
+9500/47976, 1116 MB, 2.2 MB/s, 0 erros
+10000/47976, 1174 MB, 2.2 MB/s, 0 erros
+10500/47976, 1233 MB, 2.2 MB/s, 0 erros
+11000/47976, 1291 MB, 2.2 MB/s, 0 erros
+11500/47976, 1350 MB, 2.2 MB/s, 0 erros
+12000/47976, 1409 MB, 2.2 MB/s, 0 erros
+12500/47976, 1467 MB, 2.2 MB/s, 0 erros
+13000/47976, 1525 MB, 2.2 MB/s, 0 erros
+13500/47976, 1584 MB, 2.2 MB/s, 0 erros
+14000/47976, 1643 MB, 2.2 MB/s, 0 erros
+14500/47976, 1702 MB, 2.2 MB/s, 0 erros
+15000/47976, 1760 MB, 2.2 MB/s, 0 erros
+15500/47976, 1821 MB, 2.2 MB/s, 0 erros
+16000/47976, 1879 MB, 2.2 MB/s, 0 erros
+16500/47976, 1939 MB, 2.2 MB/s, 0 erros
+17000/47976, 1997 MB, 2.2 MB/s, 0 erros
+17500/47976, 2056 MB, 2.2 MB/s, 0 erros
+18000/47976, 2114 MB, 2.2 MB/s, 0 erros
+18500/47976, 2174 MB, 2.2 MB/s, 0 erros
+19000/47976, 2233 MB, 2.2 MB/s, 0 erros
+19500/47976, 2292 MB, 2.2 MB/s, 0 erros
+20000/47976, 2351 MB, 2.2 MB/s, 0 erros
+20500/47976, 2411 MB, 2.2 MB/s, 0 erros
+21000/47976, 2469 MB, 2.2 MB/s, 0 erros
+21500/47976, 2528 MB, 2.2 MB/s, 0 erros
+Traceback (most recent call last):
+  File "C:\Users\Enzo W Liran\Downloads\New folder\src\baixar_hagrid.py", line 214, in <module>
+    main()
+  File "C:\Users\Enzo W Liran\Downloads\New folder\src\baixar_hagrid.py", line 202, in main
+    bytes_total += futuro.result()
+                   ^^^^^^^^^^^^^^^
+  File "C:\Users\Enzo W Liran\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\concurrent\futures\_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Enzo W Liran\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\concurrent\futures\_base.py", line 401, in __get_result
+    raise self._exception
+  File "C:\Users\Enzo W Liran\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Enzo W Liran\Downloads\New folder\src\baixar_hagrid.py", line 198, in tarefa
+    return baixar_imagem(*x)
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Enzo W Liran\Downloads\New folder\src\baixar_hagrid.py", line 106, in baixar_imagem
+    dados = ler_trecho(URL_IMAGENS, inicio, inicio + 30 + len(nome.encode()) + 256 + comprimido)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Enzo W Liran\Downloads\New folder\src\baixar_hagrid.py", line 45, in ler_trecho
+    return resposta.read()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\Enzo W Liran\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\http\client.py", line 510, in read
+    s = self._safe_read(self.length)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Enzo W Liran\AppData\Roaming\uv\python\cpython-3.12-windows-x86_64-none\Lib\http\client.py", line 671, in _safe_read
+    raise IncompleteRead(data, amt - len(data))
+http.client.IncompleteRead: IncompleteRead(48583 bytes read, 88940 more expected)

@@ -1,0 +1,242 @@
+[
+  {
+    "jester_top1": 0.9226666688919067,
+    "jester_virou_novo": 0.0063333334401249886,
+    "jester_sem_gesto_dispara_07": 0.005263158120214939,
+    "jester_sem_gesto_dispara_novo_07": 0.0,
+    "hagrid_por_classe": {
+      "Thumb Up": 0.6333333253860474,
+      "Thumb Down": 0.3333333432674408,
+      "Stop Sign": 0.9083333611488342,
+      "No gesture": 0.2666666805744171,
+      "Doing other things": 0.38333332538604736,
+      "One Finger": 0.0,
+      "Two Fingers": 0.13333334028720856,
+      "Three Fingers": 0.5083333253860474,
+      "Four Fingers": 0.0,
+      "Fist": 0.0
+    },
+    "novas_acerto": 0.12833333313465117,
+    "novas_detectadas_07": {
+      "One Finger": 0.0,
+      "Two Fingers": 0.0,
+      "Three Fingers": 0.0,
+      "Four Fingers": 0.0,
+      "Fist": 0.0
+    },
+    "hagrid_sem_gesto_dispara_07": 0.02500000037252903,
+    "novas_mais_confundidas": {
+      "One Finger": "Three Fingers",
+      "Two Fingers": "Three Fingers",
+      "Three Fingers": "Stop Sign",
+      "Four Fingers": "Stop Sign",
+      "Fist": "Doing other things"
+    },
+    "novas_acerto_sem_tremor": 0.11428571492433548,
+    "epoca": 0,
+    "top1_treino": 0.5981818181818181,
+    "minutos": 1.2829902013142904,
+    "referencia_jester_top1": 0.9323333501815796,
+    "referencia_sem_gesto_dispara_07": 0.0026315790601074696
+  },
+  {
+    "jester_top1": 0.9213333129882812,
+    "jester_virou_novo": 0.0010000000474974513,
+    "jester_sem_gesto_dispara_07": 0.007894736714661121,
+    "jester_sem_gesto_dispara_novo_07": 0.0,
+    "hagrid_por_classe": {
+      "Thumb Up": 0.699999988079071,
+      "Thumb Down": 0.7333333492279053,
+      "Stop Sign": 0.8916666507720947,
+      "No gesture": 0.44999998807907104,
+      "Doing other things": 0.44999998807907104,
+      "One Finger": 0.11666666716337204,
+      "Two Fingers": 0.4833333194255829,
+      "Three Fingers": 0.22499999403953552,
+      "Four Fingers": 0.0,
+      "Fist": 0.2666666805744171
+    },
+    "novas_acerto": 0.21833333224058152,
+    "novas_detectadas_07": {
+      "One Finger": 0.0,
+      "Two Fingers": 0.0,
+      "Three Fingers": 0.0,
+      "Four Fingers": 0.0,
+      "Fist": 0.0
+    },
+    "hagrid_sem_gesto_dispara_07": 0.02500000037252903,
+    "novas_mais_confundidas": {
+      "One Finger": "Two Fingers",
+      "Two Fingers": "Doing other things",
+      "Three Fingers": "Two Fingers",
+      "Four Fingers": "Stop Sign",
+      "Fist": "Doing other things"
+    },
+    "novas_acerto_sem_tremor": 0.31904762983322144,
+    "epoca": 1,
+    "top1_treino": 0.6607070707070707,
+    "minutos": 1.1228708465894064,
+    "referencia_jester_top1": 0.9323333501815796,
+    "referencia_sem_gesto_dispara_07": 0.0026315790601074696
+  },
+  {
+    "jester_top1": 0.9229999780654907,
+    "jester_virou_novo": 0.0016666667070239782,
+    "jester_sem_gesto_dispara_07": 0.005263158120214939,
+    "jester_sem_gesto_dispara_novo_07": 0.0,
+    "hagrid_por_classe": {
+      "Thumb Up": 0.7333333492279053,
+      "Thumb Down": 0.8333333134651184,
+      "Stop Sign": 0.8916666507720947,
+      "No gesture": 0.550000011920929,
+      "Doing other things": 0.5333333611488342,
+      "One Finger": 0.25,
+      "Two Fingers": 0.6166666746139526,
+      "Three Fingers": 0.30000001192092896,
+      "Four Fingers": 0.0833333358168602,
+      "Fist": 0.6499999761581421
+    },
+    "novas_acerto": 0.3799999997019768,
+    "novas_detectadas_07": {
+      "One Finger": 0.0,
+      "Two Fingers": 0.008333333767950535,
+      "Three Fingers": 0.0,
+      "Four Fingers": 0.0,
+      "Fist": 0.18333333730697632
+    },
+    "hagrid_sem_gesto_dispara_07": 0.03333333507180214,
+    "novas_mais_confundidas": {
+      "One Finger": "Two Fingers",
+      "Two Fingers": "Doing other things",
+      "Three Fingers": "Two Fingers",
+      "Four Fingers": "Stop Sign",
+      "Fist": "Doing other things"
+    },
+    "novas_acerto_sem_tremor": 0.3571428656578064,
+    "epoca": 2,
+    "top1_treino": 0.6992929292929293,
+    "minutos": 1.090762186050415,
+    "referencia_jester_top1": 0.9323333501815796,
+    "referencia_sem_gesto_dispara_07": 0.0026315790601074696
+  },
+  {
+    "jester_top1": 0.9206666946411133,
+    "jester_virou_novo": 0.0010000000474974513,
+    "jester_sem_gesto_dispara_07": 0.005263158120214939,
+    "jester_sem_gesto_dispara_novo_07": 0.0,
+    "hagrid_por_classe": {
+      "Thumb Up": 0.8166666626930237,
+      "Thumb Down": 0.800000011920929,
+      "Stop Sign": 0.8833333253860474,
+      "No gesture": 0.699999988079071,
+      "Doing other things": 0.4000000059604645,
+      "One Finger": 0.3333333432674408,
+      "Two Fingers": 0.6166666746139526,
+      "Three Fingers": 0.40833333134651184,
+      "Four Fingers": 0.20000000298023224,
+      "Fist": 0.8166666626930237
+    },
+    "novas_acerto": 0.47500000298023226,
+    "novas_detectadas_07": {
+      "One Finger": 0.0,
+      "Two Fingers": 0.03333333507180214,
+      "Three Fingers": 0.0,
+      "Four Fingers": 0.0,
+      "Fist": 0.36666667461395264
+    },
+    "hagrid_sem_gesto_dispara_07": 0.03333333507180214,
+    "novas_mais_confundidas": {
+      "One Finger": "Two Fingers",
+      "Two Fingers": "Three Fingers",
+      "Three Fingers": "Two Fingers",
+      "Four Fingers": "Stop Sign",
+      "Fist": "Doing other things"
+    },
+    "novas_acerto_sem_tremor": 0.4285714328289032,
+    "epoca": 3,
+    "top1_treino": 0.7237373737373738,
+    "minutos": 1.086109419663747,
+    "referencia_jester_top1": 0.9323333501815796,
+    "referencia_sem_gesto_dispara_07": 0.0026315790601074696
+  },
+  {
+    "jester_top1": 0.9210000038146973,
+    "jester_virou_novo": 0.0006666666595265269,
+    "jester_sem_gesto_dispara_07": 0.005263158120214939,
+    "jester_sem_gesto_dispara_novo_07": 0.0,
+    "hagrid_por_classe": {
+      "Thumb Up": 0.7333333492279053,
+      "Thumb Down": 0.8333333134651184,
+      "Stop Sign": 0.875,
+      "No gesture": 0.7333333492279053,
+      "Doing other things": 0.4333333373069763,
+      "One Finger": 0.38333332538604736,
+      "Two Fingers": 0.6499999761581421,
+      "Three Fingers": 0.34166666865348816,
+      "Four Fingers": 0.28333333134651184,
+      "Fist": 0.8500000238418579
+    },
+    "novas_acerto": 0.5016666650772095,
+    "novas_detectadas_07": {
+      "One Finger": 0.01666666753590107,
+      "Two Fingers": 0.05000000074505806,
+      "Three Fingers": 0.0,
+      "Four Fingers": 0.0,
+      "Fist": 0.4166666567325592
+    },
+    "hagrid_sem_gesto_dispara_07": 0.0416666679084301,
+    "novas_mais_confundidas": {
+      "One Finger": "Two Fingers",
+      "Two Fingers": "Three Fingers",
+      "Three Fingers": "Two Fingers",
+      "Four Fingers": "Stop Sign",
+      "Fist": "Doing other things"
+    },
+    "novas_acerto_sem_tremor": 0.48571428656578064,
+    "epoca": 4,
+    "top1_treino": 0.7426262626262626,
+    "minutos": 1.0920212984085083,
+    "referencia_jester_top1": 0.9323333501815796,
+    "referencia_sem_gesto_dispara_07": 0.0026315790601074696
+  },
+  {
+    "jester_top1": 0.921999990940094,
+    "jester_virou_novo": 0.0010000000474974513,
+    "jester_sem_gesto_dispara_07": 0.005263158120214939,
+    "jester_sem_gesto_dispara_novo_07": 0.0,
+    "hagrid_por_classe": {
+      "Thumb Up": 0.7833333611488342,
+      "Thumb Down": 0.8166666626930237,
+      "Stop Sign": 0.9166666865348816,
+      "No gesture": 0.7333333492279053,
+      "Doing other things": 0.4166666567325592,
+      "One Finger": 0.36666667461395264,
+      "Two Fingers": 0.6416666507720947,
+      "Three Fingers": 0.375,
+      "Four Fingers": 0.21666666865348816,
+      "Fist": 0.8500000238418579
+    },
+    "novas_acerto": 0.4900000035762787,
+    "novas_detectadas_07": {
+      "One Finger": 0.01666666753590107,
+      "Two Fingers": 0.05000000074505806,
+      "Three Fingers": 0.0,
+      "Four Fingers": 0.0,
+      "Fist": 0.4166666567325592
+    },
+    "hagrid_sem_gesto_dispara_07": 0.0416666679084301,
+    "novas_mais_confundidas": {
+      "One Finger": "Two Fingers",
+      "Two Fingers": "Three Fingers",
+      "Three Fingers": "Two Fingers",
+      "Four Fingers": "Stop Sign",
+      "Fist": "Doing other things"
+    },
+    "novas_acerto_sem_tremor": 0.4928571283817291,
+    "epoca": 5,
+    "top1_treino": 0.7529292929292929,
+    "minutos": 1.0888445734977723,
+    "referencia_jester_top1": 0.9323333501815796,
+    "referencia_sem_gesto_dispara_07": 0.0026315790601074696
+  }
+]
