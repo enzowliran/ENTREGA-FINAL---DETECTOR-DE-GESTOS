@@ -13,7 +13,7 @@ from pathlib import Path
 
 RAIZ = Path(__file__).resolve().parent.parent
 R = RAIZ / "resultados/jester"
-GRUPO = "Insper · Deep Learning · 2026"  # troque pelos nomes do grupo
+GRUPO = "Enzo Liran, Isabela Giusti e Maria Luiza Xavier · Insper · 2026"  # em ordem alfabética
 
 PT = {
     "Swiping Left": "Deslizar para a esquerda", "Swiping Right": "Deslizar para a direita", "Swiping Down": "Deslizar para baixo",
