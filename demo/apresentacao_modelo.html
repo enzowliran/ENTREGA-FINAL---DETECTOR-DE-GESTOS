@@ -50,6 +50,25 @@
   .tabela th:first-child, .tabela td:first-child { text-align: left; }
   .tabela td { text-align: right; padding: 10px 14px; border-top: 1px solid var(--linha); font-variant-numeric: tabular-nums; }
   .tabela tr.vencedora td { font-weight: 800; color: var(--acento); }
+  .cena3d { position: relative; height: 560px; border-radius: 18px; overflow: hidden; border: 1px solid var(--linha);
+            background: radial-gradient(800px 500px at 30% 20%, #ffffff, #eef2ff 60%, #fdf2f8); }
+  .cena3d canvas { width: 100%; height: 100%; display: block; }
+  .estado3d { border-top-color: var(--acento); }
+  .estado3d h3 { font-size: 24px; margin: 4px 0 8px; }
+  .estado3d p { font-size: 18px; }
+  .rotuloEstado { font-size: 13px !important; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--acento) !important; }
+  .medidor { height: 12px; border-radius: 6px; background: var(--linha); margin-top: 14px; overflow: hidden; }
+  .medidor div { height: 100%; width: 0; background: linear-gradient(90deg, #f9a8d4, #ec4899); transition: width .25s; }
+  .controles { display: flex; flex-wrap: wrap; gap: 8px; }
+  .controles button { border: 1px solid var(--linha); background: var(--cartao); border-radius: 999px; padding: 9px 14px; font: 600 15px "Segoe UI", system-ui, sans-serif;
+                      color: var(--suave); cursor: pointer; transition: background .2s, color .2s, transform .2s; }
+  .controles button b { color: var(--tinta); }
+  .controles button:hover { border-color: var(--acento); }
+  .controles button.agora { background: var(--acento); color: #fff; transform: scale(1.04); }
+  .controles button.agora b { color: #fff; }
+  .licao p { font-size: 17px; }
+  .rotulos3d { position: absolute; left: 16px; bottom: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .rotulos3d span { background: rgba(255,255,255,.88); border-radius: 999px; padding: 6px 12px; font-size: 15px; font-weight: 600; color: var(--c); }
   #secaoPilula { color: var(--acento); border-color: var(--acento-claro); background: var(--acento-claro); font-weight: 700; }
   h1 { font-size: 76px; line-height: 1.04; margin: 0; letter-spacing: -.02em; }
   h2 { font-size: 46px; line-height: 1.12; margin: 0 0 26px; letter-spacing: -.015em; }
@@ -190,6 +209,7 @@
   .lista li { font-size: 23px; line-height: 1.45; color: var(--suave); padding: 8px 0 8px 34px; position: relative; }
   .lista li::before { content: attr(data-i); position: absolute; left: 0; top: 8px; font-size: 20px; }
 </style>
+<script src="/vendor/three.min.js"></script>
 </head>
 <body>
 <div id="palco">
@@ -258,6 +278,44 @@
       <div class="etapa an" style="--d:7;background:var(--acento-claro);border-color:var(--acento)"><div class="icone">✅</div><h3>Comando</h3><p>Próxima música, zoom, slide...</p></div>
     </div>
     <p class="lead an" style="--d:8;margin-top:44px;font-size:22px">A rede olha <b>movimento</b>, não uma foto: a convolução 3D percorre o espaço e o tempo ao mesmo tempo. O gatilho é a segunda defesa contra o disparo sem querer.</p>
+  </section>
+
+  <!-- 3b. O que é uma CNN 3D (interativo) -->
+  <section class="slide" data-titulo="O que é uma CNN 3D" data-interativo="cnn1">
+    <p class="kicker an">Por dentro do modelo · interativo</p>
+    <h2 class="an" style="--d:1">O que é uma CNN 3D: um filtro que olha espaço e tempo juntos</h2>
+    <div class="grade" style="grid-template-columns:1.4fr 1fr;align-items:stretch;gap:26px">
+      <div class="cena3d an" style="--d:2;height:540px"><canvas id="cena1"></canvas>
+        <div class="rotulos3d"><span style="--c:#64748b">▮ vídeo: quadros no tempo</span><span style="--c:#7c3aed">▮ filtro</span><span style="--c:#ec4899">▮ onde o filtro acendeu</span></div>
+      </div>
+      <div class="grade an" style="--d:3;gap:16px;align-content:start">
+        <div class="cartao estado3d"><p class="rotuloEstado" id="e1modo"></p><h3 id="e1titulo"></h3><p id="e1texto"></p>
+          <div class="medidor"><div id="e1barra"></div></div></div>
+        <div class="controles">
+          <button data-acao="Swiping Right">👉 Deslizar: <b>um passo</b></button>
+          <button data-acao="Stop Sign">✋ Pare: <b>pausa ou continua</b></button>
+          <button data-acao="Thumb Up">👍 Polegar para cima: <b>troca o vídeo</b></button>
+          <button data-acao="Thumb Down">👎 Polegar para baixo: <b>filtro 2D ou 3D</b></button>
+        </div>
+        <div class="cartao licao"><p><b>Experimente:</b> com o vídeo <b>parado</b>, o filtro 2D ainda acende, porque ele vê a mão. O filtro 3D não acende, porque procura o <b>movimento</b>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3c. Como a CNN 3D funciona (interativo) -->
+  <section class="slide" data-titulo="Como a CNN 3D funciona" data-interativo="cnn2">
+    <p class="kicker an">Por dentro do modelo · interativo</p>
+    <h2 class="an" style="--d:1">Bloco a bloco: o vídeo encolhe, os filtros aumentam</h2>
+    <div class="cena3d an" style="--d:2;height:430px"><canvas id="cena2"></canvas></div>
+    <div class="grade an" style="--d:3;grid-template-columns:1.3fr 1fr;margin-top:18px;gap:20px;align-items:start">
+      <div class="cartao estado3d"><p class="rotuloEstado" id="e2modo"></p><h3 id="e2titulo"></h3><p id="e2texto"></p></div>
+      <div class="controles">
+          <button data-acao="Swiping Right">👉 Deslizar: <b>próximo bloco</b></button>
+          <button data-acao="Swiping Left">👈 <b>bloco anterior</b></button>
+          <button data-acao="Thumb Up">👍 Polegar para cima: <b>passa um gesto</b></button>
+          <button data-acao="Stop Sign">✋ Pare: <b>pausa ou continua</b></button>
+        </div>
+    </div>
   </section>
 
   <!-- 4. Os dados -->
@@ -722,6 +780,228 @@ matriz($("matriz2"), D.matriz2, { celula: 46, esquerda: 200, topo: 170 });
   $("trilho").innerHTML = html;
 })();
 
+
+// ---------- Visualizações 3D interativas da CNN 3D (three.js), animadas só com o slide na tela ----------
+const CENAS3D = [], INTERATIVOS = {};
+function texto3d(texto, cor, tamanho = 1) {
+  const c = document.createElement("canvas"); c.width = 640; c.height = 120;
+  const g = c.getContext("2d"); g.font = "bold 46px Segoe UI, system-ui, sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
+  g.lineWidth = 10; g.strokeStyle = "rgba(255,255,255,.95)"; g.strokeText(texto, 320, 60); g.fillStyle = cor; g.fillText(texto, 320, 60);
+  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false }));
+  sp.scale.set(3.2 * tamanho, 0.6 * tamanho, 1); return sp;
+}
+function novaCena(canvas, posCamera, alvo) {
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(2, devicePixelRatio));
+  const cena = new THREE.Scene(), camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+  camera.position.set(...posCamera); camera.lookAt(...alvo);
+  cena.add(new THREE.AmbientLight(0xffffff, 0.75));
+  const luz = new THREE.DirectionalLight(0xffffff, 0.7); luz.position.set(4, 8, 6); cena.add(luz);
+  const item = { renderer, cena, camera, canvas, passo: () => {} };
+  CENAS3D.push(item); return item;
+}
+function ajustarCena(item) {
+  const w = item.canvas.clientWidth, h = item.canvas.clientHeight;
+  if (!w || !h) return;
+  item.renderer.setSize(w, h, false); item.camera.aspect = w / h; item.camera.updateProjectionMatrix();
+}
+function acenderBotao(slideId, acao) {
+  const sl = document.querySelector(`[data-interativo="${slideId}"]`);
+  sl.querySelectorAll(".controles button").forEach(b => b.classList.toggle("agora", b.dataset.acao === acao));
+  clearTimeout(sl._tempoBotao); sl._tempoBotao = setTimeout(() => sl.querySelectorAll(".controles button").forEach(b => b.classList.remove("agora")), 900);
+}
+
+// Slide 1: o filtro percorre o vídeo. Didático: vídeo deslizando ou parado, filtro 2D ou 3D.
+function montarCena1() {
+  const item = novaCena($("cena1"), [4.2, 3.2, 8.6], [4.2, -0.1, 0]);
+  const N = 8, ESP = 0.55, LADO = 2.2, PASSOS = 4, tam = LADO / PASSOS;
+  const est = { auto: true, k: 0, video: "deslizando", filtro: "3d", tempo: 0 };
+  // Parada, a mão fica alinhada a uma coluna do filtro, para o filtro 2D poder encontrá-la por inteiro.
+  const posMao = q => est.video === "deslizando" ? -0.75 + 1.5 * q / (N - 1) : -0.275;
+  const planos = [];
+  function desenharQuadros() {
+    planos.forEach((plano, i) => {
+      const c = document.createElement("canvas"); c.width = c.height = 128; const g = c.getContext("2d");
+      g.fillStyle = "#f8fafc"; g.fillRect(0, 0, 128, 128); g.strokeStyle = "#cbd5e1"; g.lineWidth = 1;
+      for (let k = 0; k <= 128; k += 32) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k, 128); g.moveTo(0, k); g.lineTo(128, k); g.stroke(); }
+      const u = 64 + posMao(i) / LADO * 128;
+      g.fillStyle = "#f4a261"; g.beginPath(); g.arc(u, 74, 17, 0, Math.PI * 2); g.fill();
+      for (let d = 0; d < 4; d++) g.fillRect(u - 15 + d * 8.5, 38, 6.5, 26);
+      g.fillStyle = "#475569"; g.font = "bold 18px Segoe UI"; g.fillText(`t${i + 1}`, 8, 22);
+      g.strokeStyle = "#475569"; g.lineWidth = 4; g.strokeRect(2, 2, 124, 124);
+      if (plano.material.map) plano.material.map.dispose();
+      plano.material.map = new THREE.CanvasTexture(c); plano.material.needsUpdate = true;
+    });
+  }
+  for (let i = 0; i < N; i++) {
+    const plano = new THREE.Mesh(new THREE.PlaneGeometry(LADO, LADO), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.93, side: THREE.DoubleSide }));
+    plano.rotation.y = Math.PI / 2; plano.position.set(i * ESP, 0, 0); item.cena.add(plano); planos.push(plano);
+  }
+  desenharQuadros();
+  const rotVideo = texto3d("tempo →", "#475569", 0.9); rotVideo.position.set(1.9, -1.6, 0); item.cena.add(rotVideo);
+  const matFiltro = new THREE.MeshStandardMaterial({ color: 0x7c3aed, transparent: true, opacity: 0.35 });
+  let filtro = null;
+  function criarFiltro() {
+    if (filtro) item.cena.remove(filtro);
+    const largura = est.filtro === "3d" ? 2 * ESP + 0.12 : 0.1;
+    filtro = new THREE.Mesh(new THREE.BoxGeometry(largura, tam, tam), matFiltro);
+    filtro.add(new THREE.LineSegments(new THREE.EdgesGeometry(filtro.geometry), new THREE.LineBasicMaterial({ color: 0x5b21b6 })));
+    item.cena.add(filtro);
+  }
+  criarFiltro();
+  const rotFiltro = texto3d("", "#6d28d9", 0.8); item.cena.add(rotFiltro);
+  const saida = [], X0 = 5.6, tamS = 0.36;
+  for (let t = 0; t < N - 2; t++) for (let a = 0; a < PASSOS; a++) for (let b = 0; b < PASSOS; b++) {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(tamS * 0.9, tamS * 0.9, tamS * 0.9), new THREE.MeshStandardMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.55 }));
+    m.position.set(X0 + t * (tamS + 0.06), (1.5 - a) * (tamS + 0.06), (b - 1.5) * (tamS + 0.06)); item.cena.add(m); saida.push(m);
+  }
+  const rotSaida = texto3d("onde o filtro acendeu", "#db2777", 0.85); rotSaida.position.set(X0 + 1, -1.6, 0); item.cena.add(rotSaida);
+  const linha = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineDashedMaterial({ color: 0x7c3aed, dashSize: 0.12, gapSize: 0.08 }));
+  item.cena.add(linha);
+  const TOTAL = (N - 2) * PASSOS * PASSOS;
+  function limparSaida() { saida.forEach(m => { m.material.color.set(0xe2e8f0); m.material.opacity = 0.55; }); }
+  // O filtro 3D procura "mão indo para a direita"; o 2D só procura "mão" em um quadro.
+  function ativacao(tt, y, z) {
+    // O quadro está girado 90°: o lado direito da imagem fica em z negativo. A mão na cena está em z = -posMao.
+    const presenca = q => Math.max(0, 1 - Math.hypot(-posMao(q) - z, y + 0.15) / 0.55);
+    if (est.filtro === "2d") return presenca(tt + 1);
+    const vista = (presenca(tt) + presenca(tt + 1) + presenca(tt + 2)) / 2;
+    const anda = posMao(tt + 2) - posMao(tt) > 0.1;
+    return Math.min(1, vista) * (anda ? 1 : 0.06);
+  }
+  function aplicar() {
+    const k = est.k, tt = Math.floor(k / (PASSOS * PASSOS)), a = Math.floor(k / PASSOS) % PASSOS, b = k % PASSOS;
+    const y = (1.5 - a) * tam, z = (b - 1.5) * tam, x = (est.filtro === "3d" ? tt + 1 : tt + 1) * ESP;
+    filtro.position.set(x, y, z); rotFiltro.position.set(x, y + 0.75, z);
+    const ativ = ativacao(tt, y, z), m = saida[k];
+    m.material.color.set(new THREE.Color(0xe2e8f0).lerp(new THREE.Color(0xec4899), ativ)); m.material.opacity = 0.55 + 0.45 * ativ;
+    linha.geometry.setFromPoints([filtro.position.clone(), m.position.clone()]); linha.computeLineDistances();
+    // Painel didático.
+    const quadros = est.filtro === "3d" ? `quadros t${tt + 1} a t${tt + 3}` : `quadro t${tt + 2}`;
+    $("e1modo").textContent = `Filtro ${est.filtro.toUpperCase()} · vídeo ${est.video === "deslizando" ? "deslizando" : "parado"} · ${est.auto ? "automático" : "passo a passo"}`;
+    $("e1titulo").textContent = `Passo ${k + 1} de ${TOTAL}: ${quadros}, linha ${a + 1}, coluna ${b + 1}`;
+    $("e1texto").innerHTML = ativ > 0.5 ? (est.filtro === "3d" ? "Acendeu: a mão está aqui <b>e se move para a direita</b> nesses 3 quadros." : "Acendeu: há uma mão neste quadro. O filtro 2D não sabe se ela se move.")
+      : ativ > 0.15 ? "Acendeu um pouco: só parte do padrão está aqui." : est.filtro === "3d" && est.video === "parado" ? "Apagado: a mão está parada, e este filtro procura movimento." : "Apagado: o padrão que o filtro procura não está aqui.";
+    $("e1barra").style.width = Math.round(ativ * 100) + "%";
+    rotFiltro.material.map.dispose();
+    const novo = texto3d(`filtro ${est.filtro === "3d" ? "3×3×3" : "3×3 (2D)"}`, "#6d28d9", 0.8); rotFiltro.material = novo.material;
+  }
+  function mudar(passo) { est.k = (est.k + passo + TOTAL) % TOTAL; if (est.k === 0 && passo > 0) limparSaida(); aplicar(); }
+  INTERATIVOS.cnn1 = classe => {
+    if (classe === "Swiping Right" || classe === "Swiping Left") { est.auto = false; mudar(classe === "Swiping Right" ? 1 : -1); }
+    else if (classe === "Stop Sign") { est.auto = !est.auto; aplicar(); aviso(est.auto ? "▶ Automático" : "⏸ Passo a passo"); }
+    else if (classe === "Thumb Up") { est.video = est.video === "deslizando" ? "parado" : "deslizando"; desenharQuadros(); limparSaida(); est.k = 0; aplicar(); aviso(`Vídeo: mão ${est.video}`); }
+    else if (classe === "Thumb Down") { est.filtro = est.filtro === "3d" ? "2d" : "3d"; criarFiltro(); limparSaida(); est.k = 0; aplicar(); aviso(`Filtro ${est.filtro.toUpperCase()}`); }
+    else return;
+    acenderBotao("cnn1", classe);
+  };
+  aplicar();
+  item.passo = t => {
+    if (est.auto && t - est.tempo > 220) { est.tempo = t; mudar(1); }
+    const ang = Math.sin(t / 4500) * 0.25;
+    item.camera.position.set(4.2 + Math.sin(ang) * 8.6, 3.2, Math.cos(ang) * 8.6); item.camera.lookAt(4.2, -0.1, 0);
+  };
+}
+
+// Slide 2: a rede real, bloco a bloco. Números calculados da arquitetura CNN3D de src/modelos.py.
+function montarCena2() {
+  const item = novaCena($("cena2"), [8.9, 2.8, 10.2], [8.9, 0.1, 0]);
+  const conv = (e, s) => e * s * 27 + s * s * 27 + 4 * s;  // duas convoluções 3x3x3 sem viés + duas normalizações
+  const etapas = [
+    { nome: "Entrada", canais: 3, T: 16, lado: 96, cor: 0x94a3b8, texto: "O vídeo que chega: 16 quadros de 96×96 pixels, em 3 cores. Ainda não há nada aprendido aqui." },
+    { nome: "Bloco 1", canais: 32, T: 16, lado: 48, cor: 0xc4b5fd, de: [3, 16, 96], texto: "32 filtros pequenos olham trechos de 3 quadros. Costumam aprender bordas, cores e o começo de um movimento. O pooling reduz a imagem pela metade." },
+    { nome: "Bloco 2", canais: 64, T: 8, lado: 24, cor: 0xa78bfa, de: [32, 16, 48], texto: "Combina o que o bloco 1 achou: partes da mão e pequenos deslocamentos. A partir daqui, o tempo também é reduzido pela metade." },
+    { nome: "Bloco 3", canais: 128, T: 4, lado: 12, cor: 0x8b5cf6, de: [64, 8, 24], texto: "Cada número já resume uma região grande do vídeo: formas da mão em movimento." },
+    { nome: "Bloco 4", canais: 256, T: 2, lado: 6, cor: 0x7c3aed, de: [128, 4, 12], texto: "256 filtros, cada um ligado a um padrão do gesto inteiro. Restam só 2 instantes de 6×6 posições." },
+    { nome: "Média e decisão", canais: 256, T: 1, lado: 1, cor: 0xec4899, texto: "A média junta tudo em 256 números, e uma camada final transforma isso na probabilidade de cada um dos 27 gestos." },
+  ];
+  const caixas = []; let x = 0;
+  etapas.slice(0, 5).forEach((e, i) => {
+    const comp = 0.3 + 0.12 * e.T, alt = 0.7 + 2.3 * Math.sqrt(e.lado / 96), larg = 0.35 + 0.28 * Math.log2(e.canais);
+    x += comp / 2;
+    const m = new THREE.Mesh(new THREE.BoxGeometry(comp, alt, larg), new THREE.MeshStandardMaterial({ color: e.cor, transparent: true, opacity: 0.8, emissive: 0x000000 }));
+    m.position.set(x, 0, 0); m.add(new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), new THREE.LineBasicMaterial({ color: 0x4c1d95, transparent: true, opacity: 0.5 })));
+    item.cena.add(m); caixas.push(m);
+    const r1 = texto3d(e.nome, "#1e293b", 1.15); r1.position.set(x, alt / 2 + 0.55, 0); item.cena.add(r1);
+    const r2 = texto3d(`${e.canais} ${i ? "filtros" : "cores"} · ${e.T}×${e.lado}×${e.lado}`, "#64748b", 1.0); r2.position.set(x, -alt / 2 - 0.5, 0); item.cena.add(r2);
+    x += comp / 2 + 1.25;
+  });
+  const media = new THREE.Mesh(new THREE.SphereGeometry(0.32, 24, 16), new THREE.MeshStandardMaterial({ color: 0xec4899, emissive: 0x000000 }));
+  media.position.set(x - 0.4, 0, 0); item.cena.add(media); caixas.push(media);
+  const rm = texto3d("média · 256", "#be185d", 0.95); rm.position.set(x - 0.4, -0.85, 0); item.cena.add(rm);
+  x += 0.8;
+  const barras3d = [], vencedora = 9, inicioBarras = x;
+  for (let j = 0; j < 27; j++) {
+    const b = new THREE.Mesh(new THREE.BoxGeometry(0.15, 1, 0.15), new THREE.MeshStandardMaterial({ color: j === vencedora ? 0x0ea5a4 : 0xcbd5e1 }));
+    b.position.set(x + j * 0.19, -0.9, 0); b.scale.y = 0.05; item.cena.add(b); barras3d.push(b);
+  }
+  const rb = texto3d("27 gestos", "#0f766e", 1.05); rb.position.set(x + 2.5, -1.45, 0); item.cena.add(rb);
+  const pulso = new THREE.Mesh(new THREE.SphereGeometry(0.16, 20, 14), new THREE.MeshBasicMaterial({ color: 0xf97316 }));
+  item.cena.add(pulso);
+  const xs = caixas.map(c => c.position.x).concat(inicioBarras + 2.5);
+  const est = { foco: -1, auto: true, inicioPulso: 0, cam: new THREE.Vector3(8.9, 2.8, 10.2), alvo: new THREE.Vector3(8.9, 0.1, 0) };
+  const fmtN = n => n.toLocaleString("pt-BR");
+  function painel() {
+    if (est.foco < 0) {
+      $("e2modo").textContent = `Visão geral · ${est.auto ? "um gesto passando pela rede" : "pausado"}`;
+      $("e2titulo").textContent = "A CNN 3D do modelo: 4 blocos e uma decisão";
+      $("e2texto").innerHTML = `No total, <b>${fmtN(3522747)}</b> parâmetros, todos aprendidos do zero. Deslize para visitar cada bloco.`;
+      return;
+    }
+    const e = etapas[est.foco];
+    $("e2modo").textContent = `Etapa ${est.foco + 1} de ${etapas.length}`;
+    let titulo = e.nome, detalhe = "";
+    if (e.de) titulo += ` · ${fmtN(conv(e.de[0], e.canais))} parâmetros`, detalhe = `<br><span class="nota">${e.de[1]}×${e.de[2]}×${e.de[2]} com ${e.de[0]} canais → ${e.T}×${e.lado}×${e.lado} com ${e.canais} canais</span>`;
+    if (est.foco === 5) titulo += ` · ${fmtN(256 * 27 + 27)} parâmetros`;
+    $("e2titulo").textContent = titulo; $("e2texto").innerHTML = e.texto + detalhe;
+  }
+  INTERATIVOS.cnn2 = classe => {
+    if (classe === "Swiping Right") est.foco = Math.min(etapas.length - 1, est.foco + 1);
+    else if (classe === "Swiping Left") est.foco = Math.max(-1, est.foco - 1);
+    else if (classe === "Thumb Up") { est.foco = -1; est.auto = true; est.inicioPulso = performance.now(); aviso("Passando um gesto pela rede"); }
+    else if (classe === "Stop Sign") { est.auto = !est.auto; aviso(est.auto ? "▶ Continuando" : "⏸ Pausado"); }
+    else return;
+    painel(); acenderBotao("cnn2", classe);
+  };
+  painel();
+  item.passo = t => {
+    const CICLO = 5200, f = est.auto ? ((t - est.inicioPulso) % CICLO) / CICLO : 0.999;
+    const trecho = f * 0.8 * (caixas.length - 1), i = Math.min(caixas.length - 2, Math.floor(trecho)), r = trecho - i;
+    pulso.visible = est.auto && f < 0.8;
+    pulso.position.set(xs[i] + (xs[i + 1] - xs[i]) * r, Math.sin(r * Math.PI) * 0.35, 0);
+    caixas.forEach((c, j) => {
+      const perto = est.foco >= 0 ? (j === est.foco ? 1 : 0) : est.auto ? Math.max(0, 1 - Math.abs(trecho - j) * 1.6) : 0;
+      c.material.emissive.setRGB(0.35 * perto, 0.12 * perto, 0.02 * perto);
+      if (c.material.opacity !== undefined && c !== media) c.material.opacity = est.foco >= 0 && j !== est.foco ? 0.35 : 0.8;
+    });
+    const crescer = est.foco === 5 ? 1 : est.auto ? Math.max(0, Math.min(1, (f - 0.78) / 0.12)) : 0;
+    barras3d.forEach((b, j) => { const alvo = j === vencedora ? 2.6 : 0.08 + 0.35 * ((j * 37) % 11) / 11; b.scale.y = 0.05 + (alvo - 0.05) * crescer; b.position.y = -0.9 + b.scale.y / 2; });
+    // A câmera vai até o bloco escolhido, ou mostra a rede inteira.
+    const destinoX = est.foco < 0 ? 8.9 : est.foco === 5 ? inicioBarras + 1.2 : caixas[est.foco].position.x;
+    const dist = est.foco < 0 ? 10.2 : 5.2, ang = Math.sin(t / 5000) * (est.foco < 0 ? 0.22 : 0.35);
+    est.alvo.lerp(new THREE.Vector3(destinoX, 0.1, 0), 0.06);
+    est.cam.lerp(new THREE.Vector3(destinoX + Math.sin(ang) * dist, est.foco < 0 ? 2.8 : 1.8, Math.cos(ang) * dist), 0.06);
+    item.camera.position.copy(est.cam); item.camera.lookAt(est.alvo);
+  };
+}
+if (typeof THREE !== "undefined") {
+  try { montarCena1(); montarCena2(); } catch (erro) { console.warn("Cenas 3D indisponíveis:", erro); }
+  const laco3d = t => {
+    requestAnimationFrame(laco3d);
+    for (const item of CENAS3D) {
+      if (!item.canvas.closest(".slide").classList.contains("ativa")) continue;
+      if (item.canvas.width !== Math.round(item.canvas.clientWidth * item.renderer.getPixelRatio())) ajustarCena(item);
+      item.passo(t); item.renderer.render(item.cena, item.camera);
+    }
+  };
+  requestAnimationFrame(laco3d);
+}
+document.querySelectorAll(".controles button").forEach(b => b.onclick = () => {
+  const f = INTERATIVOS[b.closest(".slide").dataset.interativo];
+  if (f) f(b.dataset.acao);
+  b.blur();
+});
+
 // ---------- Navegação, trava e demos ----------
 const slides = [...document.querySelectorAll(".slide")];
 // Cada slide herda a parte da divisória anterior; o marcador mostra em que passo do treino estamos.
@@ -783,7 +1063,7 @@ function mostrar(n) {
   atual = n; history.replaceState(null, "", "#" + (n + 1));
   $("numSlide").textContent = `${n + 1} / ${slides.length}`;
   $("progresso").firstElementChild.style.width = ((n + 1) / slides.length * 100) + "%";
-  $("trava").style.visibility = s.dataset.demo ? "hidden" : "visible";
+  $("trava").style.visibility = s.dataset.demo || s.dataset.interativo ? "hidden" : "visible";
   // Nas demos, a câmera já aparece grande: a miniatura sai e o vídeo dela é desligado.
   $("mini").classList.toggle("oculto", !!s.dataset.demo);
   if (s.dataset.demo) $("miniVideo").removeAttribute("src"); else if (!$("miniVideo").getAttribute("src")) $("miniVideo").src = "/video";
@@ -799,6 +1079,13 @@ function repassar(e) { const f = quadroDemo(); if (f && f.contentWindow) f.conte
 
 function receberComando(e) {
   const classe = e.classe || e.comando, s = slides[atual], demo = s.dataset.demo;
+  if (s.dataset.interativo) {
+    if (e.repeticao) return;
+    if (classe === "Rolling Hand Forward") ir(1);
+    else if (classe === "Rolling Hand Backward") ir(-1);
+    else if (INTERATIVOS[s.dataset.interativo]) INTERATIVOS[s.dataset.interativo](classe);
+    return;
+  }
   if (demo) {
     // Nas demos, os gestos são da demo; rolar a mão (que nenhuma demo usa) troca o slide.
     if (classe === "Rolling Hand Forward" && !e.repeticao) { ir(1); return; }
