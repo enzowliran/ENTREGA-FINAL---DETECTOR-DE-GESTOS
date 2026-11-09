@@ -1,0 +1,10 @@
+{
+  "videos_treino": 118562,
+  "videos_validacao": 14787,
+  "videos_teste": 14743,
+  "videos_total": 148092,
+  "classes": 27,
+  "frames": 5279581,
+  "gigabytes": 27.1,
+  "fonte": "calculado de data/Jester (rótulos e índice dos frames)"
+}

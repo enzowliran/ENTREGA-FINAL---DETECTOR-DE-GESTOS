@@ -3,460 +3,710 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gestos no Carro</title>
+<title>Gestos em Tempo Real</title>
 <style>
-  :root {
-    --fundo: #fbfaf7; --superficie: #ffffff; --tinta: #16191c; --apoio: #5a5f64; --suave: #8b9095; --linha: #e4e2dc;
-    --azul: #2a78d6; --laranja: #eb6834; --verde: #1baf7a; --verde-tinta: #0d7a54; --vermelho: #d94841;
-  }
+  :root { --fundo: #eef1f4; --palco: #f8fafb; --cartao: #ffffff; --tinta: #13232e; --suave: #5a6b77; --fraco: #93a2ad; --linha: #dde4ea;
+          --acento: #0b8a7f; --acento-claro: #d9f1ee; --azul: #2563eb; --azul-claro: #dfe9fd; --alerta: #d9480f; --alerta-claro: #fde6dc;
+          --ouro: #d99a1e; --ok: #2b8a3e; }
   * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; background: #e9e7e1; overflow: hidden; }
-  body { font-family: "Segoe UI", system-ui, sans-serif; color: var(--tinta); }
-  #palco { position: absolute; left: 50%; top: 50%; width: 1280px; height: 720px; transform-origin: center; background: var(--fundo); overflow: hidden; }
-  .slide { position: absolute; inset: 0; padding: 54px 72px 48px; display: none; flex-direction: column; }
-  .slide.ativo { display: flex; }
-  h1 { font-size: 76px; line-height: 1.04; margin: 0; font-weight: 700; }
-  h2 { font-size: 46px; line-height: 1.1; margin: 0 0 22px; font-weight: 700; }
-  .sub { font-size: 25px; color: var(--apoio); margin: 0; line-height: 1.35; }
-  .centro { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
-  .numero { font-size: 104px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
-  .pequeno { font-size: 54px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
-  .rot { font-size: 22px; color: var(--apoio); margin-top: 8px; line-height: 1.25; }
-  .verde { color: var(--verde-tinta); } .laranja { color: var(--laranja); } .azul { color: var(--azul); } .vermelho { color: var(--vermelho); }
-  .duas { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; width: 100%; }
-  svg { display: block; max-width: 100%; }
-  svg text { font-family: "Segoe UI", system-ui, sans-serif; }
-  .nota { position: absolute; left: 72px; bottom: 26px; font-size: 16px; color: var(--suave); max-width: 1000px; }
-  #cameraGrande { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #dedcd5; border-radius: 12px; display: block; transform: none; }
-  #gestoAtual { font-size: 52px; font-weight: 700; line-height: 1.1; min-height: 120px; }
-  #barra { position: absolute; left: 0; bottom: 0; height: 6px; background: var(--verde); transition: width .25s; z-index: 2; }
-  #pagina { position: absolute; right: 26px; bottom: 16px; color: var(--suave); font-size: 15px; font-variant-numeric: tabular-nums; }
-  #ponto { position: absolute; right: 78px; bottom: 21px; width: 9px; height: 9px; border-radius: 50%; background: #c9c7c0; }
-  #ponto.ok { background: var(--verde); }
-  #aviso { position: absolute; left: 50%; top: 20px; transform: translate(-50%, -90px); background: var(--tinta); color: #fff; padding: 11px 26px; border-radius: 999px; font-size: 21px; font-weight: 600; transition: transform .18s; z-index: 3; white-space: nowrap; }
-  #aviso.ver { transform: translate(-50%, 0); }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--fundo); color: var(--tinta); font-family: "Segoe UI", system-ui, sans-serif; }
+  #palco { position: absolute; left: 50%; top: 50%; width: 1600px; height: 900px; transform-origin: 50% 50%; background: var(--palco); box-shadow: 0 10px 40px rgba(20,40,60,.12); overflow: hidden; }
 
-  .entra { opacity: 0; }
-  .ativo .entra { animation: entra .55s ease-out forwards; }
-  .ativo .d1 { animation-delay: .15s; } .ativo .d2 { animation-delay: .35s; } .ativo .d3 { animation-delay: .55s; }
-  .ativo .d4 { animation-delay: .75s; } .ativo .d5 { animation-delay: .95s; } .ativo .d6 { animation-delay: 1.15s; }
-  @keyframes entra { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-  .traco { stroke-dasharray: 1; stroke-dashoffset: 1; }
-  .ativo .traco { animation: traco 1.3s ease-out forwards; }
-  @keyframes traco { to { stroke-dashoffset: 0; } }
-  .ativo .pulso { animation: pulso 1.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
-  @keyframes pulso { 50% { transform: scale(1.22); opacity: .72; } }
-  .ativo .arrastar { animation: arrastar 2.4s ease-in-out infinite; }
-  @keyframes arrastar { 0%, 100% { transform: translateX(-70px); } 50% { transform: translateX(70px); } }
-  .ativo .carro { animation: carro 3.4s linear infinite; }
-  @keyframes carro { from { transform: translateX(-180px); } to { transform: translateX(1110px); } }
-  .ativo .asfalto { animation: asfalto .5s linear infinite; }
-  @keyframes asfalto { to { stroke-dashoffset: -80; } }
-  .ativo .fluxo { animation: fluxo 1s linear infinite; }
-  @keyframes fluxo { to { stroke-dashoffset: -24; } }
-  .ativo .barra-distancia { animation: distancia 3.4s linear infinite; transform-origin: left center; transform-box: fill-box; }
-  @keyframes distancia { from { transform: scaleX(0); } 90%, to { transform: scaleX(1); } }
-  .ativo .pisca { animation: pisca 2.4s ease-in-out infinite; }
-  @keyframes pisca { 0%, 55%, 100% { opacity: .18; } 70%, 85% { opacity: 1; } }
-  .ponto-mapa { opacity: 0; }
-  .ativo .ponto-mapa { animation: aparece .3s forwards; }
-  @keyframes aparece { to { opacity: 1; } }
-  @media (prefers-reduced-motion: reduce) {
-    .ativo .entra, .ativo .traco, .ativo .ponto-mapa { animation-duration: .01s; animation-delay: 0s !important; }
-    .ativo .pulso, .ativo .arrastar, .ativo .carro, .ativo .asfalto, .ativo .fluxo, .ativo .barra-distancia, .ativo .pisca { animation: none; }
-  }
+  /* Slides e animação de entrada */
+  .slide { position: absolute; inset: 0; padding: 70px 90px 90px; opacity: 0; visibility: hidden; transform: translateX(40px); transition: opacity .5s ease, transform .6s cubic-bezier(.2,.7,.2,1), visibility .5s; }
+  .slide:not(.demo) { display: flex; flex-direction: column; justify-content: center; }
+  .slide.antes { transform: translateX(-40px); }
+  .slide.ativa { opacity: 1; visibility: visible; transform: none; }
+  .an { opacity: 0; transform: translateY(16px); transition: opacity .55s ease, transform .6s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--d, 0) * 110ms + 150ms); }
+  .slide.ativa .an { opacity: 1; transform: none; }
+  .kicker { font-size: 17px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--acento); margin: 0 0 10px; }
+  h1 { font-size: 76px; line-height: 1.04; margin: 0; letter-spacing: -.02em; }
+  h2 { font-size: 46px; line-height: 1.12; margin: 0 0 26px; letter-spacing: -.015em; }
+  p.lead { font-size: 25px; line-height: 1.45; color: var(--suave); margin: 0; max-width: 980px; }
+  .grade { display: grid; gap: 28px; }
+  .cartao { background: var(--cartao); border: 1px solid var(--linha); border-radius: 18px; padding: 26px 28px; box-shadow: 0 2px 10px rgba(20,40,60,.04); }
+  .cartao h3 { margin: 0 0 8px; font-size: 24px; }
+  .cartao p { margin: 0; font-size: 19px; line-height: 1.45; color: var(--suave); }
+  .numero { font-size: 64px; font-weight: 800; letter-spacing: -.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .numero small { font-size: 26px; font-weight: 700; color: var(--suave); margin-left: 4px; }
+  .rotulo { font-size: 16px; color: var(--suave); margin-top: 8px; line-height: 1.35; }
+  .nota { font-size: 16px; color: var(--fraco); line-height: 1.4; }
+  .destaque { color: var(--acento); } .ruim { color: var(--alerta); } .bom { color: var(--ok); }
+  .chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: var(--cartao); border: 1px solid var(--linha); font-size: 16px; color: var(--suave); }
+  .chip b { color: var(--tinta); }
+
+  /* Rodapé */
+  #rodape { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; gap: 16px; padding: 0 90px; z-index: 5; pointer-events: none; }
+  #progresso { flex: 1; height: 4px; border-radius: 2px; background: var(--linha); overflow: hidden; }
+  #progresso div { height: 100%; background: var(--acento); transition: width .5s ease; }
+  #numSlide { font-size: 15px; color: var(--fraco); font-variant-numeric: tabular-nums; min-width: 60px; text-align: right; }
+  .pilula { font-size: 15px; font-weight: 600; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--linha); background: var(--cartao); color: var(--suave); white-space: nowrap; }
+  #trava.travada { color: var(--alerta); border-color: var(--alerta); background: var(--alerta-claro); }
+  #gestoPilula.comando { color: var(--acento); border-color: var(--acento); }
+  #aviso { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%) scale(.96); background: rgba(19,35,46,.88); color: #fff; font-size: 30px; font-weight: 700;
+           padding: 16px 30px; border-radius: 16px; opacity: 0; transition: opacity .2s, transform .2s; z-index: 6; pointer-events: none; }
+  #aviso.ver { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+  /* Capa */
+  #capa { display: flex; flex-direction: column; justify-content: center; }
+  #capa .faixa { width: 120px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--acento), var(--azul)); margin: 34px 0; background-size: 200% 100%; animation: faixa 4s linear infinite; }
+  @keyframes faixa { to { background-position: -200% 0; } }
+  #capa .mao { position: absolute; right: 120px; top: 50%; transform: translateY(-50%); }
+
+  /* Fluxo de movimentos na ideia */
+  .fita { position: relative; height: 150px; overflow: hidden; border-radius: 18px; background: var(--cartao); border: 1px solid var(--linha); }
+  .fita .trilho { position: absolute; top: 28px; left: 0; display: flex; gap: 18px; animation: fita 22s linear infinite; }
+  .fita .mov { flex: none; width: 210px; height: 94px; border-radius: 14px; background: #f1f4f6; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 17px; color: var(--suave); gap: 6px; }
+  .fita .mov b { font-size: 30px; }
+  .fita .mov.gesto { background: var(--acento-claro); color: var(--acento); font-weight: 700; }
+  .fita .mira { position: absolute; left: 50%; top: 14px; bottom: 14px; width: 232px; transform: translateX(-50%); border: 3px dashed var(--fraco); border-radius: 18px; }
+  @keyframes fita { to { transform: translateX(-50%); } }
+
+  /* Pipeline */
+  .pipeline { display: flex; align-items: stretch; gap: 0; margin-top: 30px; }
+  .etapa { flex: 1; background: var(--cartao); border: 1px solid var(--linha); border-radius: 18px; padding: 24px 20px; text-align: center; }
+  .etapa .icone { font-size: 46px; height: 60px; }
+  .etapa h3 { font-size: 22px; margin: 10px 0 6px; }
+  .etapa p { font-size: 16px; color: var(--suave); margin: 0; line-height: 1.4; }
+  .seta { width: 60px; display: flex; align-items: center; justify-content: center; position: relative; }
+  .seta::before { content: ""; position: absolute; left: 8px; right: 8px; top: 50%; height: 3px; background: var(--linha); }
+  .seta i { position: absolute; top: calc(50% - 6px); left: 8px; width: 12px; height: 12px; border-radius: 50%; background: var(--acento); animation: pulso 1.6s linear infinite; animation-delay: var(--atraso, 0s); }
+  @keyframes pulso { from { left: 4px; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { left: 46px; opacity: 0; } }
+
+  /* Linha do tempo do passo a passo */
+  .linha-tempo { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; margin-top: 40px; position: relative; }
+  .linha-tempo::before { content: ""; position: absolute; left: 4%; right: 4%; top: 36px; height: 4px; background: var(--linha); }
+  .passo { position: relative; text-align: center; }
+  .passo .bola { width: 72px; height: 72px; margin: 0 auto 16px; border-radius: 50%; background: var(--cartao); border: 4px solid var(--acento); display: grid; place-items: center; font-size: 28px; font-weight: 800; color: var(--acento); position: relative; z-index: 1; }
+  .passo h3 { font-size: 21px; margin: 0 0 6px; }
+  .passo p { font-size: 16px; color: var(--suave); margin: 0; line-height: 1.4; }
+
+  /* Gráficos */
+  svg text { font-family: "Segoe UI", system-ui, sans-serif; paint-order: stroke; stroke: var(--cartao); stroke-width: 5px; stroke-linejoin: round; }
+  .barra { transform-box: fill-box; transform-origin: 50% 100%; transform: scaleY(0); transition: transform .9s cubic-bezier(.2,.7,.2,1); }
+  .barraH { transform-box: fill-box; transform-origin: 0 50%; transform: scaleX(0); transition: transform .9s cubic-bezier(.2,.7,.2,1); }
+  .slide.ativa .barra { transform: scaleY(1); } .slide.ativa .barraH { transform: scaleX(1); }
+  .traco { transition: stroke-dashoffset 1.8s ease; }
+  .ponto { opacity: 0; transition: opacity .4s; } .slide.ativa .ponto { opacity: 1; }
+  .celula { opacity: 0; transition: opacity .5s; stroke: none; } .slide.ativa .celula { opacity: 1; }
+
+  /* Demos ao vivo */
+  .demo { padding: 26px 40px 70px; display: flex; flex-direction: column; }
+  .demo .topo { display: flex; align-items: center; gap: 18px; margin-bottom: 14px; }
+  .demo .topo h2 { margin: 0; font-size: 34px; }
+  .demo .topo .espaco { flex: 1; }
+  .demo .quadro { flex: 1; border-radius: 16px; overflow: hidden; border: 1px solid var(--linha); background: #0b1014; position: relative; }
+  .demo iframe { width: 100%; height: 100%; border: 0; display: block; background: #0b1014; }
+  .vivo { display: inline-flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; color: var(--alerta); letter-spacing: .1em; }
+  .vivo::before { content: ""; width: 11px; height: 11px; border-radius: 50%; background: var(--alerta); animation: pisca 1.2s ease-in-out infinite; }
+  @keyframes pisca { 50% { opacity: .25; } }
+  #testeVivo { display: grid; grid-template-columns: 1fr 440px; gap: 24px; flex: 1; min-height: 0; }
+  #testeVivo .camera { border-radius: 16px; overflow: hidden; background: #0b1014; display: grid; place-items: center; }
+  #testeVivo .camera img { width: 100%; height: 100%; object-fit: contain; }
+  #gestoGrande { font-size: 44px; font-weight: 800; line-height: 1.1; min-height: 100px; }
+  #gestoGrande.comando { color: var(--acento); }
+  .barraConf { height: 12px; background: var(--linha); border-radius: 6px; overflow: hidden; margin: 14px 0 6px; }
+  .barraConf div { height: 100%; width: 0; background: var(--acento); transition: width .15s; }
+  #listaDisparos { list-style: none; margin: 10px 0 0; padding: 0; }
+  #listaDisparos li { display: flex; justify-content: space-between; padding: 10px 14px; border-radius: 10px; font-size: 19px; background: #f3f6f8; margin-bottom: 8px; animation: entra .4s ease; }
+  #listaDisparos li span { color: var(--fraco); font-size: 15px; }
+  @keyframes entra { from { opacity: 0; transform: translateY(-8px); } }
+
+  /* Impacto */
+  .impacto { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-top: 10px; }
+  .problema { border-left: 6px solid var(--alerta); }
+  .solucao { border-left: 6px solid var(--acento); }
+  .lista { margin: 12px 0 0; padding: 0; list-style: none; }
+  .lista li { font-size: 23px; line-height: 1.45; color: var(--suave); padding: 8px 0 8px 34px; position: relative; }
+  .lista li::before { content: attr(data-i); position: absolute; left: 0; top: 8px; font-size: 20px; }
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <defs>
-    <symbol id="mao" viewBox="0 0 100 120">
-      <g fill="currentColor">
-        <rect x="20" y="52" width="60" height="58" rx="24"/>
-        <rect x="22" y="14" width="13" height="58" rx="6.5"/>
-        <rect x="37" y="4" width="13" height="66" rx="6.5"/>
-        <rect x="52" y="8" width="13" height="62" rx="6.5"/>
-        <rect x="67" y="18" width="12" height="54" rx="6"/>
-        <rect x="-2" y="58" width="36" height="14" rx="7" transform="rotate(-38 16 65)"/>
-      </g>
-    </symbol>
-    <symbol id="volante" viewBox="0 0 200 200">
-      <circle cx="100" cy="100" r="86" fill="none" stroke="currentColor" stroke-width="16"/>
-      <circle cx="100" cy="100" r="22" fill="currentColor"/>
-      <path d="M82 92 L22 74 M118 92 L178 74 M100 122 L100 182" stroke="currentColor" stroke-width="14" stroke-linecap="round"/>
-    </symbol>
-    <symbol id="camera" viewBox="0 0 120 90">
-      <rect x="4" y="18" width="84" height="56" rx="10" fill="currentColor"/>
-      <path d="M88 40 L116 24 V68 L88 52 Z" fill="currentColor"/>
-      <circle cx="46" cy="46" r="15" fill="#fbfaf7"/>
-    </symbol>
-    <symbol id="carro" viewBox="0 0 170 72">
-      <path d="M8 50 Q6 32 28 30 L52 10 Q58 5 68 5 H108 Q118 5 126 12 L144 30 Q164 32 164 50 V54 H8 Z" fill="currentColor"/>
-      <path d="M58 13 H84 V29 H42 Z M92 13 H112 Q116 13 120 17 L132 29 H92 Z" fill="#fbfaf7"/>
-      <circle cx="44" cy="54" r="15" fill="#16191c"/><circle cx="44" cy="54" r="6" fill="#fbfaf7"/>
-      <circle cx="128" cy="54" r="15" fill="#16191c"/><circle cx="128" cy="54" r="6" fill="#fbfaf7"/>
-    </symbol>
-  </defs>
-</svg>
-
 <div id="palco">
-  <div id="aviso" role="status" aria-live="polite"></div>
 
   <!-- 1. Capa -->
-  <section class="slide" style="justify-content:center">
-    <div class="duas" style="grid-template-columns:1.25fr 1fr">
-      <div>
-        <h1 class="entra">Comandos por gesto, olhos na estrada</h1>
-        <p class="sub entra d2" style="margin-top:22px">Deep Learning · Insper · Apresentação intermediária</p>
-        <p class="sub entra d3 verde" style="margin-top:14px;font-weight:600">Estes slides são passados com gestos</p>
-      </div>
-      <svg viewBox="0 0 460 420" role="img" aria-label="Mão se movendo em frente a um volante" class="entra d1">
-        <use href="#volante" x="70" y="60" width="320" height="320" style="color:#d9d6ce"/>
-        <g class="arrastar" style="color:var(--verde)"><use href="#mao" x="160" y="110" width="140" height="168"/></g>
-        <path d="M100 340 H360" stroke="#8b9095" stroke-width="3" stroke-dasharray="6 9"/>
-        <path d="M108 328 L92 340 L108 352 M352 328 L368 340 L352 352" fill="none" stroke="#8b9095" stroke-width="3" stroke-linecap="round"/>
-      </svg>
+  <section class="slide" id="capa" data-titulo="Capa">
+    <p class="kicker an">Trabalho final de Deep Learning</p>
+    <h1 class="an" style="--d:1">Gestos que comandam<br>sem disparar sozinhos</h1>
+    <div class="faixa an" style="--d:2"></div>
+    <p class="lead an" style="--d:3">Uma rede treinada do zero reconhece gestos em vídeo, em tempo real. Da primeira tentativa às aplicações: jogo, carro e sala cirúrgica.</p>
+    <p class="nota an" style="--d:4;margin-top:30px;font-size:19px" id="grupo"></p>
+    <svg class="mao an" style="--d:3" width="300" height="300" viewBox="0 0 300 300" aria-hidden="true">
+      <circle cx="150" cy="150" r="140" fill="var(--acento-claro)"/>
+      <g fill="none" stroke="var(--acento)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M110 205 V120 a14 14 0 0 1 28 0 V150 M138 150 V100 a14 14 0 0 1 28 0 V150 M166 150 V108 a14 14 0 0 1 28 0 V158 M194 158 V130 a14 14 0 0 1 28 0 V200 q0 50 -50 55 h-20 q-30 0 -48 -30 l-26 -42 a14 14 0 0 1 24 -14 l10 14"/>
+      </g>
+      <g stroke="var(--azul)" stroke-width="6" stroke-linecap="round"><path d="M70 90 q-18 20 0 40"><animate attributeName="opacity" values="0;1;0" dur="1.8s" repeatCount="indefinite"/></path><path d="M48 75 q-30 35 0 70"><animate attributeName="opacity" values="0;1;0" dur="1.8s" begin=".3s" repeatCount="indefinite"/></path></g>
+    </svg>
+  </section>
+
+  <!-- 2. A ideia -->
+  <section class="slide" data-titulo="A ideia">
+    <p class="kicker an">A ideia</p>
+    <h2 class="an" style="--d:1">Comandar sem tocar e sem olhar para a tela</h2>
+    <p class="lead an" style="--d:2">A câmera vê um fluxo contínuo de movimentos. Quase todos são do dia a dia; só alguns são comandos. Um sistema assim só serve se <b>quase nunca disparar sozinho</b>.</p>
+    <div class="fita an" style="--d:3;margin-top:40px">
+      <div class="mira"></div>
+      <div class="trilho" id="trilho"></div>
+    </div>
+    <div class="grade an" style="--d:4;grid-template-columns:repeat(3,1fr);margin-top:36px">
+      <div class="cartao"><h3>Métrica principal</h3><p><b class="destaque">Falsos disparos por minuto</b>, e não só a acurácia.</p></div>
+      <div class="cartao"><h3>Restrição</h3><p>Rede treinada <b>do zero</b>, sem pesos prontos de terceiros.</p></div>
+      <div class="cartao"><h3>Teste real</h3><p>Webcam comum, em <b>tempo real</b>, em três aplicações.</p></div>
     </div>
   </section>
 
-  <!-- 2. Problema -->
-  <section class="slide">
-    <h2 class="entra">Olhar para a tela custa dezenas de metros</h2>
-    <div class="centro"><div style="width:100%">
-      <div class="entra d1" style="display:flex;align-items:baseline;gap:18px;margin-bottom:6px"><span class="numero laranja">67 m</span><span class="sub">às cegas, em 3 s a 80 km/h</span></div>
-      <svg viewBox="0 0 1136 250" role="img" aria-label="Carro percorrendo a estrada enquanto o motorista olha para a tela" class="entra d2">
-        <rect x="0" y="60" width="1136" height="130" rx="8" fill="#e9e7e1"/>
-        <path class="asfalto" d="M0 125 H1136" stroke="#fff" stroke-width="7" stroke-dasharray="44 36"/>
-        <g class="carro" style="color:var(--azul)"><use href="#carro" x="0" y="74" width="170" height="72"/></g>
-        <rect class="barra-distancia" x="0" y="208" width="1136" height="10" rx="5" fill="var(--laranja)"/>
-        <text x="0" y="244" font-size="20" fill="#5a5f64">Tira os olhos</text>
-        <text x="1136" y="244" font-size="20" fill="#5a5f64" text-anchor="end">Volta a olhar</text>
-      </svg>
-    </div></div>
+  <!-- 3. Como funciona -->
+  <section class="slide" data-titulo="Como funciona">
+    <p class="kicker an">Como funciona</p>
+    <h2 class="an" style="--d:1">Da câmera ao comando, a cada 0,15 segundo</h2>
+    <div class="pipeline">
+      <div class="etapa an" style="--d:2"><div class="icone">📷</div><h3>Câmera</h3><p>Imagens a 12 por segundo</p></div>
+      <div class="seta an" style="--d:2"><i></i></div>
+      <div class="etapa an" style="--d:3"><div class="icone">🎞️</div><h3>Janela de vídeo</h3><p>16 quadros de 96×96 pixels</p></div>
+      <div class="seta an" style="--d:3"><i style="--atraso:.3s"></i></div>
+      <div class="etapa an" style="--d:4"><div class="icone">🧠</div><h3>CNN 3D</h3><p>3,52 milhões de parâmetros, treinada do zero</p></div>
+      <div class="seta an" style="--d:4"><i style="--atraso:.6s"></i></div>
+      <div class="etapa an" style="--d:5"><div class="icone">📊</div><h3>27 gestos</h3><p>Uma probabilidade para cada gesto</p></div>
+      <div class="seta an" style="--d:5"><i style="--atraso:.9s"></i></div>
+      <div class="etapa an" style="--d:6;border-color:var(--acento)"><div class="icone">🛡️</div><h3>Gatilho</h3><p>Confiança ≥ 0,7 em 3 janelas seguidas, e depois uma pausa</p></div>
+      <div class="seta an" style="--d:6"><i style="--atraso:1.2s"></i></div>
+      <div class="etapa an" style="--d:7;background:var(--acento-claro);border-color:var(--acento)"><div class="icone">✅</div><h3>Comando</h3><p>Próxima música, zoom, slide...</p></div>
+    </div>
+    <p class="lead an" style="--d:8;margin-top:44px;font-size:22px">A rede olha <b>movimento</b>, não uma foto: a convolução 3D percorre o espaço e o tempo ao mesmo tempo. O gatilho é a segunda defesa contra o disparo sem querer.</p>
   </section>
 
-  <!-- 3. Tese -->
-  <section class="slide">
-    <h2 class="entra">Importa menos acertar do que não disparar sozinho</h2>
-    <div class="centro"><svg viewBox="0 0 1136 400" role="img" aria-label="Linha do tempo em que um modelo dispara sozinho várias vezes e outro não" style="width:100%">
-      <g class="entra d1">
-        <text x="0" y="66" font-size="27" font-weight="700" fill="#d94841">Acerta muito, mas dispara sozinho</text>
-        <line x1="0" y1="130" x2="1136" y2="130" stroke="#e4e2dc" stroke-width="6" stroke-linecap="round"/>
-        <g fill="#2a78d6"><circle cx="160" cy="130" r="13"/><circle cx="690" cy="130" r="13"/></g>
-        <g fill="#d94841">
-          <circle class="pulso" cx="310" cy="130" r="17"/><circle class="pulso" cx="470" cy="130" r="17"/><circle class="pulso" cx="880" cy="130" r="17"/><circle class="pulso" cx="1050" cy="130" r="17"/>
-        </g>
-      </g>
-      <g class="entra d3">
-        <text x="0" y="246" font-size="27" font-weight="700" fill="#0d7a54">O que queremos</text>
-        <line x1="0" y1="310" x2="1136" y2="310" stroke="#e4e2dc" stroke-width="6" stroke-linecap="round"/>
-        <g fill="#2a78d6"><circle cx="160" cy="310" r="13"/><circle cx="690" cy="310" r="13"/></g>
-      </g>
-      <g class="entra d4" font-size="21" fill="#5a5f64">
-        <circle cx="10" cy="378" r="10" fill="#2a78d6"/><text x="30" y="385">Gesto de verdade</text>
-        <circle cx="270" cy="378" r="10" fill="#d94841"/><text x="290" y="385">Falso disparo</text>
-      </g>
-    </svg></div>
+  <!-- 4. Os dados -->
+  <section class="slide" data-titulo="Os dados">
+    <p class="kicker an">Os dados</p>
+    <h2 class="an" style="--d:1">Jester: vídeos curtos de pessoas fazendo gestos na webcam</h2>
+    <div class="grade" style="grid-template-columns:repeat(4,1fr);margin-top:20px">
+      <div class="cartao an" style="--d:2"><div class="numero" data-num="videos_total"></div><div class="rotulo">vídeos</div></div>
+      <div class="cartao an" style="--d:3"><div class="numero" data-num="classes"></div><div class="rotulo">classes de gesto, incluindo “sem gesto” e “outro movimento”</div></div>
+      <div class="cartao an" style="--d:4"><div class="numero" data-num="frames_mi"><small>mi</small></div><div class="rotulo">quadros de imagem</div></div>
+      <div class="cartao an" style="--d:5"><div class="numero" data-num="gigabytes"><small>GB</small></div><div class="rotulo">em disco</div></div>
+    </div>
+    <div class="cartao an" style="--d:6;margin-top:28px">
+      <h3>Divisão oficial, usada do começo ao fim</h3>
+      <svg id="graficoDivisao" width="1380" height="90"></svg>
+      <p class="nota" style="margin-top:6px">O teste só foi usado uma vez, no fim, para medir o modelo escolhido pela validação.</p>
+    </div>
   </section>
 
-  <!-- 4. Dados -->
-  <section class="slide">
-    <h2 class="entra">Muitos gestos genéricos, poucos no volante</h2>
-    <div class="centro"><div class="duas">
-      <div class="entra d1" style="text-align:center">
-        <svg viewBox="0 0 420 240" role="img" aria-label="Mão diante de uma webcam" style="height:220px;margin:0 auto">
-          <use href="#camera" x="20" y="72" width="140" height="105" style="color:var(--azul)"/>
-          <g class="arrastar" style="color:#c9c7c0"><use href="#mao" x="230" y="36" width="140" height="168"/></g>
-        </svg>
-        <div class="numero azul">148 mil</div><div class="rot">vídeos no <b>Jester</b>: mão diante da webcam</div>
+  <!-- 5. Passo a passo -->
+  <section class="slide" data-titulo="Passo a passo">
+    <p class="kicker an">Como chegamos lá</p>
+    <h2 class="an" style="--d:1">Seis passos, cada um respondendo a um problema do anterior</h2>
+    <div class="linha-tempo">
+      <div class="passo an" style="--d:2"><div class="bola">1</div><h3>Primeiros testes</h3><p>Qual arquitetura aprende rápido?</p></div>
+      <div class="passo an" style="--d:3"><div class="bola">2</div><h3>Não disparar</h3><p>Custo extra para disparos sem gesto</p></div>
+      <div class="passo an" style="--d:4"><div class="bola">3</div><h3>Mais dados</h3><p>Pequeno, médio e grande</p></div>
+      <div class="passo an" style="--d:5"><div class="bola">4</div><h3>Treino completo</h3><p>20 épocas em todo o Jester</p></div>
+      <div class="passo an" style="--d:6"><div class="bola">5</div><h3>Gatilho</h3><p>Trocar acerto por segurança</p></div>
+      <div class="passo an" style="--d:7"><div class="bola">6</div><h3>Gestos novos</h3><p>Dedos e punho, com fotos</p></div>
+    </div>
+  </section>
+
+  <!-- 6. Passo 1 -->
+  <section class="slide" data-titulo="Passo 1">
+    <p class="kicker an">Passo 1 · primeiros testes</p>
+    <h2 class="an" style="--d:1">Um teste curto para escolher a arquitetura</h2>
+    <div class="grade" style="grid-template-columns:1.25fr 1fr;align-items:center">
+      <div class="cartao an" style="--d:2"><svg id="graficoPequeno" width="760" height="420"></svg></div>
+      <div class="an" style="--d:3">
+        <p class="lead" id="textoPequeno" style="font-size:22px"></p>
+        <div class="cartao" style="margin-top:24px"><h3>Leitura honesta</h3><p>O transformer usou a mesma taxa de aprendizado da CNN, sem ajuste próprio, e a GRU foi interrompida. Não dá para dizer que eles são piores: só que a CNN 3D aprendeu bem nessas condições.</p></div>
       </div>
-      <div class="entra d2" style="text-align:center">
-        <svg viewBox="0 0 420 240" role="img" aria-label="Volante com um dedo em movimento" style="height:220px;margin:0 auto">
-          <use href="#volante" x="100" y="10" width="220" height="220" style="color:#c9c7c0"/>
-          <circle class="pulso" cx="120" cy="120" r="18" fill="var(--laranja)"/><circle cx="300" cy="120" r="18" fill="#c9c7c0"/>
-        </svg>
-        <div class="numero laranja">5.148</div><div class="rot">segmentos no <b>DriverMHG</b>: dedos no volante</div>
+    </div>
+  </section>
+
+  <!-- 7. Passo 2 -->
+  <section class="slide" data-titulo="Passo 2">
+    <p class="kicker an">Passo 2 · ensinar a não disparar</p>
+    <h2 class="an" style="--d:1">Punir o disparo sem gesto tem um preço</h2>
+    <p class="lead an" style="--d:2;font-size:22px">Somamos à perda um custo extra quando a rede aposta em um gesto num vídeo sem gesto. Quanto maior o custo, menos disparos falsos, mas também menos acertos.</p>
+    <div class="grade" style="grid-template-columns:1fr 1fr;margin-top:26px">
+      <div class="cartao an" style="--d:3"><h3>Acerto na validação</h3><svg id="graficoPenAcerto" width="600" height="330"></svg></div>
+      <div class="cartao an" style="--d:4"><h3>Vídeos sem gesto que disparam (limiar 0,6)</h3><svg id="graficoPenFalso" width="600" height="330"></svg></div>
+    </div>
+  </section>
+
+  <!-- 8. Passo 3 -->
+  <section class="slide" data-titulo="Passo 3">
+    <p class="kicker an">Passo 3 · mais dados</p>
+    <h2 class="an" style="--d:1">O que mais ajudou foi dar mais exemplos para a rede</h2>
+    <div class="grade" style="grid-template-columns:1fr 1fr;margin-top:10px">
+      <div class="cartao an" style="--d:2"><h3>Falsos disparos por minuto</h3><svg id="graficoEscalaFalso" width="600" height="360"></svg></div>
+      <div class="cartao an" style="--d:3"><h3>Gestos detectados</h3><svg id="graficoEscalaDet" width="600" height="360"></svg></div>
+    </div>
+    <p class="nota an" style="--d:4;margin-top:16px">Mesmo gatilho (0,7 e 3 janelas) e os mesmos 100 minutos de vídeos sem gesto colados em sequência, com 1.500 vídeos com gesto.</p>
+  </section>
+
+  <!-- 9. Passo 4 -->
+  <section class="slide" data-titulo="Passo 4">
+    <p class="kicker an">Passo 4 · treino completo</p>
+    <h2 class="an" style="--d:1">20 épocas em todo o Jester</h2>
+    <div class="grade" style="grid-template-columns:1.45fr 1fr;align-items:start">
+      <div class="cartao an" style="--d:2"><h3>Acerto por época</h3><svg id="graficoCurva" width="800" height="430"></svg></div>
+      <div class="grade" style="gap:22px">
+        <div class="cartao an" style="--d:3"><div class="numero destaque" data-num="teste_top1"><small>%</small></div><div class="rotulo">de acerto no <b>teste</b>, com vídeos nunca vistos (<span data-texto="teste_n"></span>)</div></div>
+        <div class="cartao an" style="--d:4"><div class="numero" data-num="teste_top5"><small>%</small></div><div class="rotulo">com o gesto certo entre as 5 primeiras apostas</div></div>
+        <div class="cartao an" style="--d:5"><div class="numero" data-num="minutos_epoca"><small>min</small></div><div class="rotulo">por época, numa GPU de notebook</div></div>
       </div>
-    </div></div>
+    </div>
   </section>
 
-  <!-- 5. Estratégia -->
-  <section class="slide">
-    <h2 class="entra">Aprender gestos, depois ajustar para o carro</h2>
-    <div class="centro"><svg viewBox="0 0 1136 400" role="img" aria-label="Três etapas: treino no Jester concluído, ajuste no DriverMHG e teste com pessoas novas" style="width:100%">
-      <path class="fluxo" d="M295 175 H420 M715 175 H840" stroke="#8b9095" stroke-width="6" stroke-dasharray="12 12"/>
-      <g class="entra d1">
-        <circle cx="150" cy="175" r="130" fill="#e3f4ed"/><g style="color:var(--verde-tinta)"><use href="#camera" x="85" y="110" width="130" height="98"/></g>
-        <text x="150" y="240" text-anchor="middle" font-size="24" font-weight="700" fill="#0d7a54">Feito</text>
-        <text x="150" y="350" text-anchor="middle" font-size="27" font-weight="700" fill="#16191c">Treino no Jester</text>
-        <text x="150" y="384" text-anchor="middle" font-size="21" fill="#5a5f64">do zero</text>
-      </g>
-      <g class="entra d3">
-        <circle cx="568" cy="175" r="130" fill="#fcebe2"/><g style="color:var(--laranja)"><use href="#volante" x="503" y="100" width="130" height="130"/></g>
-        <text x="568" y="350" text-anchor="middle" font-size="27" font-weight="700" fill="#16191c">Ajuste no DriverMHG</text>
-        <text x="568" y="384" text-anchor="middle" font-size="21" fill="#5a5f64">próximo passo</text>
-      </g>
-      <g class="entra d5">
-        <circle cx="986" cy="175" r="130" fill="#eceae4"/>
-        <g fill="#8b9095"><circle cx="986" cy="142" r="30"/><path d="M936 232 Q936 186 986 186 Q1036 186 1036 232 Z"/></g>
-        <text x="986" y="350" text-anchor="middle" font-size="27" font-weight="700" fill="#16191c">Teste</text>
-        <text x="986" y="384" text-anchor="middle" font-size="21" fill="#5a5f64">pessoas nunca vistas</text>
-      </g>
-    </svg></div>
-  </section>
-
-  <!-- 6. Modelo -->
-  <section class="slide">
-    <h2 class="entra">Uma CNN 3D própria, do zero</h2>
-    <div class="centro"><svg viewBox="0 0 1136 400" role="img" aria-label="Dezesseis frames entram em blocos convolucionais que encolhem até a resposta de 27 gestos" style="width:100%">
-      <g class="entra d1">
-        <g fill="#fff" stroke="#8b9095" stroke-width="2">
-          <rect x="40" y="90" width="120" height="120" rx="6"/><rect x="58" y="108" width="120" height="120" rx="6"/><rect x="76" y="126" width="120" height="120" rx="6"/>
-        </g>
-        <g style="color:var(--azul)"><use href="#mao" x="104" y="140" width="66" height="84"/></g>
-        <text x="118" y="310" text-anchor="middle" font-size="24" font-weight="700" fill="#16191c">16 frames</text>
-        <text x="118" y="342" text-anchor="middle" font-size="20" fill="#5a5f64">96 × 96</text>
-      </g>
-      <path class="fluxo" d="M212 180 H270" stroke="#8b9095" stroke-width="5" stroke-dasharray="10 10"/>
-      <g fill="#2a78d6">
-        <rect class="entra d2" x="285" y="60" width="62" height="240" rx="8" opacity=".35"/>
-        <rect class="entra d3" x="375" y="85" width="62" height="190" rx="8" opacity=".55"/>
-        <rect class="entra d4" x="465" y="115" width="62" height="130" rx="8" opacity=".75"/>
-        <rect class="entra d5" x="555" y="145" width="62" height="70" rx="8"/>
-      </g>
-      <text x="450" y="342" text-anchor="middle" font-size="24" font-weight="700" fill="#16191c" class="entra d5">4 blocos 3D</text>
-      <path class="fluxo" d="M635 180 H700" stroke="#8b9095" stroke-width="5" stroke-dasharray="10 10"/>
-      <g class="entra d6">
-        <rect x="716" y="80" width="400" height="200" rx="12" fill="#e3f4ed"/>
-        <text x="916" y="168" text-anchor="middle" font-size="58" font-weight="700" fill="#0d7a54">27 gestos</text>
-        <text x="916" y="214" text-anchor="middle" font-size="22" fill="#5a5f64">incluindo "sem gesto"</text>
-        <text x="916" y="342" text-anchor="middle" font-size="24" font-weight="700" fill="#16191c">3,5 milhões de parâmetros</text>
-      </g>
-    </svg></div>
-  </section>
-
-  <!-- 7. Resultado -->
-  <section class="slide">
-    <h2 class="entra">Do zero, a rede chegou a {{top1}} no teste</h2>
-    <div class="centro"><div class="duas" style="grid-template-columns:330px 1fr;gap:36px">
-      <div class="entra d1" style="text-align:center">
-        <svg viewBox="0 0 300 300" role="img" aria-label="{{top1}} de acerto no teste" style="width:290px;margin:0 auto">
-          <circle cx="150" cy="150" r="118" fill="none" stroke="#e4e2dc" stroke-width="26"/>
-          <circle id="rosca" class="traco" cx="150" cy="150" r="118" fill="none" stroke="var(--verde)" stroke-width="26" stroke-linecap="round" pathLength="1" transform="rotate(-90 150 150)"/>
-          <text x="150" y="168" text-anchor="middle" font-size="54" font-weight="700" fill="#16191c">{{top1}}</text>
-        </svg>
-        <div class="rot">{{n_teste}} vídeos nunca vistos</div>
+  <!-- 10. Passo 5 -->
+  <section class="slide" data-titulo="Passo 5">
+    <p class="kicker an">Passo 5 · o gatilho</p>
+    <h2 class="an" style="--d:1">Cada ponto é uma regra de disparo: escolhemos a segurança</h2>
+    <div class="grade" style="grid-template-columns:1.35fr 1fr;align-items:center">
+      <div class="cartao an" style="--d:2"><svg id="graficoGatilho" width="760" height="470"></svg></div>
+      <div class="grade" style="gap:22px">
+        <div class="cartao an" style="--d:3"><div class="numero destaque"><span data-texto="falsos_completo"></span><small>falsos</small></div><div class="rotulo">em <span data-texto="minutos_completo"></span> minutos de vídeos sem gesto: cerca de <b>1 a cada <span data-texto="intervalo_falso"></span> minutos</b></div></div>
+        <div class="cartao an" style="--d:4"><div class="numero"><span data-texto="det_completo"></span><small>%</small></div><div class="rotulo">dos <span data-texto="videos_completo"></span> gestos de validação detectados com a classe certa</div></div>
+        <p class="nota an" style="--d:5">Regra escolhida: confiança ≥ 0,7 em 3 janelas seguidas. AUC gesto × sem gesto no teste: <b data-texto="auc"></b>.</p>
       </div>
-      <svg id="graficoTreino" viewBox="0 0 760 410" role="img" aria-label="Acerto na validação por época nos três treinos" class="entra d2"></svg>
-    </div></div>
-    <div class="nota">Validação com 5 mil, 10 mil e 14.787 vídeos nos treinos pequeno, médio e grande.</div>
+    </div>
   </section>
 
-  <!-- 8. Falsos disparos -->
-  <section class="slide">
-    <h2 class="entra">Treino maior, menos falsos e mais gestos</h2>
-    <div class="centro"><div class="duas" style="grid-template-columns:1fr 280px;gap:30px">
-      <svg id="graficoFalsos" viewBox="0 0 800 430" role="img" aria-label="Gestos detectados conforme os falsos disparos por minuto, por modelo" class="entra d1"></svg>
-      <div class="entra d4">
-        <div class="pequeno verde">{{det}}</div><div class="rot" style="margin-bottom:26px">dos gestos detectados</div>
-        <div class="pequeno">{{fp}}</div><div class="rot">falso por minuto</div>
+  <!-- 11. Matriz de confusão -->
+  <section class="slide" data-titulo="Matriz de confusão">
+    <p class="kicker an">Onde a rede erra</p>
+    <h2 class="an" style="--d:1">Matriz de confusão dos gestos usados nas demos</h2>
+    <div class="grade" style="grid-template-columns:auto 1fr;align-items:center;gap:36px">
+      <div class="an" style="--d:2"><svg id="matriz1" width="900" height="640"></svg></div>
+      <div class="an" style="--d:3">
+        <p class="lead" style="font-size:21px">Cada linha é o gesto feito; cada coluna, o que a rede respondeu. A diagonal forte é acerto.</p>
+        <div class="cartao" style="margin-top:22px"><h3>O que chama atenção</h3><p id="textoMatriz1"></p></div>
+        <p class="nota" style="margin-top:16px">Validação do Jester: <span data-texto="matriz_n"></span> vídeos, em porcentagem de cada linha.</p>
       </div>
-    </div></div>
-    <div class="nota">Clipes colados, com cerca de 100 min sem gesto: {{falsos}} disparos, com margem de erro grande. Não vale para o carro.</div>
+    </div>
   </section>
 
-  <!-- 9. Lição -->
-  <section class="slide">
-    <h2 class="entra">A webcam mostrou o que a validação escondia</h2>
-    <div class="centro"><svg viewBox="0 0 1136 400" role="img" aria-label="Antes o gesto rápido ficava de fora da janela analisada; depois, janelas curtas o capturam" style="width:100%">
-      <g class="entra d1">
-        <text x="0" y="46" font-size="28" font-weight="700" fill="#d94841">Antes: cerca de 10 s para reconhecer o joinha</text>
-        <rect x="0" y="74" width="1136" height="80" rx="10" fill="#f6e4e2"/>
-        <rect x="430" y="74" width="80" height="80" rx="10" fill="#d94841"/>
-        <text x="470" y="182" text-anchor="middle" font-size="20" fill="#5a5f64">gesto rápido</text>
-        <text x="1120" y="122" text-anchor="end" font-size="21" fill="#5a5f64">janela de 3 s, com poucos frames</text>
-      </g>
-      <g class="entra d3">
-        <text x="0" y="248" font-size="28" font-weight="700" fill="#0d7a54">Depois: reconhecimento quase imediato</text>
-        <rect x="0" y="276" width="1136" height="80" rx="10" fill="#eceae4"/>
-        <rect class="pulso" x="360" y="276" width="220" height="80" rx="10" fill="#1baf7a" opacity=".35"/>
-        <rect x="430" y="276" width="80" height="80" rx="10" fill="#1baf7a"/>
-        <text x="1120" y="324" text-anchor="end" font-size="21" fill="#5a5f64">janelas curtas e treino variado</text>
-      </g>
-    </svg></div>
-    <div class="nota">Relato do teste com uma pessoa, em uma webcam. Várias mudanças foram feitas juntas.</div>
+  <!-- 12. Ranking -->
+  <section class="slide" data-titulo="Quais gestos funcionam">
+    <p class="kicker an">Quais gestos usar</p>
+    <h2 class="an" style="--d:1">Com o gatilho ligado, alguns gestos passam bem mais</h2>
+    <div class="cartao an" style="--d:2"><svg id="graficoRanking" width="1400" height="560"></svg></div>
+    <p class="nota an" style="--d:3;margin-top:14px">Porcentagem de vídeos de validação em que o gatilho disparou o gesto certo. Foi assim que escolhemos os gestos de cada demo.</p>
   </section>
 
-  <!-- 10. Demo -->
-  <section class="slide">
-    <h2 class="entra">Ao vivo</h2>
-    <div class="centro"><div class="duas" style="grid-template-columns:1.35fr 1fr">
-      <img id="cameraGrande" alt="Imagem da webcam" class="entra d1">
-      <div class="entra d2">
-        <div class="rot" style="margin:0 0 6px">O modelo vê</div>
-        <div id="gestoAtual">-</div>
-        <svg viewBox="0 0 420 110" role="img" aria-label="Direita avança e esquerda volta" style="width:400px;margin-top:20px">
-          <path d="M60 45 H360 M84 25 L60 45 L84 65 M336 25 L360 45 L336 65" fill="none" stroke="var(--verde)" stroke-width="7" stroke-linecap="round"/>
-          <text x="60" y="98" text-anchor="middle" font-size="21" fill="#5a5f64">volta</text><text x="360" y="98" text-anchor="middle" font-size="21" fill="#5a5f64">avança</text>
-        </svg>
+  <!-- 13. O que não funcionou -->
+  <section class="slide" data-titulo="O que não funcionou">
+    <p class="kicker an">O que não funcionou</p>
+    <h2 class="an" style="--d:1">Três tentativas que medimos e descartamos</h2>
+    <div class="grade" style="grid-template-columns:repeat(3,1fr);margin-top:16px">
+      <div class="cartao an" style="--d:2"><p class="kicker" style="color:var(--suave)">Limiar diferente por gesto</p><div class="numero ruim" style="font-size:52px">sem ganho</div><p style="margin-top:14px" id="textoLimiar"></p></div>
+      <div class="cartao an" style="--d:3"><p class="kicker" style="color:var(--suave)">Reforçar esquerda e direita</p><div class="numero ruim" style="font-size:52px"><span data-texto="esqdir_ajustado"></span>%</div><p style="margin-top:14px">O acerto geral caiu de <b data-texto="esqdir_origem"></b>% para <b data-texto="esqdir_ajustado"></b>%. A regra combinada antes do teste mandava descartar.</p></div>
+      <div class="cartao an" style="--d:4"><p class="kicker" style="color:var(--suave)">Usar no volante sem ajuste</p><div class="numero ruim" style="font-size:52px"><span data-texto="driver_certos"></span> de <span data-texto="driver_total"></span></div><p style="margin-top:14px">Micro-gestos do volante (DriverMHG) quase sempre viraram “sem gesto”. Para o carro real, é preciso ajustar com dados do carro.</p></div>
+    </div>
+  </section>
+
+  <!-- 14. Passo 6 -->
+  <section class="slide" data-titulo="Passo 6">
+    <p class="kicker an">Passo 6 · gestos novos</p>
+    <h2 class="an" style="--d:1">Ensinar um, dois, três, quatro dedos e o punho</h2>
+    <div class="grade" style="grid-template-columns:1fr 1.2fr;align-items:start">
+      <div class="an" style="--d:2">
+        <p class="lead" style="font-size:21px">O Jester não tem esses gestos. Usamos fotos do HaGRID: cada foto virou um clipe parado, e o treino misturou fotos e vídeos para a rede não esquecer o que já sabia.</p>
+        <div class="grade" style="grid-template-columns:1fr 1fr;gap:16px;margin-top:22px">
+          <div class="cartao"><div class="numero ruim" style="font-size:48px"><span data-texto="novos_teste1"></span>%</div><div class="rotulo"><b>1º teste:</b> imagem parada virava “sem gesto”</div></div>
+          <div class="cartao"><div class="numero" style="font-size:48px;color:var(--ouro)"><span data-texto="novos_teste2"></span>%</div><div class="rotulo"><b>2º teste:</b> corrigido, mas com poucas fotos</div></div>
+        </div>
+        <div class="cartao" style="margin-top:16px"><div class="numero bom" style="font-size:48px"><span data-texto="novos_top1_antigos"></span>%</div><div class="rotulo">nos gestos antigos depois do treino real, com <span data-texto="novos_fpm"></span> falso por minuto</div></div>
       </div>
-    </div></div>
+      <div class="cartao an" style="--d:3"><h3>Treino real: acerto por época</h3><svg id="graficoNovos" width="680" height="430"></svg></div>
+    </div>
   </section>
 
-  <!-- 11. Volante -->
-  <section class="slide">
-    <h2 class="entra">No volante, sem ajuste: zero acertos</h2>
-    <div class="centro"><div class="duas" style="grid-template-columns:320px 1fr;gap:40px">
-      <div class="entra d1">
-        <div class="numero vermelho">{{acertos_volante}}</div>
-        <div class="rot">de {{total_volante}} gestos de direção</div>
-        <p class="sub" style="margin-top:24px;font-size:22px">Por isso o próximo passo é o <b style="color:var(--tinta)">ajuste</b></p>
+  <!-- 15. Matriz dos gestos novos -->
+  <section class="slide" data-titulo="Matriz dos gestos novos">
+    <p class="kicker an">Gestos novos</p>
+    <h2 class="an" style="--d:1">Nas fotos, ótimo. Na webcam, ainda não</h2>
+    <div class="grade" style="grid-template-columns:auto 1fr;align-items:center;gap:36px">
+      <div class="an" style="--d:2"><svg id="matriz2" width="820" height="560"></svg></div>
+      <div class="an" style="--d:3">
+        <div class="cartao"><h3>Fotos de validação</h3><p><b data-texto="matriz2_acerto"></b>% de acerto em <span data-texto="matriz2_n"></span> fotos de pessoas fora do treino. Quatro dedos se confunde com o sinal de pare.</p></div>
+        <div class="cartao" style="margin-top:20px;border-left:6px solid var(--alerta)"><h3>Teste na webcam</h3><p>No teste informal ao vivo, só <b>um dedo</b> passou do limiar com folga. Foto e vídeo real são diferentes: por isso as demos usam um e dois dedos, e a medida formal na webcam é o próximo passo.</p></div>
       </div>
-      <svg id="mapaVolante" viewBox="0 0 760 340" role="img" aria-label="Grade de {{total_volante}} tentativas, nenhuma correta"></svg>
-    </div></div>
-    <div class="nota">Modelo do Jester sem treino novo, em 4 pessoas do DriverMHG, comparando com o gesto equivalente.</div>
+    </div>
   </section>
 
-  <!-- 12. Próximos passos -->
-  <section class="slide">
-    <h2 class="entra">A pergunta até a entrega: o pré-treino ajuda?</h2>
-    <div class="centro"><svg viewBox="0 0 1136 380" role="img" aria-label="Cronograma: agora o ajuste, depois falsos disparos, em seguida os experimentos e, em 17 e 18 de novembro, a entrega" style="width:100%">
-      <line x1="60" y1="130" x2="1076" y2="130" stroke="#e4e2dc" stroke-width="10" stroke-linecap="round"/>
-      <line class="traco" x1="60" y1="130" x2="230" y2="130" stroke="var(--verde)" stroke-width="10" stroke-linecap="round" pathLength="1"/>
-      <g text-anchor="middle">
-        <g class="entra d1"><circle class="pulso" cx="146" cy="130" r="24" fill="var(--verde)"/><text x="146" y="62" font-size="22" font-weight="700" fill="#0d7a54">Agora</text><text x="146" y="200" font-size="26" font-weight="700" fill="#16191c">Com × sem</text><text x="146" y="234" font-size="26" font-weight="700" fill="#16191c">pré-treino</text></g>
-        <g class="entra d2"><circle cx="427" cy="130" r="18" fill="#8b9095"/><text x="427" y="62" font-size="22" fill="#5a5f64">Depois</text><text x="427" y="200" font-size="26" font-weight="700" fill="#16191c">Falsos disparos</text><text x="427" y="234" font-size="26" font-weight="700" fill="#16191c">no volante</text></g>
-        <g class="entra d3"><circle cx="708" cy="130" r="18" fill="#8b9095"/><text x="708" y="62" font-size="22" fill="#5a5f64">Até 16/11</text><text x="708" y="200" font-size="26" font-weight="700" fill="#16191c">Infravermelho</text><text x="708" y="234" font-size="26" font-weight="700" fill="#16191c">e latência</text></g>
-        <g class="entra d4"><circle cx="989" cy="130" r="18" fill="#8b9095"/><text x="989" y="62" font-size="22" fill="#5a5f64">17-18/11</text><text x="989" y="200" font-size="26" font-weight="700" fill="#16191c">Paper</text><text x="989" y="234" font-size="26" font-weight="700" fill="#16191c">e entrega</text></g>
-      </g>
-      <text class="entra d5" x="568" y="340" text-anchor="middle" font-size="30" fill="#5a5f64">Quantos falsos disparos por hora você aceitaria no seu carro?</text>
-    </svg></div>
+  <!-- 16. Teste ao vivo -->
+  <section class="slide demo" data-titulo="Teste ao vivo" data-demo="teste">
+    <div class="topo"><span class="vivo">AO VIVO</span><h2>O modelo, sem aplicação</h2><span class="espaco"></span><span class="chip">Rolar a mão para frente ou para trás: <b>troca o slide</b></span></div>
+    <div id="testeVivo">
+      <div class="camera"><img id="videoTeste" alt="Imagem da webcam"></div>
+      <div class="cartao" style="display:flex;flex-direction:column">
+        <p class="kicker" style="color:var(--suave)">Gesto agora</p>
+        <div id="gestoGrande">Aguardando...</div>
+        <div class="barraConf"><div id="confTeste"></div></div>
+        <div class="nota" id="estadoTeste">confiança</div>
+        <p class="kicker" style="color:var(--suave);margin-top:26px">Disparos <span id="contaDisparos" style="color:var(--tinta)">0</span></p>
+        <ul id="listaDisparos"></ul>
+      </div>
+    </div>
   </section>
 
-  <div id="ponto"></div>
-  <div id="pagina"></div>
-  <div id="barra"></div>
+  <!-- 17. Tênis -->
+  <section class="slide demo" data-titulo="Tênis" data-demo="tenis">
+    <div class="topo"><span class="vivo">AO VIVO</span><h2>Jogo de tênis</h2><span class="espaco"></span>
+      <span class="chip">Deslizar: <b>golpes</b></span><span class="chip">Pare: <b>pausa</b></span><span class="chip">Rolar a mão: <b>troca o slide</b></span></div>
+    <div class="quadro"></div>
+  </section>
+
+  <!-- 18. Carro -->
+  <section class="slide demo" data-titulo="Carro" data-demo="painel">
+    <div class="topo"><span class="vivo">AO VIVO</span><h2>Painel do carro</h2><span class="espaco"></span>
+      <span class="chip">Um dedo: <b>próxima função</b></span><span class="chip">Empurrar a mão: <b>explica</b></span><span class="chip">Rolar a mão: <b>troca o slide</b></span></div>
+    <div class="quadro"></div>
+  </section>
+
+  <!-- 19. Impacto no carro -->
+  <section class="slide" data-titulo="Impacto no carro">
+    <p class="kicker an">Impacto · carro</p>
+    <h2 class="an" style="--d:1">Mudar a música sem tirar os olhos da estrada</h2>
+    <div class="impacto">
+      <div class="cartao problema an" style="--d:2"><h3>O problema</h3>
+        <ul class="lista"><li data-i="👀">Telas de toque pedem o olhar: para achar o botão, o motorista deixa de ver a estrada.</li><li data-i="🎛️">Cada função tem um menu, e cada menu exige mais olhares.</li><li data-i="⚠️">Um comando que dispara sozinho distrai ainda mais do que um botão.</li></ul></div>
+      <div class="cartao solucao an" style="--d:3"><h3>O que a demo mostra</h3>
+        <ul class="lista"><li data-i="✋">Gestos simples, feitos sem olhar, comandam música, clima, telefone, limpador e faróis.</li><li data-i="🔊">A voz diz em que página o motorista está; os comandos só são lidos quando ele pede.</li><li data-i="🛡️">No fluxo simulado: <b><span data-texto="falsos_completo"></span> falsos em <span data-texto="minutos_completo"></span> min</b>, cerca de 1 a cada <span data-texto="intervalo_falso"></span> min.</li></ul></div>
+    </div>
+    <p class="nota an" style="--d:4;margin-top:22px">Limite: nos micro-gestos do volante (DriverMHG), o modelo sem ajuste acertou <span data-texto="driver_certos"></span> de <span data-texto="driver_total"></span>. O uso real no carro depende de treinar com dados do carro.</p>
+  </section>
+
+  <!-- 20. Sala cirúrgica -->
+  <section class="slide demo" data-titulo="Sala cirúrgica" data-demo="hospital">
+    <div class="topo"><span class="vivo">AO VIVO</span><h2>Sala cirúrgica</h2><span class="espaco"></span>
+      <span class="chip">Pare: <b>trava</b></span><span class="chip">Um dedo: <b>próximo corte</b></span><span class="chip">Dois dedos: <b>contraste</b></span><span class="chip">Rolar a mão: <b>troca o slide</b></span></div>
+    <div class="quadro"></div>
+  </section>
+
+  <!-- 21. Impacto na cirurgia -->
+  <section class="slide" data-titulo="Impacto na cirurgia">
+    <p class="kicker an">Impacto · sala cirúrgica</p>
+    <h2 class="an" style="--d:1">Ver o exame sem quebrar a esterilidade</h2>
+    <div class="impacto">
+      <div class="cartao problema an" style="--d:2"><h3>O problema</h3>
+        <ul class="lista"><li data-i="🧤">Com luvas estéreis, o cirurgião não pode tocar em mouse, teclado ou tela.</li><li data-i="🗣️">Para ver um corte da tomografia, precisa pedir a outra pessoa, que interrompe o que estava fazendo.</li><li data-i="⏱️">Cada pedido é tempo de cirurgia e uma chance de mal-entendido.</li></ul></div>
+      <div class="cartao solucao an" style="--d:3"><h3>O que a demo mostra</h3>
+        <ul class="lista"><li data-i="🩻">Cortes, contraste, zoom e a lista de verificação da OMS, só com gestos.</li><li data-i="🔒">A tela começa travada: só o sinal de pare libera. O contador mostra quantos gestos a trava bloqueou.</li><li data-i="🔁">O mesmo modelo do carro, sem treinar de novo: muda só a tradução de gesto para comando.</li></ul></div>
+    </div>
+    <p class="nota an" style="--d:4;margin-top:22px">Demonstração de conceito: não é um dispositivo médico, e as imagens e o paciente são gerados pela página.</p>
+  </section>
+
+  <!-- 22. Próximos passos -->
+  <section class="slide" data-titulo="Próximos passos">
+    <p class="kicker an">E agora?</p>
+    <h2 class="an" style="--d:1">Qual caminho a banca recomenda?</h2>
+    <div class="grade" style="grid-template-columns:repeat(3,1fr);margin-top:10px">
+      <div class="cartao an" style="--d:2"><p class="kicker">Caminho 1</p><h3>Carro de verdade</h3><p>Ajustar no DriverMHG e comparar com e sem o nosso pré-treino: a pergunta científica original.</p></div>
+      <div class="cartao an" style="--d:3"><p class="kicker">Caminho 2</p><h3>Sala cirúrgica</h3><p>Focar na aplicação em que a trava e o toque zero têm mais valor.</p></div>
+      <div class="cartao an" style="--d:4"><p class="kicker">Caminho 3</p><h3>Plataforma geral</h3><p>Um reconhecedor único, com a tradução de gestos por aplicação, medido na webcam de várias pessoas.</p></div>
+    </div>
+    <div class="cartao an" style="--d:5;margin-top:28px;display:flex;gap:40px;align-items:center">
+      <div><div class="numero destaque" style="font-size:52px"><span data-texto="teste_top1"></span>%</div><div class="rotulo">acerto no teste</div></div>
+      <div><div class="numero destaque" style="font-size:52px"><span data-texto="falsos_por_min"></span></div><div class="rotulo">falso disparo por minuto</div></div>
+      <div><div class="numero destaque" style="font-size:52px">3</div><div class="rotulo">aplicações ao vivo com o mesmo modelo</div></div>
+      <p class="lead" style="font-size:20px;flex:1">Obrigado! Perguntas e sugestões são muito bem-vindas.</p>
+    </div>
+  </section>
+
+  <div id="rodape">
+    <span class="pilula" id="trava">🔓 Livre · pare trava</span>
+    <span class="pilula" id="gestoPilula">conectando...</span>
+    <div id="progresso"><div></div></div>
+    <span id="numSlide"></span>
+  </div>
+  <div id="aviso"></div>
 </div>
+
 <script>
+"use strict";
 const DADOS = /*DADOS*/null;
-const slides = [...document.querySelectorAll(".slide")];
-const CORES = { "Pequeno": "#2a78d6", "Médio": "#eb6834", "Grande": "#1baf7a" };
-let atual = 0, gestosAtivos = true, conectado = false;
+const $ = id => document.getElementById(id);
+const fmt = (n, casas = 1) => n === null || n === undefined ? "—" : Number(n).toLocaleString("pt-BR", { minimumFractionDigits: casas, maximumFractionDigits: casas });
 
-function ajustarPalco() {
-  const e = Math.min(innerWidth / 1280, innerHeight / 720);
-  document.getElementById("palco").style.transform = `translate(-50%, -50%) scale(${e})`;
+// ---------- Palco 16:9 ajustado à janela ----------
+function ajustar() {
+  const s = Math.min(innerWidth / 1600, innerHeight / 900);
+  $("palco").style.transform = `translate(-50%, -50%) scale(${s})`;
 }
-addEventListener("resize", ajustarPalco); ajustarPalco();
+addEventListener("resize", ajustar); ajustar();
 
-function mostrar(i) {
-  atual = Math.max(0, Math.min(slides.length - 1, i));
-  slides.forEach((s, n) => s.classList.toggle("ativo", n === atual));
-  document.getElementById("pagina").textContent = (atual + 1) + " / " + slides.length;
-  document.getElementById("barra").style.width = ((atual + 1) / slides.length * 100) + "%";
-  const camera = document.getElementById("cameraGrande"), visivel = slides[atual].contains(camera);
-  if (visivel && !camera.getAttribute("src")) camera.src = "/video";
-  if (!visivel && camera.getAttribute("src")) camera.removeAttribute("src");
-  location.hash = atual + 1;
-}
-let tempoAviso;
-function avisar(texto) {
-  const a = document.getElementById("aviso"); a.textContent = texto; a.classList.add("ver");
-  clearTimeout(tempoAviso); tempoAviso = setTimeout(() => a.classList.remove("ver"), 900);
-}
-function atualizarEstado() { document.getElementById("ponto").className = conectado && gestosAtivos ? "ok" : ""; }
-addEventListener("keydown", e => {
-  if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); mostrar(atual + 1); }
-  if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); mostrar(atual - 1); }
-  if (e.key === "Home") mostrar(0);
-  if (e.key === "End") mostrar(slides.length - 1);
-  if (e.key.toLowerCase() === "f") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
-  if (e.key.toLowerCase() === "g") { gestosAtivos = !gestosAtivos; atualizarEstado(); avisar(gestosAtivos ? "Gestos ligados" : "Gestos desligados"); }
-});
-const fonte = new EventSource("/eventos");
-fonte.onopen = () => { conectado = true; atualizarEstado(); };
-fonte.onerror = () => { conectado = false; atualizarEstado(); };
-fonte.onmessage = ev => {
-  const e = JSON.parse(ev.data);
-  if (e.tipo === "estado") document.getElementById("gestoAtual").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
-  if (e.tipo === "comando" && gestosAtivos) {
-    if (e.comando === "proxima") { mostrar(atual + 1); avisar("Próximo"); }
-    if (e.comando === "anterior") { mostrar(atual - 1); avisar("Voltar"); }
-  }
+// ---------- Números no texto ----------
+const D = DADOS;
+const textos = {
+  teste_n: Number(D.teste.n).toLocaleString("pt-BR") + " vídeos", falsos_completo: D.gatilho.completo.falsos, minutos_completo: fmt(D.gatilho.completo.minutos),
+  intervalo_falso: Math.round(D.gatilho.completo.minutos / Math.max(1, D.gatilho.completo.falsos)), det_completo: fmt(D.gatilho.completo.det),
+  videos_completo: Number(D.gatilho.completo.videos).toLocaleString("pt-BR"), auc: fmt(D.roc.auc, 3), matriz_n: Number(D.matriz.n).toLocaleString("pt-BR"),
+  esqdir_origem: fmt(D.descartados.esqdir.origem), esqdir_ajustado: fmt(D.descartados.esqdir.ajustado), driver_certos: D.descartados.driver.certos,
+  driver_total: D.descartados.driver.total, novos_teste1: fmt(D.novos.teste1), novos_teste2: fmt(D.novos.teste2), novos_top1_antigos: fmt(D.novos.top1_antigos),
+  novos_fpm: fmt(D.novos.fpm, 2), matriz2_acerto: fmt(D.matriz2.acerto), matriz2_n: Number(D.matriz2.n).toLocaleString("pt-BR"), teste_top1: fmt(D.teste.top1),
+  falsos_por_min: fmt(D.gatilho.completo.falsos / D.gatilho.completo.minutos, 2),
 };
+document.querySelectorAll("[data-texto]").forEach(e => { e.textContent = textos[e.dataset.texto]; });
+$("grupo").textContent = D.grupo;
+const contagens = { videos_total: [D.dados.videos_total, 0], classes: [D.dados.classes, 0], frames_mi: [D.dados.frames / 1e6, 2], gigabytes: [D.dados.gigabytes, 1],
+                    teste_top1: [D.teste.top1, 1], teste_top5: [D.teste.top5, 1], minutos_epoca: [D.curva.minutos_epoca, 1] };
+document.querySelectorAll("[data-num]").forEach(e => { e.insertAdjacentHTML("afterbegin", '<span class="conta">0</span>'); });
+function contar(slide) {
+  slide.querySelectorAll("[data-num]").forEach(e => {
+    const [alvo, casas] = contagens[e.dataset.num], alvoEl = e.querySelector(".conta"), t0 = performance.now();
+    const passo = t => { const p = Math.min(1, (t - t0) / 1100), v = alvo * (1 - (1 - p) ** 3); alvoEl.textContent = fmt(v, casas); if (p < 1) requestAnimationFrame(passo); };
+    requestAnimationFrame(passo);
+  });
+}
+$("textoPequeno").innerHTML = `Com ${Number(D.pequeno_cfg.videos).toLocaleString("pt-BR")} vídeos e ${D.pequeno_cfg.epocas} épocas, a <b class="destaque">CNN 3D chegou a ${fmt(D.pequeno[0].top1)}%</b> na validação; o transformer ficou em ${fmt(D.pequeno[1].top1)}%. Seguimos com a CNN 3D.`;
+$("textoLimiar").innerHTML = `Um limiar por gesto deu ${D.descartados.limiar.por_gesto.falsos} falsos e ${fmt(D.descartados.limiar.por_gesto.det)}% de detecção; o limiar único, ${D.descartados.limiar.unico.falsos} falsos e ${fmt(D.descartados.limiar.unico.det)}%. Mais regras, sem melhora real.`;
 
+// ---------- Gráficos em SVG ----------
 const NS = "http://www.w3.org/2000/svg";
-function criar(svg, tag, a, txt) {
+function no(pai, tag, a = {}, texto) {
   const n = document.createElementNS(NS, tag);
   for (const k in a) n.setAttribute(k, a[k]);
-  if (txt !== undefined) n.textContent = txt;
-  svg.appendChild(n);
-  return n;
+  if (texto !== undefined) n.textContent = texto;
+  pai.appendChild(n); return n;
 }
-const virgula = v => String(v).replace(".", ",");
-
-document.getElementById("rosca").style.strokeDasharray = `${DADOS.top1 / 100} 1`;
-document.getElementById("rosca").style.strokeDashoffset = "0";
-
-(function graficoTreino() {
-  const svg = document.getElementById("graficoTreino"), L = { e: 58, d: 170, t: 16, b: 60, w: 760, h: 410 };
-  const x = e => L.e + (e - 1) / 19 * (L.w - L.e - L.d), y = v => L.h - L.b - v / 100 * (L.h - L.t - L.b);
-  [0, 50, 100].forEach(v => {
-    criar(svg, "line", { x1: L.e, x2: L.w - L.d, y1: y(v), y2: y(v), stroke: "#e4e2dc", "stroke-width": 2 });
-    criar(svg, "text", { x: L.e - 12, y: y(v) + 7, fill: "#5a5f64", "font-size": 20, "text-anchor": "end" }, v + "%");
+const COR = { acento: "#0b8a7f", azul: "#2563eb", alerta: "#d9480f", ouro: "#d99a1e", cinza: "#b9c4cc", tinta: "#13232e", suave: "#5a6b77", linha: "#dde4ea" };
+function barras(svg, itens, { max, unidade = "", casas = 1, base = itens.some(i => i.rotulo.includes("\n")) ? 62 : 40, topo = 30 } = {}) {
+  const L = +svg.getAttribute("width"), A = +svg.getAttribute("height"), n = itens.length, larg = Math.min(130, (L - 40) / n * 0.6), passo = (L - 40) / n;
+  const m = max || Math.max(...itens.map(i => i.valor || 0)) * 1.15;
+  no(svg, "line", { x1: 20, x2: L - 20, y1: A - base, y2: A - base, stroke: COR.linha, "stroke-width": 2 });
+  itens.forEach((it, i) => {
+    const x = 20 + passo * i + (passo - larg) / 2, h = it.valor === null ? 0 : (A - base - topo) * it.valor / m, y = A - base - h;
+    if (it.valor === null) {
+      no(svg, "rect", { x, y: A - base - 70, width: larg, height: 70, rx: 10, fill: "none", stroke: COR.cinza, "stroke-dasharray": "6 6", "stroke-width": 2 });
+      no(svg, "text", { x: x + larg / 2, y: A - base - 82, "text-anchor": "middle", "font-size": 18, fill: COR.suave }, "interrompida");
+    } else {
+      no(svg, "rect", { x, y, width: larg, height: Math.max(h, 2), rx: 10, fill: it.cor || COR.acento, class: "barra", style: `transition-delay:${300 + i * 140}ms` });
+      no(svg, "text", { x: x + larg / 2, y: y - 12, "text-anchor": "middle", "font-size": 24, "font-weight": 800, fill: COR.tinta, class: "ponto", style: `transition-delay:${900 + i * 140}ms` }, fmt(it.valor, casas) + unidade);
+    }
+    it.rotulo.split("\n").forEach((r, k) => no(svg, "text", { x: x + larg / 2, y: A - base + 24 + k * 20, "text-anchor": "middle", "font-size": 17, fill: COR.suave }, r));
   });
-  [1, 10, 20].forEach(e => criar(svg, "text", { x: x(e), y: L.h - L.b + 30, fill: "#5a5f64", "font-size": 20, "text-anchor": "middle" }, e));
-  criar(svg, "text", { x: (L.e + L.w - L.d) / 2, y: L.h - 2, fill: "#5a5f64", "font-size": 20, "text-anchor": "middle" }, "Época");
-  const rotulos = [];
-  Object.entries(DADOS.historico).forEach(([nome, v]) => {
-    criar(svg, "polyline", { class: "traco", pathLength: 1, points: v.map((p, i) => x(i + 1) + "," + y(p)).join(" "), fill: "none", stroke: CORES[nome], "stroke-width": 4, "stroke-linejoin": "round", "stroke-linecap": "round" });
-    const n = v.length, u = v[n - 1];
-    criar(svg, "circle", { cx: x(n), cy: y(u), r: 6, fill: CORES[nome], class: "entra d5" });
-    rotulos.push({ nome, u, x: x(n), y: y(u) });
-  });
-  let baixo = -99;
-  rotulos.sort((a, b) => a.y - b.y).forEach(r => {
-    const yy = Math.max(r.y + 7, baixo + 26); baixo = yy;
-    criar(svg, "text", { x: r.x + 14, y: yy, fill: "#16191c", "font-size": 20, "font-weight": 700, class: "entra d5" }, r.nome + " " + virgula(r.u.toFixed(1)) + "%");
-  });
-})();
-
-(function graficoFalsos() {
-  const svg = document.getElementById("graficoFalsos"), L = { e: 104, d: 24, t: 18, b: 76, w: 800, h: 430 };
-  const minimo = 0.005, maximo = 3;
-  const x = f => { const v = Math.log10(Math.max(f, minimo)); return L.e + (v - Math.log10(minimo)) / (Math.log10(maximo) - Math.log10(minimo)) * (L.w - L.e - L.d); };
-  const y = d => L.h - L.b - d / 100 * (L.h - L.t - L.b);
-  [0, 50, 100].forEach(v => {
-    criar(svg, "line", { x1: L.e, x2: L.w - L.d, y1: y(v), y2: y(v), stroke: "#e4e2dc", "stroke-width": 2 });
-    criar(svg, "text", { x: L.e - 12, y: y(v) + 7, fill: "#5a5f64", "font-size": 20, "text-anchor": "end" }, v + "%");
-  });
-  [[minimo, "0"], [0.01, "0,01"], [0.1, "0,1"], [1, "1"]].forEach(([f, t]) => criar(svg, "text", { x: x(f), y: L.h - L.b + 30, fill: "#5a5f64", "font-size": 20, "text-anchor": "middle" }, t));
-  criar(svg, "text", { x: (L.e + L.w - L.d) / 2, y: L.h - 10, fill: "#5a5f64", "font-size": 20, "text-anchor": "middle" }, "Falsos disparos por minuto (escala log)");
-  criar(svg, "text", { x: 22, y: y(50), fill: "#5a5f64", "font-size": 20, "text-anchor": "middle", transform: `rotate(-90 22 ${y(50)})` }, "Gestos detectados");
-  criar(svg, "line", { x1: x(1 / 30), x2: x(1 / 30), y1: L.t, y2: L.h - L.b, stroke: "#8b9095", "stroke-width": 2, "stroke-dasharray": "6 7" });
-  criar(svg, "text", { x: x(1 / 30) + 8, y: L.t + 18, fill: "#5a5f64", "font-size": 18 }, "meta");
-  const posicoes = { "Pequeno": [0.35, 30], "Médio": [0.2, 65], "Grande": [0.25, 93] };
-  Object.entries(DADOS.fronteira).forEach(([nome, f]) => {
-    const pontos = f.map(p => [x(p.fp), y(p.det)]);
-    const escada = pontos.map(p => p.join(",")).join(" ");
-    criar(svg, "polyline", { class: "traco", pathLength: 1, points: escada, fill: "none", stroke: CORES[nome], "stroke-width": 4, "stroke-linejoin": "round", "stroke-linecap": "round" });
-    const [fp, det] = posicoes[nome];
-    criar(svg, "text", { x: x(fp), y: y(det), fill: "#16191c", "font-size": 21, "font-weight": 700, class: "entra d3" }, nome);
-  });
-  const e = DADOS.escolhido;
-  criar(svg, "circle", { cx: x(e.fp), cy: y(e.det), r: 11, fill: CORES["Grande"], stroke: "#fbfaf7", "stroke-width": 3, class: "pulso" });
-})();
-
-(function mapaVolante() {
-  const svg = document.getElementById("mapaVolante"), colunas = 32, total = DADOS.volante.total, passo = 760 / colunas;
-  for (let i = 0; i < total; i++) {
-    const c = criar(svg, "circle", { class: "ponto-mapa", cx: passo / 2 + (i % colunas) * passo, cy: passo / 2 + Math.floor(i / colunas) * passo, r: 8.5, fill: i < DADOS.volante.acertos ? "#1baf7a" : "#d94841" });
-    c.style.animationDelay = (i * 0.003) + "s";
+}
+function linhas(svg, series, { min = 0, max = 100, rotuloX = "época", marca } = {}) {
+  const L = +svg.getAttribute("width"), A = +svg.getAttribute("height"), e = 56, d = 20, t = 20, b = 46;
+  const n = series[0].valores.length, X = i => e + (L - e - d) * i / (n - 1), Y = v => t + (A - t - b) * (1 - (v - min) / (max - min));
+  for (let v = min; v <= max; v += (max - min) / 4) {
+    no(svg, "line", { x1: e, x2: L - d, y1: Y(v), y2: Y(v), stroke: COR.linha });
+    no(svg, "text", { x: e - 10, y: Y(v) + 6, "text-anchor": "end", "font-size": 15, fill: COR.suave }, Math.round(v) + "%");
   }
+  for (let i = 0; i < n; i += Math.ceil(n / 10)) no(svg, "text", { x: X(i), y: A - b + 26, "text-anchor": "middle", "font-size": 15, fill: COR.suave }, i + 1);
+  no(svg, "text", { x: L - d, y: A - 4, "text-anchor": "end", "font-size": 15, fill: COR.suave }, rotuloX);
+  if (marca !== undefined) {
+    no(svg, "line", { x1: X(marca), x2: X(marca), y1: t, y2: A - b, stroke: COR.ouro, "stroke-width": 2, "stroke-dasharray": "6 6", class: "ponto" });
+    no(svg, "text", { x: X(marca) - 8, y: t + 16, "text-anchor": "end", "font-size": 15, fill: COR.ouro, class: "ponto" }, "modelo salvo");
+  }
+  series.forEach((s, k) => {
+    const caminho = s.valores.map((v, i) => (i ? "L" : "M") + X(i).toFixed(1) + " " + Y(v).toFixed(1)).join(" ");
+    const p = no(svg, "path", { d: caminho, fill: "none", stroke: s.cor, "stroke-width": 4, "stroke-linejoin": "round", "stroke-linecap": "round", class: "traco" });
+    const ultimo = s.valores[n - 1];
+    no(svg, "circle", { cx: X(n - 1), cy: Y(ultimo), r: 7, fill: s.cor, class: "ponto", style: "transition-delay:1.6s" });
+    no(svg, "text", { x: X(n - 1) - 12, y: Y(ultimo) + (k ? 26 : -14), "text-anchor": "end", "font-size": 18, "font-weight": 700, fill: s.cor, class: "ponto", style: "transition-delay:1.7s" }, `${s.nome} ${fmt(ultimo)}%`);
+  });
+}
+function prepararTracos(slide, apagar) {
+  slide.querySelectorAll(".traco").forEach(p => {
+    const c = p.getTotalLength(); p.style.strokeDasharray = c;
+    if (apagar) { p.style.transition = "none"; p.style.strokeDashoffset = c; p.getBoundingClientRect(); p.style.transition = ""; }
+    else p.style.strokeDashoffset = 0;
+  });
+}
+function dispersao(svg, pontos, escolhido) {
+  const L = +svg.getAttribute("width"), A = +svg.getAttribute("height"), e = 70, d = 24, t = 20, b = 60;
+  const maxX = Math.max(...pontos.map(p => p.fpm)) * 1.05, X = v => e + (L - e - d) * Math.sqrt(v / maxX), Y = v => t + (A - t - b) * (1 - v / 100);
+  [0, 25, 50, 75, 100].forEach(v => { no(svg, "line", { x1: e, x2: L - d, y1: Y(v), y2: Y(v), stroke: COR.linha }); no(svg, "text", { x: e - 10, y: Y(v) + 6, "text-anchor": "end", "font-size": 15, fill: COR.suave }, v + "%"); });
+  [0, 0.05, 0.2, 0.5].filter(v => v <= maxX).forEach(v => no(svg, "text", { x: X(v), y: A - b + 26, "text-anchor": "middle", "font-size": 15, fill: COR.suave }, fmt(v, 2)));
+  no(svg, "text", { x: L - d, y: A - 8, "text-anchor": "end", "font-size": 16, fill: COR.suave }, "falsos disparos por minuto →");
+  no(svg, "text", { x: e, y: t - 4, "font-size": 16, fill: COR.suave }, "gestos detectados ↑");
+  pontos.forEach((p, i) => {
+    const sel = p.limiar === escolhido.limiar && p.janelas === escolhido.janelas;
+    no(svg, "circle", { cx: X(p.fpm), cy: Y(p.det), r: sel ? 13 : 7, fill: sel ? COR.acento : COR.cinza, stroke: "#fff", "stroke-width": 2, class: "ponto", style: `transition-delay:${200 + i * 35}ms` });
+    if (sel) {
+      no(svg, "text", { x: X(p.fpm) + 20, y: Y(p.det) - 16, "font-size": 19, "font-weight": 800, fill: COR.acento, class: "ponto", style: "transition-delay:1.5s" }, "0,7 · 3 janelas");
+      no(svg, "text", { x: X(p.fpm) + 20, y: Y(p.det) + 8, "font-size": 16, fill: COR.suave, class: "ponto", style: "transition-delay:1.5s" }, `${fmt(p.fpm, 2)} por min · ${fmt(p.det)}%`);
+    }
+  });
+}
+function matriz(svg, M, { celula = 44, esquerda = 240, topo = 190 } = {}) {
+  const nl = M.linhas_rotulos.length, nc = M.colunas_rotulos.length;
+  svg.setAttribute("width", esquerda + nc * celula + 90); svg.setAttribute("height", topo + nl * celula + 10);  // folga para os rótulos inclinados
+  M.colunas_rotulos.forEach((r, j) => no(svg, "text", { x: 0, y: 0, transform: `translate(${esquerda + j * celula + celula / 2 + 5} ${topo - 10}) rotate(-55)`, "font-size": 15, fill: COR.suave }, r));
+  M.linhas_rotulos.forEach((r, i) => {
+    no(svg, "text", { x: esquerda - 12, y: topo + i * celula + celula / 2 + 5, "text-anchor": "end", "font-size": 15, fill: COR.tinta }, r);
+    M.valores[i].forEach((v, j) => {
+      const diag = M.linhas_rotulos[i] === M.colunas_rotulos[j], forca = Math.min(1, v / (diag ? 100 : 25));
+      const cor = diag ? `rgba(11,138,127,${0.12 + 0.88 * forca})` : `rgba(217,72,15,${v < 0.5 ? 0 : 0.1 + 0.8 * forca})`;
+      const atraso = (i + j) * 30;
+      no(svg, "rect", { x: esquerda + j * celula, y: topo + i * celula, width: celula - 3, height: celula - 3, rx: 6, fill: v < 0.5 && !diag ? "#f1f4f6" : cor, class: "celula", style: `transition-delay:${atraso}ms` });
+      if (v >= 1) no(svg, "text", { x: esquerda + j * celula + celula / 2 - 1, y: topo + i * celula + celula / 2 + 5, "text-anchor": "middle", "font-size": diag ? 14 : 13, "font-weight": diag ? 800 : 600,
+                                   fill: diag && forca > 0.5 ? "#fff" : COR.tinta, class: "celula", style: `transition-delay:${atraso + 200}ms` }, Math.round(v));
+    });
+  });
+}
+function barrasH(svg, itens) {
+  const L = +svg.getAttribute("width"), A = +svg.getAttribute("height"), esq = 300, alt = (A - 10) / itens.length;
+  itens.forEach((it, i) => {
+    const y = 5 + i * alt, w = (L - esq - 90) * it.det / 100;
+    no(svg, "text", { x: esq - 14, y: y + alt / 2 + 6, "text-anchor": "end", "font-size": 18, fill: COR.tinta }, it.gesto);
+    no(svg, "rect", { x: esq, y: y + 6, width: L - esq - 90, height: alt - 14, rx: 8, fill: "#f1f4f6" });
+    no(svg, "rect", { x: esq, y: y + 6, width: w, height: alt - 14, rx: 8, fill: it.det >= 80 ? COR.acento : it.det >= 72 ? COR.azul : COR.ouro, class: "barraH", style: `transition-delay:${200 + i * 70}ms` });
+    no(svg, "text", { x: esq + w + 12, y: y + alt / 2 + 6, "font-size": 18, "font-weight": 700, fill: COR.tinta, class: "ponto", style: `transition-delay:${900 + i * 70}ms` }, fmt(it.det) + "%");
+  });
+}
+function divisao(svg) {
+  const L = +svg.getAttribute("width"), tot = D.dados.videos_total, partes = [["Treino", D.dados.videos_treino, COR.acento], ["Validação", D.dados.videos_validacao, COR.azul], ["Teste", D.dados.videos_teste, COR.ouro]];
+  let x = 0;
+  partes.forEach(([nome, n, cor], i) => {
+    const w = L * n / tot;
+    no(svg, "rect", { x: x + 1, y: 10, width: w - 2, height: 40, rx: 8, fill: cor, class: "barraH", style: `transition-delay:${300 + i * 200}ms` });
+    // Legenda em linha própria: as fatias de validação e teste são estreitas demais para o texto.
+    const lx = i === 0 ? 0 : L - (3 - i) * 300;
+    no(svg, "rect", { x: lx, y: 64, width: 16, height: 16, rx: 4, fill: cor, class: "ponto", style: `transition-delay:${700 + i * 200}ms` });
+    no(svg, "text", { x: lx + 24, y: 78, "font-size": 18, fill: COR.tinta, class: "ponto", style: `transition-delay:${700 + i * 200}ms` },
+       `${nome}: ${n.toLocaleString("pt-BR")} (${fmt(100 * n / tot)}%)`);
+    x += w;
+  });
+}
+
+divisao($("graficoDivisao"));
+barras($("graficoPequeno"), D.pequeno.map((p, i) => ({ rotulo: p.nome, valor: p.top1, cor: i ? COR.cinza : COR.acento })), { max: 100, unidade: "%" });
+barras($("graficoPenAcerto"), D.penalidade.map(p => ({ rotulo: p.rotulo, valor: p.top1, cor: COR.acento })), { max: 100, unidade: "%" });
+barras($("graficoPenFalso"), D.penalidade.map(p => ({ rotulo: p.rotulo, valor: p.fa, cor: COR.alerta })), { unidade: "%", casas: 2 });
+const nomesEscala = D.escala.map(e => `${e.rotulo}\n${(e.videos / 1000).toFixed(0)} mil vídeos · ${e.epocas} ép.`);
+barras($("graficoEscalaFalso"), D.escala.map((e, i) => ({ rotulo: nomesEscala[i], valor: e.fpm, cor: COR.alerta })), { unidade: "", casas: 2 });
+barras($("graficoEscalaDet"), D.escala.map((e, i) => ({ rotulo: nomesEscala[i], valor: e.det, cor: COR.acento })), { max: 100, unidade: "%" });
+linhas($("graficoCurva"), [{ nome: "validação", valores: D.curva.val, cor: COR.acento }, { nome: "treino", valores: D.curva.treino, cor: COR.cinza }], { min: 20, max: 100 });
+dispersao($("graficoGatilho"), D.gatilho.pontos, { limiar: 0.7, janelas: 3 });
+matriz($("matriz1"), D.matriz, { celula: 40, esquerda: 230, topo: 175 });
+barrasH($("graficoRanking"), D.ranking);
+linhas($("graficoNovos"), [{ nome: "gestos novos", valores: D.novos.epocas.map(e => e.novos), cor: COR.azul }, { nome: "gestos antigos", valores: D.novos.epocas.map(e => e.antigos), cor: COR.acento }], { min: 60, max: 100, marca: D.novos.escolhida });
+matriz($("matriz2"), D.matriz2, { celula: 46, esquerda: 200, topo: 170 });
+// Texto da matriz: as duas maiores confusões fora da diagonal, entre os gestos das demos.
+(() => {
+  const M = D.matriz, pares = [];
+  M.valores.forEach((l, i) => l.forEach((v, j) => { const ri = M.linhas_rotulos[i], cj = M.colunas_rotulos[j]; if (ri !== cj && cj !== "Outros gestos" && ri !== "Sem gesto") pares.push([v, ri, cj]); }));
+  pares.sort((a, b) => b[0] - a[0]);
+  $("textoMatriz1").innerHTML = pares.slice(0, 2).map(([v, a, b]) => `<b>${a}</b> vira <b>${b}</b> em ${fmt(v)}% dos casos`).join("; ") + ". Abrir e fechar a mão se confundem porque um movimento contém o outro.";
 })();
 
-mostrar(Math.max(0, (parseInt(location.hash.slice(1), 10) || 1) - 1));
-atualizarEstado();
+// Fita de movimentos do dia a dia, com um único gesto de comando.
+(() => {
+  const movs = [["🤚", "Coçar o rosto"], ["🗣️", "Falar"], ["👉", "Deslizar", true], ["☕", "Pegar o copo"], ["🔁", "Ajustar o retrovisor"], ["👀", "Olhar para o lado"], ["✋", "Sinal de pare", true], ["💁", "Mexer no cabelo"]];
+  const html = [...movs, ...movs].map(([i, t, g]) => `<div class="mov ${g ? "gesto" : ""}"><b>${i}</b>${t}${g ? " · comando" : ""}</div>`).join("");
+  $("trilho").innerHTML = html;
+})();
+
+// ---------- Navegação, trava e demos ----------
+const slides = [...document.querySelectorAll(".slide")];
+let atual = Math.min(slides.length - 1, Math.max(0, parseInt(location.hash.slice(1)) - 1 || 0));
+let travada = false, bloqueados = 0, disparosTeste = 0;
+const DEMOS = { tenis: "tenis.html", painel: "painel_carro.html", hospital: "hospital.html" };
+const BASE = { "Swiping Left": "anterior", "Swiping Right": "proxima", "Stop Sign": "alternar" };
+const MAPAS = {
+  tenis: BASE,
+  painel: { ...BASE, "Thumb Up": "volume_mais", "Thumb Down": "volume_menos", "Drumming Fingers": "tamborilar", "Pushing Hand Away": "ajuda",
+            "One Finger": "funcao", "Pulling Hand In": "funcao_anterior", "Two Fingers": "tamborilar" },
+  hospital: { ...BASE, "Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking Hand": "normal", "Zooming In With Full Hand": "zoom_mais",
+              "Zooming Out With Full Hand": "zoom_menos", "One Finger": "proximo_corte", "Two Fingers": "janela" },
+};
+let tempoAviso;
+function aviso(texto) { const a = $("aviso"); a.textContent = texto; a.classList.add("ver"); clearTimeout(tempoAviso); tempoAviso = setTimeout(() => a.classList.remove("ver"), 1100); }
+function quadroDemo() { return slides[atual].querySelector("iframe"); }
+function abrirDemo(slide) {
+  const chave = slide.dataset.demo;
+  if (chave === "teste") { $("videoTeste").src = "/video"; return; }
+  if (!DEMOS[chave]) return;
+  const f = document.createElement("iframe");
+  f.src = `/demo/${DEMOS[chave]}?embutido=1`; f.allow = "autoplay; fullscreen"; f.title = slide.dataset.titulo;
+  slide.querySelector(".quadro").appendChild(f);
+}
+function fecharDemo(slide) {
+  if (slide.dataset.demo === "teste") { $("videoTeste").removeAttribute("src"); return; }
+  const f = slide.querySelector("iframe");
+  if (f) { f.src = "about:blank"; f.remove(); }  // fecha o som e a câmera da demo
+}
+function mostrar(n) {
+  n = Math.max(0, Math.min(slides.length - 1, n));
+  slides.forEach((s, i) => {
+    const era = s.classList.contains("ativa");
+    s.classList.toggle("ativa", i === n); s.classList.toggle("antes", i < n);
+    if (era && i !== n) { prepararTracos(s, true); if (s.dataset.demo) fecharDemo(s); }
+  });
+  const s = slides[n];
+  if (s.dataset.demo && !s.classList.contains("aberta")) abrirDemo(s);
+  slides.forEach(x => x.classList.toggle("aberta", x === s && !!x.dataset.demo));
+  prepararTracos(s, true); requestAnimationFrame(() => requestAnimationFrame(() => prepararTracos(s, false)));
+  contar(s);
+  atual = n; history.replaceState(null, "", "#" + (n + 1));
+  $("numSlide").textContent = `${n + 1} / ${slides.length}`;
+  $("progresso").firstElementChild.style.width = ((n + 1) / slides.length * 100) + "%";
+  $("trava").style.visibility = s.dataset.demo ? "hidden" : "visible";
+}
+function ir(passo) { if (atual + passo >= 0 && atual + passo < slides.length) mostrar(atual + passo); }
+function mostrarTrava() {
+  $("trava").className = "pilula" + (travada ? " travada" : "");
+  $("trava").textContent = travada ? `🔒 Travada · pare destrava${bloqueados ? " · " + bloqueados + " bloqueados" : ""}` : "🔓 Livre · pare trava";
+}
+function repassar(e) { const f = quadroDemo(); if (f && f.contentWindow) f.contentWindow.postMessage(e, location.origin); }
+
+function receberComando(e) {
+  const classe = e.classe || e.comando, s = slides[atual], demo = s.dataset.demo;
+  if (demo) {
+    // Nas demos, os gestos são da demo; rolar a mão (que nenhuma demo usa) troca o slide.
+    if (classe === "Rolling Hand Forward" && !e.repeticao) { ir(1); return; }
+    if (classe === "Rolling Hand Backward" && !e.repeticao) { ir(-1); return; }
+    if (demo === "teste") { if (!e.repeticao) registrarDisparo(e); return; }
+    const comando = MAPAS[demo][classe];
+    if (!comando || (e.repeticao && demo !== "painel")) return;
+    repassar({ ...e, comando });
+    return;
+  }
+  if (e.repeticao) return;
+  if (classe === "Stop Sign") { travada = !travada; mostrarTrava(); aviso(travada ? "🔒 Tela travada" : "🔓 Tela destravada"); return; }
+  if (classe !== "Swiping Left" && classe !== "Swiping Right") return;
+  if (travada) { bloqueados++; mostrarTrava(); aviso("Tela travada: gesto ignorado"); return; }
+  ir(classe === "Swiping Right" ? 1 : -1);
+}
+function registrarDisparo(e) {
+  disparosTeste++; $("contaDisparos").textContent = disparosTeste;
+  const li = document.createElement("li"), hora = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  li.innerHTML = `<b></b><span>${hora} · ${Math.round((e.confianca || 0) * 100)}%</span>`; li.firstChild.textContent = e.gesto || e.classe;
+  $("listaDisparos").prepend(li);
+  while ($("listaDisparos").children.length > 7) $("listaDisparos").lastChild.remove();
+}
+function receberEstado(e) {
+  $("gestoPilula").textContent = e.aquecendo ? "aquecendo..." : `✋ ${e.gesto} · ${Math.round(e.confianca * 100)}%`;
+  $("gestoPilula").className = "pilula" + (e.e_comando ? " comando" : "");
+  if (slides[atual].dataset.demo === "teste") {
+    $("gestoGrande").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
+    $("gestoGrande").className = e.e_comando ? "comando" : "";
+    $("confTeste").style.width = (e.confianca * 100) + "%";
+    $("estadoTeste").textContent = `confiança ${Math.round(e.confianca * 100)}% · ${e.fps.toFixed(0)} fps · ${e.ms.toFixed(0)} ms por análise`;
+  }
+  if (slides[atual].dataset.demo && slides[atual].dataset.demo !== "teste") repassar(e);
+}
+const fonte = new EventSource("/eventos");
+fonte.onerror = () => { $("gestoPilula").textContent = "sem conexão com o modelo · use o teclado"; };
+fonte.onmessage = ev => {
+  const e = JSON.parse(ev.data);
+  if (e.tipo === "estado") receberEstado(e);
+  if (e.tipo === "comando") receberComando(e);
+  if (e.tipo === "erro") $("gestoPilula").textContent = e.mensagem;
+};
+addEventListener("message", ev => { if (ev.origin === location.origin && ev.data && ev.data.navegar) ir(ev.data.navegar); });
+addEventListener("keydown", e => {
+  if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); ir(1); }
+  else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); ir(-1); }
+  else if (e.key === "Home") mostrar(0);
+  else if (e.key === "End") mostrar(slides.length - 1);
+  else if (e.key.toLowerCase() === "t" && !slides[atual].dataset.demo) { travada = !travada; mostrarTrava(); aviso(travada ? "🔒 Tela travada" : "🔓 Tela destravada"); }
+  else if (e.key.toLowerCase() === "f") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+});
+mostrarTrava();
+mostrar(atual);
 </script>
 </body>
 </html>

@@ -63,6 +63,18 @@ A voz diz o nome da página a cada troca, e **empurrar a mão** faz ela ler os c
 
 Os gestos mudam em cada tela, e a legenda à direita mostra os da tela atual. Pelo teclado: setas, espaço, `M` (tamborilar), `R` (próxima função), `Shift+R` (função anterior), `E` (explicação) e `F` (tela cheia).
 
+### Apresentação
+
+`abrir_apresentacao.bat` gera `demo/apresentacao.html` a partir de `demo/apresentacao_modelo.html`, com todos os números lidos de `resultados/` por `demo/gerar_apresentacao.py`. Os nomes do grupo ficam na variável `GRUPO` desse arquivo. São 22 slides: a ideia, o passo a passo do treino, as matrizes de confusão e quatro demos ao vivo dentro dos slides (teste geral, tênis, carro e sala cirúrgica).
+
+| Gesto | Nos slides | Nas demos |
+|---|---|---|
+| Deslizar para a direita ou esquerda | Avança ou volta | Comando da demo |
+| Sinal de pare | Trava ou destrava a troca de slide | Comando da demo |
+| Rolar a mão para frente ou para trás | | Avança ou volta o slide |
+
+Uma webcam só serve um programa por vez, então as demos rodam dentro da apresentação, e cada gesto vai apenas para o slide aberto. Pelo teclado: setas ou PageUp/PageDown, `T` (trava) e `F` (tela cheia). As matrizes de confusão saem de `python src/matriz_confusao.py`.
+
 ### Sala cirúrgica
 
 Demonstração de que o mesmo modelo serve fora do carro: durante uma lobectomia, o cirurgião percorre os cortes da tomografia, muda o contraste, dá zoom e confirma a lista de verificação da OMS sem tocar em nada. As tomografias são geradas pela própria página em unidades Hounsfield, com janelas de contraste reais (pulmão, mediastino, osso); o raio-X, o paciente e o monitor de sinais vitais também são simulados, sem nenhum dado real. A tela começa **travada** e ignora qualquer gesto até o sinal de pare; os gestos bloqueados aparecem num contador, para mostrar a defesa contra o disparo sem querer.

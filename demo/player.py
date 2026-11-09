@@ -40,6 +40,11 @@ COMANDOS_HOSPITAL = {"Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking
                      "Zooming In With Full Hand": "zoom_mais", "Zooming Out With Full Hand": "zoom_menos",
                      # Só existem no modelo cnn_3d_mais_gestos.
                      "One Finger": "proximo_corte", "Two Fingers": "janela"}
+# Na apresentação, a página repassa cada gesto para o slide aberto. O servidor só dispara gestos desta
+# lista e manda o nome da classe; quem traduz para o comando de cada demo é a própria apresentação.
+GESTOS_APRESENTACAO = sorted({*COMANDOS, *COMANDOS_PAINEL, *COMANDOS_HOSPITAL, "Rolling Hand Forward", "Rolling Hand Backward"})
+# Páginas que a apresentação pode abrir dentro de um slide.
+DEMOS_EMBUTIDAS = {"tenis.html", "painel_carro.html", "hospital.html"}
 TIPOS_AUDIO = {".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".wav": "audio/wav", ".ogg": "audio/ogg"}
 
 
@@ -128,7 +133,7 @@ def laco_modelo(args, estado, parar):
     maximo = int(round(max(args.janelas) * V.QUADROS_POR_SEGUNDO))
     minimo = int(round(min(args.janelas) * V.QUADROS_POR_SEGUNDO))
     buffer, historico = collections.deque(maxlen=maximo), collections.deque(maxlen=args.suavizar)
-    gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if args.painel else (), args.repetir)
+    gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if (args.painel or args.apresentacao) else (), args.repetir)
     ultimo_quadro, ultima_inferencia, ultimo_video, ultimo_estado = 0.0, 0.0, 0.0, 0.0
     tempos = collections.deque(maxlen=30)
     nome_atual, confianca, ms = "Aquecendo", 0.0, 0.0
@@ -170,7 +175,7 @@ def laco_modelo(args, estado, parar):
             disparo = gatilho.atualizar(nome_atual, confianca, agora, presente)
             if disparo:
                 estado.disparos += 1
-                estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "gesto": V.TRADUCAO[disparo],
+                estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "classe": disparo, "gesto": V.TRADUCAO[disparo],
                                  "confianca": confianca, "repeticao": gatilho.foi_repeticao})
         if agora - ultimo_video >= 0.08:
             pequena = cv2.resize(cv2.flip(quadro, 1), (480, 270), interpolation=cv2.INTER_AREA)
@@ -239,7 +244,7 @@ def laco_separado(args, estado, parar, captura, modelo, nomes, indices_gesto):
     leitor.start()
 
     historico = collections.deque(maxlen=args.suavizar)
-    gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if args.painel else (), args.repetir)
+    gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if (args.painel or args.apresentacao) else (), args.repetir)
     ultima_inferencia, ultimo_estado = 0.0, 0.0
     nome_atual, confianca, ms = "Aquecendo", 0.0, 0.0
 
@@ -270,7 +275,7 @@ def laco_separado(args, estado, parar, captura, modelo, nomes, indices_gesto):
             disparo = gatilho.atualizar(nome_atual, confianca, agora, presente)
             if disparo:
                 estado.disparos += 1
-                estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "gesto": V.TRADUCAO[disparo],
+                estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "classe": disparo, "gesto": V.TRADUCAO[disparo],
                                  "confianca": confianca, "repeticao": gatilho.foi_repeticao})
         else:
             time.sleep(0.01)
@@ -339,6 +344,13 @@ def criar_servidor(args, estado, parar):
                 self.send_header("Cache-Control", "no-store")
                 self.end_headers()
                 self.wfile.write(html)
+            elif url.path.startswith("/demo/") and Path(url.path).name in DEMOS_EMBUTIDAS:
+                # A apresentação abre as demos dentro de slides; lidas a cada pedido, sem cache.
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write((RAIZ / Path(url.path).name).read_bytes())
             elif url.path.startswith("/vendor/"):
                 # Só arquivos diretos de demo/vendor, sem subpastas.
                 arquivo = RAIZ / "vendor" / Path(url.path).name
@@ -397,7 +409,8 @@ def criar_servidor(args, estado, parar):
                     pass
             elif url.path == "/testar" and args.simular:
                 comando = parse_qs(url.query).get("c", ["proxima"])[0]
-                estado.publicar({"tipo": "comando", "comando": comando, "gesto": "Teste", "confianca": 1.0})
+                estado.publicar({"tipo": "comando", "comando": comando, "classe": comando, "gesto": "Teste", "confianca": 1.0,
+                                 "repeticao": "repeticao" in parse_qs(url.query)})
                 self.send_response(204)
                 self.end_headers()
             else:
@@ -428,7 +441,11 @@ def main():
     a.add_argument("--repetir", type=float, default=2.0, help="Segundos entre repetições de um polegar mantido, no painel")
     a.add_argument("--painel", action="store_true", help="Liga os gestos extras do painel: polegares, tamborilar, puxar e empurrar a mão")
     a.add_argument("--hospital", action="store_true", help="Liga os gestos extras do hospital: polegares, acenar e zoom com a mão inteira")
+    a.add_argument("--apresentacao", action="store_true", help="Dispara os gestos de todas as demos; a página repassa cada um ao slide aberto")
     args = a.parse_args()
+    if args.apresentacao:
+        COMANDOS.clear()
+        COMANDOS.update({g: g for g in GESTOS_APRESENTACAO})
     if args.painel:
         COMANDOS.update(COMANDOS_PAINEL)
     if args.hospital:

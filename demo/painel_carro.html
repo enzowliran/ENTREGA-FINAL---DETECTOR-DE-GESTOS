@@ -886,11 +886,10 @@ carregarFaixas();
 
 // ---- Modelo ----
 $("video").src = "/video";
-const fonte = new EventSource("/eventos");
-fonte.onopen = () => { $("conexao").textContent = "Gestos ligados"; $("ponto").className = "ok"; };
-fonte.onerror = () => { $("conexao").textContent = "Sem conexão com o modelo"; $("ponto").className = ""; };
-fonte.onmessage = ev => {
-  const e = JSON.parse(ev.data);
+// Dentro da apresentação, os eventos chegam da página que abriu esta demo, e não direto do servidor:
+// assim só o slide aberto recebe os gestos.
+const EMBUTIDO = new URLSearchParams(location.search).has("embutido");
+function receber(e) {
   if (e.tipo === "erro") { $("conexao").textContent = e.mensagem; $("ponto").className = ""; }
   // Manter o polegar repete no menu e no clima, e confirma a chamada; o volume muda um passo por gesto.
   if (e.tipo === "comando") executar(e.comando, !!e.repeticao);
@@ -900,7 +899,17 @@ fonte.onmessage = ev => {
     $("confianca").style.width = (e.confianca * 100) + "%";
     $("nMs").textContent = Math.round(e.ms);
   }
-};
+}
+if (EMBUTIDO) {
+  $("conexao").textContent = "Gestos ligados"; $("ponto").className = "ok";
+  addEventListener("message", ev => { if (ev.origin === location.origin && ev.data && ev.data.tipo) receber(ev.data); });
+  addEventListener("keydown", ev => { if (ev.key === "PageDown" || ev.key === "PageUp") parent.postMessage({ navegar: ev.key === "PageDown" ? 1 : -1 }, location.origin); });
+} else {
+  const fonte = new EventSource("/eventos");
+  fonte.onopen = () => { $("conexao").textContent = "Gestos ligados"; $("ponto").className = "ok"; };
+  fonte.onerror = () => { $("conexao").textContent = "Sem conexão com o modelo"; $("ponto").className = ""; };
+  fonte.onmessage = ev => receber(JSON.parse(ev.data));
+}
 </script>
 </body>
 </html>
