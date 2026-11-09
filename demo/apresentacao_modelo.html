@@ -45,6 +45,11 @@
   .divisor .enfeite { position: absolute; right: 120px; top: 50%; width: 340px; height: 340px; transform: translateY(-50%); border-radius: 50%;
                       background: conic-gradient(from 0deg, var(--acento), #f472b6, #60a5fa, #34d399, var(--acento)); opacity: .9; animation: gira 18s linear infinite; }
   .divisor .enfeite::after { content: attr(data-icone); position: absolute; inset: 26px; border-radius: 50%; background: var(--palco); display: grid; place-items: center; font-size: 150px; animation: gira 18s linear infinite reverse; }
+  .tabela { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 17px; background: var(--cartao); border: 1px solid var(--linha); border-radius: 16px; overflow: hidden; }
+  .tabela th { text-align: right; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--suave); padding: 12px 14px; background: var(--acento-claro); }
+  .tabela th:first-child, .tabela td:first-child { text-align: left; }
+  .tabela td { text-align: right; padding: 10px 14px; border-top: 1px solid var(--linha); font-variant-numeric: tabular-nums; }
+  .tabela tr.vencedora td { font-weight: 800; color: var(--acento); }
   #secaoPilula { color: var(--acento); border-color: var(--acento-claro); background: var(--acento-claro); font-weight: 700; }
   h1 { font-size: 76px; line-height: 1.04; margin: 0; letter-spacing: -.02em; }
   h2 { font-size: 46px; line-height: 1.12; margin: 0 0 26px; letter-spacing: -.015em; }
@@ -278,7 +283,7 @@
     <div class="numParte an">02</div>
     <h1 class="an" style="--d:1">Como treinamos</h1>
     <p class="lead an" style="--d:2">Seis passos, do primeiro teste aos gestos novos, sempre medindo os falsos disparos.</p>
-    <div class="indice an" style="--d:3"><span><b>1</b>Primeiros testes</span><span><b>2</b>Não disparar</span><span><b>3</b>Mais dados</span><span><b>4</b>Treino completo</span><span><b>5</b>Gatilho</span><span><b>6</b>Gestos novos</span></div>
+    <div class="indice an" style="--d:3"><span><b>1</b>Arquitetura</span><span><b>2</b>Não disparar</span><span><b>3</b>Mais dados</span><span><b>4</b>Treino completo</span><span><b>5</b>Gatilho</span><span><b>6</b>Gestos novos</span></div>
   </section>
 
   <!-- 5. Passo a passo -->
@@ -286,7 +291,7 @@
     <p class="kicker an">Como chegamos lá</p>
     <h2 class="an" style="--d:1">Seis passos, cada um respondendo a um problema do anterior</h2>
     <div class="linha-tempo">
-      <div class="passo an" style="--d:2"><div class="bola">1</div><h3>Primeiros testes</h3><p>Qual arquitetura aprende rápido?</p></div>
+      <div class="passo an" style="--d:2"><div class="bola">1</div><h3>Arquitetura</h3><p>Seis redes no mesmo teste</p></div>
       <div class="passo an" style="--d:3"><div class="bola">2</div><h3>Não disparar</h3><p>Custo extra para disparos sem gesto</p></div>
       <div class="passo an" style="--d:4"><div class="bola">3</div><h3>Mais dados</h3><p>Pequeno, médio e grande</p></div>
       <div class="passo an" style="--d:5"><div class="bola">4</div><h3>Treino completo</h3><p>20 épocas em todo o Jester</p></div>
@@ -297,13 +302,13 @@
 
   <!-- 6. Passo 1 -->
   <section class="slide" data-titulo="Passo 1">
-    <p class="kicker an">Passo 1 · primeiros testes</p>
-    <h2 class="an" style="--d:1">Um teste curto para escolher a arquitetura</h2>
-    <div class="grade" style="grid-template-columns:1.25fr 1fr;align-items:center">
-      <div class="cartao an" style="--d:2"><svg id="graficoPequeno" width="760" height="420"></svg></div>
+    <p class="kicker an">Passo 1 · escolher a arquitetura</p>
+    <h2 class="an" style="--d:1">Seis redes, o mesmo teste: as convoluções 3D venceram</h2>
+    <div class="grade" style="grid-template-columns:1.15fr 1fr;align-items:center;gap:30px">
+      <div class="cartao an" style="--d:2"><h3>Acerto na validação</h3><svg id="graficoArquiteturas" width="760" height="400"></svg></div>
       <div class="an" style="--d:3">
-        <p class="lead" id="textoPequeno" style="font-size:22px"></p>
-        <div class="cartao" style="margin-top:24px"><h3>Leitura honesta</h3><p>O transformer usou a mesma taxa de aprendizado da CNN, sem ajuste próprio, e a GRU foi interrompida. Não dá para dizer que eles são piores: só que a CNN 3D aprendeu bem nessas condições.</p></div>
+        <table class="tabela" id="tabelaArquiteturas"></table>
+        <p class="nota" style="margin-top:14px" id="notaArquiteturas"></p>
       </div>
     </div>
   </section>
@@ -567,7 +572,6 @@ function contar(slide) {
     requestAnimationFrame(passo);
   });
 }
-$("textoPequeno").innerHTML = `Com ${Number(D.pequeno_cfg.videos).toLocaleString("pt-BR")} vídeos e ${D.pequeno_cfg.epocas} épocas, a <b class="destaque">CNN 3D chegou a ${fmt(D.pequeno[0].top1)}%</b> na validação; o transformer ficou em ${fmt(D.pequeno[1].top1)}%. Seguimos com a CNN 3D.`;
 $("textoLimiar").innerHTML = `Um limiar por gesto deu ${D.descartados.limiar.por_gesto.falsos} falsos e ${fmt(D.descartados.limiar.por_gesto.det)}% de detecção; o limiar único, ${D.descartados.limiar.unico.falsos} falsos e ${fmt(D.descartados.limiar.unico.det)}%. Mais regras, sem melhora real.`;
 
 // ---------- Gráficos em SVG ----------
@@ -681,7 +685,17 @@ function divisao(svg) {
 }
 
 divisao($("graficoDivisao"));
-barras($("graficoPequeno"), D.pequeno.map((p, i) => ({ rotulo: p.nome, valor: p.top1, cor: i ? COR.cinza : COR.acento })), { max: 100, unidade: "%" });
+// Passo 1: comparação justa de arquiteturas, da melhor para a pior.
+(() => {
+  const A = D.arquiteturas, r = A.resultados, tresD = n => !/2D/.test(n);
+  barras($("graficoArquiteturas"), r.map((x, i) => ({ rotulo: x.nome.replace(" + ", "\n+ ").replace("CNN 3D ", "CNN 3D\n"), valor: x.top1_val,
+                                                     cor: i === 0 ? COR.acento : tresD(x.nome) ? "#a78bfa" : COR.cinza })), { max: 100, unidade: "%" });
+  $("tabelaArquiteturas").innerHTML = "<tr><th>Arquitetura</th><th>Parâmetros</th><th>Resposta</th><th>Treino/época</th></tr>" +
+    r.map((x, i) => `<tr class="${i === 0 ? "vencedora" : ""}"><td>${x.nome}</td><td>${fmt(x.parametros_mi, 2)} mi</td><td>${fmt(x.latencia_1_ms)} ms</td><td>${fmt(x.segundos_epoca / 60)} min</td></tr>`).join("");
+  const venc = r[0], base = r.find(x => x.arquitetura === "cnn_3d");
+  $("notaArquiteturas").innerHTML = `<b>${venc.nome}</b>: +${fmt(venc.top1_val - base.top1_val)} ponto sobre a CNN 3D, com o dobro do tempo de treino. Todas respondem em menos de 4 ms.<br>` +
+    `Mesmo teste para todas: 20 mil vídeos, 8 épocas, seed 42. As redes 2D aprendem devagar (a GRU com taxa 1e-3 travou em ${fmt(A.gru_lr1e3)}%); a R(2+1)D não coube nos 8 GB da GPU.`;
+})();
 barras($("graficoPenAcerto"), D.penalidade.map(p => ({ rotulo: p.rotulo, valor: p.top1, cor: COR.acento })), { max: 100, unidade: "%" });
 barras($("graficoPenFalso"), D.penalidade.map(p => ({ rotulo: p.rotulo, valor: p.fa, cor: COR.alerta })), { unidade: "%", casas: 2 });
 const nomesEscala = D.escala.map(e => `${e.rotulo}\n${(e.videos / 1000).toFixed(0)} mil vídeos · ${e.epocas} ép.`);

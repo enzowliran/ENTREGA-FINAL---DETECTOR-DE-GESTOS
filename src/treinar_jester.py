@@ -73,7 +73,7 @@ def avaliar(modelo, conjunto, tamanho_lote, dispositivo, indices_negativos):
 
 def main():
     analisador = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    analisador.add_argument("--modelo", required=True, choices=["cnn_gru", "cnn_transformer", "cnn_3d"])
+    analisador.add_argument("--modelo", required=True, choices=list(M.ARQUITETURAS))
     analisador.add_argument("--dados", default="data/Jester")
     analisador.add_argument("--epocas", type=int, default=20)
     analisador.add_argument("--lote", type=int, default=48)

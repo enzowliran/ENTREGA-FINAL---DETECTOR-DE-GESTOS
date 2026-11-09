@@ -94,6 +94,9 @@ def main():
                     {"nome": "CNN 2D + Transformer", "top1": round(100 * float(historico("cnn_transformer_pequeno")[-1]["top1_val"]), 1)},
                     {"nome": "CNN 2D + GRU", "top1": None}]
     d["pequeno_cfg"] = {"videos": config("cnn_3d_pequeno")["limite_treino"], "epocas": config("cnn_3d_pequeno")["epocas"]}
+    # Comparação justa de arquiteturas (src/comparar_arquiteturas.py); a GRU com taxa 1e-3 travou e foi refeita com 3e-4.
+    d["arquiteturas"] = ler_json("resultados/jester/comparacao_arquiteturas.json")
+    d["arquiteturas"]["gru_lr1e3"] = round(100 * max(float(l["top1_val"]) for l in historico("arq_cnn_gru_lr1e-3")), 1)
 
     # Passo 2: custo extra para disparos sem gesto, no mesmo subconjunto.
     pen = []

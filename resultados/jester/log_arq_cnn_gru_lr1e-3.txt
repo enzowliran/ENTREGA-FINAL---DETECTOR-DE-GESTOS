@@ -1,0 +1,11 @@
+Treino 20000 (faltando 0); validação 5000 (faltando 0); 27 classes
+cnn_gru: 1,574,907 parâmetros, inicialização aleatória
+ ep0 passo 0 perda 3.337 top1 0.062 9 vídeos/s GPU 6596 MB
+ ep0 passo 200 perda 3.299 top1 0.068 211 vídeos/s GPU 6596 MB
+ ep0 passo 400 perda 3.293 top1 0.076 223 vídeos/s GPU 6596 MB
+Época 0: treino 0.076, validação top1 0.1018 top5 0.2538, falsa ativação 0.0000, gestos acertados 0.0000 (limiar 0,6), 1.5 min
+ ep1 passo 0 perda 3.278 top1 0.104 131 vídeos/s GPU 6596 MB
+ ep1 passo 200 perda 3.287 top1 0.082 239 vídeos/s GPU 6596 MB
+ ep1 passo 400 perda 3.285 top1 0.081 239 vídeos/s GPU 6596 MB
+Época 1: treino 0.081, validação top1 0.1018 top5 0.2426, falsa ativação 0.0000, gestos acertados 0.0000 (limiar 0,6), 1.4 min
+ ep2 passo 0 perda 3.279 top1 0.083 172 vídeos/s GPU 6596 MB

@@ -1,0 +1,152 @@
+{
+  "protocolo": "20 mil vídeos de treino, 8 épocas, lote 48, seed 42, validação de 5 mil vídeos; sem aumento de dados",
+  "fora": {
+    "r2plus1d": "com lote de 48 passa dos 8 GB da GPU e fica dezenas de vezes mais lenta"
+  },
+  "resultados": [
+    {
+      "arquitetura": "cnn_3d_larga",
+      "nome": "CNN 3D larga",
+      "parametros_mi": 7.92,
+      "lr": 0.001,
+      "top1_val": 84.2,
+      "top5_val": 98.1,
+      "melhor_epoca": 8,
+      "falsa_ativacao_06": 0.71,
+      "gestos_acertados_06": 62.3,
+      "segundos_epoca": 220,
+      "curva_val": [
+        23.2,
+        41.8,
+        54.0,
+        65.4,
+        76.6,
+        79.8,
+        83.6,
+        84.2
+      ],
+      "latencia_1_ms": 3.9,
+      "latencia_3_ms": 12.0
+    },
+    {
+      "arquitetura": "res_3d",
+      "nome": "ResNet 3D",
+      "parametros_mi": 3.57,
+      "lr": 0.001,
+      "top1_val": 83.0,
+      "top5_val": 97.9,
+      "melhor_epoca": 8,
+      "falsa_ativacao_06": 1.14,
+      "gestos_acertados_06": 57.5,
+      "segundos_epoca": 125,
+      "curva_val": [
+        17.4,
+        50.4,
+        59.8,
+        69.8,
+        72.2,
+        78.5,
+        82.1,
+        83.0
+      ],
+      "latencia_1_ms": 2.4,
+      "latencia_3_ms": 6.7
+    },
+    {
+      "arquitetura": "cnn_3d",
+      "nome": "CNN 3D",
+      "parametros_mi": 3.52,
+      "lr": 0.001,
+      "top1_val": 82.4,
+      "top5_val": 98.1,
+      "melhor_epoca": 8,
+      "falsa_ativacao_06": 0.43,
+      "gestos_acertados_06": 58.0,
+      "segundos_epoca": 107,
+      "curva_val": [
+        24.2,
+        45.8,
+        55.4,
+        68.3,
+        73.8,
+        79.0,
+        82.3,
+        82.4
+      ],
+      "latencia_1_ms": 1.9,
+      "latencia_3_ms": 5.3
+    },
+    {
+      "arquitetura": "cnn_3d_leve",
+      "nome": "CNN 3D leve",
+      "parametros_mi": 0.88,
+      "lr": 0.001,
+      "top1_val": 78.6,
+      "top5_val": 97.5,
+      "melhor_epoca": 8,
+      "falsa_ativacao_06": 1.42,
+      "gestos_acertados_06": 45.1,
+      "segundos_epoca": 56,
+      "curva_val": [
+        19.3,
+        41.9,
+        52.7,
+        58.5,
+        72.4,
+        73.1,
+        77.9,
+        78.6
+      ],
+      "latencia_1_ms": 1.9,
+      "latencia_3_ms": 2.8
+    },
+    {
+      "arquitetura": "cnn_transformer",
+      "nome": "CNN 2D + Transformer",
+      "parametros_mi": 2.24,
+      "lr": 0.0003,
+      "top1_val": 65.3,
+      "top5_val": 92.5,
+      "melhor_epoca": 8,
+      "falsa_ativacao_06": 2.42,
+      "gestos_acertados_06": 36.8,
+      "segundos_epoca": 87,
+      "curva_val": [
+        9.1,
+        10.4,
+        22.2,
+        33.6,
+        48.8,
+        59.6,
+        64.5,
+        65.3
+      ],
+      "latencia_1_ms": 3.9,
+      "latencia_3_ms": 4.6
+    },
+    {
+      "arquitetura": "cnn_gru",
+      "nome": "CNN 2D + GRU",
+      "parametros_mi": 1.57,
+      "lr": 0.0003,
+      "top1_val": 50.4,
+      "top5_val": 87.0,
+      "melhor_epoca": 8,
+      "falsa_ativacao_06": 0.28,
+      "gestos_acertados_06": 4.1,
+      "segundos_epoca": 85,
+      "curva_val": [
+        9.9,
+        8.7,
+        18.1,
+        22.3,
+        34.1,
+        44.4,
+        49.4,
+        50.4
+      ],
+      "latencia_1_ms": 2.7,
+      "latencia_3_ms": 4.4
+    }
+  ]
+}

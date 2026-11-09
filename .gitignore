@@ -5,3 +5,6 @@ __pycache__/
 .ipynb_checkpoints/
 *.rar
 *.npz
+
+# Estado de otimizador dos treinos curtos de arquitetura: não serve para retomar nada útil e pesa demais.
+resultados/jester/arq_*/ultimo.pt

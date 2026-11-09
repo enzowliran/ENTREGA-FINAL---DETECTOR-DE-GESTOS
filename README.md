@@ -113,7 +113,7 @@ Para repetir o melhor treino, em uma pasta nova (`--nome`):
 python src/treinar_jester.py --modelo cnn_3d --epocas 20 --lr 1e-3 --peso-falso 1.0 --aug-tempo --aug-espaco --suavizacao 0.05 --frac-sinteticos 0.1 --nome meu_treino
 ```
 
-**Use sempre um `--nome` novo.** Sem ele, o resultado grava por cima de `resultados/jester/cnn_3d/`, que é o modelo das demos. Para continuar um treino, use `--retomar` com o `--nome` da pasta: ele parte do `ultimo.pt` que está nela e grava por cima dessa pasta. As arquiteturas disponíveis são `cnn_3d`, `cnn_gru` e `cnn_transformer`. Para um teste rápido, use `--limite-treino 2000` e poucas épocas.
+**Use sempre um `--nome` novo.** Sem ele, o resultado grava por cima de `resultados/jester/cnn_3d/`, que é o modelo das demos. Para continuar um treino, use `--retomar` com o `--nome` da pasta: ele parte do `ultimo.pt` que está nela e grava por cima dessa pasta. As arquiteturas disponíveis estão em `ARQUITETURAS`, em `src/modelos.py`: `cnn_3d`, `cnn_3d_leve`, `cnn_3d_larga`, `res_3d`, `r2plus1d`, `cnn_gru` e `cnn_transformer`. Depois de treinar as pastas `arq_*`, `python src/comparar_arquiteturas.py` junta os resultados e mede a latência. Para um teste rápido, use `--limite-treino 2000` e poucas épocas.
 
 Para medir o modelo salvo, troque o caminho pelo do seu treino:
 
@@ -157,8 +157,7 @@ O fluxo é simulado com vídeos sem gesto colados em sequência, ou seja, é uma
 | RGB x RGB + infravermelho | Não feito |
 | Latência | Não medida formalmente |
 | Vocabulário de 3, 5 ou 7 gestos | Não feito |
-| CNN + GRU x CNN 3D | Não concluído; a GRU foi interrompida |
-| CNN + Transformer | Sem conclusão: 15,2% em um treino pequeno, sem ajuste próprio de taxa de aprendizado |
+| Comparação de arquiteturas | Feita em treino curto (20 mil vídeos, 8 épocas): CNN 3D larga 84,2%, ResNet 3D 83,0%, CNN 3D 82,4%, CNN 3D leve 78,6%, CNN 2D + Transformer 65,3%, CNN 2D + GRU 50,4% (`resultados/jester/comparacao_arquiteturas.json`) |
 
 ### Gestos novos: um a quatro dedos e punho
 

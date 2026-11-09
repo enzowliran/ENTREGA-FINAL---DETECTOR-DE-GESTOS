@@ -1,0 +1,35 @@
+Treino 20000 (faltando 0); validação 5000 (faltando 0); 27 classes
+cnn_transformer: 2,238,459 parâmetros, inicialização aleatória
+ ep0 passo 0 perda 3.591 top1 0.062 10 vídeos/s GPU 6601 MB
+ ep0 passo 200 perda 3.426 top1 0.051 210 vídeos/s GPU 6601 MB
+ ep0 passo 400 perda 3.393 top1 0.058 222 vídeos/s GPU 6601 MB
+Época 0: treino 0.058, validação top1 0.0910 top5 0.2678, falsa ativação 0.0000, gestos acertados 0.0000 (limiar 0,6), 1.5 min
+ ep1 passo 0 perda 3.362 top1 0.042 148 vídeos/s GPU 6601 MB
+ ep1 passo 200 perda 3.300 top1 0.075 236 vídeos/s GPU 6601 MB
+ ep1 passo 400 perda 3.262 top1 0.085 237 vídeos/s GPU 6601 MB
+Época 1: treino 0.085, validação top1 0.1042 top5 0.3854, falsa ativação 0.0000, gestos acertados 0.0002 (limiar 0,6), 1.4 min
+ ep2 passo 0 perda 3.166 top1 0.083 172 vídeos/s GPU 6601 MB
+ ep2 passo 200 perda 3.115 top1 0.123 213 vídeos/s GPU 6601 MB
+ ep2 passo 400 perda 3.049 top1 0.138 204 vídeos/s GPU 6601 MB
+Época 2: treino 0.140, validação top1 0.2220 top5 0.5928, falsa ativação 0.0000, gestos acertados 0.0047 (limiar 0,6), 1.6 min
+ ep3 passo 0 perda 2.894 top1 0.146 144 vídeos/s GPU 6601 MB
+ ep3 passo 200 perda 2.773 top1 0.221 226 vídeos/s GPU 6601 MB
+ ep3 passo 400 perda 2.676 top1 0.249 232 vídeos/s GPU 6601 MB
+Época 3: treino 0.251, validação top1 0.3356 top5 0.7256, falsa ativação 0.0014, gestos acertados 0.0337 (limiar 0,6), 1.4 min
+ ep4 passo 0 perda 2.575 top1 0.333 175 vídeos/s GPU 6601 MB
+ ep4 passo 200 perda 2.355 top1 0.353 238 vídeos/s GPU 6601 MB
+ ep4 passo 400 perda 2.286 top1 0.382 238 vídeos/s GPU 6601 MB
+Época 4: treino 0.385, validação top1 0.4876 top5 0.8440, falsa ativação 0.0128, gestos acertados 0.1366 (limiar 0,6), 1.4 min
+ ep5 passo 0 perda 2.264 top1 0.458 177 vídeos/s GPU 6601 MB
+ ep5 passo 200 perda 2.071 top1 0.468 239 vídeos/s GPU 6601 MB
+ ep5 passo 400 perda 2.011 top1 0.493 239 vídeos/s GPU 6601 MB
+Época 5: treino 0.496, validação top1 0.5960 top5 0.9034, falsa ativação 0.0242, gestos acertados 0.2720 (limiar 0,6), 1.4 min
+ ep6 passo 0 perda 1.960 top1 0.479 175 vídeos/s GPU 6601 MB
+ ep6 passo 200 perda 1.854 top1 0.553 239 vídeos/s GPU 6601 MB
+ ep6 passo 400 perda 1.832 top1 0.561 238 vídeos/s GPU 6601 MB
+Época 6: treino 0.562, validação top1 0.6450 top5 0.9206, falsa ativação 0.0242, gestos acertados 0.3432 (limiar 0,6), 1.4 min
+ ep7 passo 0 perda 1.806 top1 0.562 179 vídeos/s GPU 6601 MB
+ ep7 passo 200 perda 1.759 top1 0.590 239 vídeos/s GPU 6601 MB
+ ep7 passo 400 perda 1.765 top1 0.587 239 vídeos/s GPU 6601 MB
+Época 7: treino 0.589, validação top1 0.6534 top5 0.9248, falsa ativação 0.0242, gestos acertados 0.3676 (limiar 0,6), 1.4 min
+Teste rápido: conjunto de teste não avaliado.

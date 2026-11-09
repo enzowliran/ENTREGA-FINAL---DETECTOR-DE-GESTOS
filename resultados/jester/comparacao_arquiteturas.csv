@@ -1,0 +1,7 @@
+arquitetura,nome,parametros_mi,lr,top1_val,top5_val,melhor_epoca,falsa_ativacao_06,gestos_acertados_06,segundos_epoca,latencia_1_ms,latencia_3_ms
+cnn_3d_larga,CNN 3D larga,7.92,0.001,84.2,98.1,8,0.71,62.3,220,3.9,12.0
+res_3d,ResNet 3D,3.57,0.001,83.0,97.9,8,1.14,57.5,125,2.4,6.7
+cnn_3d,CNN 3D,3.52,0.001,82.4,98.1,8,0.43,58.0,107,1.9,5.3
+cnn_3d_leve,CNN 3D leve,0.88,0.001,78.6,97.5,8,1.42,45.1,56,1.9,2.8
+cnn_transformer,CNN 2D + Transformer,2.24,0.0003,65.3,92.5,8,2.42,36.8,87,3.9,4.6
+cnn_gru,CNN 2D + GRU,1.57,0.0003,50.4,87.0,8,0.28,4.1,85,2.7,4.4

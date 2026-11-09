@@ -1,0 +1,16 @@
+{
+  "modelo": "cnn_3d_larga",
+  "dados": "data/Jester",
+  "epocas": 8,
+  "lote": 48,
+  "lr": 0.001,
+  "seed": 42,
+  "limite_treino": 20000,
+  "retomar": false,
+  "peso_falso": 0.0,
+  "aug_tempo": false,
+  "aug_espaco": false,
+  "suavizacao": 0.1,
+  "frac_sinteticos": 0.0,
+  "nome": "arq_cnn_3d_larga"
+}
