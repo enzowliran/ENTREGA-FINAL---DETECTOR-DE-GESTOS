@@ -37,7 +37,9 @@ COMANDOS_PAINEL = {**COMANDOS_VOLUME, "Drumming Fingers": "tamborilar", "Pushing
                    "Two Fingers": "tamborilar"}  # dois dedos faz o mesmo que tamborilar: abre e fecha o menu
 # No hospital, empurrar a mão fica de fora: o modelo a confunde com o zoom in.
 COMANDOS_HOSPITAL = {"Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking Hand": "normal",
-                     "Zooming In With Full Hand": "zoom_mais", "Zooming Out With Full Hand": "zoom_menos"}
+                     "Zooming In With Full Hand": "zoom_mais", "Zooming Out With Full Hand": "zoom_menos",
+                     # Só existem no modelo cnn_3d_mais_gestos.
+                     "One Finger": "proximo_corte", "Two Fingers": "janela"}
 TIPOS_AUDIO = {".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".wav": "audio/wav", ".ogg": "audio/ogg"}
 
 

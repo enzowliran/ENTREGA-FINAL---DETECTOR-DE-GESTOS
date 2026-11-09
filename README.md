@@ -65,18 +65,20 @@ Os gestos mudam em cada tela, e a legenda à direita mostra os da tela atual. Pe
 
 ### Sala cirúrgica
 
-Demonstração de que o mesmo modelo serve fora do carro: durante a cirurgia, o médico consulta exames e o checklist sem tocar em nada. As imagens são desenhadas pela própria página, sem dados de paciente. A tela começa **travada** e ignora qualquer gesto até o sinal de pare; os gestos bloqueados aparecem num contador, para mostrar a defesa contra o disparo sem querer.
+Demonstração de que o mesmo modelo serve fora do carro: durante uma lobectomia, o cirurgião percorre os cortes da tomografia, muda o contraste, dá zoom e confirma a lista de verificação da OMS sem tocar em nada. As tomografias são geradas pela própria página em unidades Hounsfield, com janelas de contraste reais (pulmão, mediastino, osso); o raio-X, o paciente e o monitor de sinais vitais também são simulados, sem nenhum dado real. A tela começa **travada** e ignora qualquer gesto até o sinal de pare; os gestos bloqueados aparecem num contador, para mostrar a defesa contra o disparo sem querer.
 
 | Gesto | Na tela |
 |---|---|
 | Sinal de pare | Trava ou destrava a tela |
+| Um dedo | Próxima imagem da série (corte da tomografia) |
+| Dois dedos | Troca a janela de contraste |
 | Zoom in com a mão (abrir) | Aproxima o exame |
 | Zoom out com a mão (fechar) | Afasta o exame |
 | Acenar | Volta ao tamanho original |
 | Deslizar para a direita ou esquerda | Troca o exame |
 | Polegar para cima ou baixo | Confirma ou desfaz um item do checklist |
 
-Abrir e fechar a mão vêm sempre em par, porque para fechar é preciso abrir antes, e o modelo enxerga os dois movimentos. Por isso o **primeiro zoom define a direção**: repetir o gesto dá mais um passo, o gesto oposto é ignorado enquanto a rodada durar, e 3 s sem zoom (ou baixar a mão) liberam a troca de direção. Pelo teclado: setas, `+`, `-`, `0` (tamanho original), espaço (trava), `C`, `X` e `F`.
+Abrir e fechar a mão vêm sempre em par, porque para fechar é preciso abrir antes, e o modelo enxerga os dois movimentos. Por isso o **primeiro zoom define a direção**: repetir o gesto dá mais um passo, o gesto oposto é ignorado enquanto a rodada durar, e 3 s sem zoom (ou baixar a mão) liberam a troca de direção. O `abrir_hospital.bat` usa o modelo `cnn_3d_mais_gestos`, o único que conhece um e dois dedos. Pelo teclado: setas, `1` (próxima imagem), `2` (janela), `+`, `-`, `0` (tamanho original), espaço (trava), `C`, `X` e `F`.
 
 ## Novos treinos
 

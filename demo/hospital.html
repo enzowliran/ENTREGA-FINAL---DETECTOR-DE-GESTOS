@@ -5,258 +5,604 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sala Cirúrgica por Gestos</title>
 <style>
-  :root { --fundo: #0c1418; --painel: #142026; --borda: #22333b; --texto: #eef3f5; --apoio: #a9b8bf; --verde: #5fd39a; --vermelho: #ff8b80; --amarelo: #f4c464; --azul: #6cc4ea; }
+  :root { --fundo: #070b0e; --painel: #0f171c; --painel2: #131e24; --borda: #1f2e36; --texto: #e8eff2; --apoio: #8fa3ad; --verde: #4fdc8f;
+          --vermelho: #ff6f63; --amarelo: #f2c14e; --azul: #5ec8f2; --ecg: #49f08c; --pleth: #48d6ff; --co2: #f6d55c; --pa: #ff7a8a; }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; overflow: hidden; background: var(--fundo); color: var(--texto); font-family: "Segoe UI", system-ui, sans-serif; }
-  #app { display: grid; grid-template-columns: 1fr 350px; grid-template-rows: auto 1fr; gap: 14px; padding: 14px; height: 100%; }
-  .painel { background: var(--painel); border: 1px solid var(--borda); border-radius: 10px; padding: 12px 16px; }
-  #topo { grid-column: 1 / 3; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-  #topo h1 { font-size: 20px; margin: 0; }
-  #topo .sub { color: var(--apoio); font-size: 14px; margin-top: 2px; }
-  #trava { font-size: 18px; font-weight: 800; padding: 10px 18px; border-radius: 999px; letter-spacing: .02em; transition: background .15s; white-space: nowrap; }
-  #trava.travada { background: rgba(255,139,128,.18); color: var(--vermelho); border: 2px solid var(--vermelho); }
-  #trava.ativa { background: rgba(95,211,154,.18); color: var(--verde); border: 2px solid var(--verde); }
-  #esquerda { display: flex; flex-direction: column; gap: 14px; min-height: 0; }
-  #visor { flex: 1; display: flex; flex-direction: column; min-height: 0; }
-  #visor header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-  #tituloExame { font-size: 18px; font-weight: 700; }
-  #zoomTexto { color: var(--azul); font-weight: 700; font-variant-numeric: tabular-nums; }
-  #direcao { color: var(--amarelo); font-weight: 700; font-size: 15px; margin-right: 14px; min-width: 120px; display: inline-block; text-align: right; }
-  #moldura { flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; background: #000; border-radius: 6px; }
-  #exame { max-width: 100%; max-height: 100%; transition: transform .25s ease; transform-origin: center; }
-  #pontos { display: flex; justify-content: center; gap: 8px; margin-top: 8px; }
-  #pontos span { width: 9px; height: 9px; border-radius: 50%; background: var(--borda); }
-  #pontos span.atual { background: var(--azul); }
-  #ajuda { font-size: 14px; line-height: 1.55; color: var(--apoio); display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px; }
-  #ajuda b { color: var(--texto); }
-  #direita { display: flex; flex-direction: column; gap: 14px; min-height: 0; }
-  #checklist h2, #camera h2, #numeros h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .08em; color: var(--apoio); margin: 0 0 8px; font-weight: 600; }
-  #checklist ol { list-style: none; margin: 0; padding: 0; }
-  #checklist li { display: flex; align-items: center; gap: 10px; padding: 7px 8px; border-radius: 6px; font-size: 15px; }
-  #checklist li .caixa { width: 20px; height: 20px; border-radius: 5px; border: 2px solid var(--apoio); flex: none; display: grid; place-items: center; font-size: 13px; font-weight: 800; color: #0d1a12; }
-  #checklist li.feito { color: var(--apoio); text-decoration: line-through; }
-  #checklist li.feito .caixa { background: var(--verde); border-color: var(--verde); }
-  #checklist li.proximo { background: rgba(108,196,234,.12); }
-  #checklist li.proximo .caixa { border-color: var(--azul); }
-  #numeros table { width: 100%; border-collapse: collapse; font-size: 14px; }
-  #numeros td { padding: 3px 0; }
-  #numeros td:last-child { text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  #app { display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto minmax(0, 1fr); gap: 10px; padding: 10px; height: 100%; }
+  .painel { background: var(--painel); border: 1px solid var(--borda); border-radius: 8px; }
+  h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--apoio); margin: 0 0 6px; font-weight: 600; }
+
+  /* Topo */
+  #topo { grid-column: 1 / 3; display: flex; align-items: center; gap: 18px; padding: 8px 14px; }
+  #topo .bloco { display: flex; flex-direction: column; gap: 1px; }
+  #topo .rotulo { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--apoio); }
+  #topo .valor { font-size: 15px; font-weight: 650; }
+  #topo .grande { font-size: 17px; font-weight: 700; }
+  #topo .espaco { flex: 1; }
+  #relogio, #tempoCirurgia { font-variant-numeric: tabular-nums; }
+  #contadores { display: flex; gap: 14px; font-size: 12px; color: var(--apoio); }
+  #contadores b { color: var(--texto); font-variant-numeric: tabular-nums; font-size: 14px; }
+  #trava { font-size: 14px; font-weight: 800; padding: 8px 14px; border-radius: 999px; letter-spacing: .03em; white-space: nowrap; border: 2px solid; }
+  #trava.travada { background: rgba(255,111,99,.14); color: var(--vermelho); border-color: var(--vermelho); }
+  #trava.ativa { background: rgba(79,220,143,.14); color: var(--verde); border-color: var(--verde); }
+
+  /* Visualizador */
+  #esquerda { display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 10px; min-height: 0; }
+  #visor { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 8px; padding: 8px; min-height: 0; }
+  #miniaturas { display: flex; flex-direction: column; gap: 8px; overflow: hidden; }
+  .mini { border: 2px solid transparent; border-radius: 6px; background: #000; padding: 3px; color: var(--apoio); font-size: 10px; line-height: 1.25; text-align: center; }
+  .mini canvas { width: 100%; aspect-ratio: 1; display: block; border-radius: 3px; }
+  .mini.atual { border-color: var(--azul); color: var(--texto); }
+  #moldura { position: relative; background: #000; border-radius: 6px; overflow: hidden; min-height: 0; display: grid; place-items: center; }
+  #visor.travado #moldura { box-shadow: inset 0 0 0 2px rgba(255,111,99,.55); }
+  #exame { transition: transform .28s ease; transform-origin: center; image-rendering: auto; }
+  .canto { position: absolute; font: 12px/1.45 Consolas, "Cascadia Mono", monospace; color: #d6e6ee; text-shadow: 0 1px 2px #000, 0 0 3px #000; pointer-events: none; white-space: pre; }
+  #cantoSE { left: 10px; top: 8px; } #cantoSD { right: 10px; top: 8px; text-align: right; }
+  #cantoIE { left: 10px; bottom: 8px; } #cantoID { right: 10px; bottom: 8px; text-align: right; }
+  .canto .destaque { color: var(--amarelo); }
+  .orient { position: absolute; font: 700 16px Consolas, monospace; color: #e9f3f7; text-shadow: 0 1px 3px #000; pointer-events: none; }
+  #orientE { left: 10px; top: 50%; transform: translateY(-50%); } #orientD { right: 10px; top: 50%; transform: translateY(-50%); }
+  #regua { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); height: 10px; border: 2px solid #d6e6ee; border-top: 0; pointer-events: none; }
+  #reguaTexto { position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%); font: 11px Consolas, monospace; color: #d6e6ee; text-shadow: 0 1px 2px #000; pointer-events: none; }
+  #fatia { position: absolute; right: 8px; top: 64px; bottom: 64px; width: 6px; border-radius: 3px; background: rgba(255,255,255,.12); pointer-events: none; }
+  #fatiaMarca { position: absolute; left: -3px; width: 12px; height: 4px; border-radius: 2px; background: var(--azul); transition: top .2s; }
+
+  /* Sinais vitais */
+  #vitais { display: grid; grid-template-columns: minmax(0, 1fr) 330px; gap: 0; padding: 0; overflow: hidden; height: 150px; background: #020405; }
+  #ondas { width: 100%; height: 150px; display: block; }
+  #numerosVitais { display: grid; grid-template-columns: 1fr 1fr 1fr; border-left: 1px solid var(--borda); }
+  .vital { padding: 6px 10px; border-bottom: 1px solid #0d1519; border-right: 1px solid #0d1519; }
+  .vital .nome { font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+  .vital .num { font-size: 30px; font-weight: 300; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .vital .uni { font-size: 10px; color: var(--apoio); }
+  .vital.pequeno .num { font-size: 22px; }
+
+  /* Coluna direita */
+  #direita { display: flex; flex-direction: column; gap: 10px; min-height: 0; overflow: auto; }
+  #camera { padding: 8px 10px; }
   #video { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; border-radius: 4px; display: block; }
-  #gesto { font-size: 16px; font-weight: 700; margin-top: 7px; min-height: 22px; }
+  #gesto { font-size: 15px; font-weight: 700; margin-top: 6px; min-height: 20px; display: flex; justify-content: space-between; }
   #gesto.comando { color: var(--verde); }
-  .barra { height: 5px; background: rgba(255,255,255,.18); border-radius: 3px; overflow: hidden; margin-top: 5px; }
+  #estado { font-size: 11px; color: var(--apoio); font-weight: 400; }
+  .barra { height: 4px; background: rgba(255,255,255,.15); border-radius: 2px; overflow: hidden; margin-top: 4px; }
   #confianca { height: 100%; width: 0; background: var(--apoio); transition: width .12s; }
-  #estado { color: var(--apoio); font-size: 13px; margin-top: 6px; }
-  #mensagem { position: fixed; left: 50%; top: 42%; transform: translate(-50%,-50%); font-size: 46px; font-weight: 800; pointer-events: none; opacity: 0; transition: opacity .15s; text-shadow: 0 3px 14px rgba(0,0,0,.75); text-align: center; z-index: 2; padding: 0 16px; }
+  #checklist { padding: 8px 10px; }
+  .fase { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--azul); margin: 6px 0 2px; display: flex; justify-content: space-between; }
+  .fase .contagem { color: var(--apoio); }
+  .itens { list-style: none; margin: 0; padding: 0; }
+  .itens li { display: flex; align-items: center; gap: 8px; padding: 3px 6px; border-radius: 5px; font-size: 13px; }
+  .itens li .caixa { width: 16px; height: 16px; border-radius: 4px; border: 2px solid #5d717b; flex: none; display: grid; place-items: center; font-size: 11px; font-weight: 900; color: #06120b; }
+  .itens li.feito { color: var(--apoio); }
+  .itens li.feito .caixa { background: var(--verde); border-color: var(--verde); }
+  .itens li.proximo { background: rgba(94,200,242,.12); }
+  .itens li.proximo .caixa { border-color: var(--azul); }
+  #ajuda { padding: 8px 10px; }
+  #ajuda table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  #ajuda td { padding: 2px 0; vertical-align: top; transition: color .2s; }
+  #ajuda td:first-child { color: var(--texto); font-weight: 600; white-space: nowrap; padding-right: 10px; }
+  #ajuda td:last-child { color: var(--apoio); }
+  #ajuda tr.agora td { color: var(--verde); }
+  #ajuda .nota { font-size: 11px; color: var(--apoio); margin-top: 4px; line-height: 1.35; }
+
+  #mensagem { position: fixed; left: 50%; top: 38%; transform: translate(-50%,-50%); font-size: 40px; font-weight: 800; pointer-events: none; opacity: 0; transition: opacity .15s; text-shadow: 0 3px 14px rgba(0,0,0,.85); text-align: center; z-index: 2; padding: 0 16px; }
   #mensagem.ver { opacity: 1; }
-  #aviso { grid-column: 1 / 3; text-align: center; color: var(--apoio); font-size: 12px; margin-top: -6px; }
-  #inicio { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(6,10,12,.9); text-align: center; padding: 16px; z-index: 3; }
-  #inicio h1 { font-size: 40px; margin: 0 0 12px; }
-  #inicio p { font-size: 19px; color: var(--apoio); margin: 0 0 8px; line-height: 1.45; max-width: 760px; }
-  button { margin-top: 18px; border: 0; border-radius: 8px; background: var(--verde); color: #0d1a12; font: 700 20px "Segoe UI", system-ui, sans-serif; padding: 13px 34px; cursor: pointer; }
+  #inicio { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(4,7,9,.93); text-align: center; padding: 16px; z-index: 3; }
+  #inicio h1 { font-size: 38px; margin: 0 0 12px; }
+  #inicio p { font-size: 18px; color: var(--apoio); margin: 0 auto 8px; line-height: 1.45; max-width: 760px; }
+  #inicio small { display: block; margin-top: 14px; color: #6d828c; font-size: 13px; }
+  button { margin-top: 18px; border: 0; border-radius: 8px; background: var(--verde); color: #06120b; font: 700 20px "Segoe UI", system-ui, sans-serif; padding: 12px 34px; cursor: pointer; }
   button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-  @media (max-width: 900px) {
+  @media (max-width: 1000px) {
     html, body { overflow: auto; }
     #app { grid-template-columns: 1fr; grid-template-rows: auto; height: auto; }
-    #topo, #aviso { grid-column: 1; }
-    #topo { flex-direction: column; align-items: flex-start; }
-    #moldura { aspect-ratio: 4 / 3; }
-    #ajuda { grid-template-columns: 1fr; }
-    #mensagem { font-size: 30px; }
+    #topo { grid-column: 1; flex-wrap: wrap; }
+    #esquerda { grid-template-rows: auto auto; }
+    #visor { grid-template-columns: 1fr; }
+    #miniaturas { flex-direction: row; }
+    .mini { flex: 1; }
+    #moldura { aspect-ratio: 1; }
+    #vitais { grid-template-columns: 1fr; height: auto; }
+    #numerosVitais { border-left: 0; }
+    #mensagem { font-size: 28px; }
   }
 </style>
 </head>
 <body>
 <div id="app">
-  <div class="painel" id="topo">
-    <div>
-      <h1>Hospital Modelo · Sala cirúrgica 3</h1>
-      <div class="sub">Paciente M. S., 54 anos · Leito 12 · dados fictícios</div>
+  <header class="painel" id="topo">
+    <div class="bloco"><span class="rotulo">Hospital Modelo · Sala 3</span><span class="grande">Lobectomia superior direita por videotoracoscopia</span></div>
+    <div class="bloco"><span class="rotulo">Paciente</span><span class="valor">Paciente fictício · 54 a · 78 kg</span></div>
+    <div class="bloco"><span class="rotulo">Hora</span><span class="valor" id="relogio">--:--</span></div>
+    <div class="bloco"><span class="rotulo">Tempo cirúrgico</span><span class="valor" id="tempoCirurgia">--:--:--</span></div>
+    <div class="espaco"></div>
+    <div id="contadores">
+      <span>Aceitos <b id="aceitos">0</b></span>
+      <span>Bloqueados <b id="ignorados">0</b></span>
+      <span>Disparos <b id="disparos">0</b></span>
     </div>
-    <div id="trava" class="travada" role="status" aria-live="polite">🔒 TRAVADA · sinal de pare para destravar</div>
-  </div>
+    <div id="trava" class="travada" role="status" aria-live="polite">🔒 TRAVADA</div>
+  </header>
 
   <div id="esquerda">
     <section class="painel" id="visor">
-      <header><span id="tituloExame"></span><span><span id="direcao" role="status" aria-live="polite"></span><span id="zoomTexto">100%</span></span></header>
-      <div id="moldura"><canvas id="exame" width="960" height="720" aria-label="Imagem de exame fictícia"></canvas></div>
-      <div id="pontos"></div>
+      <div id="miniaturas"></div>
+      <div id="moldura">
+        <canvas id="exame" width="512" height="512" aria-label="Imagem de exame gerada pela página, sem dados reais"></canvas>
+        <div class="canto" id="cantoSE"></div><div class="canto" id="cantoSD"></div>
+        <div class="canto" id="cantoIE"></div><div class="canto" id="cantoID"></div>
+        <div class="orient" id="orientE">D</div><div class="orient" id="orientD">E</div>
+        <div id="regua"></div><div id="reguaTexto">5 cm</div>
+        <div id="fatia"><div id="fatiaMarca"></div></div>
+      </div>
     </section>
-    <div class="painel" id="ajuda">
-      <div>
-        <b>Sinal de pare:</b> trava ou destrava a tela<br>
-        <b>Abrir a mão (zoom in):</b> aproxima o exame<br>
-        <b>Fechar a mão (zoom out):</b> afasta o exame<br>
-        <b>Acenar:</b> volta ao tamanho original
+    <section class="painel" id="vitais" aria-label="Sinais vitais simulados">
+      <canvas id="ondas"></canvas>
+      <div id="numerosVitais">
+        <div class="vital" style="color:var(--ecg)"><div class="nome">FC · bpm</div><div class="num" id="vFC">72</div><div class="uni">ECG II · ritmo sinusal</div></div>
+        <div class="vital" style="color:var(--pleth)"><div class="nome">SpO₂ · %</div><div class="num" id="vSpO2">98</div><div class="uni">pulso <span id="vPulso">72</span></div></div>
+        <div class="vital" style="color:var(--pa)"><div class="nome">PA · mmHg</div><div class="num" id="vPA" style="font-size:24px">118/74</div><div class="uni">média <span id="vPAM">89</span> · 5 min</div></div>
+        <div class="vital pequeno" style="color:var(--co2)"><div class="nome">EtCO₂ · mmHg</div><div class="num" id="vCO2">35</div><div class="uni">FR <span id="vFR">12</span> rpm</div></div>
+        <div class="vital pequeno" style="color:#d9e4ea"><div class="nome">Temp · °C</div><div class="num" id="vTemp">36,4</div><div class="uni">esofágica</div></div>
+        <div class="vital pequeno" style="color:#b69cff"><div class="nome">BIS</div><div class="num" id="vBIS">46</div><div class="uni">anestesia geral</div></div>
       </div>
-      <div>
-        <b>Deslizar para a direita ou esquerda:</b> troca o exame<br>
-        <b>Polegar para cima:</b> confirma o próximo item do checklist<br>
-        <b>Polegar para baixo:</b> desfaz o último item<br>
-        <i>O primeiro zoom define a direção; repita o gesto para continuar. Para inverter, 3 s de pausa ou baixe a mão.</i>
-      </div>
-    </div>
+    </section>
   </div>
 
   <div id="direita">
-    <section class="painel" id="checklist">
-      <h2>Checklist de segurança cirúrgica</h2>
-      <ol id="itens"></ol>
-    </section>
-    <section class="painel" id="numeros">
-      <h2>Comandos</h2>
-      <table>
-        <tr><td>Aceitos</td><td id="aceitos">0</td></tr>
-        <tr><td>Bloqueados pela trava</td><td id="ignorados">0</td></tr>
-        <tr><td>Disparos do modelo</td><td id="disparos">0</td></tr>
-      </table>
-    </section>
     <section class="painel" id="camera">
-      <h2>Câmera</h2>
+      <h2>Câmera e gesto</h2>
       <img id="video" alt="Imagem da webcam">
-      <div id="gesto">Conectando...</div>
+      <div id="gesto"><span id="gestoNome">Conectando...</span><span id="estado">sem conexão</span></div>
       <div class="barra"><div id="confianca"></div></div>
-      <div id="estado">Sem conexão com o modelo</div>
+    </section>
+    <section class="painel" id="checklist">
+      <h2>Lista de verificação de segurança cirúrgica (OMS)</h2>
+      <div id="itens"></div>
+    </section>
+    <section class="painel" id="ajuda">
+      <h2>Gestos</h2>
+      <table>
+        <tr data-acao="alternar"><td>Sinal de pare</td><td>trava ou destrava</td></tr>
+        <tr data-acao="proximo_corte"><td>Um dedo</td><td>próxima imagem da série</td></tr>
+        <tr data-acao="janela"><td>Dois dedos</td><td>troca a janela de contraste</td></tr>
+        <tr data-acao="troca"><td>Deslizar para os lados</td><td>troca o exame</td></tr>
+        <tr data-acao="zoom"><td>Abrir ou fechar a mão</td><td>aproxima ou afasta</td></tr>
+        <tr data-acao="normal"><td>Acenar</td><td>volta ao tamanho original</td></tr>
+        <tr data-acao="checklist"><td>Polegar para cima ou baixo</td><td>confirma ou desfaz um item</td></tr>
+      </table>
+      <div class="nota">O primeiro zoom define a direção; repita para continuar. Para inverter, 3 s de pausa ou baixe a mão.</div>
     </section>
   </div>
-
-  <div id="aviso">Demonstração de conceito do reconhecedor de gestos. Não é um dispositivo médico; as imagens são desenhadas pela própria página.</div>
 </div>
 <div id="mensagem" role="status" aria-live="polite"></div>
 
 <div id="inicio"><div>
   <h1>Sala Cirúrgica por Gestos</h1>
-  <p>Durante a cirurgia, o médico não pode tocar na tela. Aqui ele consulta os exames e o checklist só com gestos.</p>
-  <p>A tela começa <b>travada</b> e ignora qualquer gesto até o <b>sinal de pare</b>. É o mesmo cuidado do carro: um comando sem querer pode custar caro.</p>
-  <p>Para aproximar, abra a mão; repita para aproximar mais. Para afastar, chegue com a mão aberta e feche. <b>Acenar</b> volta ao tamanho original.</p>
-  <p>Pelo teclado: setas trocam o exame, <b>+</b> e <b>-</b> dão zoom, <b>0</b> volta ao normal, <b>espaço</b> trava, <b>C</b> confirma, <b>X</b> desfaz, <b>F</b> tela cheia.</p>
+  <p>Durante a cirurgia, a equipe não pode tocar na tela. Aqui o cirurgião percorre os cortes da tomografia, muda o contraste, dá zoom e confirma o checklist só com gestos.</p>
+  <p>A tela começa <b>travada</b> e ignora qualquer gesto até o <b>sinal de pare</b>: um comando sem querer pode custar caro.</p>
+  <p>Teclado: setas trocam o exame, <b>1</b> próxima imagem, <b>2</b> janela, <b>+</b> e <b>-</b> zoom, <b>0</b> tamanho original, <b>espaço</b> trava, <b>C</b> confirma, <b>X</b> desfaz, <b>F</b> tela cheia.</p>
   <button id="comecar">Começar</button>
+  <small>Demonstração de conceito do reconhecedor de gestos. Não é um dispositivo médico: imagens, paciente e sinais vitais são gerados pela página.</small>
 </div></div>
 
 <script>
 "use strict";
 const el = id => document.getElementById(id);
+const N = 512;  // lado das imagens, em pixels
 const ZOOMS = [1, 1.5, 2.2, 3.2];
 const RODADA_MS = 3000;  // tempo sem zoom que encerra uma rodada e libera a troca de direção
-const ITENS = [
-  "Identidade do paciente confirmada",
-  "Lado e local da cirurgia marcados",
-  "Alergias verificadas",
-  "Antibiótico profilático administrado",
-  "Instrumentos e compressas contados",
-];
-const estado = { travada: true, exame: 0, zoom: 0, feitos: 0, aceitos: 0, ignorados: 0, direcao: 0, ultimoZoom: 0 };
 
-// As imagens são desenhadas aqui mesmo: nada de exame real, nem de paciente real.
-function base() {
-  const c = document.createElement("canvas"); c.width = 960; c.height = 720;
-  return [c, c.getContext("2d")];
+// ---------- Ruído determinístico: o mesmo corte sempre gera a mesma imagem ----------
+function hash(x, y, s) {
+  let h = Math.imul(x | 0, 374761393) ^ Math.imul(y | 0, 668265263) ^ Math.imul(s | 0, 1442695041);
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967295;
 }
-function elipse(g, x, y, rx, ry, rot) { g.beginPath(); g.ellipse(x, y, rx, ry, rot || 0, 0, Math.PI * 2); }
-function ruido(g, forca) {
-  const d = g.getImageData(0, 0, 960, 720), p = d.data;
-  for (let i = 0; i < p.length; i += 4) { const r = (Math.random() - 0.5) * forca; p[i] += r; p[i + 1] += r; p[i + 2] += r; }
-  g.putImageData(d, 0, 0);
+function ruidoValor(x, y, s) {
+  const xi = Math.floor(x), yi = Math.floor(y), fx = x - xi, fy = y - yi;
+  const sx = fx * fx * (3 - 2 * fx), sy = fy * fy * (3 - 2 * fy);
+  const a = hash(xi, yi, s), b = hash(xi + 1, yi, s), c = hash(xi, yi + 1, s), d = hash(xi + 1, yi + 1, s);
+  return a + (b - a) * sx + (c - a) * sy + (a - b - c + d) * sx * sy;
 }
-function torax() {
-  const [c, g] = base();
-  g.fillStyle = "#06080a"; g.fillRect(0, 0, 960, 720);
-  const grad = g.createRadialGradient(480, 380, 40, 480, 380, 380);
-  grad.addColorStop(0, "#3a3f44"); grad.addColorStop(1, "#0b0d0f");
-  g.fillStyle = grad; elipse(g, 480, 400, 330, 370); g.fill();
-  g.fillStyle = "rgba(4,6,8,.78)";
-  [-1, 1].forEach(l => { elipse(g, 480 + l * 150, 390, 125, 235); g.fill(); });
-  g.fillStyle = "rgba(200,205,210,.5)"; elipse(g, 545, 440, 105, 130, 0.35); g.fill();
-  g.strokeStyle = "rgba(235,238,240,.55)"; g.lineWidth = 11;
-  for (let i = 0; i < 9; i++) { g.beginPath(); g.ellipse(480, 190 + i * 52, 290, 105, 0, Math.PI, Math.PI * 2); g.stroke(); }
-  g.lineWidth = 14; g.lineCap = "round";
-  g.beginPath(); g.moveTo(320, 125); g.lineTo(465, 160); g.moveTo(640, 125); g.lineTo(495, 160); g.stroke();
-  g.fillStyle = "rgba(228,231,235,.75)";
-  for (let y = 110; y < 720; y += 34) g.fillRect(455, y, 50, 26);
-  ruido(g, 24);
-  return c;
+function fbm(x, y, s, oitavas = 3) {
+  let soma = 0, amp = 0.5, f = 1;
+  for (let i = 0; i < oitavas; i++) { soma += amp * ruidoValor(x * f, y * f, s + i * 31); amp *= 0.5; f *= 2; }
+  return soma;
 }
-function cranio() {
-  const [c, g] = base();
-  g.fillStyle = "#050607"; g.fillRect(0, 0, 960, 720);
-  g.fillStyle = "#e9ecef"; elipse(g, 480, 370, 300, 345); g.fill();
-  g.fillStyle = "#6c7278"; elipse(g, 480, 370, 268, 312); g.fill();
-  g.save(); elipse(g, 480, 370, 268, 312); g.clip();
-  const sorteio = (a, b) => a + Math.random() * (b - a);
-  g.lineCap = "round";
-  for (let k = 0; k < 90; k++) {
-    g.strokeStyle = k % 2 ? "rgba(145,151,158,.9)" : "rgba(58,62,68,.85)"; g.lineWidth = k % 2 ? 11 : 5;
-    const inicio = sorteio(0, Math.PI * 2);
-    g.beginPath(); g.arc(sorteio(230, 730), sorteio(80, 660), sorteio(18, 48), inicio, inicio + sorteio(1, 2.6)); g.stroke();
+const elip = (u, v, cx, cy, rx, ry) => ((u - cx) / rx) ** 2 + ((v - cy) / ry) ** 2;
+function elipRot(u, v, cx, cy, rx, ry, ang) {
+  const c = Math.cos(ang), s = Math.sin(ang), x = (u - cx) * c + (v - cy) * s, y = -(u - cx) * s + (v - cy) * c;
+  return (x / rx) ** 2 + (y / ry) ** 2;
+}
+
+// ---------- Tomografia de tórax, em unidades Hounsfield (HU) ----------
+// Lado direito do paciente aparece à esquerda da imagem, como nos exames reais.
+const VASOS = [];
+for (const lado of [-1, 1]) for (let i = 0; i < 70; i++)
+  VASOS.push({ lado, ang: hash(i, lado + 5, 7) * Math.PI * 2, r: 0.12 + 0.85 * Math.sqrt(hash(i, lado + 5, 8)), fase: hash(i, lado + 5, 9) * 9 });
+const NODULO = { u: -0.43, v: -0.16, z: 0.34, raio: 0.052, meiaAltura: 0.065 };
+
+function tcTorax(z) {
+  const hu = new Float32Array(N * N), pulmao = new Uint8Array(N * N);
+  const tam = 0.62 + 0.38 * Math.sin(Math.PI * Math.min(1, 0.15 + z * 0.95));  // ápice pequeno, base larga
+  const coracao = z > 0.42 ? Math.sin(Math.PI * Math.min(1, (z - 0.42) / 0.5)) : 0;
+  const figado = z > 0.7 ? (z - 0.7) * 2.4 : 0;
+  for (let j = 0; j < N; j++) {
+    const v = (j + 0.5) / N * 2 - 1;
+    for (let i = 0; i < N; i++) {
+      const u = (i + 0.5) / N * 2 - 1, k = j * N + i;
+      let h = -1000;
+      const mesa = 0.72 + 0.12 * u * u;
+      if (v > mesa && v < mesa + 0.035 && Math.abs(u) < 0.62) h = 120;  // mesa do tomógrafo
+      const rho = Math.sqrt(elip(u, v, 0, 0.03, 0.9, 0.64 - 0.05 * Math.max(0, v)));
+      if (rho < 1) {
+        // Parede do tórax com espessura variável: músculos das costas grossos, peitorais na frente.
+        const th = paredeEspessura(u, v), interno = 1 - th.gordura - th.musculo;
+        if (rho > 0.985) h = 40;  // pele
+        else if (rho > 1 - th.gordura) h = -105 + fbm(u * 18, v * 18, 3) * 30;
+        else if (rho > interno) h = fbm(u * 14, v * 14, 4) > 0.62 ? -80 : 50 + fbm(u * 30, v * 30, 15) * 12;  // músculo, com gordura entre os feixes
+        else {
+          h = -85 + fbm(u * 12, v * 12, 5) * 60;  // gordura do mediastino
+          for (const lado of [-1, 1]) {
+            let e = elip(u, v, lado * 0.36, 0.0, 0.31 * tam, 0.43 * tam);
+            if (rho > interno - 0.02) e = 2;  // a pleura acompanha a parede
+            if (lado === 1 && coracao) e = Math.max(e, 1.6 - elip(u, v, 0.1, 0.1, 0.3 * coracao + 0.02, 0.26 * coracao + 0.02));
+            if (lado === -1 && figado) e = Math.max(e, 1.5 - elip(u, v, -0.24, 0.12, figado * 0.55 + 0.01, figado * 0.45 + 0.01));
+            if (Math.abs(u) < 0.13) e = Math.max(e, 2 - Math.abs(u) / 0.13 * 1.2);  // mediastino entre os pulmões
+            if (e < 1) { h = -865 + fbm(u * 30, v * 30, 6) * 60 + (v + 0.4) * 55; pulmao[k] = 1; }  // parte de trás mais densa, pela gravidade
+          }
+          if (coracao) {
+            const ec = elipRot(u, v, 0.08, 0.1, 0.29 * coracao + 0.02, 0.21 * coracao + 0.02, 0.5) * (1 + 0.08 * (fbm(u * 6, v * 6, 17) - 0.5));
+            if (ec < 1) h = ec > 0.82 ? 52 : 38 + fbm(u * 20, v * 20, 7) * 8;
+            else if (ec < 1.15) h = -95;  // gordura do pericárdio
+          }
+          if (figado && elip(u, v, -0.24, 0.12, figado * 0.55, figado * 0.45) < 1 && !pulmao[k]) h = 58 + fbm(u * 15, v * 15, 8) * 10;
+          if (z < 0.42) {
+            const tr = elip(u, v, 0, -0.1, 0.058, 0.052);  // traqueia
+            if (tr < 1) h = tr < 0.65 ? -1000 : 35;
+            if (elip(u, v, -0.01, -0.03, 0.068, 0.068) < 1 && z > 0.18) h = 46;  // aorta ascendente
+            if (z < 0.3) for (const [cu, cv, r] of [[0.08, -0.2, 0.03], [-0.07, -0.21, 0.034], [0.14, -0.12, 0.028]]) if (elip(u, v, cu, cv, r, r) < 1) h = 44;  // grandes vasos
+          } else if (z < 0.52) {
+            for (const lado of [-1, 1]) { const b = elip(u, v, lado * 0.11, -0.05, 0.034, 0.03); if (b < 1) h = b < 0.5 ? -1000 : 30; }
+            if (elip(u, v, 0.02, -0.14, 0.07, 0.05) < 1) h = 44;  // tronco da artéria pulmonar
+          }
+          if (elip(u, v, 0.12, 0.27, 0.058, 0.058) < 1) h = 45;  // aorta descendente
+          const es = elip(u, v, 0.05, 0.24, 0.034, 0.028);  // esôfago
+          if (es < 1) h = es < 0.08 ? -900 : 38;
+        }
+        const ev = elip(u, v, 0, 0.41, 0.088, 0.082);  // corpo vertebral
+        if (ev < 1) h = ev > 0.78 ? 950 : 330 + fbm(u * 60, v * 60, 9) * 120;
+        if (elip(u, v, 0, 0.53, 0.07, 0.065) < 1 && v > 0.5) h = 720;  // arco posterior
+        if (elip(u, v, 0, 0.53, 0.042, 0.038) < 1) h = 18;  // canal medular
+        if (Math.abs(u) < 0.013 && v > 0.58 && v < 0.66) h = 700;  // processo espinhoso
+        for (const lado of [-1, 1]) if (elipRot(u, v, lado * 0.09, 0.47, 0.06, 0.016, lado * 0.5) < 1) h = 680;  // processos transversos
+        const es2 = elip(u, v, 0, -0.47, 0.055, 0.024);  // esterno
+        if (es2 < 1) h = es2 > 0.6 ? 800 : 380;
+      }
+      hu[k] = h;
+    }
   }
-  g.restore();
-  g.strokeStyle = "rgba(40,44,48,.9)"; g.lineWidth = 5; g.beginPath(); g.moveTo(480, 70); g.lineTo(480, 670); g.stroke();
-  g.fillStyle = "#2a2e33"; elipse(g, 447, 380, 26, 78, 0.18); g.fill(); elipse(g, 513, 380, 26, 78, -0.18); g.fill();
-  ruido(g, 18);
-  return c;
+  // Costelas: cortadas na diagonal, aparecem alongadas junto à pleura e mudam de um corte para outro.
+  for (let c = 0; c < 16; c++) {
+    if ((z * 4.2 + hash(c, 3, 70)) % 1 > 0.68) continue;
+    const t = -Math.PI / 2 + 0.4 + (c / 16) * (Math.PI * 2 - 0.8) + (hash(c, 4, 70) - 0.5) * 0.15;
+    if (Math.abs(Math.atan2(Math.sin(t - Math.PI / 2), Math.cos(t - Math.PI / 2))) < 0.32) continue;  // atrás, a coluna ocupa o lugar
+    const ry = 0.64, th = paredeEspessura(Math.cos(t) * 0.9, 0.03 + Math.sin(t) * ry), rho = 1 - th.gordura - th.musculo + 0.015;
+    const u0 = Math.cos(t) * 0.9 * rho, v0 = 0.03 + Math.sin(t) * ry * rho, tang = Math.atan2(ry * Math.cos(t), -0.9 * Math.sin(t));
+    const comp = 0.035 + hash(c, 5, 70) * 0.045 + (z > 0.6 ? 0.025 : 0);
+    pintar(hu, u0, v0, comp, 0.017, tang, (d) => d > 0.6 ? 820 : 320);
+  }
+  if (z < 0.58) for (const lado of [-1, 1]) {  // escápulas, por fora das costelas, nas costas
+    const t = Math.PI / 2 - lado * 0.72, u0 = Math.cos(t) * 0.9 * 0.93, v0 = 0.03 + Math.sin(t) * 0.64 * 0.93;
+    pintar(hu, u0, v0, 0.15, 0.014, Math.atan2(0.64 * Math.cos(t), -0.9 * Math.sin(t)), (d) => d > 0.5 ? 760 : 420);
+  }
+  // Vasos pulmonares: alongados na direção do hilo, grossos no centro e finos na periferia.
+  for (const vs of VASOS) {
+    const a = vs.ang + 0.45 * Math.sin(z * 6 + vs.fase);
+    const u0 = vs.lado * 0.2 + Math.cos(a) * vs.r * 0.3 * tam, v0 = Math.sin(a) * vs.r * 0.42 * tam;
+    const raio = 0.004 + 0.015 * (1 - vs.r) ** 1.5, alongado = 1 + 2.5 * hash(Math.round(z * 40), Math.round(vs.fase * 100), 71);
+    pintar(hu, u0, v0, raio * alongado, raio, a, (d) => 40 - d * 140, pulmao);
+  }
+  // Nódulo espiculado no lobo superior direito: o motivo da cirurgia.
+  const dz = (z - NODULO.z) / NODULO.meiaAltura;
+  let marca = null;
+  if (Math.abs(dz) < 1) {
+    const r = NODULO.raio * Math.sqrt(1 - dz * dz), x0 = Math.floor((NODULO.u - r * 1.6 + 1) / 2 * N), x1 = Math.ceil((NODULO.u + r * 1.6 + 1) / 2 * N);
+    const y0 = Math.floor((NODULO.v - r * 1.6 + 1) / 2 * N), y1 = Math.ceil((NODULO.v + r * 1.6 + 1) / 2 * N);
+    for (let j = y0; j <= y1; j++) for (let i = x0; i <= x1; i++) {
+      const u = (i + 0.5) / N * 2 - 1, v = (j + 0.5) / N * 2 - 1, du = u - NODULO.u, dv = v - NODULO.v;
+      const ang = Math.atan2(dv, du), borda = r * (1 + 0.18 * Math.sin(ang * 9 + 1.3) * fbm(ang * 3, 1, 12) + 0.1 * Math.sin(ang * 4));
+      const d = Math.hypot(du, dv);
+      if (d < borda) hu[j * N + i] = 32 + fbm(u * 80, v * 80, 13) * 25;
+      else if (d < borda * 1.5 && Math.abs(Math.sin(ang * 11)) > 0.93) hu[j * N + i] = Math.max(hu[j * N + i], -300);  // espículas
+    }
+    marca = { u: NODULO.u, v: NODULO.v, r: r * 1.35, texto: (r * 2 * 175).toFixed(0) + " mm" };
+  }
+  suavizar(hu);
+  for (let k = 0; k < N * N; k++) hu[k] += (hash(k % N, k / N | 0, 11 + Math.round(z * 100)) - 0.5) * 30;  // ruído quântico
+  return { hu, marca };
 }
-function joelho() {
-  const [c, g] = base();
-  g.fillStyle = "#07090b"; g.fillRect(0, 0, 960, 720);
-  const grad = g.createRadialGradient(480, 360, 30, 480, 360, 360);
-  grad.addColorStop(0, "#30353a"); grad.addColorStop(1, "#0b0d10");
-  g.fillStyle = grad; elipse(g, 480, 360, 215, 370); g.fill();
-  g.fillStyle = "#dfe3e6"; g.strokeStyle = "#f5f7f8"; g.lineWidth = 6; g.lineJoin = "round";
-  g.beginPath(); g.moveTo(400, -10); g.lineTo(400, 250); g.quadraticCurveTo(360, 300, 372, 340);
-  g.quadraticCurveTo(480, 385, 588, 340); g.quadraticCurveTo(600, 300, 560, 250); g.lineTo(560, -10); g.closePath(); g.fill(); g.stroke();
-  g.beginPath(); g.moveTo(380, 402); g.quadraticCurveTo(480, 372, 580, 402); g.quadraticCurveTo(570, 440, 550, 470);
-  g.lineTo(545, 730); g.lineTo(415, 730); g.lineTo(410, 470); g.quadraticCurveTo(390, 440, 380, 402); g.closePath(); g.fill(); g.stroke();
-  g.beginPath(); g.roundRect(592, 445, 30, 290, 12); g.fill(); g.stroke();
-  g.fillStyle = "#9aa0a6"; elipse(g, 480, 348, 30, 20); g.fill();
-  g.fillStyle = "rgba(240,243,245,.85)"; elipse(g, 480, 296, 44, 58); g.fill();
-  ruido(g, 20);
-  return c;
+// Espessura da gordura e do músculo da parede, conforme o ângulo em volta do tórax.
+function paredeEspessura(u, v) {
+  const t = Math.atan2(v - 0.03, u), dif = (a, b) => Math.atan2(Math.sin(a - b), Math.cos(a - b));
+  const costas = Math.exp(-((dif(t, Math.PI / 2) / 0.38) ** 2));
+  const peito = Math.exp(-((dif(t, -Math.PI / 2 - 0.75) / 0.4) ** 2)) + Math.exp(-((dif(t, -Math.PI / 2 + 0.75) / 0.4) ** 2));
+  return { gordura: 0.045 + 0.03 * ruidoValor(t * 2 + 9, 0.5, 14) + 0.02 * peito,
+           musculo: 0.055 + 0.08 * costas + 0.05 * peito + 0.02 * ruidoValor(t * 3 + 9, 1.5, 16) };
 }
-const EXAMES = [
-  { titulo: "Raio-X de tórax (PA)", imagem: torax() },
-  { titulo: "Tomografia de crânio, corte axial", imagem: cranio() },
-  { titulo: "Raio-X do joelho direito", imagem: joelho() },
-];
+// Média ponderada 3x3: tira o serrilhado das bordas, como o filtro de reconstrução de um tomógrafo.
+function suavizar(hu) {
+  const t = new Float32Array(hu);
+  for (let j = 1; j < N - 1; j++) for (let i = 1; i < N - 1; i++) {
+    const k = j * N + i;
+    hu[k] = (t[k] * 4 + (t[k - 1] + t[k + 1] + t[k - N] + t[k + N]) * 2 + t[k - N - 1] + t[k - N + 1] + t[k + N - 1] + t[k + N + 1]) / 16;
+  }
+}
+// Pinta uma elipse pequena: f recebe a distância normalizada ao centro (0 a 1) e devolve o HU.
+function pintar(hu, u0, v0, rx, ry, ang, f, mascara) {
+  const raio = Math.max(rx, ry), x0 = Math.max(0, Math.floor((u0 - raio + 1) / 2 * N)), x1 = Math.min(N - 1, Math.ceil((u0 + raio + 1) / 2 * N));
+  const y0 = Math.max(0, Math.floor((v0 - raio + 1) / 2 * N)), y1 = Math.min(N - 1, Math.ceil((v0 + raio + 1) / 2 * N));
+  for (let j = y0; j <= y1; j++) for (let i = x0; i <= x1; i++) {
+    const k = j * N + i;
+    if (mascara && (!mascara[k] || hu[k] > -500)) continue;
+    const u = (i + 0.5) / N * 2 - 1, v = (j + 0.5) / N * 2 - 1, e = elipRot(u, v, u0, v0, rx, ry, ang);
+    if (e < 1) { const valor = f(Math.sqrt(e)); hu[k] = mascara ? hu[k] + (valor + 860) * (1 - e) ** 0.5 : valor; }
+  }
+}
 
-let tempoMsg;
-function mensagem(texto, cor, duracao) {
-  const m = el("mensagem"); m.textContent = texto; m.style.color = cor || "#fff"; m.classList.add("ver");
-  clearTimeout(tempoMsg); tempoMsg = setTimeout(() => m.classList.remove("ver"), duracao || 1000);
+// ---------- Tomografia de crânio ----------
+function tcCranio(z) {
+  const hu = new Float32Array(N * N), esc = Math.sqrt(Math.max(0.05, 1 - ((z - 0.52) / 0.62) ** 2));
+  const ventr = z > 0.42 && z < 0.68 ? Math.sin(Math.PI * (z - 0.42) / 0.26) : 0;
+  const nucleos = z > 0.44 && z < 0.62 ? Math.sin(Math.PI * (z - 0.44) / 0.18) : 0;
+  for (let j = 0; j < N; j++) {
+    const v = (j + 0.5) / N * 2 - 1;
+    for (let i = 0; i < N; i++) {
+      const u = (i + 0.5) / N * 2 - 1, k = j * N + i;
+      let h = -1000;
+      const apoio = 0.86 + 0.25 * u * u;
+      if (v > apoio && v < apoio + 0.03 && Math.abs(u) < 0.5) h = 120;  // apoio da cabeça
+      const rho = Math.sqrt(elip(u, v, 0, 0.02, 0.74 * esc, 0.9 * esc));
+      if (rho < 1) {
+        if (rho > 0.985) h = 45;  // couro cabeludo
+        else if (rho > 0.965) h = -70;
+        else if (rho > 0.905) h = rho > 0.948 ? 1150 : rho > 0.922 ? 560 + fbm(u * 70, v * 70, 21) * 220 : 1100;  // tábua externa, díploe, tábua interna
+        else {
+          const rb = rho / 0.905, ang = Math.atan2(v - 0.02, u), ondula = fbm(u * 5, v * 5, 22, 4);
+          const cortex = 0.86 + 0.08 * (fbm(u * 11, v * 11, 25) - 0.5);
+          h = rb > cortex ? 38 + fbm(u * 45, v * 45, 23) * 4 : 29 + fbm(u * 45, v * 45, 24) * 3;  // substância cinzenta e branca
+          // Sulcos: fendas de líquor entrando no córtex, entre os giros.
+          const sulco = Math.abs(Math.sin(ang * 15 + ondula * 14 + fbm(u * 3, v * 3, 26) * 6));
+          if (rb > cortex - 0.02 && sulco < 0.05 + 0.5 * (rb - 0.9) && fbm(u * 7, v * 7, 27) > 0.38) h = 12;
+          if (rb > 0.985) h = 9;  // espaço subaracnóideo
+          if (nucleos) for (const lado of [-1, 1]) {  // núcleos da base e tálamos
+            if (elipRot(u, v, lado * 0.15, -0.03, 0.045 * nucleos + 0.01, 0.085 * nucleos + 0.01, lado * 0.25) < 1) h = 34;
+            if (elip(u, v, lado * 0.075, 0.1, 0.055 * nucleos + 0.01, 0.06 * nucleos + 0.01) < 1) h = 33;
+          }
+          if (ventr) for (const lado of [-1, 1]) {
+            if (elipRot(u, v, lado * 0.055, -0.13, 0.022 * ventr + 0.006, 0.1 * ventr + 0.02, -lado * 0.42) < 1) h = 6;  // cornos frontais
+            if (elipRot(u, v, lado * 0.1, 0.2, 0.02 * ventr + 0.006, 0.09 * ventr + 0.02, lado * 0.3) < 1) h = 6;  // átrios
+            if (z > 0.5 && elip(u, v, lado * 0.105, 0.22, 0.014, 0.014) < 1) h = 85;  // plexo coroide calcificado
+          }
+          if (ventr && Math.abs(u) < 0.008 && v > 0.0 && v < 0.08) h = 7;  // terceiro ventrículo
+          // Foice do cérebro: só na frente e atrás, onde o corpo caloso não une os hemisférios.
+          const vEsc = (v - 0.02) / (0.9 * esc);
+          if (Math.abs(u) < 0.012 && (vEsc < -0.42 || vEsc > 0.5)) h = Math.abs(u) < 0.005 ? 52 : 10;
+        }
+      }
+      hu[k] = h;
+    }
+  }
+  suavizar(hu);
+  for (let k = 0; k < N * N; k++) hu[k] += (hash(k % N, k / N | 0, 40 + Math.round(z * 100)) - 0.5) * 8;
+  return { hu, marca: null };
+}
+
+// ---------- Raio-X de tórax PA: desenhado em camadas e lido como intensidade ----------
+function raioX() {
+  const c = document.createElement("canvas"); c.width = N; c.height = N;
+  const g = c.getContext("2d");
+  const cinza = (a, l) => `rgba(255,255,255,${a})`;
+  g.fillStyle = "#000"; g.fillRect(0, 0, N, N);
+  const camada = (blur, desenho) => { g.save(); g.filter = `blur(${blur}px)`; desenho(); g.restore(); };
+  camada(18, () => {  // partes moles do tronco, pescoço e ombros
+    g.fillStyle = cinza(0.42);
+    g.beginPath(); g.moveTo(215, 0); g.lineTo(297, 0); g.lineTo(305, 60); g.quadraticCurveTo(470, 70, 500, 150);
+    g.lineTo(492, N); g.lineTo(20, N); g.lineTo(12, 150); g.quadraticCurveTo(42, 70, 207, 60); g.closePath(); g.fill();
+  });
+  camada(10, () => {  // campos pulmonares escuros
+    g.globalCompositeOperation = "destination-out"; g.fillStyle = "rgba(0,0,0,.8)";
+    for (const l of [-1, 1]) {
+      g.beginPath(); const x = 256 + l * 22;
+      g.moveTo(x, 92); g.bezierCurveTo(256 + l * 80, 70, 256 + l * 175, 110, 256 + l * 200, 300);
+      g.bezierCurveTo(256 + l * 205, 380, 256 + l * 195, 420, 256 + l * 185, l === -1 ? 430 : 448);
+      g.quadraticCurveTo(256 + l * 120, l === -1 ? 380 : 395, x, l === -1 ? 400 : 330); g.closePath(); g.fill();
+    }
+  });
+  camada(2, () => {  // vasos pulmonares ramificados a partir dos hilos
+    g.strokeStyle = cinza(0.1); g.lineCap = "round";
+    const ramo = (x, y, ang, comp, larg, nivel, s) => {
+      if (nivel > 4 || larg < 0.8) return;
+      const x2 = x + Math.cos(ang) * comp, y2 = y + Math.sin(ang) * comp;
+      g.lineWidth = larg; g.beginPath(); g.moveTo(x, y); g.lineTo(x2, y2); g.stroke();
+      for (const d of [-1, 1]) ramo(x2, y2, ang + d * (0.3 + hash(nivel, s, d + 3) * 0.35), comp * 0.72, larg * 0.68, nivel + 1, s * 2 + (d > 0 ? 1 : 0));
+    };
+    for (const l of [-1, 1]) for (let r = 0; r < 7; r++) {
+      const ang = l < 0 ? Math.PI + (r - 3) * 0.33 : (r - 3) * 0.33;
+      ramo(256 + l * 48, 222 + r * 10, ang + Math.sin(r * 3.1) * 0.1, 30, 6, 0, r + (l > 0 ? 50 : 0));
+    }
+  });
+  camada(5, () => {  // mediastino, coração e botão aórtico
+    g.fillStyle = cinza(0.5);
+    g.beginPath(); g.moveTo(230, 60); g.lineTo(285, 60); g.lineTo(292, 200);
+    g.bezierCurveTo(395, 220, 410, 380, 368, 438); g.lineTo(220, 440); g.bezierCurveTo(185, 400, 195, 290, 222, 200); g.closePath(); g.fill();
+    g.beginPath(); g.arc(300, 178, 26, 0, Math.PI * 2); g.fill();
+  });
+  camada(4, () => {  // traqueia, com ar
+    g.globalCompositeOperation = "destination-out"; g.fillStyle = "rgba(0,0,0,.55)";
+    g.beginPath(); g.roundRect(247, 0, 18, 205, 9); g.fill();
+  });
+  camada(6, () => {  // cúpulas do diafragma e abdome
+    g.fillStyle = cinza(0.55);
+    g.beginPath(); g.moveTo(20, 470); g.quadraticCurveTo(140, 350, 252, 410); g.quadraticCurveTo(370, 365, 492, 480); g.lineTo(492, N); g.lineTo(20, N); g.closePath(); g.fill();
+    g.globalCompositeOperation = "destination-out"; g.fillStyle = "rgba(0,0,0,.5)"; g.beginPath(); g.ellipse(360, 440, 34, 20, 0, 0, Math.PI * 2); g.fill();  // bolha gástrica
+  });
+  camada(1.6, () => {  // costelas posteriores e anteriores, clavículas e escápulas
+    g.lineCap = "round";
+    for (const l of [-1, 1]) for (let r = 0; r < 11; r++) {
+      const y = 95 + r * 33;
+      g.strokeStyle = cinza(0.13); g.lineWidth = 7 - r * 0.25;
+      g.beginPath(); g.moveTo(256 + l * 20, y); g.bezierCurveTo(256 + l * 100, y - 22, 256 + l * 185, y - 4, 256 + l * 212, y + 36 + r * 2); g.stroke();
+      g.strokeStyle = cinza(0.035); g.lineWidth = 6;
+      g.beginPath(); g.moveTo(256 + l * 215, y + 40); g.bezierCurveTo(256 + l * 170, y + 70, 256 + l * 95, y + 82, 256 + l * 40, y + 110); g.stroke();
+    }
+    g.strokeStyle = cinza(0.22); g.lineWidth = 10;
+    for (const l of [-1, 1]) { g.beginPath(); g.moveTo(256 + l * 22, 92); g.bezierCurveTo(256 + l * 90, 80, 256 + l * 150, 62, 256 + l * 215, 70); g.stroke(); }
+    g.strokeStyle = cinza(0.1); g.lineWidth = 5;
+    for (const l of [-1, 1]) { g.beginPath(); g.moveTo(256 + l * 215, 90); g.quadraticCurveTo(256 + l * 160, 190, 256 + l * 205, 290); g.stroke(); }
+  });
+  camada(2, () => {  // coluna vista através do mediastino
+    g.fillStyle = cinza(0.045);
+    for (let y = 40; y < N; y += 30) { g.beginPath(); g.roundRect(243, y, 26, 23, 6); g.fill(); }
+  });
+  camada(3, () => { g.fillStyle = cinza(0.32); g.beginPath(); g.arc(150, 168, 12, 0, Math.PI * 2); g.fill(); });  // nódulo no lobo superior direito
+  g.save(); g.font = "bold 22px Arial"; g.fillStyle = "rgba(255,255,255,.9)"; g.fillText("D", 26, 40); g.restore();  // marcador de lado, como no filme
+  const d = g.getImageData(0, 0, N, N).data, lum = new Float32Array(N * N);
+  // Onde a camada foi apagada, o canvas guarda branco com pouca opacidade: a luminância é cor x opacidade.
+  for (let k = 0; k < N * N; k++) lum[k] = Math.min(1, d[k * 4] / 255 * d[k * 4 + 3] / 255 + (hash(k % N, k / N | 0, 61) - 0.5) * 0.04);
+  return { hu: lum, marca: { u: (150 + 0.5) / N * 2 - 1, v: (168 + 0.5) / N * 2 - 1, r: 0.075, texto: "opacidade" }, intensidade: true };
+}
+
+// ---------- Exames, séries e janelas ----------
+const EXAMES = [
+  { titulo: "TC de tórax · sem contraste", curto: "TC tórax", serie: "Série 3 · Axial", n: 16, inicio: 5, fov: 350, espessura: "5 mm",
+    z: i => 0.06 + i / 15 * 0.9, pos: i => -40 - i * 18, gerar: tcTorax,
+    janelas: [{ nome: "Pulmão", L: -600, W: 1500 }, { nome: "Mediastino", L: 40, W: 400 }, { nome: "Osso", L: 400, W: 1800 }] },
+  { titulo: "Raio-X de tórax · PA", curto: "RX tórax", serie: "Série 1 · PA", n: 1, inicio: 0, fov: 430, espessura: "",
+    z: () => 0, pos: () => 0, gerar: raioX,
+    janelas: [{ nome: "Padrão", L: 0.5, W: 1 }, { nome: "Alto contraste", L: 0.45, W: 0.55 }, { nome: "Invertida", L: 0.5, W: -1 }] },
+  { titulo: "TC de crânio · estadiamento", curto: "TC crânio", serie: "Série 2 · Axial", n: 12, inicio: 6, fov: 230, espessura: "5 mm",
+    z: i => 0.3 + i / 11 * 0.46, pos: i => 20 + i * 10, gerar: tcCranio,
+    janelas: [{ nome: "Encéfalo", L: 40, W: 80 }, { nome: "Subdural", L: 75, W: 215 }, { nome: "Osso", L: 500, W: 2500 }] },
+];
+const ITENS = [
+  { fase: "Antes da indução", texto: "Identidade, local e consentimento confirmados" },
+  { fase: "Antes da indução", texto: "Oxímetro instalado e funcionando" },
+  { fase: "Antes da indução", texto: "Alergias e via aérea avaliadas" },
+  { fase: "Antes da incisão", texto: "Equipe apresentada por nome e função" },
+  { fase: "Antes da incisão", texto: "Antibiótico nos últimos 60 minutos" },
+  { fase: "Antes da incisão", texto: "Exames de imagem essenciais exibidos" },
+  { fase: "Antes de sair da sala", texto: "Contagem de instrumentos e compressas" },
+  { fase: "Antes de sair da sala", texto: "Peça cirúrgica identificada" },
+];
+const estado = { travada: true, exame: 0, corte: EXAMES[0].inicio, janela: 0, zoom: 0, feitos: 5, aceitos: 0, ignorados: 0, direcao: 0, ultimoZoom: 0 };
+const cache = new Map();
+function imagem(exame, corte) {
+  const chave = exame + ":" + corte;
+  if (!cache.has(chave)) { const ex = EXAMES[exame]; cache.set(chave, ex.gerar(ex.z(corte))); }
+  return cache.get(chave);
+}
+// Converte HU (ou intensidade, no raio-X) em cinza, com o nível e a largura da janela.
+function renderizar(canvas, dados, janela, comMarca) {
+  const g = canvas.getContext("2d"), img = g.createImageData(N, N), p = img.data;
+  const inv = janela.W < 0, W = Math.abs(janela.W), base = janela.L - W / 2;
+  for (let k = 0; k < N * N; k++) {
+    let t = (dados.hu[k] - base) / W; t = t < 0 ? 0 : t > 1 ? 1 : t;
+    if (inv) t = 1 - t;
+    const c = t * 255; p[k * 4] = c; p[k * 4 + 1] = c; p[k * 4 + 2] = c; p[k * 4 + 3] = 255;
+  }
+  if (canvas.width !== N) {  // miniatura: desenha reduzido
+    const tmp = document.createElement("canvas"); tmp.width = N; tmp.height = N; tmp.getContext("2d").putImageData(img, 0, 0);
+    g.drawImage(tmp, 0, 0, canvas.width, canvas.height); return;
+  }
+  g.putImageData(img, 0, 0);
+  if (comMarca && dados.marca) {  // anotação como num laudo
+    const m = dados.marca, x = (m.u + 1) / 2 * N, y = (m.v + 1) / 2 * N, r = m.r / 2 * N;
+    g.save(); g.strokeStyle = "#f2c14e"; g.lineWidth = 1.5; g.setLineDash([5, 4]);
+    g.beginPath(); g.arc(x, y, r, 0, Math.PI * 2); g.stroke(); g.setLineDash([]);
+    g.beginPath(); g.moveTo(x + r * 0.7, y - r * 0.7); g.lineTo(x + r + 26, y - r - 18); g.stroke();
+    g.font = "bold 13px Consolas, monospace"; g.fillStyle = "#f2c14e"; g.fillText(m.texto, x + r + 28, y - r - 20); g.restore();
+  }
+}
+
+// ---------- Interface do visualizador ----------
+function montarMiniaturas() {
+  el("miniaturas").innerHTML = EXAMES.map((ex, i) => `<div class="mini" data-i="${i}"><canvas width="96" height="96"></canvas>${ex.curto}<br>${ex.n} img</div>`).join("");
+  EXAMES.forEach((ex, i) => renderizar(el("miniaturas").children[i].querySelector("canvas"), imagem(i, ex.inicio), ex.janelas[0], false));
 }
 function mostrarExame() {
-  const ex = EXAMES[estado.exame];
-  el("exame").getContext("2d").drawImage(ex.imagem, 0, 0);
-  el("tituloExame").textContent = ex.titulo + " · " + (estado.exame + 1) + " de " + EXAMES.length;
-  el("pontos").innerHTML = EXAMES.map((_, i) => `<span class="${i === estado.exame ? "atual" : ""}"></span>`).join("");
+  const ex = EXAMES[estado.exame], jan = ex.janelas[estado.janela];
+  renderizar(el("exame"), imagem(estado.exame, estado.corte), jan, true);
+  [...el("miniaturas").children].forEach((m, i) => m.classList.toggle("atual", i === estado.exame));
+  const data = "06/11/2026";
+  el("cantoSE").innerHTML = `HOSPITAL MODELO\nPaciente fictício\nID 0000-0000 · 54 a · M\n${data}`;
+  el("cantoSD").innerHTML = `${ex.titulo}\n${ex.serie}\n<span class="destaque">Img ${estado.corte + 1}/${ex.n}</span>${ex.n > 1 ? "  Pos " + ex.pos(estado.corte) + " mm" : ""}\n${ex.espessura ? "Espessura " + ex.espessura : "120 kV · 3,2 mAs"}`;
+  const L = ex === EXAMES[1] ? "" : `L ${jan.L}  W ${jan.W}`;
+  el("cantoIE").innerHTML = `<span class="destaque">Janela: ${jan.nome}</span>\n${L || "Processamento digital"}`;
+  el("fatia").style.display = ex.n > 1 ? "block" : "none";
+  el("fatiaMarca").style.top = `calc(${ex.n > 1 ? estado.corte / (ex.n - 1) * 100 : 0}% - 2px)`;
   mostrarZoom();
 }
 function mostrarZoom() {
-  el("exame").style.transform = "scale(" + ZOOMS[estado.zoom] + ")";
-  el("zoomTexto").textContent = Math.round(ZOOMS[estado.zoom] * 100) + "%";
+  const ex = EXAMES[estado.exame], z = ZOOMS[estado.zoom];
+  const quadro = el("moldura").getBoundingClientRect(), lado = Math.max(120, Math.min(quadro.width, quadro.height));
+  el("exame").style.width = el("exame").style.height = lado + "px";
+  el("exame").style.transform = "scale(" + z + ")";
+  el("cantoID").innerHTML = `Zoom ${Math.round(z * 100)}%\nFOV ${Math.round(ex.fov / z)} mm`;
+  // Régua de 5 cm na escala atual da imagem.
+  const largura = el("exame").clientWidth * z * 50 / ex.fov;
+  el("regua").style.width = largura + "px";
 }
 function mostrarChecklist() {
-  el("itens").innerHTML = ITENS.map((t, i) => {
-    const classe = i < estado.feitos ? "feito" : i === estado.feitos ? "proximo" : "";
-    return `<li class="${classe}"><span class="caixa">${i < estado.feitos ? "✓" : ""}</span>${t}</li>`;
+  // Três fases, como na lista da OMS; cada uma com sua contagem.
+  const fases = [...new Set(ITENS.map(x => x.fase))];
+  el("itens").innerHTML = fases.map(fase => {
+    const daFase = ITENS.map((x, k) => [x, k]).filter(([x]) => x.fase === fase);
+    const feitosFase = daFase.filter(([, k]) => k < estado.feitos).length;
+    const linhas = daFase.map(([item, i]) => {
+      const classe = i < estado.feitos ? "feito" : i === estado.feitos ? "proximo" : "";
+      return `<li class="${classe}"><span class="caixa">${i < estado.feitos ? "✓" : ""}</span>${item.texto}</li>`;
+    }).join("");
+    return `<div class="fase"><span>${fase}</span><span class="contagem">${feitosFase}/${daFase.length}</span></div><ul class="itens">${linhas}</ul>`;
   }).join("");
 }
 function mostrarTrava() {
   const t = el("trava");
   t.className = estado.travada ? "travada" : "ativa";
-  t.textContent = estado.travada ? "🔒 TRAVADA · sinal de pare para destravar" : "🔓 ATIVA · sinal de pare para travar";
+  t.textContent = estado.travada ? "🔒 TRAVADA · pare destrava" : "🔓 ATIVA · pare trava";
+  el("visor").classList.toggle("travado", estado.travada);
 }
 function mostrarContadores() { el("aceitos").textContent = estado.aceitos; el("ignorados").textContent = estado.ignorados; }
-let tempoDirecao;
-function mostrarDirecao() {
-  el("direcao").textContent = estado.direcao > 0 ? "▲ aproximando" : estado.direcao < 0 ? "▼ afastando" : "";
-  clearTimeout(tempoDirecao);
-  if (estado.direcao) tempoDirecao = setTimeout(() => { estado.direcao = 0; mostrarDirecao(); }, RODADA_MS);
+let tempoMsg;
+function mensagem(texto, cor, duracao) {
+  const m = el("mensagem"); m.textContent = texto; m.style.color = cor || "#fff"; m.classList.add("ver");
+  clearTimeout(tempoMsg); tempoMsg = setTimeout(() => m.classList.remove("ver"), duracao || 1000);
 }
-function encerrarRodada() { estado.direcao = 0; mostrarDirecao(); }
+let tempoAjuda;
+function destacarAjuda(acao) {
+  document.querySelectorAll("#ajuda tr").forEach(tr => tr.classList.toggle("agora", tr.dataset.acao === acao));
+  clearTimeout(tempoAjuda); tempoAjuda = setTimeout(() => document.querySelectorAll("#ajuda tr").forEach(tr => tr.classList.remove("agora")), 1200);
+}
 
+// ---------- Comandos ----------
+let tempoDirecao;
+function encerrarRodada() { estado.direcao = 0; clearTimeout(tempoDirecao); }
 function trocar(passo) {
-  estado.exame = (estado.exame + passo + EXAMES.length) % EXAMES.length; estado.zoom = 0; encerrarRodada();
-  mostrarExame(); mensagem(passo > 0 ? "Próximo exame" : "Exame anterior", "#6cc4ea", 800);
+  estado.exame = (estado.exame + passo + EXAMES.length) % EXAMES.length;
+  estado.corte = EXAMES[estado.exame].inicio; estado.janela = 0; estado.zoom = 0; encerrarRodada();
+  mostrarExame(); mensagem(EXAMES[estado.exame].curto, "#5ec8f2", 900);
+}
+function proximoCorte() {
+  const ex = EXAMES[estado.exame];
+  if (ex.n === 1) { mensagem("Série com uma imagem", "#f2c14e", 900); return; }
+  estado.corte = (estado.corte + 1) % ex.n;
+  mostrarExame(); mensagem(`Imagem ${estado.corte + 1} de ${ex.n}`, "#5ec8f2", 700);
+}
+function trocarJanela() {
+  const ex = EXAMES[estado.exame];
+  estado.janela = (estado.janela + 1) % ex.janelas.length;
+  mostrarExame(); mensagem("Janela: " + ex.janelas[estado.janela].nome, "#5ec8f2", 900);
 }
 function zoom(passo) {
   // Abrir e fechar a mão vêm sempre em par: para fechar, antes é preciso abrir, e vice-versa. Por isso
@@ -266,45 +612,49 @@ function zoom(passo) {
   const emRodada = estado.direcao && agora - estado.ultimoZoom < RODADA_MS;
   estado.ultimoZoom = agora;
   if (!emRodada) estado.direcao = passo;
-  mostrarDirecao();
+  clearTimeout(tempoDirecao); tempoDirecao = setTimeout(encerrarRodada, RODADA_MS);
   if (passo !== estado.direcao) return false;
   const novo = Math.min(ZOOMS.length - 1, Math.max(0, estado.zoom + passo));
-  if (novo === estado.zoom) { mensagem(passo > 0 ? "Zoom máximo" : "Tamanho original", "#f4c464", 800); return true; }
-  estado.zoom = novo; mostrarZoom(); mensagem("Zoom " + Math.round(ZOOMS[novo] * 100) + "%", "#6cc4ea", 800);
+  if (novo === estado.zoom) { mensagem(passo > 0 ? "Zoom máximo" : "Tamanho original", "#f2c14e", 800); return true; }
+  estado.zoom = novo; mostrarZoom(); mensagem("Zoom " + Math.round(ZOOMS[novo] * 100) + "%", "#5ec8f2", 800);
   return true;
 }
 function normal() {
   encerrarRodada();
-  if (estado.zoom === 0) { mensagem("Já está no tamanho original", "#f4c464", 800); return; }
-  estado.zoom = 0; mostrarZoom(); mensagem("Tamanho original", "#6cc4ea", 800);
+  if (estado.zoom === 0) { mensagem("Já está no tamanho original", "#f2c14e", 800); return; }
+  estado.zoom = 0; mostrarZoom(); mensagem("Tamanho original", "#5ec8f2", 800);
 }
 function confirmar() {
-  if (estado.feitos >= ITENS.length) { mensagem("Checklist completo", "#5fd39a"); return; }
+  if (estado.feitos >= ITENS.length) { mensagem("Lista completa", "#4fdc8f"); return; }
   estado.feitos++; mostrarChecklist();
-  mensagem(estado.feitos === ITENS.length ? "Checklist completo!" : "Item confirmado", "#5fd39a");
+  mensagem(estado.feitos === ITENS.length ? "Lista completa!" : "Item confirmado", "#4fdc8f");
 }
 function desfazer() {
-  if (estado.feitos === 0) { mensagem("Nada a desfazer", "#f4c464", 800); return; }
-  estado.feitos--; mostrarChecklist(); mensagem("Item desfeito", "#f4c464");
+  if (estado.feitos === 0) { mensagem("Nada a desfazer", "#f2c14e", 800); return; }
+  estado.feitos--; mostrarChecklist(); mensagem("Item desfeito", "#f2c14e");
 }
 function alternarTrava() {
   estado.travada = !estado.travada; mostrarTrava();
-  mensagem(estado.travada ? "Tela travada" : "Tela destravada", estado.travada ? "#ff8b80" : "#5fd39a");
+  mensagem(estado.travada ? "Tela travada" : "Tela destravada", estado.travada ? "#ff6f63" : "#4fdc8f");
 }
-const ACOES = { anterior: () => trocar(-1), proxima: () => trocar(1), zoom_mais: () => zoom(1), zoom_menos: () => zoom(-1), normal, confirmar, desfazer };
+const ACOES = { anterior: () => trocar(-1), proxima: () => trocar(1), zoom_mais: () => zoom(1), zoom_menos: () => zoom(-1),
+                proximo_corte: proximoCorte, janela: trocarJanela, normal, confirmar, desfazer };
+const AJUDA = { anterior: "troca", proxima: "troca", zoom_mais: "zoom", zoom_menos: "zoom", confirmar: "checklist", desfazer: "checklist" };
 function comando(nome) {
-  if (nome === "alternar") { alternarTrava(); return; }
+  if (nome === "alternar") { alternarTrava(); destacarAjuda("alternar"); return; }
   if (!ACOES[nome]) return;
   // Travada, a tela só obedece ao sinal de pare: é a defesa contra o gesto sem querer.
-  if (estado.travada) { estado.ignorados++; mostrarContadores(); mensagem("Tela travada: gesto ignorado", "#f4c464"); return; }
+  if (estado.travada) { estado.ignorados++; mostrarContadores(); mensagem("Tela travada: gesto ignorado", "#f2c14e"); return; }
   if (ACOES[nome]() === false) return;  // zoom oposto dentro da rodada: a mão só voltou à posição
-  estado.aceitos++; mostrarContadores();
+  estado.aceitos++; mostrarContadores(); destacarAjuda(AJUDA[nome] || nome);
 }
 
 addEventListener("keydown", e => {
   const k = e.key;
   if (k === "ArrowLeft") { e.preventDefault(); comando("anterior"); }
   else if (k === "ArrowRight") { e.preventDefault(); comando("proxima"); }
+  else if (k === "1" || k === "PageDown") { e.preventDefault(); comando("proximo_corte"); }
+  else if (k === "2") comando("janela");
   else if (k === "+" || k === "=") comando("zoom_mais");
   else if (k === "-") comando("zoom_menos");
   else if (k === "0" || k.toLowerCase() === "r") comando("normal");
@@ -313,22 +663,91 @@ addEventListener("keydown", e => {
   else if (k === "Backspace" || k.toLowerCase() === "x") comando("desfazer");
   else if (k.toLowerCase() === "f") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
 });
-el("comecar").onclick = () => { el("inicio").style.display = "none"; };
+el("comecar").onclick = () => { el("inicio").style.display = "none"; mostrarZoom(); };
+addEventListener("resize", mostrarZoom);
 
-mostrarExame(); mostrarChecklist(); mostrarTrava(); mostrarContadores();
+// ---------- Monitor de sinais vitais (simulado) ----------
+const ondas = el("ondas"), go = ondas.getContext("2d");
+const vit = { fc: 72, sat: 98, pas: 118, pad: 74, co2: 35, fr: 12, temp: 36.4, bis: 46 };
+let fase = 0, faseResp = 0, xVarredura = 0, ultimoQuadro = 0, ultimoNumero = 0;
+const anterior = { ecg: null, pleth: null, co2: null };
+function ajustarOndas() {
+  const r = ondas.getBoundingClientRect();
+  ondas.width = Math.max(200, Math.round(r.width)); ondas.height = Math.round(r.height);
+  go.fillStyle = "#020405"; go.fillRect(0, 0, ondas.width, ondas.height); xVarredura = 0; anterior.ecg = anterior.pleth = anterior.co2 = null;
+}
+const gauss = (x, m, s) => Math.exp(-((x - m) ** 2) / (2 * s * s));
+function ecg(f) {  // um batimento: P, QRS e T
+  return 0.12 * gauss(f, 0.12, 0.025) - 0.12 * gauss(f, 0.235, 0.008) + 1.0 * gauss(f, 0.255, 0.01) - 0.25 * gauss(f, 0.275, 0.01) + 0.3 * gauss(f, 0.5, 0.045);
+}
+function pleth(f) { const g = (f - 0.32 + 1) % 1; return 0.85 * gauss(g, 0.18, 0.07) + 0.35 * gauss(g, 0.42, 0.08) + 0.08; }
+function capno(f) {  // inspiração em zero, platô na expiração
+  if (f < 0.4) return 0.02;
+  if (f < 0.47) return (f - 0.4) / 0.07 * 0.92;
+  if (f < 0.92) return 0.92 + (f - 0.47) * 0.15;
+  return Math.max(0.02, 0.99 - (f - 0.92) / 0.05);
+}
+function desenharOndas(dt) {
+  const W = ondas.width, H = ondas.height, faixa = H / 3, vel = 75;  // pixels por segundo
+  const passos = Math.max(1, Math.round(dt * vel));
+  for (let s = 0; s < passos; s++) {
+    fase = (fase + vit.fc / 60 / vel) % 1; faseResp = (faseResp + vit.fr / 60 / vel) % 1;
+    const x = xVarredura;
+    go.fillStyle = "#020405"; go.fillRect(x, 0, 14, H);  // barra que apaga à frente da varredura
+    const pts = { ecg: faixa * 0.72 - ecg(fase) * faixa * 0.6, pleth: faixa * 1.9 - pleth(fase) * faixa * 0.7, co2: faixa * 2.9 - capno(faseResp) * faixa * 0.72 };
+    for (const [nome, cor] of [["ecg", "#49f08c"], ["pleth", "#48d6ff"], ["co2", "#f6d55c"]]) {
+      if (anterior[nome] !== null && x > 0) {
+        go.strokeStyle = cor; go.lineWidth = 1.6; go.beginPath(); go.moveTo(x - 1, anterior[nome]); go.lineTo(x, pts[nome]); go.stroke();
+      }
+      anterior[nome] = pts[nome];
+    }
+    xVarredura = (xVarredura + 1) % W;
+    if (xVarredura === 0) anterior.ecg = anterior.pleth = anterior.co2 = null;
+  }
+  go.fillStyle = "#020405"; go.fillRect(0, 0, 70, 14); go.fillRect(0, faixa, 70, 14); go.fillRect(0, faixa * 2, 70, 14);
+  go.font = "bold 11px Segoe UI"; go.fillStyle = "#49f08c"; go.fillText("II", 6, 11); go.fillStyle = "#48d6ff"; go.fillText("Pleth", 6, faixa + 11); go.fillStyle = "#f6d55c"; go.fillText("CO₂", 6, faixa * 2 + 11);
+}
+function atualizarNumeros() {
+  const andar = (v, d, a, b) => Math.min(b, Math.max(a, v + (Math.random() - 0.5) * d));
+  vit.fc = andar(vit.fc, 2.2, 64, 82); vit.sat = andar(vit.sat, 0.8, 96, 100); vit.pas = andar(vit.pas, 3, 108, 128); vit.pad = andar(vit.pad, 2, 66, 80);
+  vit.co2 = andar(vit.co2, 1, 32, 38); vit.temp = andar(vit.temp, 0.04, 36.1, 36.7); vit.bis = andar(vit.bis, 3, 40, 55);
+  el("vFC").textContent = Math.round(vit.fc); el("vPulso").textContent = Math.round(vit.fc); el("vSpO2").textContent = Math.round(vit.sat);
+  el("vPA").textContent = Math.round(vit.pas) + "/" + Math.round(vit.pad); el("vPAM").textContent = Math.round((vit.pas + 2 * vit.pad) / 3);
+  el("vCO2").textContent = Math.round(vit.co2); el("vTemp").textContent = vit.temp.toFixed(1).replace(".", ","); el("vBIS").textContent = Math.round(vit.bis);
+}
+const inicioCirurgia = Date.now() - (42 * 60 + 17) * 1000;
+function relogios() {
+  const agora = new Date();
+  el("relogio").textContent = agora.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  const s = Math.floor((Date.now() - inicioCirurgia) / 1000);
+  el("tempoCirurgia").textContent = [s / 3600 | 0, (s / 60 | 0) % 60, s % 60].map(n => String(n).padStart(2, "0")).join(":");
+}
+function quadro(t) {
+  requestAnimationFrame(quadro);
+  const dt = Math.min(0.1, (t - ultimoQuadro) / 1000 || 0); ultimoQuadro = t;
+  desenharOndas(dt);
+  if (t - ultimoNumero > 2000) { ultimoNumero = t; atualizarNumeros(); relogios(); }
+}
+addEventListener("resize", ajustarOndas);
+
+// ---------- Início ----------
+montarMiniaturas(); mostrarExame(); mostrarChecklist(); mostrarTrava(); mostrarContadores();
+ajustarOndas(); relogios(); requestAnimationFrame(quadro);
+setInterval(relogios, 1000);
+
 el("video").src = "/video";
 const fonte = new EventSource("/eventos");
-fonte.onopen = () => { el("estado").textContent = "Modelo conectado"; };
-fonte.onerror = () => { el("estado").textContent = "Sem conexão com o modelo: use o teclado"; };
+fonte.onopen = () => { el("estado").textContent = "modelo conectado"; };
+fonte.onerror = () => { el("estado").textContent = "sem conexão: use o teclado"; };
 fonte.onmessage = ev => {
   const e = JSON.parse(ev.data);
   if (e.tipo === "erro") el("estado").textContent = e.mensagem;
   if (e.tipo === "estado") {
-    el("gesto").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
+    el("gestoNome").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
     el("gesto").className = e.e_comando ? "comando" : "";
     el("confianca").style.width = (e.confianca * 100) + "%";
-    el("disparos").textContent = e.disparos + " (" + e.por_minuto.toFixed(1) + "/min)";
-    el("estado").textContent = "Modelo conectado · " + e.fps.toFixed(0) + " fps · " + e.ms.toFixed(0) + " ms";
+    el("disparos").textContent = e.disparos;
+    el("estado").textContent = e.fps.toFixed(0) + " fps · " + e.ms.toFixed(0) + " ms";
   }
   if (e.tipo === "comando") comando(e.comando);
 };
