@@ -56,7 +56,7 @@ A voz diz o nome da página a cada troca, e **empurrar a mão** faz ela ler os c
 | Deslizar para a esquerda | Última tocada |
 | Sinal de pare | Toca ou pausa |
 | Polegar para cima ou baixo | Volume |
-| Tamborilar os dedos (com a música pausada) | Abre o menu |
+| Tamborilar os dedos ou dois dedos (com a música pausada) | Abre o menu |
 | Um dedo | Próxima função |
 | Puxar a mão | Função anterior |
 | Empurrar a mão | Explica os comandos |

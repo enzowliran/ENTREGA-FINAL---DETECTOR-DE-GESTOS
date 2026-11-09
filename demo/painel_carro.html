@@ -528,14 +528,14 @@ function comandosAtuais() {
   let linhas;
   if (chamada && chamada.estado === "tocando") linhas = [["Manter polegar para cima", "atende"], ["Manter polegar para baixo", "recusa"]];
   else if (chamada) linhas = [["Sinal de pare", "encerra"]];
-  else if (menuAberto) linhas = [["Polegar para cima ou baixo", "navega"], ["Sinal de pare", "seleciona"], ["Tamborilar os dedos", "volta"]];
+  else if (menuAberto) linhas = [["Polegar para cima ou baixo", "navega"], ["Sinal de pare", "seleciona"], ["Tamborilar ou dois dedos", "volta", "Tamborilar os dedos ou mostrar dois dedos"]];
   else if (pagina === "clima") linhas = [["Deslizar para os lados", "troca o ajuste"], ["Polegar para cima ou baixo", "muda o valor"], ["Sinal de pare", clima.ligado ? "desliga" : "liga"], FUNCAO];
   else if (pagina === "telefone") linhas = [["Sinal de pare", "simula uma chamada"], FUNCAO];
   else if (pagina === "limpador") linhas = [["Polegar para cima ou baixo", "muda a velocidade"], ["Sinal de pare", limpador ? "desliga" : "liga"], FUNCAO];
   else if (pagina === "farois") linhas = [["Sinal de pare", farois ? "desliga" : "liga"], FUNCAO];
   else {
     linhas = [["Para a direita", "próxima", "Deslizar para a direita"], ["Para a esquerda", "última tocada", "Deslizar para a esquerda"], ["Sinal de pare", tocando ? "pausa" : "toca"], ["Polegar", "volume", "Polegar para cima ou baixo"]];
-    if (!tocando) linhas.push(["Tamborilar os dedos", "abre o menu"]);
+    if (!tocando) linhas.push(["Tamborilar ou dois dedos", "abre o menu", "Tamborilar os dedos ou mostrar dois dedos"]);
     linhas.push(FUNCAO);
   }
   if (!chamada && !menuAberto) linhas.push(["Puxar a mão", "função anterior"]);
