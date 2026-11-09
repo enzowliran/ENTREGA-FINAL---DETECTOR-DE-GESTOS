@@ -15,11 +15,37 @@
   /* Slides e animação de entrada */
   .slide { position: absolute; inset: 0; padding: 70px 90px 90px; opacity: 0; visibility: hidden; transform: translateX(40px); transition: opacity .5s ease, transform .6s cubic-bezier(.2,.7,.2,1), visibility .5s; }
   .slide:not(.demo) { display: flex; flex-direction: column; justify-content: center; }
+  .slide > h2, .slide > p.lead { align-self: stretch; }
   .slide.antes { transform: translateX(-40px); }
   .slide.ativa { opacity: 1; visibility: visible; transform: none; }
   .an { opacity: 0; transform: translateY(16px); transition: opacity .55s ease, transform .6s cubic-bezier(.2,.7,.2,1); transition-delay: calc(var(--d, 0) * 110ms + 150ms); }
   .slide.ativa .an { opacity: 1; transform: none; }
-  .kicker { font-size: 17px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--acento); margin: 0 0 10px; }
+  /* Cada parte da apresentação tem sua cor; tudo que usa --acento acompanha. */
+  [data-secao="ideia"] { --acento: #ea580c; --acento-claro: #ffedd5; --tom2: #fef3c7; }
+  [data-secao="treino"] { --acento: #7c3aed; --acento-claro: #ede9fe; --tom2: #e0f2fe; }
+  [data-secao="vivo"] { --acento: #0891b2; --acento-claro: #cffafe; --tom2: #dcfce7; }
+  [data-secao="fim"] { --acento: #db2777; --acento-claro: #fce7f3; --tom2: #ede9fe; }
+  .slide[data-secao] { background: radial-gradient(1200px 700px at 105% -10%, var(--acento-claro), transparent 66%),
+                                   radial-gradient(1000px 600px at -10% 110%, var(--tom2), transparent 64%), var(--palco); }
+  .kicker { display: inline-flex; align-self: flex-start; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+            color: var(--acento); background: var(--acento-claro); padding: 7px 14px; border-radius: 999px; margin: 0 0 14px; }
+  .cartao { border-top: 4px solid var(--acento-claro); }
+  .passos { display: flex; align-items: center; gap: 8px; margin: -4px 0 16px; }
+  .passos i { width: 46px; height: 7px; border-radius: 4px; background: var(--linha); }
+  .passos i.feito { background: var(--acento); opacity: .45; } .passos i.agora { background: var(--acento); }
+  .passos span { font-size: 15px; color: var(--suave); margin-left: 8px; font-weight: 600; }
+  .divisor { justify-content: center; }
+  .divisor > :not(.enfeite) { max-width: 880px; position: relative; z-index: 1; }
+  .divisor .numParte { font-size: 230px; font-weight: 900; line-height: .8; letter-spacing: -.06em; margin: 0 0 10px; color: transparent;
+                       background: linear-gradient(120deg, var(--acento), #f472b6 55%, #60a5fa); -webkit-background-clip: text; background-clip: text; }
+  .divisor h1 { font-size: 96px; margin-bottom: 18px; }
+  .divisor .indice { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+  .divisor .indice span { padding: 10px 18px; border-radius: 999px; background: rgba(255,255,255,.85); border: 2px solid var(--acento-claro); font-size: 19px; font-weight: 600; color: var(--tinta); }
+  .divisor .indice span b { color: var(--acento); margin-right: 6px; }
+  .divisor .enfeite { position: absolute; right: 120px; top: 50%; width: 340px; height: 340px; transform: translateY(-50%); border-radius: 50%;
+                      background: conic-gradient(from 0deg, var(--acento), #f472b6, #60a5fa, #34d399, var(--acento)); opacity: .9; animation: gira 18s linear infinite; }
+  .divisor .enfeite::after { content: attr(data-icone); position: absolute; inset: 26px; border-radius: 50%; background: var(--palco); display: grid; place-items: center; font-size: 150px; animation: gira 18s linear infinite reverse; }
+  #secaoPilula { color: var(--acento); border-color: var(--acento-claro); background: var(--acento-claro); font-weight: 700; }
   h1 { font-size: 76px; line-height: 1.04; margin: 0; letter-spacing: -.02em; }
   h2 { font-size: 46px; line-height: 1.12; margin: 0 0 26px; letter-spacing: -.015em; }
   p.lead { font-size: 25px; line-height: 1.45; color: var(--suave); margin: 0; max-width: 980px; }
@@ -172,6 +198,15 @@
     </div>
   </section>
 
+  <!-- Parte 1 -->
+  <section class="slide divisor" data-secao="ideia" data-titulo="Parte 1" data-parte="A ideia">
+    <div class="enfeite an" style="--d:2" data-icone="💡" aria-hidden="true"></div>
+    <div class="numParte an">01</div>
+    <h1 class="an" style="--d:1">A ideia</h1>
+    <p class="lead an" style="--d:2">O problema que queremos resolver, como o sistema funciona e os dados que usamos.</p>
+    <div class="indice an" style="--d:3"><span><b>1</b>A ideia</span><span><b>2</b>Como funciona</span><span><b>3</b>Os dados</span></div>
+  </section>
+
   <!-- 2. A ideia -->
   <section class="slide" data-titulo="A ideia">
     <p class="kicker an">A ideia</p>
@@ -223,6 +258,15 @@
       <svg id="graficoDivisao" width="1380" height="90"></svg>
       <p class="nota" style="margin-top:6px">O teste só foi usado uma vez, no fim, para medir o modelo escolhido pela validação.</p>
     </div>
+  </section>
+
+  <!-- Parte 2 -->
+  <section class="slide divisor" data-secao="treino" data-titulo="Parte 2" data-parte="Como treinamos">
+    <div class="enfeite an" style="--d:2" data-icone="🧠" aria-hidden="true"></div>
+    <div class="numParte an">02</div>
+    <h1 class="an" style="--d:1">Como treinamos</h1>
+    <p class="lead an" style="--d:2">Seis passos, do primeiro teste aos gestos novos, sempre medindo os falsos disparos.</p>
+    <div class="indice an" style="--d:3"><span><b>1</b>Primeiros testes</span><span><b>2</b>Não disparar</span><span><b>3</b>Mais dados</span><span><b>4</b>Treino completo</span><span><b>5</b>Gatilho</span><span><b>6</b>Gestos novos</span></div>
   </section>
 
   <!-- 5. Passo a passo -->
@@ -365,6 +409,15 @@
     </div>
   </section>
 
+  <!-- Parte 3 -->
+  <section class="slide divisor" data-secao="vivo" data-titulo="Parte 3" data-parte="Ao vivo">
+    <div class="enfeite an" style="--d:2" data-icone="🎥" aria-hidden="true"></div>
+    <div class="numParte an">03</div>
+    <h1 class="an" style="--d:1">Ao vivo</h1>
+    <p class="lead an" style="--d:2">O mesmo modelo, em tempo real, em quatro situações diferentes.</p>
+    <div class="indice an" style="--d:3"><span><b>1</b>Teste geral</span><span><b>2</b>Tênis</span><span><b>3</b>Carro</span><span><b>4</b>Sala cirúrgica</span></div>
+  </section>
+
   <!-- 16. Teste ao vivo -->
   <section class="slide demo" data-titulo="Teste ao vivo" data-demo="teste">
     <div class="topo"><span class="vivo">AO VIVO</span><h2>O modelo, sem aplicação</h2><span class="espaco"></span><span class="chip">Rolar a mão para frente ou para trás: <b>troca o slide</b></span></div>
@@ -428,9 +481,18 @@
     <p class="nota an" style="--d:4;margin-top:22px">Demonstração de conceito: não é um dispositivo médico, e as imagens e o paciente são gerados pela página.</p>
   </section>
 
+  <!-- Parte 4 -->
+  <section class="slide divisor" data-secao="fim" data-titulo="Parte 4" data-parte="E agora?">
+    <div class="enfeite an" style="--d:2" data-icone="🧭" aria-hidden="true"></div>
+    <div class="numParte an">04</div>
+    <h1 class="an" style="--d:1">E agora?</h1>
+    <p class="lead an" style="--d:2">O que já sabemos e os caminhos que propomos para a entrega final.</p>
+    <div class="indice an" style="--d:3"><span><b>1</b>Resultados</span><span><b>2</b>Caminhos</span><span><b>3</b>Perguntas</span></div>
+  </section>
+
   <!-- 22. Próximos passos -->
   <section class="slide" data-titulo="Próximos passos">
-    <p class="kicker an">E agora?</p>
+    <p class="kicker an">Próximos passos</p>
     <h2 class="an" style="--d:1">Qual caminho a banca recomenda?</h2>
     <div class="grade" style="grid-template-columns:repeat(3,1fr);margin-top:10px">
       <div class="cartao an" style="--d:2"><p class="kicker">Caminho 1</p><h3>Carro de verdade</h3><p>Ajustar no DriverMHG e comparar com e sem o nosso pré-treino: a pergunta científica original.</p></div>
@@ -447,6 +509,7 @@
 
   <div id="rodape">
     <span class="pilula" id="trava">🔓 Livre · pare trava</span>
+    <span class="pilula" id="secaoPilula"></span>
     <span class="pilula" id="gestoPilula">conectando...</span>
     <div id="progresso"><div></div></div>
     <span id="numSlide"></span>
@@ -502,7 +565,7 @@ function no(pai, tag, a = {}, texto) {
   if (texto !== undefined) n.textContent = texto;
   pai.appendChild(n); return n;
 }
-const COR = { acento: "#0b8a7f", azul: "#2563eb", alerta: "#d9480f", ouro: "#d99a1e", cinza: "#b9c4cc", tinta: "#13232e", suave: "#5a6b77", linha: "#dde4ea" };
+const COR = { acento: "#7c3aed", azul: "#0891b2", alerta: "#f97316", ouro: "#f59e0b", cinza: "#b9c4cc", tinta: "#13232e", suave: "#5a6b77", linha: "#dde4ea" };
 function barras(svg, itens, { max, unidade = "", casas = 1, base = itens.some(i => i.rotulo.includes("\n")) ? 62 : 40, topo = 30 } = {}) {
   const L = +svg.getAttribute("width"), A = +svg.getAttribute("height"), n = itens.length, larg = Math.min(130, (L - 40) / n * 0.6), passo = (L - 40) / n;
   const m = max || Math.max(...itens.map(i => i.valor || 0)) * 1.15;
@@ -571,7 +634,7 @@ function matriz(svg, M, { celula = 44, esquerda = 240, topo = 190 } = {}) {
     no(svg, "text", { x: esquerda - 12, y: topo + i * celula + celula / 2 + 5, "text-anchor": "end", "font-size": 15, fill: COR.tinta }, r);
     M.valores[i].forEach((v, j) => {
       const diag = M.linhas_rotulos[i] === M.colunas_rotulos[j], forca = Math.min(1, v / (diag ? 100 : 25));
-      const cor = diag ? `rgba(11,138,127,${0.12 + 0.88 * forca})` : `rgba(217,72,15,${v < 0.5 ? 0 : 0.1 + 0.8 * forca})`;
+      const cor = diag ? `rgba(124,58,237,${0.12 + 0.88 * forca})` : `rgba(236,72,153,${v < 0.5 ? 0 : 0.1 + 0.8 * forca})`;
       const atraso = (i + j) * 30;
       no(svg, "rect", { x: esquerda + j * celula, y: topo + i * celula, width: celula - 3, height: celula - 3, rx: 6, fill: v < 0.5 && !diag ? "#f1f4f6" : cor, class: "celula", style: `transition-delay:${atraso}ms` });
       if (v >= 1) no(svg, "text", { x: esquerda + j * celula + celula / 2 - 1, y: topo + i * celula + celula / 2 + 5, "text-anchor": "middle", "font-size": diag ? 14 : 13, "font-weight": diag ? 800 : 600,
@@ -634,6 +697,23 @@ matriz($("matriz2"), D.matriz2, { celula: 46, esquerda: 200, topo: 170 });
 
 // ---------- Navegação, trava e demos ----------
 const slides = [...document.querySelectorAll(".slide")];
+// Cada slide herda a parte da divisória anterior; o marcador mostra em que passo do treino estamos.
+const NOMES_PARTES = {};
+(() => {
+  let secao = null, parte = "";
+  slides.forEach(sl => {
+    if (sl.classList.contains("divisor")) { secao = sl.dataset.secao; parte = sl.dataset.parte; }
+    if (secao && !sl.dataset.secao) sl.dataset.secao = secao;
+    NOMES_PARTES[slides.indexOf(sl)] = parte;
+    const k = sl.querySelector(".kicker"), m = k && k.textContent.match(/^Passo (\d)/);
+    if (m) {
+      const n = +m[1], marcador = document.createElement("div");
+      marcador.className = "passos an";
+      marcador.innerHTML = [1, 2, 3, 4, 5, 6].map(i => `<i class="${i < n ? "feito" : i === n ? "agora" : ""}"></i>`).join("") + `<span>Passo ${n} de 6</span>`;
+      k.after(marcador);
+    }
+  });
+})();
 let atual = Math.min(slides.length - 1, Math.max(0, parseInt(location.hash.slice(1)) - 1 || 0));
 let travada = false, bloqueados = 0, disparosTeste = 0;
 const DEMOS = { tenis: "tenis.html", painel: "painel_carro.html", hospital: "hospital.html" };
@@ -677,6 +757,8 @@ function mostrar(n) {
   $("numSlide").textContent = `${n + 1} / ${slides.length}`;
   $("progresso").firstElementChild.style.width = ((n + 1) / slides.length * 100) + "%";
   $("trava").style.visibility = s.dataset.demo ? "hidden" : "visible";
+  if (s.dataset.secao) $("palco").dataset.secao = s.dataset.secao; else delete $("palco").dataset.secao;
+  $("secaoPilula").textContent = NOMES_PARTES[n] || "Abertura";
 }
 function ir(passo) { if (atual + passo >= 0 && atual + passo < slides.length) mostrar(atual + passo); }
 function mostrarTrava() {

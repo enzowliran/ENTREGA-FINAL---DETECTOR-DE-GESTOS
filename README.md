@@ -65,7 +65,7 @@ Os gestos mudam em cada tela, e a legenda à direita mostra os da tela atual. Pe
 
 ### Apresentação
 
-`abrir_apresentacao.bat` gera `demo/apresentacao.html` a partir de `demo/apresentacao_modelo.html`, com todos os números lidos de `resultados/` por `demo/gerar_apresentacao.py`. Os nomes do grupo ficam na lista `GRUPO` desse arquivo. São 22 slides: a ideia, o passo a passo do treino, as matrizes de confusão e quatro demos ao vivo dentro dos slides (teste geral, tênis, carro e sala cirúrgica).
+`abrir_apresentacao.bat` gera `demo/apresentacao.html` a partir de `demo/apresentacao_modelo.html`, com todos os números lidos de `resultados/` por `demo/gerar_apresentacao.py`. Os nomes do grupo ficam na lista `GRUPO` desse arquivo. São 26 slides em quatro partes, cada uma com sua cor: a ideia, como treinamos (o passo a passo, com gráficos e matrizes de confusão), ao vivo (teste geral, tênis, carro e sala cirúrgica, rodando dentro dos slides) e próximos passos.
 
 | Gesto | Nos slides | Nas demos |
 |---|---|---|
