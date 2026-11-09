@@ -180,7 +180,7 @@
   <div id="tela" aria-label="Central multimídia">
     <div class="topo"><span><i id="ponto"></i><b id="conexao">Conectando</b></span><span id="origem"></span><span id="hora"></span></div>
     <div id="abas">
-      <button data-pagina="musica">1 Música</button><button data-pagina="clima">2 Clima</button><button data-pagina="telefone">3 Telefone</button><button data-pagina="limpador">4 Limpador</button><button data-pagina="farois">✊ Faróis</button>
+      <button data-pagina="musica">Música</button><button data-pagina="clima">Clima</button><button data-pagina="telefone">Telefone</button><button data-pagina="limpador">Limpador</button><button data-pagina="farois">Faróis</button>
     </div>
     <div class="pagina" id="pag_musica">
     <div class="faixa">
@@ -524,7 +524,7 @@ function atualizarBotao() {
   atualizarLegenda();
 }
 function comandosAtuais() {
-  const FUNCAO = ["Puxar a mão", "troca de função"];
+  const FUNCAO = ["Um dedo", "próxima função", "Mostrar um dedo"];
   let linhas;
   if (chamada && chamada.estado === "tocando") linhas = [["Manter polegar para cima", "atende"], ["Manter polegar para baixo", "recusa"]];
   else if (chamada) linhas = [["Sinal de pare", "encerra"]];
@@ -538,7 +538,7 @@ function comandosAtuais() {
     if (!tocando) linhas.push(["Tamborilar os dedos", "abre o menu"]);
     linhas.push(FUNCAO);
   }
-  if (!chamada) linhas.push(["1 a 4 dedos ou punho", "abre cada função", "Um a quatro dedos, ou punho"]);
+  if (!chamada && !menuAberto) linhas.push(["Puxar a mão", "função anterior"]);
   return linhas;
 }
 function atualizarLegenda() {
@@ -798,23 +798,14 @@ function executar(c, repeticao = false) {
     if (!repeticao) { explicarComandos(); avisar("Comandos de " + tituloTela()); $("nDisparos").textContent = ++comandos; }
     return;
   }
-  // Um a quatro dedos e o punho abrem direto cada página, na ordem das abas. Na chamada, não valem.
-  if (c.startsWith("pagina_")) {
-    if (repeticao || chamada) return;
-    const nova = PAGINAS[Number(c.slice(7)) - 1];
-    if (!nova) return;
-    if (menuAberto) { menuAberto = false; $("menu").classList.remove("aberto"); }
-    if (nova === pagina) { atualizarLegenda(); narrarTela(); } else mostrarPagina(nova);
-    avisar(NOMES_PAGINA[nova]);
-    $("nDisparos").textContent = ++comandos;
-    return;
-  }
   let feito = true;
   const falaAntes = idFala;
   if (chamada) feito = comandoChamada(c, repeticao);
-  else if (c === "funcao" && !menuAberto) {
+  else if ((c === "funcao" || c === "funcao_anterior") && !menuAberto) {
+    // Um dedo avança uma página; puxar a mão volta uma.
     if (repeticao) return;
-    const nova = PAGINAS[(PAGINAS.indexOf(pagina) + 1) % PAGINAS.length];
+    const passo = c === "funcao" ? 1 : -1;
+    const nova = PAGINAS[(PAGINAS.indexOf(pagina) + passo + PAGINAS.length) % PAGINAS.length];
     mostrarPagina(nova); avisar(NOMES_PAGINA[nova]);
   }
   else if (!menuAberto && pagina !== "musica") feito = comandoPagina(c, repeticao);
@@ -848,10 +839,10 @@ addEventListener("keydown", e => {
   if (e.key === "ArrowLeft") executar("anterior");
   if (e.key === "ArrowUp") { e.preventDefault(); executar("volume_mais", e.repeat); }
   if (e.key === "ArrowDown") { e.preventDefault(); executar("volume_menos", e.repeat); }
-  if (e.key.toLowerCase() === "r") executar("funcao");
+  if (e.key === "r") executar("funcao");
+  if (e.key === "R") executar("funcao_anterior");
   if (e.key.toLowerCase() === "m") executar("tamborilar");
   if (e.key.toLowerCase() === "e") executar("ajuda");
-  if ("12345".includes(e.key) && e.key.length === 1) executar("pagina_" + e.key);
   if (e.key === " " && e.target.tagName !== "BUTTON") { e.preventDefault(); executar("alternar"); }
   if (e.key.toLowerCase() === "f") document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
 });

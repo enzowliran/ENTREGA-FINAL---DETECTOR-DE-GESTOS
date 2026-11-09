@@ -57,11 +57,11 @@ A voz diz o nome da página a cada troca, e **empurrar a mão** faz ela ler os c
 | Sinal de pare | Toca ou pausa |
 | Polegar para cima ou baixo | Volume |
 | Tamborilar os dedos (com a música pausada) | Abre o menu |
-| Puxar a mão | Troca de função |
+| Um dedo | Próxima função |
+| Puxar a mão | Função anterior |
 | Empurrar a mão | Explica os comandos |
-| 1, 2, 3 ou 4 dedos, ou punho | Abre direto Música, Clima, Telefone, Limpador ou Faróis |
 
-Os gestos mudam em cada tela, e a legenda à direita mostra os da tela atual. Pelo teclado: setas, espaço, `M` (tamborilar), `R` (função), `E` (explicação), `1` a `5` (páginas) e `F` (tela cheia).
+Os gestos mudam em cada tela, e a legenda à direita mostra os da tela atual. Pelo teclado: setas, espaço, `M` (tamborilar), `R` (próxima função), `Shift+R` (função anterior), `E` (explicação) e `F` (tela cheia).
 
 ### Sala cirúrgica
 
@@ -157,7 +157,7 @@ O modelo `resultados/jester/cnn_3d_mais_gestos/melhor.pt` reconhece os 27 gestos
 | Acerto nos gestos novos, fotos | | 92,7% |
 | Gestos novos na webcam | | **ainda não medido** |
 
-Ele já é usado pelo painel do carro (`abrir_painel.bat`), para abrir as páginas com os dedos, mas ainda não foi medido na webcam. Para medir na webcam, cada pessoa grava seus vídeos com `demo/abrir_gravacao.bat`, que salva em `data/webcam/`, fora do git, porque mostra rostos. Depois:
+O painel do carro (`abrir_painel.bat`) usa esse modelo só para o gesto de um dedo, que avança a página. No primeiro teste na webcam, de 09/11, sem medição formal, só um dedo foi bem reconhecido: os outros raramente passavam do limiar. Para medir na webcam, cada pessoa grava seus vídeos com `demo/abrir_gravacao.bat`, que salva em `data/webcam/`, fora do git, porque mostra rostos. Depois:
 
 ```bash
 python src/avaliar_webcam.py --modelo resultados/jester/cnn_3d_mais_gestos/melhor.pt
