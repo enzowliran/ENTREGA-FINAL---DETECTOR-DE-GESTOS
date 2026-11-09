@@ -73,7 +73,7 @@ Os gestos mudam em cada tela, e a legenda à direita mostra os da tela atual. Pe
 | Sinal de pare | Trava ou destrava a troca de slide | Comando da demo |
 | Rolar a mão para frente ou para trás | | Avança ou volta o slide |
 
-Uma webcam só serve um programa por vez, então as demos rodam dentro da apresentação, e cada gesto vai apenas para o slide aberto. O `.bat` abre a apresentação no Chrome (ou no Edge) já em tela cheia, numa janela própria; para sair, `F11` ou `Alt+F4`. Nos slides, uma miniatura da webcam no canto mostra o gesto detectado. Pelo teclado: setas ou PageUp/PageDown, `T` (trava) e `F` (tela cheia). As matrizes de confusão saem de `python src/matriz_confusao.py`.
+Uma webcam só serve um programa por vez, então as demos rodam dentro da apresentação, e cada gesto vai apenas para o slide aberto. O `.bat` abre a apresentação no Chrome (ou no Edge) já em tela cheia, numa janela própria; para sair, `F11` ou `Alt+F4`. Nos slides, uma miniatura da webcam no canto mostra o gesto detectado. Dentro de uma demo, deslizar e o sinal de pare são comandos da demo, e um clique nela leva o teclado junto. Para trocar o slide nessa hora, use os botões ‹ › no canto do rodapé, que sempre funcionam, ou PageUp/PageDown (as teclas dos passadores de slide). Pelo teclado: setas ou PageUp/PageDown, `T` (trava) e `F` (tela cheia). As matrizes de confusão saem de `python src/matriz_confusao.py`.
 
 ### Sala cirúrgica
 
