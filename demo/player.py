@@ -12,7 +12,10 @@ import collections
 import json
 import queue
 import re
+import os
+import subprocess
 import sys
+import tempfile
 import threading
 import time
 import webbrowser
@@ -97,6 +100,20 @@ class Gatilho:
             self.foi_repeticao = True
             return nome
         return None
+
+
+def abrir_tela_cheia(endereco):
+    """Abre o Chrome (ou o Edge) em tela cheia, numa janela própria; sem eles, usa o navegador padrão."""
+    candidatos = [Path(os.environ.get(v, "")) / sub for v in ("ProgramFiles", "ProgramFiles(x86)", "LocalAppData")
+                  for sub in ("Google/Chrome/Application/chrome.exe", "Microsoft/Edge/Application/msedge.exe")]
+    navegador = next((c for c in candidatos if c.is_file()), None)
+    if navegador is None:
+        webbrowser.open(endereco)
+        return
+    # Perfil separado: assim a janela abre mesmo com o navegador já aberto, e respeita a tela cheia.
+    perfil = Path(tempfile.gettempdir()) / "gestos_apresentacao"
+    subprocess.Popen([str(navegador), "--start-fullscreen", f"--app={endereco}", f"--user-data-dir={perfil}",
+                      "--no-first-run", "--autoplay-policy=no-user-gesture-required"])
 
 
 def laco_modelo(args, estado, parar):
@@ -441,6 +458,7 @@ def main():
     a.add_argument("--repetir", type=float, default=2.0, help="Segundos entre repetições de um polegar mantido, no painel")
     a.add_argument("--painel", action="store_true", help="Liga os gestos extras do painel: polegares, tamborilar, puxar e empurrar a mão")
     a.add_argument("--hospital", action="store_true", help="Liga os gestos extras do hospital: polegares, acenar e zoom com a mão inteira")
+    a.add_argument("--tela-cheia", action="store_true", help="Abre a página no Chrome ou no Edge em tela cheia")
     a.add_argument("--apresentacao", action="store_true", help="Dispara os gestos de todas as demos; a página repassa cada um ao slide aberto")
     args = a.parse_args()
     if args.apresentacao:
@@ -457,7 +475,7 @@ def main():
     endereco = f"http://127.0.0.1:{args.porta}/"
     print(f"Player em {endereco} (Ctrl+C encerra)", flush=True)
     if not args.nao_abrir:
-        webbrowser.open(endereco)
+        abrir_tela_cheia(endereco) if args.tela_cheia else webbrowser.open(endereco)
     try:
         laco_modelo(args, estado, parar)
         while not parar.is_set():

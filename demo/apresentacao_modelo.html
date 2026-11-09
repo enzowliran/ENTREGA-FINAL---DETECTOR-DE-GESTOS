@@ -62,13 +62,19 @@
   .chip b { color: var(--tinta); }
 
   /* Rodapé */
-  #rodape { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; gap: 16px; padding: 0 90px; z-index: 5; pointer-events: none; }
+  #rodape { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; gap: 16px; padding: 0 210px 0 90px; z-index: 5; pointer-events: none; }
   #progresso { flex: 1; height: 4px; border-radius: 2px; background: var(--linha); overflow: hidden; }
   #progresso div { height: 100%; background: var(--acento); transition: width .5s ease; }
   #numSlide { font-size: 15px; color: var(--fraco); font-variant-numeric: tabular-nums; min-width: 60px; text-align: right; }
   .pilula { font-size: 15px; font-weight: 600; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--linha); background: var(--cartao); color: var(--suave); white-space: nowrap; }
   #trava.travada { color: var(--alerta); border-color: var(--alerta); background: var(--alerta-claro); }
-  #gestoPilula.comando { color: var(--acento); border-color: var(--acento); }
+  /* Miniatura da webcam no canto, com o gesto detectado embaixo; some nas demos, que já mostram a câmera. */
+  #mini { position: absolute; right: 14px; bottom: 8px; width: 164px; z-index: 6; border-radius: 12px; overflow: hidden; background: #0b1014;
+          box-shadow: 0 6px 20px rgba(20,40,60,.22); border: 2px solid #fff; transition: opacity .3s; }
+  #mini img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+  #miniGesto { font-size: 12px; font-weight: 700; padding: 4px 8px; background: #fff; color: var(--tinta); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #miniGesto.comando { background: var(--acento); color: #fff; }
+  #mini.oculto { opacity: 0; pointer-events: none; }
   #aviso { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%) scale(.96); background: rgba(19,35,46,.88); color: #fff; font-size: 30px; font-weight: 700;
            padding: 16px 30px; border-radius: 16px; opacity: 0; transition: opacity .2s, transform .2s; z-index: 6; pointer-events: none; }
   #aviso.ver { opacity: 1; transform: translate(-50%, -50%) scale(1); }
@@ -510,10 +516,10 @@
   <div id="rodape">
     <span class="pilula" id="trava">🔓 Livre · pare trava</span>
     <span class="pilula" id="secaoPilula"></span>
-    <span class="pilula" id="gestoPilula">conectando...</span>
     <div id="progresso"><div></div></div>
     <span id="numSlide"></span>
   </div>
+  <div id="mini"><img id="miniVideo" alt="Webcam"><div id="miniGesto">conectando...</div></div>
   <div id="aviso"></div>
 </div>
 
@@ -757,6 +763,9 @@ function mostrar(n) {
   $("numSlide").textContent = `${n + 1} / ${slides.length}`;
   $("progresso").firstElementChild.style.width = ((n + 1) / slides.length * 100) + "%";
   $("trava").style.visibility = s.dataset.demo ? "hidden" : "visible";
+  // Nas demos, a câmera já aparece grande: a miniatura sai e o vídeo dela é desligado.
+  $("mini").classList.toggle("oculto", !!s.dataset.demo);
+  if (s.dataset.demo) $("miniVideo").removeAttribute("src"); else if (!$("miniVideo").getAttribute("src")) $("miniVideo").src = "/video";
   if (s.dataset.secao) $("palco").dataset.secao = s.dataset.secao; else delete $("palco").dataset.secao;
   $("secaoPilula").textContent = NOMES_PARTES[n] || "Abertura";
 }
@@ -793,8 +802,8 @@ function registrarDisparo(e) {
   while ($("listaDisparos").children.length > 7) $("listaDisparos").lastChild.remove();
 }
 function receberEstado(e) {
-  $("gestoPilula").textContent = e.aquecendo ? "aquecendo..." : `✋ ${e.gesto} · ${Math.round(e.confianca * 100)}%`;
-  $("gestoPilula").className = "pilula" + (e.e_comando ? " comando" : "");
+  $("miniGesto").textContent = e.aquecendo ? "aquecendo..." : `${e.gesto} · ${Math.round(e.confianca * 100)}%`;
+  $("miniGesto").className = e.e_comando ? "comando" : "";
   if (slides[atual].dataset.demo === "teste") {
     $("gestoGrande").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
     $("gestoGrande").className = e.e_comando ? "comando" : "";
@@ -804,12 +813,12 @@ function receberEstado(e) {
   if (slides[atual].dataset.demo && slides[atual].dataset.demo !== "teste") repassar(e);
 }
 const fonte = new EventSource("/eventos");
-fonte.onerror = () => { $("gestoPilula").textContent = "sem conexão com o modelo · use o teclado"; };
+fonte.onerror = () => { $("miniGesto").textContent = "sem conexão · use o teclado"; };
 fonte.onmessage = ev => {
   const e = JSON.parse(ev.data);
   if (e.tipo === "estado") receberEstado(e);
   if (e.tipo === "comando") receberComando(e);
-  if (e.tipo === "erro") $("gestoPilula").textContent = e.mensagem;
+  if (e.tipo === "erro") $("miniGesto").textContent = e.mensagem;
 };
 addEventListener("message", ev => { if (ev.origin === location.origin && ev.data && ev.data.navegar) ir(ev.data.navegar); });
 addEventListener("keydown", e => {
@@ -822,6 +831,9 @@ addEventListener("keydown", e => {
 });
 mostrarTrava();
 mostrar(atual);
+const telaCheia = () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {}); };
+addEventListener("pointerdown", telaCheia, { once: true });
+addEventListener("keydown", e => { if (e.key.toLowerCase() !== "f") telaCheia(); }, { once: true });
 </script>
 </body>
 </html>
