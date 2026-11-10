@@ -1,0 +1,157 @@
+{
+  "jester": {
+    "videos_treino": 118562,
+    "videos_validacao": 14787,
+    "videos_teste": 14743,
+    "videos_total": 148092,
+    "classes": 27,
+    "frames": 5279581,
+    "gigabytes": 27.1,
+    "fonte": "calculado de data/Jester (rótulos e índice dos frames)",
+    "treino_por_classe": {
+      "Doing other things": 9592,
+      "Thumb Down": 4390,
+      "Thumb Up": 4373,
+      "Drumming Fingers": 4371,
+      "Pushing Hand Away": 4357,
+      "Sliding Two Fingers Down": 4348,
+      "Stop Sign": 4337,
+      "Zooming Out With Two Fingers": 4323,
+      "Pulling Hand In": 4323,
+      "Zooming In With Two Fingers": 4302,
+      "Sliding Two Fingers Left": 4292,
+      "Pushing Two Fingers Away": 4291,
+      "Zooming Out With Full Hand": 4281,
+      "No gesture": 4278,
+      "Pulling Two Fingers In": 4267,
+      "Swiping Down": 4259,
+      "Shaking Hand": 4258,
+      "Zooming In With Full Hand": 4251,
+      "Swiping Up": 4220,
+      "Sliding Two Fingers Up": 4219,
+      "Sliding Two Fingers Right": 4206,
+      "Swiping Left": 4162,
+      "Rolling Hand Forward": 4132,
+      "Swiping Right": 4084,
+      "Rolling Hand Backward": 4032,
+      "Turning Hand Counterclockwise": 3398,
+      "Turning Hand Clockwise": 3216
+    },
+    "quadros_por_video_media": 35.7,
+    "duracao_media_s": 3.0,
+    "fps": 12,
+    "altura_px": 100
+  },
+  "hagrid": {
+    "imagens_no_arquivo": 1086158,
+    "classes_no_arquivo": 34,
+    "gb_arquivo_completo": 128.3,
+    "gb_baixados": 6.4,
+    "lado_min_px": 512,
+    "usadas": {
+      "call": {
+        "train": 666,
+        "val": 66
+      },
+      "dislike": {
+        "train": 4000,
+        "val": 400
+      },
+      "fist": {
+        "train": 4000,
+        "val": 400
+      },
+      "four": {
+        "train": 4000,
+        "val": 400
+      },
+      "like": {
+        "train": 4000,
+        "val": 400
+      },
+      "little_finger": {
+        "train": 666,
+        "val": 66
+      },
+      "mute": {
+        "train": 666,
+        "val": 66
+      },
+      "no_gesture": {
+        "train": 1464,
+        "val": 200
+      },
+      "ok": {
+        "train": 666,
+        "val": 66
+      },
+      "one": {
+        "train": 4000,
+        "val": 400
+      },
+      "palm": {
+        "train": 4000,
+        "val": 400
+      },
+      "peace": {
+        "train": 4000,
+        "val": 400
+      },
+      "point": {
+        "train": 666,
+        "val": 66
+      },
+      "rock": {
+        "train": 666,
+        "val": 66
+      },
+      "stop": {
+        "train": 4000,
+        "val": 400
+      },
+      "three": {
+        "train": 4000,
+        "val": 400
+      },
+      "three2": {
+        "train": 4000,
+        "val": 400
+      },
+      "two_up": {
+        "train": 4000,
+        "val": 400
+      }
+    },
+    "fotos_treino": 49460,
+    "fotos_validacao": 4996,
+    "pessoas_treino": 12725,
+    "pessoas_validacao": 854,
+    "pessoas_em_comum": 0
+  },
+  "drivermhg": {
+    "pessoas": 25,
+    "segmentos": 5148,
+    "gravacoes": 125,
+    "pessoas_treino": 18,
+    "pessoas_teste": 7,
+    "por_gesto": {
+      "FlickDown": 720,
+      "FlickUp": 737,
+      "None": 753,
+      "Other": 739,
+      "SwipeLeft": 737,
+      "SwipeRight": 727,
+      "Tap": 735
+    },
+    "duracao_media_s": 0.94,
+    "modalidades": [
+      "RGB",
+      "infravermelho",
+      "profundidade"
+    ],
+    "resolucao": "320×240",
+    "fps": 30,
+    "gravacoes_baixadas": 87,
+    "gb_baixados": 12.1
+  }
+}

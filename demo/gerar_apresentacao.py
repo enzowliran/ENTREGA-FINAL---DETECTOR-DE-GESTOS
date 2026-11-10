@@ -173,6 +173,21 @@ def main():
                   "top1_antigos": round(100 * fn["top1_antigos_validacao"], 1),
                   "det07": {PT[k]: round(100 * v, 1) for k, v in rf[salvo]["novas_detectadas_07"].items()}}
     d["novos"]["fotos_treino"] = sum(1 for _ in (RAIZ / "data/HaGRID/train").rglob("*.jpg")) if (RAIZ / "data/HaGRID/train").exists() else None
+    # As três bases (src/estatisticas_bases.py) e de que classe do HaGRID veio cada saída nova.
+    d["bases"] = ler_json("resultados/estatisticas_bases.json")
+    import sys
+    sys.path.insert(0, str(RAIZ / "src"))
+    from treinar_gestos_novos import MAPA
+    usadas = d["bases"]["hagrid"]["usadas"]
+    destinos = NOVOS + ["Thumb Up", "Thumb Down", "Stop Sign", "No gesture", "Doing other things"]
+    d["mapa_hagrid"] = [{"destino": PT[dest], "tipo": "novo" if dest in NOVOS else "negativo" if dest in SEM_GESTO else "antigo",
+                         "origens": [{"classe": o, "fotos": usadas.get(o, {}).get("train", 0)} for o, x in MAPA.items() if x == dest]}
+                        for dest in destinos]
+    d["treino_novos"] = {"jester_por_epoca": config("cnn_3d_mais_gestos")["jester_por_epoca"], "epocas": config("cnn_3d_mais_gestos")["epocas"],
+                         "lr": config("cnn_3d_mais_gestos")["lr"], "lr_cabeca": config("cnn_3d_mais_gestos")["lr_cabeca"],
+                         "saidas_antigas": len(salvo_nomes := __import__("torch").load(R / "cnn_3d/melhor.pt", map_location="cpu", weights_only=False)["nomes"]),
+                         "saidas": len(salvo_nomes) + len(NOVOS)}
+    d["jester_classes"] = [{"gesto": PT[g], "n": n} for g, n in d["bases"]["jester"]["treino_por_classe"].items()]
     d["matriz2"] = matriz("resultados/jester/cnn_3d_mais_gestos/matriz_confusao_hagrid_val.json", NOVOS + ["Stop Sign", "Thumb Up", "Thumb Down"], NOVOS + ["Stop Sign", "Thumb Up", "Thumb Down"])
 
     modelo = (RAIZ / "demo/apresentacao_modelo.html").read_text(encoding="utf-8")
