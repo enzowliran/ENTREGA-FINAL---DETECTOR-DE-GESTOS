@@ -1,0 +1,82 @@
+﻿Treino por época: 60000 Jester + 25000 fotos + 24000 janelas reais = 109000
+Validação: 3000 Jester, 3677 IPN (13 pessoas), 200 Slovo sem gesto, 103 sinais um/dois
+Modelo de origem: jester_top1 0.925 | ipn_One Finger_top1 0.062 | ipn_One Finger_top5 0.217 | ipn_One Finger_dispara07 0.009 | ipn_Two Fingers_top1 0.057 | ipn_Two Fingers_top5 0.226 | ipn_Two Fingers_dispara07 0.007 | ipn_sem_gesto_vira_dedo07 0.007 | slovo_sem_gesto_vira_dedo07 0.000 | sinais_One Finger_top1 0.020 | sinais_One Finger_top5 0.275 | sinais_One Finger_dispara07 0.000 | sinais_Two Fingers_top1 0.019 | sinais_Two Fingers_top5 0.212 | sinais_Two Fingers_dispara07 0.000 | dedos_real 0.040
+Retomando da época 2
+ ep2 passo 0/2271 perda 1.014 top1 0.833 7 clipes/s
+ ep2 passo 200/2271 perda 0.863 top1 0.855 146 clipes/s
+ ep2 passo 400/2271 perda 0.871 top1 0.852 152 clipes/s
+ ep2 passo 600/2271 perda 0.875 top1 0.852 155 clipes/s
+ ep2 passo 800/2271 perda 0.867 top1 0.855 157 clipes/s
+ ep2 passo 1000/2271 perda 0.865 top1 0.857 158 clipes/s
+ ep2 passo 1200/2271 perda 0.858 top1 0.859 158 clipes/s
+ ep2 passo 1400/2271 perda 0.857 top1 0.860 159 clipes/s
+ ep2 passo 1600/2271 perda 0.856 top1 0.860 159 clipes/s
+ ep2 passo 1800/2271 perda 0.855 top1 0.860 159 clipes/s
+ ep2 passo 2000/2271 perda 0.853 top1 0.861 159 clipes/s
+ ep2 passo 2200/2271 perda 0.851 top1 0.861 159 clipes/s
+Época 3/8 (11.5 min) | Jester 89.0% (origem 92.5%) | IPN um 78.9% dois 78.5% | sinais um 0.0% dois 0.0% | top5 sinais um 23.5% dois 17.3% | sem gesto vira dedo: IPN 6.7% Slovo 0.0%
+ ep3 passo 0/2271 perda 0.912 top1 0.896 100 clipes/s
+ ep3 passo 200/2271 perda 0.855 top1 0.859 159 clipes/s
+ ep3 passo 400/2271 perda 0.847 top1 0.863 159 clipes/s
+ ep3 passo 600/2271 perda 0.839 top1 0.866 160 clipes/s
+ ep3 passo 800/2271 perda 0.837 top1 0.866 160 clipes/s
+ ep3 passo 1000/2271 perda 0.833 top1 0.867 160 clipes/s
+ ep3 passo 1200/2271 perda 0.832 top1 0.868 160 clipes/s
+ ep3 passo 1400/2271 perda 0.830 top1 0.868 160 clipes/s
+ ep3 passo 1600/2271 perda 0.827 top1 0.869 160 clipes/s
+ ep3 passo 1800/2271 perda 0.827 top1 0.869 160 clipes/s
+ ep3 passo 2000/2271 perda 0.825 top1 0.870 160 clipes/s
+ ep3 passo 2200/2271 perda 0.824 top1 0.870 160 clipes/s
+Época 4/8 (11.3 min) | Jester 88.6% (origem 92.5%) | IPN um 86.9% dois 69.1% | sinais um 0.0% dois 0.0% | top5 sinais um 58.8% dois 23.1% | sem gesto vira dedo: IPN 8.1% Slovo 0.0%
+ ep4 passo 0/2271 perda 0.766 top1 0.917 113 clipes/s
+ ep4 passo 200/2271 perda 0.815 top1 0.877 160 clipes/s
+ ep4 passo 400/2271 perda 0.803 top1 0.879 161 clipes/s
+ ep4 passo 600/2271 perda 0.801 top1 0.880 161 clipes/s
+ ep4 passo 800/2271 perda 0.802 top1 0.879 161 clipes/s
+ ep4 passo 1000/2271 perda 0.802 top1 0.879 161 clipes/s
+ ep4 passo 1200/2271 perda 0.799 top1 0.880 161 clipes/s
+ ep4 passo 1400/2271 perda 0.799 top1 0.880 153 clipes/s
+ ep4 passo 1600/2271 perda 0.801 top1 0.879 142 clipes/s
+ ep4 passo 1800/2271 perda 0.799 top1 0.880 141 clipes/s
+ ep4 passo 2000/2271 perda 0.798 top1 0.880 142 clipes/s
+ ep4 passo 2200/2271 perda 0.798 top1 0.880 141 clipes/s
+Época 5/8 (12.8 min) | Jester 89.4% (origem 92.5%) | IPN um 85.6% dois 75.0% | sinais um 0.0% dois 0.0% | top5 sinais um 45.1% dois 21.2% | sem gesto vira dedo: IPN 6.8% Slovo 0.0%
+ ep5 passo 0/2271 perda 0.627 top1 0.938 100 clipes/s
+ ep5 passo 200/2271 perda 0.793 top1 0.881 150 clipes/s
+ ep5 passo 400/2271 perda 0.789 top1 0.884 155 clipes/s
+ ep5 passo 600/2271 perda 0.788 top1 0.884 157 clipes/s
+ ep5 passo 800/2271 perda 0.789 top1 0.883 158 clipes/s
+ ep5 passo 1000/2271 perda 0.787 top1 0.883 158 clipes/s
+ ep5 passo 1200/2271 perda 0.787 top1 0.883 159 clipes/s
+ ep5 passo 1400/2271 perda 0.788 top1 0.883 159 clipes/s
+ ep5 passo 1600/2271 perda 0.787 top1 0.883 159 clipes/s
+ ep5 passo 1800/2271 perda 0.786 top1 0.884 159 clipes/s
+ ep5 passo 2000/2271 perda 0.786 top1 0.884 159 clipes/s
+ ep5 passo 2200/2271 perda 0.785 top1 0.884 159 clipes/s
+Época 6/8 (11.4 min) | Jester 89.9% (origem 92.5%) | IPN um 82.4% dois 81.4% | sinais um 0.0% dois 0.0% | top5 sinais um 37.3% dois 25.0% | sem gesto vira dedo: IPN 7.6% Slovo 0.0%
+ ep6 passo 0/2271 perda 0.879 top1 0.771 103 clipes/s
+ ep6 passo 200/2271 perda 0.774 top1 0.887 160 clipes/s
+ ep6 passo 400/2271 perda 0.774 top1 0.887 160 clipes/s
+ ep6 passo 600/2271 perda 0.774 top1 0.887 160 clipes/s
+ ep6 passo 800/2271 perda 0.775 top1 0.887 160 clipes/s
+ ep6 passo 1000/2271 perda 0.773 top1 0.888 160 clipes/s
+ ep6 passo 1200/2271 perda 0.773 top1 0.888 160 clipes/s
+ ep6 passo 1400/2271 perda 0.773 top1 0.887 160 clipes/s
+ ep6 passo 1600/2271 perda 0.774 top1 0.887 160 clipes/s
+ ep6 passo 1800/2271 perda 0.773 top1 0.888 160 clipes/s
+ ep6 passo 2000/2271 perda 0.774 top1 0.887 160 clipes/s
+ ep6 passo 2200/2271 perda 0.774 top1 0.887 160 clipes/s
+Época 7/8 (11.4 min) | Jester 90.0% (origem 92.5%) | IPN um 85.3% dois 79.4% | sinais um 0.0% dois 0.0% | top5 sinais um 41.2% dois 23.1% | sem gesto vira dedo: IPN 8.7% Slovo 0.0%
+ ep7 passo 0/2271 perda 0.766 top1 0.875 97 clipes/s
+ ep7 passo 200/2271 perda 0.773 top1 0.892 160 clipes/s
+ ep7 passo 400/2271 perda 0.774 top1 0.889 161 clipes/s
+ ep7 passo 600/2271 perda 0.772 top1 0.889 161 clipes/s
+ ep7 passo 800/2271 perda 0.774 top1 0.889 161 clipes/s
+ ep7 passo 1000/2271 perda 0.772 top1 0.890 161 clipes/s
+ ep7 passo 1200/2271 perda 0.771 top1 0.890 161 clipes/s
+ ep7 passo 1400/2271 perda 0.770 top1 0.890 160 clipes/s
+ ep7 passo 1600/2271 perda 0.770 top1 0.889 160 clipes/s
+ ep7 passo 1800/2271 perda 0.770 top1 0.889 160 clipes/s
+ ep7 passo 2000/2271 perda 0.771 top1 0.889 159 clipes/s
+ ep7 passo 2200/2271 perda 0.771 top1 0.888 157 clipes/s
+Época 8/8 (11.7 min) | Jester 89.8% (origem 92.5%) | IPN um 84.4% dois 79.8% | sinais um 0.0% dois 0.0% | top5 sinais um 41.2% dois 23.1% | sem gesto vira dedo: IPN 8.2% Slovo 0.0%

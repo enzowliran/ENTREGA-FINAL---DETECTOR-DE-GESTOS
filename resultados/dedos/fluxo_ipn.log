@@ -1,0 +1,65 @@
+﻿52 vídeos de validação (pessoas fora do treino)
+  1/52 vídeos
+  2/52 vídeos
+  3/52 vídeos
+  4/52 vídeos
+  5/52 vídeos
+  6/52 vídeos
+  7/52 vídeos
+  8/52 vídeos
+  9/52 vídeos
+  10/52 vídeos
+  11/52 vídeos
+  12/52 vídeos
+  13/52 vídeos
+  14/52 vídeos
+  15/52 vídeos
+  16/52 vídeos
+  17/52 vídeos
+  18/52 vídeos
+  19/52 vídeos
+  20/52 vídeos
+  21/52 vídeos
+  22/52 vídeos
+  23/52 vídeos
+  24/52 vídeos
+  25/52 vídeos
+  26/52 vídeos
+  27/52 vídeos
+  28/52 vídeos
+  29/52 vídeos
+  30/52 vídeos
+  31/52 vídeos
+  32/52 vídeos
+  33/52 vídeos
+  34/52 vídeos
+  35/52 vídeos
+  36/52 vídeos
+  37/52 vídeos
+  38/52 vídeos
+  39/52 vídeos
+  40/52 vídeos
+  41/52 vídeos
+  42/52 vídeos
+  43/52 vídeos
+  44/52 vídeos
+  45/52 vídeos
+  46/52 vídeos
+  47/52 vídeos
+  48/52 vídeos
+  49/52 vídeos
+  50/52 vídeos
+  51/52 vídeos
+  52/52 vídeos
+
+== resultados/jester/cnn_3d_mais_gestos/melhor.pt
+  118.1 min de vídeo, 31.5 min sem gesto: 25 falsos (0.794 por minuto) {'Sliding Two Fingers Down': 9, 'Sliding Two Fingers Right': 3, 'Four Fingers': 3, 'Pushing Two Fingers Away': 2, 'Thumb Up': 2, 'Fist': 2, 'Sliding Two Fingers Up': 1, 'Sliding Two Fingers Left': 1, 'Swiping Down': 1, 'Drumming Fingers': 1}
+  apontar 1 dedo: 6 disparos certos em 265 trechos {'Sliding Two Fingers Right': 171, 'Sliding Two Fingers Left': 118, 'Sliding Two Fingers Up': 109, 'Sliding Two Fingers Down': 102, 'Drumming Fingers': 6}
+  apontar 2 dedos: 2 disparos certos em 264 trechos {'Sliding Two Fingers Right': 168, 'Sliding Two Fingers Up': 145, 'Sliding Two Fingers Down': 105, 'Sliding Two Fingers Left': 91, 'Pushing Two Fingers Away': 33}
+
+== resultados/jester/cnn_3d_dedos/final.pt
+  118.1 min de vídeo, 31.5 min sem gesto: 10 falsos (0.317 por minuto) {'Two Fingers': 7, 'One Finger': 2, 'Sliding Two Fingers Right': 1}
+  apontar 1 dedo: 485 disparos certos em 265 trechos {'One Finger': 485, 'Sliding Two Fingers Right': 43, 'Two Fingers': 7, 'Zooming Out With Full Hand': 1, 'Sliding Two Fingers Left': 1}
+  apontar 2 dedos: 351 disparos certos em 264 trechos {'Two Fingers': 351, 'One Finger': 209, 'Sliding Two Fingers Right': 63, 'Sliding Two Fingers Left': 2, 'Sliding Two Fingers Down': 1}
+
+Salvo em C:\Users\Enzo W Liran\Downloads\New folder\resultados\dedos\fluxo_ipn.json

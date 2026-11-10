@@ -1,0 +1,35 @@
+{
+  "origem": {
+    "minutos": 100.15833333333333,
+    "falsos": 3,
+    "falsos_por_min": 0.029952575089441717,
+    "falsos_de_gestos_novos": 0,
+    "falsos_por_classe": {
+      "Swiping Right": 1,
+      "Thumb Up": 2
+    },
+    "deteccao_antigos": 0.7241514156108243,
+    "classe_errada": 0.05091506335053965,
+    "gestos_antigos_disparando_novo": 0,
+    "videos": 12786
+  },
+  "novo": {
+    "minutos": 100.15833333333333,
+    "falsos": 5,
+    "falsos_por_min": 0.04992095848240286,
+    "falsos_de_gestos_novos": 0,
+    "falsos_por_classe": {
+      "Thumb Up": 2,
+      "Shaking Hand": 3
+    },
+    "deteccao_antigos": 0.6582981385890818,
+    "classe_errada": 0.04567495698420147,
+    "gestos_antigos_disparando_novo": 0,
+    "videos": 12786
+  },
+  "top1_antigos_validacao": 0.9034286873605194,
+  "criterio_top1": 0.923,
+  "passou_top1": false,
+  "criterio_falsos_por_min": 0.1,
+  "passou_falsos": true
+}

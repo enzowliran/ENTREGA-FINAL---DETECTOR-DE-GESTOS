@@ -9,6 +9,8 @@ Uso:
 """
 import argparse
 import io
+import time
+import urllib.error
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -43,8 +45,15 @@ class ArquivoRemoto(io.RawIOBase):
             return 0
         fim = min(self.pos + len(b), self.tamanho) - 1
         pedido = urllib.request.Request(self.url, headers={"Range": f"bytes={self.pos}-{fim}", "User-Agent": "projeto-gestos"})
-        with urllib.request.urlopen(pedido, timeout=120) as r:
-            dados = r.read()
+        for tentativa in range(5):  # o servidor às vezes derruba a conexão; tenta de novo com espera crescente
+            try:
+                with urllib.request.urlopen(pedido, timeout=120) as r:
+                    dados = r.read()
+                break
+            except (urllib.error.URLError, ConnectionError, TimeoutError):
+                if tentativa == 4:
+                    raise
+                time.sleep(2 * 2 ** tentativa)
         b[:len(dados)] = dados
         self.pos += len(dados)
         self.baixado += len(dados)

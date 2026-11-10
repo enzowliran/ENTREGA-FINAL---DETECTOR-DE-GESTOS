@@ -1,0 +1,23 @@
+{
+  "origem": "resultados/jester/cnn_3d_mais_gestos/melhor.pt",
+  "nome": "cnn_3d_dedos",
+  "dados": "data/Jester",
+  "hagrid": "data/HaGRID",
+  "reais": "data/videos_reais",
+  "epocas": 8,
+  "jester_por_epoca": 60000,
+  "hagrid_por_epoca": 25000,
+  "reais_dedo": 8000,
+  "reais_sem_gesto": 5000,
+  "reais_outros": 3000,
+  "val_jester": 3000,
+  "lote": 48,
+  "lr": 0.0003,
+  "lr_cabeca": 0.001,
+  "peso_falso": 1.0,
+  "suavizacao": 0.05,
+  "queda_max_jester": 0.01,
+  "retomar": true,
+  "teste_rapido": false,
+  "seed": 42
+}
