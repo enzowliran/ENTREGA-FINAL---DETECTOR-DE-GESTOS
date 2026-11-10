@@ -227,9 +227,9 @@ def resumo_geral():
     """
     tentativas, por_pessoa, sessoes = [], {}, 0
     for pasta in sorted(p for p in PASTA.iterdir() if p.is_dir() and (p / "resumo.json").exists()):
-        with (pasta / "tentativas.csv").open(encoding="utf-8") as f:
+        with (pasta / "tentativas.csv").open(encoding="utf-8-sig") as f:
             linhas = list(csv.DictReader(f))
-        r = json.loads((pasta / "resumo.json").read_text(encoding="utf-8"))
+        r = json.loads((pasta / "resumo.json").read_text(encoding="utf-8-sig"))
         p = por_pessoa.setdefault(r["pessoa"], {"tentativas": [], "falsos": 0, "minutos": 0.0, "sessoes": 0})
         p["tentativas"] += linhas
         p["falsos"] += r["sem_gesto"]["falsos"]
