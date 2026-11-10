@@ -67,6 +67,8 @@
   .controles button.agora { background: var(--acento); color: #fff; transform: scale(1.04); }
   .controles button.agora b { color: #fff; }
   .licao p { font-size: 17px; }
+  .cena3d.escura { background: radial-gradient(900px 520px at 30% 20%, #1e293b, #0b1220 70%); border-color: #1e293b; }
+  .cena3d.escura .rotulos3d span { background: rgba(15,23,42,.78); }
   .rotulos3d { position: absolute; left: 16px; bottom: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
   .rotulos3d span { background: rgba(255,255,255,.88); border-radius: 999px; padding: 6px 12px; font-size: 15px; font-weight: 600; color: var(--c); }
   #secaoPilula { color: var(--acento); border-color: var(--acento-claro); background: var(--acento-claro); font-weight: 700; }
@@ -284,37 +286,39 @@
   <section class="slide" data-titulo="O que é uma CNN 3D" data-interativo="cnn1">
     <p class="kicker an">Por dentro do modelo · interativo</p>
     <h2 class="an" style="--d:1">O que é uma CNN 3D: um filtro que olha espaço e tempo juntos</h2>
-    <div class="grade" style="grid-template-columns:1.4fr 1fr;align-items:stretch;gap:26px">
-      <div class="cena3d an" style="--d:2;height:540px"><canvas id="cena1"></canvas>
-        <div class="rotulos3d"><span style="--c:#64748b">▮ vídeo: quadros no tempo</span><span style="--c:#7c3aed">▮ filtro</span><span style="--c:#ec4899">▮ onde o filtro acendeu</span></div>
+    <div class="grade" style="grid-template-columns:1.45fr 1fr;align-items:stretch;gap:26px">
+      <div class="cena3d escura an" style="--d:2;height:540px"><canvas id="cena1"></canvas>
+        <div class="rotulos3d"><span style="--c:#cbd5e1">▮ vídeo de entrada</span><span style="--c:#c4b5fd">▮ filtro 3×3×3</span><span style="--c:#fda4af">▮ mapa de ativação</span></div>
       </div>
       <div class="grade an" style="--d:3;gap:16px;align-content:start">
         <div class="cartao estado3d"><p class="rotuloEstado" id="e1modo"></p><h3 id="e1titulo"></h3><p id="e1texto"></p>
           <div class="medidor"><div id="e1barra"></div></div></div>
         <div class="controles">
-          <button data-acao="Swiping Right">👉 Deslizar: <b>um passo</b></button>
+          <button data-acao="Swiping Right">👉 Deslizar: <b>avança ou volta um passo</b></button>
           <button data-acao="Stop Sign">✋ Pare: <b>pausa ou continua</b></button>
-          <button data-acao="Thumb Up">👍 Polegar para cima: <b>troca o vídeo</b></button>
+          <button data-acao="Thumb Up">👍 Polegar para cima: <b>mão deslizando ou parada</b></button>
           <button data-acao="Thumb Down">👎 Polegar para baixo: <b>filtro 2D ou 3D</b></button>
         </div>
-        <div class="cartao licao"><p><b>Experimente:</b> com o vídeo <b>parado</b>, o filtro 2D ainda acende, porque ele vê a mão. O filtro 3D não acende, porque procura o <b>movimento</b>.</p></div>
+        <div class="cartao licao"><p><b>Experimente:</b> com a mão <b>parada</b>, o filtro 2D ainda acende, porque vê a mão. O filtro 3D não acende, porque procura o <b>movimento</b>.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- 3c. Como a CNN 3D funciona (interativo) -->
-  <section class="slide" data-titulo="Como a CNN 3D funciona" data-interativo="cnn2">
+  <!-- 3c. Por dentro da rede (interativo) -->
+  <section class="slide" data-titulo="Por dentro da rede" data-interativo="cnn2">
     <p class="kicker an">Por dentro do modelo · interativo</p>
-    <h2 class="an" style="--d:1">Bloco a bloco: o vídeo encolhe, os filtros aumentam</h2>
-    <div class="cena3d an" style="--d:2;height:430px"><canvas id="cena2"></canvas></div>
-    <div class="grade an" style="--d:3;grid-template-columns:1.3fr 1fr;margin-top:18px;gap:20px;align-items:start">
+    <h2 class="an" style="--d:1">Por dentro da rede: as ativações reais do nosso modelo</h2>
+    <div class="cena3d escura an" style="--d:2;height:450px"><canvas id="cena2"></canvas>
+      <div class="rotulos3d"><span style="--c:#cbd5e1">▮ entrada</span><span style="--c:#fda4af">▮ mapas de ativação reais (8 por bloco)</span><span style="--c:#93c5fd">● neurônios</span><span style="--c:#94a3b8">— conexões</span></div>
+    </div>
+    <div class="grade an" style="--d:3;grid-template-columns:1.3fr 1fr;margin-top:16px;gap:20px;align-items:start">
       <div class="cartao estado3d"><p class="rotuloEstado" id="e2modo"></p><h3 id="e2titulo"></h3><p id="e2texto"></p></div>
       <div class="controles">
-          <button data-acao="Swiping Right">👉 Deslizar: <b>próximo bloco</b></button>
-          <button data-acao="Swiping Left">👈 <b>bloco anterior</b></button>
-          <button data-acao="Thumb Up">👍 Polegar para cima: <b>passa um gesto</b></button>
-          <button data-acao="Stop Sign">✋ Pare: <b>pausa ou continua</b></button>
-        </div>
+        <button data-acao="Swiping Right">👉 Deslizar: <b>próxima camada ou anterior</b></button>
+        <button data-acao="Thumb Up">👍 Polegar para cima: <b>passa o vídeo pela rede</b></button>
+        <button data-acao="Thumb Down">👎 Polegar para baixo: <b>abre ou fecha os mapas</b></button>
+        <button data-acao="Stop Sign">✋ Pare: <b>pausa ou continua</b></button>
+      </div>
     </div>
   </section>
 
@@ -786,8 +790,10 @@ const CENAS3D = [], INTERATIVOS = {};
 function texto3d(texto, cor, tamanho = 1) {
   const c = document.createElement("canvas"); c.width = 640; c.height = 120;
   const g = c.getContext("2d"); g.font = "bold 46px Segoe UI, system-ui, sans-serif"; g.textAlign = "center"; g.textBaseline = "middle";
-  g.lineWidth = 10; g.strokeStyle = "rgba(255,255,255,.95)"; g.strokeText(texto, 320, 60); g.fillStyle = cor; g.fillText(texto, 320, 60);
+  // Contorno escuro: as cenas 3D têm fundo escuro.
+  g.lineWidth = 5; g.strokeStyle = "rgba(11,18,32,.7)"; g.strokeText(texto, 320, 60); g.fillStyle = cor; g.fillText(texto, 320, 60);
   const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), transparent: true, depthWrite: false }));
+  sp.material.depthTest = false; sp.renderOrder = 20;  // rótulos sempre visíveis, mesmo atrás de planos transparentes
   sp.scale.set(3.2 * tamanho, 0.6 * tamanho, 1); return sp;
 }
 function novaCena(canvas, posCamera, alvo) {
@@ -812,180 +818,274 @@ function acenderBotao(slideId, acao) {
 }
 
 // Slide 1: o filtro percorre o vídeo. Didático: vídeo deslizando ou parado, filtro 2D ou 3D.
+// Mapa de cores "magma": escuro para pouca ativação, claro para muita (o padrão em visualizações de CNN).
+const MAGMA = [[0, 0, 4], [59, 15, 112], [140, 41, 129], [222, 73, 104], [254, 159, 109], [252, 253, 191]];
+function magma(t) {
+  t = Math.max(0, Math.min(1, t)) * (MAGMA.length - 1);
+  const i = Math.min(MAGMA.length - 2, Math.floor(t)), f = t - i;
+  return MAGMA[i].map((c, k) => Math.round(c + (MAGMA[i + 1][k] - c) * f));
+}
+const bytes64 = b => Uint8Array.from(atob(b), c => c.charCodeAt(0));
+function texturaMapa(b64, lado) {
+  const v = bytes64(b64), c = document.createElement("canvas"); c.width = c.height = lado;
+  const g = c.getContext("2d"), img = g.createImageData(lado, lado);
+  for (let k = 0; k < lado * lado; k++) { const [r, gg, b] = magma(v[k] / 255); img.data.set([r, gg, b, 255], k * 4); }
+  g.putImageData(img, 0, 0);
+  const t = new THREE.CanvasTexture(c); t.magFilter = THREE.NearestFilter; return t;
+}
+function texturaQuadro(b64, lado) {
+  const v = bytes64(b64), c = document.createElement("canvas"); c.width = c.height = lado;
+  const g = c.getContext("2d"), img = g.createImageData(lado, lado);
+  for (let k = 0; k < lado * lado; k++) img.data.set([v[k * 3], v[k * 3 + 1], v[k * 3 + 2], 255], k * 4);
+  g.putImageData(img, 0, 0);
+  return new THREE.CanvasTexture(c);
+}
+function borda(geo, cor, opacidade = 0.7) { return new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: cor, transparent: true, opacity: opacidade })); }
+
+// Slide 1: o filtro 3x3x3 percorre o vídeo de entrada e monta um mapa de ativação.
 function montarCena1() {
-  const item = novaCena($("cena1"), [4.2, 3.2, 8.6], [4.2, -0.1, 0]);
-  const N = 8, ESP = 0.55, LADO = 2.2, PASSOS = 4, tam = LADO / PASSOS;
+  const A = D.ativacoes, item = novaCena($("cena1"), [-1.8, 2.6, 7.2], [3.6, -0.1, 0]);
+  const N = A.quadros.length, ESP = 0.55, LADO = 2.2, PASSOS = 5, tam = LADO / PASSOS;
   const est = { auto: true, k: 0, video: "deslizando", filtro: "3d", tempo: 0 };
-  // Parada, a mão fica alinhada a uma coluna do filtro, para o filtro 2D poder encontrá-la por inteiro.
-  const posMao = q => est.video === "deslizando" ? -0.75 + 1.5 * q / (N - 1) : -0.275;
+  const quadroFixo = 3;
+  // Posição da mão em cada quadro mostrado (quadros 0, 2, ..., 14 do vídeo sintético de 16), no plano girado.
+  const zMao = i => { const q = est.video === "deslizando" ? i : quadroFixo, cx = 18 + 60 * (2 * q) / 15; return -(cx / 96 - 0.5) * LADO; };
+  const yMao = 0.07;
+  const texturas = A.quadros.map(b => texturaQuadro(b, A.lado_quadro));
   const planos = [];
-  function desenharQuadros() {
-    planos.forEach((plano, i) => {
-      const c = document.createElement("canvas"); c.width = c.height = 128; const g = c.getContext("2d");
-      g.fillStyle = "#f8fafc"; g.fillRect(0, 0, 128, 128); g.strokeStyle = "#cbd5e1"; g.lineWidth = 1;
-      for (let k = 0; k <= 128; k += 32) { g.beginPath(); g.moveTo(k, 0); g.lineTo(k, 128); g.moveTo(0, k); g.lineTo(128, k); g.stroke(); }
-      const u = 64 + posMao(i) / LADO * 128;
-      g.fillStyle = "#f4a261"; g.beginPath(); g.arc(u, 74, 17, 0, Math.PI * 2); g.fill();
-      for (let d = 0; d < 4; d++) g.fillRect(u - 15 + d * 8.5, 38, 6.5, 26);
-      g.fillStyle = "#475569"; g.font = "bold 18px Segoe UI"; g.fillText(`t${i + 1}`, 8, 22);
-      g.strokeStyle = "#475569"; g.lineWidth = 4; g.strokeRect(2, 2, 124, 124);
-      if (plano.material.map) plano.material.map.dispose();
-      plano.material.map = new THREE.CanvasTexture(c); plano.material.needsUpdate = true;
-    });
-  }
   for (let i = 0; i < N; i++) {
-    const plano = new THREE.Mesh(new THREE.PlaneGeometry(LADO, LADO), new THREE.MeshBasicMaterial({ transparent: true, opacity: 0.93, side: THREE.DoubleSide }));
+    const geo = new THREE.PlaneGeometry(LADO, LADO);
+    const plano = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texturas[i], side: THREE.DoubleSide, transparent: true, opacity: 0.88, depthWrite: false }));
+    plano.add(borda(geo, 0x94a3b8, 0.9));
     plano.rotation.y = Math.PI / 2; plano.position.set(i * ESP, 0, 0); item.cena.add(plano); planos.push(plano);
   }
-  desenharQuadros();
-  const rotVideo = texto3d("tempo →", "#475569", 0.9); rotVideo.position.set(1.9, -1.6, 0); item.cena.add(rotVideo);
-  const matFiltro = new THREE.MeshStandardMaterial({ color: 0x7c3aed, transparent: true, opacity: 0.35 });
-  let filtro = null;
-  function criarFiltro() {
-    if (filtro) item.cena.remove(filtro);
-    const largura = est.filtro === "3d" ? 2 * ESP + 0.12 : 0.1;
-    filtro = new THREE.Mesh(new THREE.BoxGeometry(largura, tam, tam), matFiltro);
-    filtro.add(new THREE.LineSegments(new THREE.EdgesGeometry(filtro.geometry), new THREE.LineBasicMaterial({ color: 0x5b21b6 })));
-    item.cena.add(filtro);
+  const rotT = texto3d("tempo →", "#cbd5e1", 0.9); rotT.position.set(1.9, -1.65, 0); item.cena.add(rotT);
+  function mostrarVideo() { planos.forEach((pl, i) => { pl.material.map = texturas[est.video === "deslizando" ? i : quadroFixo]; pl.material.needsUpdate = true; }); }
+  // Filtro: uma grade de 3x3 células em cada um dos 3 quadros que ele cobre.
+  const filtro = new THREE.Group(); item.cena.add(filtro);
+  function montarFiltro() {
+    filtro.clear();
+    const camadas = est.filtro === "3d" ? 3 : 1;
+    for (let q = 0; q < camadas; q++) {
+      const geo = new THREE.BoxGeometry(0.04, tam, tam);
+      const caixa = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ color: 0xa78bfa, transparent: true, opacity: 0.28 }));
+      caixa.position.x = (q - (camadas - 1) / 2) * ESP; filtro.add(caixa);
+      const contorno = borda(geo, 0xc4b5fd, 1); contorno.position.copy(caixa.position); filtro.add(contorno);
+      const pts = [];
+      for (let k = 1; k < 3; k++) { const o = -tam / 2 + k * tam / 3; pts.push(new THREE.Vector3(caixa.position.x, o, -tam / 2), new THREE.Vector3(caixa.position.x, o, tam / 2), new THREE.Vector3(caixa.position.x, -tam / 2, o), new THREE.Vector3(caixa.position.x, tam / 2, o)); }
+      filtro.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xc4b5fd, transparent: true, opacity: 0.7 })));
+    }
+    // Desenhado por cima dos quadros, para não sumir atrás deles.
+    filtro.traverse(o => { if (o.material) { o.material.depthTest = false; o.material.transparent = true; } o.renderOrder = 10; });
+    if (camadas === 3) {  // arestas ligando os 3 quadros: o filtro é um volume
+      const h = tam / 2, x0 = -ESP, x1 = ESP, pts = [];
+      for (const [y, z] of [[h, h], [h, -h], [-h, h], [-h, -h]]) pts.push(new THREE.Vector3(x0, y, z), new THREE.Vector3(x1, y, z));
+      const arestas = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xc4b5fd, depthTest: false, transparent: true }));
+      arestas.renderOrder = 10; filtro.add(arestas);
+    }
   }
-  criarFiltro();
-  const rotFiltro = texto3d("", "#6d28d9", 0.8); item.cena.add(rotFiltro);
-  const saida = [], X0 = 5.6, tamS = 0.36;
-  for (let t = 0; t < N - 2; t++) for (let a = 0; a < PASSOS; a++) for (let b = 0; b < PASSOS; b++) {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(tamS * 0.9, tamS * 0.9, tamS * 0.9), new THREE.MeshStandardMaterial({ color: 0xe2e8f0, transparent: true, opacity: 0.55 }));
-    m.position.set(X0 + t * (tamS + 0.06), (1.5 - a) * (tamS + 0.06), (b - 1.5) * (tamS + 0.06)); item.cena.add(m); saida.push(m);
+  montarFiltro();
+  // Saída: um mapa de ativação por posição no tempo, como os mapas reais do slide seguinte.
+  const NT = N - 2, X0 = 5.4, mapas = [];
+  for (let t = 0; t < NT; t++) {
+    const c = document.createElement("canvas"); c.width = c.height = PASSOS * 16;
+    const tex = new THREE.CanvasTexture(c); tex.magFilter = THREE.NearestFilter;
+    const geo = new THREE.PlaneGeometry(1.5, 1.5);
+    const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide }));
+    m.add(borda(geo, 0xfda4af, 0.8));
+    m.rotation.y = Math.PI / 2; m.position.set(X0 + t * 0.42, 0, 0); item.cena.add(m);
+    mapas.push({ c, tex, valores: new Float32Array(PASSOS * PASSOS) });
   }
-  const rotSaida = texto3d("onde o filtro acendeu", "#db2777", 0.85); rotSaida.position.set(X0 + 1, -1.6, 0); item.cena.add(rotSaida);
-  const linha = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineDashedMaterial({ color: 0x7c3aed, dashSize: 0.12, gapSize: 0.08 }));
+  const rotM = texto3d("mapa de ativação", "#fda4af", 0.85); rotM.position.set(X0 + 1.1, -1.25, 0); item.cena.add(rotM);
+  function pintarMapa(t, marcado) {
+    const m = mapas[t], g = m.c.getContext("2d"), L = 16;
+    for (let a = 0; a < PASSOS; a++) for (let b = 0; b < PASSOS; b++) {
+      const [r, gg, bb] = magma(m.valores[a * PASSOS + b]); g.fillStyle = `rgb(${r},${gg},${bb})`; g.fillRect((PASSOS - 1 - b) * L, a * L, L, L);
+    }
+    if (marcado !== undefined) { const a = Math.floor(marcado / PASSOS), b = marcado % PASSOS; g.strokeStyle = "#c4b5fd"; g.lineWidth = 3; g.strokeRect((PASSOS - 1 - b) * L + 1.5, a * L + 1.5, L - 3, L - 3); }
+    m.tex.needsUpdate = true;
+  }
+  function limparMapas() { mapas.forEach((m, t) => { m.valores.fill(0); pintarMapa(t); }); }
+  limparMapas();
+  const linha = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineDashedMaterial({ color: 0xc4b5fd, dashSize: 0.12, gapSize: 0.08 }));
   item.cena.add(linha);
-  const TOTAL = (N - 2) * PASSOS * PASSOS;
-  function limparSaida() { saida.forEach(m => { m.material.color.set(0xe2e8f0); m.material.opacity = 0.55; }); }
-  // O filtro 3D procura "mão indo para a direita"; o 2D só procura "mão" em um quadro.
+  const TOTAL = NT * PASSOS * PASSOS;
+  // O filtro 3D procura "mão indo para a direita"; o 2D só procura "mão" no quadro do meio.
   function ativacao(tt, y, z) {
-    // O quadro está girado 90°: o lado direito da imagem fica em z negativo. A mão na cena está em z = -posMao.
-    const presenca = q => Math.max(0, 1 - Math.hypot(-posMao(q) - z, y + 0.15) / 0.55);
+    const presenca = q => Math.max(0, 1 - Math.hypot(zMao(q) - z, yMao - y) / 0.5);
     if (est.filtro === "2d") return presenca(tt + 1);
     const vista = (presenca(tt) + presenca(tt + 1) + presenca(tt + 2)) / 2;
-    const anda = posMao(tt + 2) - posMao(tt) > 0.1;
-    return Math.min(1, vista) * (anda ? 1 : 0.06);
+    return Math.min(1, vista) * (Math.abs(zMao(tt + 2) - zMao(tt)) > 0.1 ? 1 : 0.06);
   }
+  let anterior = null;
   function aplicar() {
-    const k = est.k, tt = Math.floor(k / (PASSOS * PASSOS)), a = Math.floor(k / PASSOS) % PASSOS, b = k % PASSOS;
-    const y = (1.5 - a) * tam, z = (b - 1.5) * tam, x = (est.filtro === "3d" ? tt + 1 : tt + 1) * ESP;
-    filtro.position.set(x, y, z); rotFiltro.position.set(x, y + 0.75, z);
-    const ativ = ativacao(tt, y, z), m = saida[k];
-    m.material.color.set(new THREE.Color(0xe2e8f0).lerp(new THREE.Color(0xec4899), ativ)); m.material.opacity = 0.55 + 0.45 * ativ;
-    linha.geometry.setFromPoints([filtro.position.clone(), m.position.clone()]); linha.computeLineDistances();
-    // Painel didático.
-    const quadros = est.filtro === "3d" ? `quadros t${tt + 1} a t${tt + 3}` : `quadro t${tt + 2}`;
-    $("e1modo").textContent = `Filtro ${est.filtro.toUpperCase()} · vídeo ${est.video === "deslizando" ? "deslizando" : "parado"} · ${est.auto ? "automático" : "passo a passo"}`;
+    const k = est.k, tt = Math.floor(k / (PASSOS * PASSOS)), cel = k % (PASSOS * PASSOS), a = Math.floor(cel / PASSOS), b = cel % PASSOS;
+    const y = (2 - a) * tam, z = (b - 2) * tam;
+    filtro.position.set((tt + 1) * ESP, y, z);
+    const ativ = ativacao(tt, y, z);
+    mapas[tt].valores[cel] = ativ;
+    if (anterior !== null && anterior !== tt) pintarMapa(anterior);
+    pintarMapa(tt, cel); anterior = tt;
+    const destino = new THREE.Vector3(X0 + tt * 0.42, (2 - a) * 0.3, (b - 2) * 0.3);
+    linha.geometry.setFromPoints([filtro.position.clone(), destino]); linha.computeLineDistances();
+    const quadros = est.filtro === "3d" ? `quadros ${2 * tt + 1} a ${2 * tt + 5}` : `quadro ${2 * tt + 3}`;
+    $("e1modo").textContent = `Filtro ${est.filtro.toUpperCase()} · mão ${est.video} · ${est.auto ? "automático" : "passo a passo"}`;
     $("e1titulo").textContent = `Passo ${k + 1} de ${TOTAL}: ${quadros}, linha ${a + 1}, coluna ${b + 1}`;
-    $("e1texto").innerHTML = ativ > 0.5 ? (est.filtro === "3d" ? "Acendeu: a mão está aqui <b>e se move para a direita</b> nesses 3 quadros." : "Acendeu: há uma mão neste quadro. O filtro 2D não sabe se ela se move.")
-      : ativ > 0.15 ? "Acendeu um pouco: só parte do padrão está aqui." : est.filtro === "3d" && est.video === "parado" ? "Apagado: a mão está parada, e este filtro procura movimento." : "Apagado: o padrão que o filtro procura não está aqui.";
+    $("e1texto").innerHTML = ativ > 0.5 ? (est.filtro === "3d" ? "Acendeu: a mão está aqui <b>e se move</b> nestes 3 quadros." : "Acendeu: há uma mão neste quadro. O filtro 2D não sabe se ela se move.")
+      : ativ > 0.15 ? "Acendeu um pouco: só parte do padrão está aqui." : est.filtro === "3d" && est.video === "parada" ? "Apagado: a mão está parada, e este filtro procura movimento." : "Apagado: o padrão que o filtro procura não está aqui.";
     $("e1barra").style.width = Math.round(ativ * 100) + "%";
-    rotFiltro.material.map.dispose();
-    const novo = texto3d(`filtro ${est.filtro === "3d" ? "3×3×3" : "3×3 (2D)"}`, "#6d28d9", 0.8); rotFiltro.material = novo.material;
   }
-  function mudar(passo) { est.k = (est.k + passo + TOTAL) % TOTAL; if (est.k === 0 && passo > 0) limparSaida(); aplicar(); }
+  function mudar(passo) { est.k = (est.k + passo + TOTAL) % TOTAL; if (est.k === 0 && passo > 0) limparMapas(); aplicar(); }
   INTERATIVOS.cnn1 = classe => {
     if (classe === "Swiping Right" || classe === "Swiping Left") { est.auto = false; mudar(classe === "Swiping Right" ? 1 : -1); }
     else if (classe === "Stop Sign") { est.auto = !est.auto; aplicar(); aviso(est.auto ? "▶ Automático" : "⏸ Passo a passo"); }
-    else if (classe === "Thumb Up") { est.video = est.video === "deslizando" ? "parado" : "deslizando"; desenharQuadros(); limparSaida(); est.k = 0; aplicar(); aviso(`Vídeo: mão ${est.video}`); }
-    else if (classe === "Thumb Down") { est.filtro = est.filtro === "3d" ? "2d" : "3d"; criarFiltro(); limparSaida(); est.k = 0; aplicar(); aviso(`Filtro ${est.filtro.toUpperCase()}`); }
+    else if (classe === "Thumb Up") { est.video = est.video === "deslizando" ? "parada" : "deslizando"; mostrarVideo(); limparMapas(); est.k = 0; aplicar(); aviso(`Mão ${est.video}`); }
+    else if (classe === "Thumb Down") { est.filtro = est.filtro === "3d" ? "2d" : "3d"; montarFiltro(); limparMapas(); est.k = 0; aplicar(); aviso(`Filtro ${est.filtro.toUpperCase()}`); }
     else return;
     acenderBotao("cnn1", classe);
   };
   aplicar();
   item.passo = t => {
-    if (est.auto && t - est.tempo > 220) { est.tempo = t; mudar(1); }
-    const ang = Math.sin(t / 4500) * 0.25;
-    item.camera.position.set(4.2 + Math.sin(ang) * 8.6, 3.2, Math.cos(ang) * 8.6); item.camera.lookAt(4.2, -0.1, 0);
+    if (est.auto && t - est.tempo > 160) { est.tempo = t; mudar(1); }
+    // Vista de frente e um pouco de lado, para ver o conteúdo dos quadros e dos mapas.
+    const ang = -0.64 + Math.sin(t / 4500) * 0.18;
+    item.camera.position.set(3.6 + Math.sin(ang) * 9, 2.6, Math.cos(ang) * 9); item.camera.lookAt(3.6, -0.1, 0);
   };
 }
 
-// Slide 2: a rede real, bloco a bloco. Números calculados da arquitetura CNN3D de src/modelos.py.
+// Slide 2: a rede real, com os mapas de ativação que ela produziu, neurônios e conexões.
 function montarCena2() {
-  const item = novaCena($("cena2"), [8.9, 2.8, 10.2], [8.9, 0.1, 0]);
-  const conv = (e, s) => e * s * 27 + s * s * 27 + 4 * s;  // duas convoluções 3x3x3 sem viés + duas normalizações
-  const etapas = [
-    { nome: "Entrada", canais: 3, T: 16, lado: 96, cor: 0x94a3b8, texto: "O vídeo que chega: 16 quadros de 96×96 pixels, em 3 cores. Ainda não há nada aprendido aqui." },
-    { nome: "Bloco 1", canais: 32, T: 16, lado: 48, cor: 0xc4b5fd, de: [3, 16, 96], texto: "32 filtros pequenos olham trechos de 3 quadros. Costumam aprender bordas, cores e o começo de um movimento. O pooling reduz a imagem pela metade." },
-    { nome: "Bloco 2", canais: 64, T: 8, lado: 24, cor: 0xa78bfa, de: [32, 16, 48], texto: "Combina o que o bloco 1 achou: partes da mão e pequenos deslocamentos. A partir daqui, o tempo também é reduzido pela metade." },
-    { nome: "Bloco 3", canais: 128, T: 4, lado: 12, cor: 0x8b5cf6, de: [64, 8, 24], texto: "Cada número já resume uma região grande do vídeo: formas da mão em movimento." },
-    { nome: "Bloco 4", canais: 256, T: 2, lado: 6, cor: 0x7c3aed, de: [128, 4, 12], texto: "256 filtros, cada um ligado a um padrão do gesto inteiro. Restam só 2 instantes de 6×6 posições." },
-    { nome: "Média e decisão", canais: 256, T: 1, lado: 1, cor: 0xec4899, texto: "A média junta tudo em 256 números, e uma camada final transforma isso na probabilidade de cada um dos 27 gestos." },
-  ];
-  const caixas = []; let x = 0;
-  etapas.slice(0, 5).forEach((e, i) => {
-    const comp = 0.3 + 0.12 * e.T, alt = 0.7 + 2.3 * Math.sqrt(e.lado / 96), larg = 0.35 + 0.28 * Math.log2(e.canais);
-    x += comp / 2;
-    const m = new THREE.Mesh(new THREE.BoxGeometry(comp, alt, larg), new THREE.MeshStandardMaterial({ color: e.cor, transparent: true, opacity: 0.8, emissive: 0x000000 }));
-    m.position.set(x, 0, 0); m.add(new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry), new THREE.LineBasicMaterial({ color: 0x4c1d95, transparent: true, opacity: 0.5 })));
-    item.cena.add(m); caixas.push(m);
-    const r1 = texto3d(e.nome, "#1e293b", 1.15); r1.position.set(x, alt / 2 + 0.55, 0); item.cena.add(r1);
-    const r2 = texto3d(`${e.canais} ${i ? "filtros" : "cores"} · ${e.T}×${e.lado}×${e.lado}`, "#64748b", 1.0); r2.position.set(x, -alt / 2 - 0.5, 0); item.cena.add(r2);
-    x += comp / 2 + 1.25;
-  });
-  const media = new THREE.Mesh(new THREE.SphereGeometry(0.32, 24, 16), new THREE.MeshStandardMaterial({ color: 0xec4899, emissive: 0x000000 }));
-  media.position.set(x - 0.4, 0, 0); item.cena.add(media); caixas.push(media);
-  const rm = texto3d("média · 256", "#be185d", 0.95); rm.position.set(x - 0.4, -0.85, 0); item.cena.add(rm);
-  x += 0.8;
-  const barras3d = [], vencedora = 9, inicioBarras = x;
-  for (let j = 0; j < 27; j++) {
-    const b = new THREE.Mesh(new THREE.BoxGeometry(0.15, 1, 0.15), new THREE.MeshStandardMaterial({ color: j === vencedora ? 0x0ea5a4 : 0xcbd5e1 }));
-    b.position.set(x + j * 0.19, -0.9, 0); b.scale.y = 0.05; item.cena.add(b); barras3d.push(b);
-  }
-  const rb = texto3d("27 gestos", "#0f766e", 1.05); rb.position.set(x + 2.5, -1.45, 0); item.cena.add(rb);
-  const pulso = new THREE.Mesh(new THREE.SphereGeometry(0.16, 20, 14), new THREE.MeshBasicMaterial({ color: 0xf97316 }));
-  item.cena.add(pulso);
-  const xs = caixas.map(c => c.position.x).concat(inicioBarras + 2.5);
-  const est = { foco: -1, auto: true, inicioPulso: 0, cam: new THREE.Vector3(8.9, 2.8, 10.2), alvo: new THREE.Vector3(8.9, 0.1, 0) };
+  const A = D.ativacoes, item = novaCena($("cena2"), [9.4, 2.0, 11.2], [9.4, 0, 0]);
+  const conv = (e, s) => e * s * 27 + s * s * 27 + 4 * s;
   const fmtN = n => n.toLocaleString("pt-BR");
+  const camadas = [
+    { nome: "Entrada", x: 0, tam: 2.1, tipo: "video", mapas: A.quadros, texto: "O vídeo que entra: 16 quadros de 96×96 pixels, em 3 cores. Aqui, uma mão desenhada atravessando a imagem.", forma: "16 quadros · 96×96 · 3 cores" },
+    ...A.blocos.map((b, i) => ({ nome: `Bloco ${b.bloco}`, x: 3.3 + i * 2.9, tam: [1.9, 1.65, 1.4, 1.2][i], tipo: "mapa", mapas: b.mapas, lado: b.lado,
+      forma: `${b.canais} mapas · ${b.T}×${b.lado}×${b.lado}`, params: conv([3, 32, 64, 128][i], b.canais), de: [[3, 16, 96], [32, 16, 48], [64, 8, 24], [128, 4, 12]][i], canais: b.canais, T: b.T,
+      texto: ["Contornos da mão: os filtros acendem nas bordas e nos dedos.", "Partes da mão: os mapas já não mostram o desenho, e sim pedaços dele.", "Regiões maiores: cada pixel resume um pedaço grande do vídeo.", "Manchas de 6×6 que dizem onde e como está a mão: é o que a decisão vai usar."][i] })),
+  ];
+  const XV = 15.4, XS = 17.6;
+  const pilhas = [];
+  camadas.forEach((cam, ci) => {
+    const grupo = new THREE.Group(); grupo.position.x = cam.x; item.cena.add(grupo);
+    const planos = cam.mapas.map((b64, j) => {
+      const geo = new THREE.PlaneGeometry(cam.tam, cam.tam);
+      const mat = new THREE.MeshBasicMaterial({ map: cam.tipo === "video" ? texturaQuadro(b64, A.lado_quadro) : texturaMapa(b64, cam.lado), side: THREE.DoubleSide, transparent: true, opacity: 1 });
+      const m = new THREE.Mesh(geo, mat); m.add(borda(geo, cam.tipo === "video" ? 0x94a3b8 : 0xfda4af, 0.6));
+      grupo.add(m);
+      const fechado = new THREE.Vector3(j * 0.1, j * 0.07, -j * 0.32), aberto = new THREE.Vector3(((j % 4) - 1.5) * (cam.tam + 0.15), (j < 4 ? 1 : -1) * (cam.tam / 2 + 0.08), 1.6);
+      m.position.copy(fechado); m.userData = { fechado, aberto };
+      return m;
+    });
+    const r1 = texto3d(cam.nome, "#f1f5f9", 1.1); r1.position.set(0.3, cam.tam / 2 + 0.75, 0); grupo.add(r1);
+    const r2 = texto3d(cam.forma, "#94a3b8", 0.95); r2.position.set(0.3, -cam.tam / 2 - 0.75, 0); grupo.add(r2);
+    pilhas.push({ grupo, planos, cam });
+  });
+  // Neurônios: 24 dos 256 números depois da média, e os 27 gestos.
+  const v = A.vetor_256, vmax = Math.max(...v), idx = Array.from({ length: 24 }, (_, i) => Math.round(i * 255 / 23));
+  const neuronio = (x, y, cor, r = 0.11) => { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 18, 12), new THREE.MeshStandardMaterial({ color: cor, emissive: cor, emissiveIntensity: 0.15 })); m.position.set(x, y, 0); item.cena.add(m); return m; };
+  const vetor = idx.map((k, i) => { const [r, g, b] = magma(v[k] / vmax); return neuronio(XV, -2.3 + i * 0.2, new THREE.Color(r / 255, g / 255, b / 255)); });
+  const rv = texto3d("256 números (24 mostrados)", "#94a3b8", 0.85); rv.position.set(XV, -2.85, 0); item.cena.add(rv);
+  const probs = A.probabilidades, pmax = probs[0].p;
+  const ordemSaida = [...probs].sort((a, b) => a.gesto.localeCompare(b.gesto));
+  const saida = ordemSaida.map((g, i) => { const [r, gg, b] = magma(0.15 + 0.85 * g.p / pmax); return neuronio(XS, -2.6 + i * 0.2, new THREE.Color(r / 255, gg / 255, b / 255), 0.09); });
+  probs.slice(0, 3).forEach((g, k) => {
+    const i = ordemSaida.indexOf(g), rot = texto3d(`${g.gesto_pt} ${(100 * g.p).toFixed(0)}%`, k ? "#cbd5e1" : "#fde68a", 0.8);
+    rot.position.set(XS + 1.7, -2.6 + i * 0.2, 0); item.cena.add(rot);
+  });
+  const rs = texto3d("27 gestos", "#94a3b8", 0.85); rs.position.set(XS, -3.15, 0); item.cena.add(rs);
+  // Conexões entre camadas: de cada mapa para os mapas seguintes, e dos neurônios para os gestos.
+  const centros = pilhas.map(p => p.planos.map(m => new THREE.Vector3()));
+  const pares = [];
+  function conexao(origens, destinos, max = 400) {
+    const pos = [];
+    for (const o of origens) for (const d of destinos) pos.push(o.x, o.y, o.z, d.x, d.y, d.z);
+    const geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.Float32BufferAttribute(pos.slice(0, max * 6), 3));
+    const linhas = new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color: 0x64748b, transparent: true, opacity: 0.12 }));
+    item.cena.add(linhas); return linhas;
+  }
+  function atualizarConexoes() {
+    pares.forEach(par => item.cena.remove(par.linhas)); pares.length = 0;
+    const pontos = pilhas.map(p => p.planos.map(m => m.getWorldPosition(new THREE.Vector3())));
+    for (let i = 0; i < pontos.length - 1; i++) pares.push({ linhas: conexao(pontos[i], pontos[i + 1]), de: pontos[i], para: pontos[i + 1] });
+    const pv = vetor.map(n => n.position.clone()), ps = saida.map(n => n.position.clone());
+    pares.push({ linhas: conexao(pontos[pontos.length - 1], pv), de: pontos[pontos.length - 1], para: pv });
+    pares.push({ linhas: conexao(pv, ps, 700), de: pv, para: ps });
+  }
+  // Pulsos: pontos de luz percorrendo as conexões da camada que está calculando.
+  const pulsos = Array.from({ length: 36 }, () => { const m = new THREE.Mesh(new THREE.SphereGeometry(0.05, 10, 8), new THREE.MeshBasicMaterial({ color: 0xfde68a })); m.visible = false; item.cena.add(m); return m; });
+  const ETAPAS = pilhas.length + 2;  // entrada, 4 blocos, vetor, saída
+  const est = { foco: -1, aberto: false, auto: true, passe: 0, inicio: -1e9, cam: new THREE.Vector3(9.4, 2.0, 11.2), alvo: new THREE.Vector3(9.4, 0, 0), sujo: true };
   function painel() {
     if (est.foco < 0) {
-      $("e2modo").textContent = `Visão geral · ${est.auto ? "um gesto passando pela rede" : "pausado"}`;
-      $("e2titulo").textContent = "A CNN 3D do modelo: 4 blocos e uma decisão";
-      $("e2texto").innerHTML = `No total, <b>${fmtN(3522747)}</b> parâmetros, todos aprendidos do zero. Deslize para visitar cada bloco.`;
+      $("e2modo").textContent = `Visão geral · ${est.auto ? "o vídeo passa pela rede a cada poucos segundos" : "pausado"}`;
+      $("e2titulo").textContent = `A CNN 3D treinada: ${fmtN(3522747)} parâmetros`;
+      $("e2texto").innerHTML = "Os mapas são <b>ativações reais</b> do nosso modelo para um vídeo sintético, não ilustrações. Deslize para visitar cada camada.";
       return;
     }
-    const e = etapas[est.foco];
-    $("e2modo").textContent = `Etapa ${est.foco + 1} de ${etapas.length}`;
-    let titulo = e.nome, detalhe = "";
-    if (e.de) titulo += ` · ${fmtN(conv(e.de[0], e.canais))} parâmetros`, detalhe = `<br><span class="nota">${e.de[1]}×${e.de[2]}×${e.de[2]} com ${e.de[0]} canais → ${e.T}×${e.lado}×${e.lado} com ${e.canais} canais</span>`;
-    if (est.foco === 5) titulo += ` · ${fmtN(256 * 27 + 27)} parâmetros`;
-    $("e2titulo").textContent = titulo; $("e2texto").innerHTML = e.texto + detalhe;
+    if (est.foco === 0) { $("e2modo").textContent = "Camada 1 de 7"; $("e2titulo").textContent = "Entrada"; $("e2texto").innerHTML = camadas[0].texto; return; }
+    if (est.foco <= 4) {
+      const c = camadas[est.foco];
+      $("e2modo").textContent = `Camada ${est.foco + 1} de 7 · 8 de ${c.canais} mapas mostrados`;
+      $("e2titulo").textContent = `${c.nome} · ${fmtN(c.params)} parâmetros`;
+      $("e2texto").innerHTML = `${c.texto}<br><span class="nota">${c.de[1]}×${c.de[2]}×${c.de[2]} com ${c.de[0]} canais → ${c.T}×${c.lado}×${c.lado} com ${c.canais} mapas, por 2 convoluções 3×3×3 e um pooling.</span>`;
+      return;
+    }
+    if (est.foco === 5) { $("e2modo").textContent = "Camada 6 de 7"; $("e2titulo").textContent = "Média: 256 números"; $("e2texto").innerHTML = "Cada um dos 256 mapas do bloco 4 vira um número, a média dele. Os neurônios mostram 24 desses números, mais claros quanto maiores."; return; }
+    const top = probs.slice(0, 3).map(g => `${g.gesto_pt} ${(100 * g.p).toFixed(0)}%`).join(", ");
+    $("e2modo").textContent = "Camada 7 de 7";
+    $("e2titulo").textContent = `Decisão: 27 gestos · ${fmtN(256 * 27 + 27)} parâmetros`;
+    $("e2texto").innerHTML = `Saída real para este vídeo: ${top}. A rede não tem certeza, e com razão: uma mão desenhada não é uma mão de verdade. Por isso a demo exige confiança de 0,7.`;
   }
   INTERATIVOS.cnn2 = classe => {
-    if (classe === "Swiping Right") est.foco = Math.min(etapas.length - 1, est.foco + 1);
+    if (classe === "Swiping Right") est.foco = Math.min(ETAPAS - 1, est.foco + 1);
     else if (classe === "Swiping Left") est.foco = Math.max(-1, est.foco - 1);
-    else if (classe === "Thumb Up") { est.foco = -1; est.auto = true; est.inicioPulso = performance.now(); aviso("Passando um gesto pela rede"); }
+    else if (classe === "Thumb Up") { est.inicio = performance.now(); est.auto = true; aviso("Passando o vídeo pela rede"); }
+    else if (classe === "Thumb Down") { est.aberto = !est.aberto; est.sujo = true; aviso(est.aberto ? "Mapas abertos" : "Mapas empilhados"); }
     else if (classe === "Stop Sign") { est.auto = !est.auto; aviso(est.auto ? "▶ Continuando" : "⏸ Pausado"); }
     else return;
-    painel(); acenderBotao("cnn2", classe);
+    est.sujo = true; painel(); acenderBotao("cnn2", classe);
   };
   painel();
+  const DUR = 6000;
   item.passo = t => {
-    const CICLO = 5200, f = est.auto ? ((t - est.inicioPulso) % CICLO) / CICLO : 0.999;
-    const trecho = f * 0.8 * (caixas.length - 1), i = Math.min(caixas.length - 2, Math.floor(trecho)), r = trecho - i;
-    pulso.visible = est.auto && f < 0.8;
-    pulso.position.set(xs[i] + (xs[i + 1] - xs[i]) * r, Math.sin(r * Math.PI) * 0.35, 0);
-    caixas.forEach((c, j) => {
-      const perto = est.foco >= 0 ? (j === est.foco ? 1 : 0) : est.auto ? Math.max(0, 1 - Math.abs(trecho - j) * 1.6) : 0;
-      c.material.emissive.setRGB(0.35 * perto, 0.12 * perto, 0.02 * perto);
-      if (c.material.opacity !== undefined && c !== media) c.material.opacity = est.foco >= 0 && j !== est.foco ? 0.35 : 0.8;
+    if (est.auto && t - est.inicio > DUR + 2500) est.inicio = t;
+    const f = est.auto ? Math.min(1, (t - est.inicio) / DUR) : 1, fase = f * ETAPAS;
+    // Pilhas: só a camada em foco abre, quando pedido.
+    let mexeu = false;
+    pilhas.forEach((p, ci) => {
+      const abrir = est.aberto && est.foco === ci;
+      p.planos.forEach(m => {
+        const alvo = abrir ? m.userData.aberto : m.userData.fechado;
+        if (m.position.distanceTo(alvo) > 0.002) { m.position.lerp(alvo, 0.12); mexeu = true; }
+        m.material.opacity = (f >= 1 || fase > ci) ? 1 : 0.22;
+        m.material.color.setScalar(est.foco >= 0 && est.foco !== ci ? 0.45 : 1);
+      });
     });
-    const crescer = est.foco === 5 ? 1 : est.auto ? Math.max(0, Math.min(1, (f - 0.78) / 0.12)) : 0;
-    barras3d.forEach((b, j) => { const alvo = j === vencedora ? 2.6 : 0.08 + 0.35 * ((j * 37) % 11) / 11; b.scale.y = 0.05 + (alvo - 0.05) * crescer; b.position.y = -0.9 + b.scale.y / 2; });
-    // A câmera vai até o bloco escolhido, ou mostra a rede inteira.
-    const destinoX = est.foco < 0 ? 8.9 : est.foco === 5 ? inicioBarras + 1.2 : caixas[est.foco].position.x;
-    const dist = est.foco < 0 ? 10.2 : 5.2, ang = Math.sin(t / 5000) * (est.foco < 0 ? 0.22 : 0.35);
-    est.alvo.lerp(new THREE.Vector3(destinoX, 0.1, 0), 0.06);
-    est.cam.lerp(new THREE.Vector3(destinoX + Math.sin(ang) * dist, est.foco < 0 ? 2.8 : 1.8, Math.cos(ang) * dist), 0.06);
+    if (mexeu || est.sujo) { atualizarConexoes(); est.sujo = mexeu; }
+    pares.forEach((par, i) => { const ativo = f < 1 && fase > i && fase < i + 1.6; par.linhas.material.opacity = ativo ? 0.45 : 0.1; par.linhas.material.color.set(ativo ? 0xfde68a : 0x64748b); });
+    vetor.forEach(n => n.material.emissiveIntensity = (f >= 1 || fase > 5) ? 0.6 : 0.05);
+    saida.forEach(n => n.material.emissiveIntensity = (f >= 1 || fase > 6) ? 0.7 : 0.05);
+    // Pulsos andando pelas conexões da etapa atual.
+    const atual = Math.floor(fase), par = pares[Math.min(pares.length - 1, atual)];
+    pulsos.forEach((m, j) => {
+      m.visible = est.auto && f < 1 && !!par;
+      if (!m.visible) return;
+      const o = par.de[(j * 7) % par.de.length], d = par.para[(j * 5 + atual) % par.para.length], r = ((fase - atual) * 1.3 + j / pulsos.length) % 1;
+      m.position.lerpVectors(o, d, r);
+    });
+    // Câmera: visão geral ou a camada escolhida.
+    const xs = [...camadas.map(c => c.x), XV, XS + 0.8];
+    const destinoX = est.foco < 0 ? 9.4 : xs[est.foco], dist = est.foco < 0 ? 11.2 : est.aberto && est.foco <= 4 ? 8.5 : 6.2;
+    const ang = Math.sin(t / 5200) * (est.foco < 0 ? 0.2 : 0.3);
+    est.alvo.lerp(new THREE.Vector3(destinoX, est.aberto && est.foco >= 0 && est.foco <= 4 ? 0.2 : 0, est.aberto && est.foco >= 0 && est.foco <= 4 ? 1.2 : 0), 0.06);
+    est.cam.lerp(new THREE.Vector3(destinoX + Math.sin(ang) * dist, est.foco < 0 ? 2.0 : 1.4, Math.cos(ang) * dist), 0.06);
     item.camera.position.copy(est.cam); item.camera.lookAt(est.alvo);
   };
 }
 if (typeof THREE !== "undefined") {
-  try { montarCena1(); montarCena2(); } catch (erro) { console.warn("Cenas 3D indisponíveis:", erro); }
+  // Uma cena com problema não pode impedir a outra de aparecer.
+  for (const montar of [montarCena1, montarCena2]) { try { montar(); } catch (erro) { console.error("Cena 3D indisponível:", erro); } }
   const laco3d = t => {
     requestAnimationFrame(laco3d);
     for (const item of CENAS3D) {
