@@ -166,8 +166,14 @@ def tela(quadro, fontes, titulo, subtitulo, cor_titulo, progresso, cor_barra, in
 def resumir(tentativas, disparos_sem_gesto, minutos_sem_gesto):
     por_gesto = {}
     for t in tentativas:
-        g = por_gesto.setdefault(t["gesto"], {"tentativas": 0, "acertos": 0, "erros": 0, "nao_disparou": 0, "latencias": [], "confundido_com": collections.Counter()})
+        g = por_gesto.setdefault(t["gesto"], {"tentativas": 0, "acertos": 0, "erros": 0, "nao_disparou": 0, "latencias": [], "confundido_com": collections.Counter(),
+                                              "com_posicao": 0, "top1": 0, "top5": 0})
         g["tentativas"] += 1
+        if str(t.get("melhor_posicao", "")).strip():  # sessões antigas não anotavam a posição
+            posicao = int(t["melhor_posicao"])
+            g["com_posicao"] += 1
+            g["top1"] += posicao == 1
+            g["top5"] += posicao <= 5
         if t["resultado"] == "acerto":
             g["acertos"] += 1
             g["latencias"].append(float(t["latencia_s"]))
@@ -181,9 +187,14 @@ def resumir(tentativas, disparos_sem_gesto, minutos_sem_gesto):
         saida[nome] = {"gesto": pt(nome), "tentativas": g["tentativas"], "acertos": g["acertos"], "erros": g["erros"], "nao_disparou": g["nao_disparou"],
                        "taxa_acerto": round(g["acertos"] / g["tentativas"], 3),
                        "latencia_media_s": round(float(np.mean(g["latencias"])), 2) if g["latencias"] else None,
-                       "confundido_com": {pt(k): v for k, v in g["confundido_com"].most_common()}}
+                       "confundido_com": {pt(k): v for k, v in g["confundido_com"].most_common()},
+                       # Mesmo sem disparar: em quantas tentativas o gesto pedido chegou a 1º ou ao top 5 do ranking.
+                       "com_posicao": g["com_posicao"], "top1": g["top1"], "top5": g["top5"]}
     total = len(tentativas)
+    com_posicao = sum(g["com_posicao"] for g in saida.values())
     return {"gestos": saida, "tentativas": total, "acertos": sum(g["acertos"] for g in saida.values()),
+            "ranking": {"tentativas_com_posicao": com_posicao, "top1": sum(g["top1"] for g in saida.values()),
+                        "top5": sum(g["top5"] for g in saida.values())},
             "taxa_acerto": round(sum(g["acertos"] for g in saida.values()) / total, 3) if total else None,
             "sem_gesto": {"minutos": round(minutos_sem_gesto, 2), "falsos": disparos_sem_gesto,
                           "falsos_por_minuto": round(disparos_sem_gesto / minutos_sem_gesto, 2) if minutos_sem_gesto > 0 else None}}
@@ -191,13 +202,18 @@ def resumir(tentativas, disparos_sem_gesto, minutos_sem_gesto):
 
 def imprimir(resumo, titulo):
     print(f"\n=== {titulo} ===")
-    print(f"{'Gesto':30s} {'acertos':>9s} {'taxa':>6s} {'tempo':>6s}  confundido com")
+    print(f"{'Gesto':30s} {'acertos':>9s} {'taxa':>6s} {'tempo':>6s} {'top 5':>7s}  confundido com")
     for g in sorted(resumo["gestos"].values(), key=lambda x: -x["taxa_acerto"]):
         lat = f"{g['latencia_media_s']:.1f}s" if g["latencia_media_s"] is not None else "—"
+        top5 = f"{g['top5']}/{g['com_posicao']}" if g["com_posicao"] else "—"
         conf = ", ".join(f"{k} ({v})" for k, v in g["confundido_com"].items())
-        print(f"{g['gesto']:30s} {g['acertos']:>4d}/{g['tentativas']:<4d} {g['taxa_acerto']:>6.0%} {lat:>6s}  {conf}")
+        print(f"{g['gesto']:30s} {g['acertos']:>4d}/{g['tentativas']:<4d} {g['taxa_acerto']:>6.0%} {lat:>6s} {top5:>7s}  {conf}")
     if resumo["tentativas"]:
         print(f"Total: {resumo['acertos']}/{resumo['tentativas']} ({resumo['taxa_acerto']:.0%})")
+    rk = resumo["ranking"]
+    if rk["tentativas_com_posicao"]:
+        n = rk["tentativas_com_posicao"]
+        print(f"Ranking, sem exigir disparo ({n} tentativas anotadas): 1º lugar {rk['top1']}/{n} ({rk['top1'] / n:.0%}), top 5 {rk['top5']}/{n} ({rk['top5'] / n:.0%})")
     s = resumo["sem_gesto"]
     if s["minutos"]:
         print(f"Sem gesto: {s['falsos']} falsos em {s['minutos']:.1f} min ({s['falsos_por_minuto']:.2f} por minuto)")
@@ -233,7 +249,7 @@ def resumo_geral():
     (PASTA / "resumo_geral.json").write_text(json.dumps(resumo, indent=2, ensure_ascii=False), encoding="utf-8")
     if tentativas:
         with (PASTA / "todas_tentativas.csv").open("w", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=list(tentativas[0].keys()))
+            w = csv.DictWriter(f, fieldnames=list(dict.fromkeys(k for t in tentativas for k in t)), restval="")
             w.writeheader()
             w.writerows(tentativas)
     imprimir(resumo, f"Todas as sessões ({sessoes}, pessoas: {', '.join(resumo['pessoas'])})")
@@ -384,10 +400,15 @@ def main():
                 break
             # Gesto: vale o primeiro disparo dentro do tempo.
             inicio, resultado, disparou, latencia, conf_max, pulou, refazer = time.time(), "nao_disparou", "", None, 0.0, False, False
+            melhor_posicao, ultima_media = None, None
             while (passado := time.time() - inicio) < args.tempo:
                 quadro, disparo, agora, tecla = passo("gesto", alvo)
-                if modelo.media is not None:
+                if modelo.media is not None and modelo.media is not ultima_media:
+                    ultima_media = modelo.media
                     conf_max = max(conf_max, float(modelo.media[modelo.nomes.index(alvo)]))
+                    # Posição do gesto pedido no ranking da rede (1 = mais provável), a melhor durante a tentativa.
+                    posicao = int((modelo.media > modelo.media[modelo.nomes.index(alvo)]).sum()) + 1
+                    melhor_posicao = posicao if melhor_posicao is None else min(melhor_posicao, posicao)
                 mostrar(quadro, f"AGORA: {pt(alvo).upper()}", f"{dica}   ({i + 1}/{len(plano)}, rodada {rodada})", VERDE, passado / args.tempo, VERDE, alvo)
                 if disparo:
                     resultado = "acerto" if disparo == alvo else "erro"
@@ -419,7 +440,7 @@ def main():
                 continue
             tentativas.append({"pessoa": args.pessoa, "sessao": pasta.name, "gesto": alvo, "gesto_pt": pt(alvo), "rodada": rodada, "resultado": resultado,
                                "disparou": disparou, "disparou_pt": pt(disparou) if disparou else "", "latencia_s": round(latencia, 2) if latencia is not None else "",
-                               "confianca_max_no_pedido": round(conf_max, 3)})
+                               "confianca_max_no_pedido": round(conf_max, 3), "melhor_posicao": melhor_posicao if melhor_posicao is not None else ""})
             if resultado == "acerto":
                 aviso = (f"ACERTOU em {latencia:.1f} s", VERDE)
             elif resultado == "erro":
