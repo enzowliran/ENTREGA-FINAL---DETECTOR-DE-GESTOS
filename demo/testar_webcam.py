@@ -225,40 +225,48 @@ def resumo_geral():
     Cada pessoa envia só a pasta da própria sessão; os arquivos gerais são refeitos aqui a partir delas,
     por isso ficam fora do git e nunca entram em conflito.
     """
-    tentativas, por_pessoa, sessoes = [], {}, 0
+    # Sessões de modelos diferentes não se misturam: um resumo por modelo.
+    por_modelo, todas = {}, []
     for pasta in sorted(p for p in PASTA.iterdir() if p.is_dir() and (p / "resumo.json").exists()):
         with (pasta / "tentativas.csv").open(encoding="utf-8-sig") as f:
             linhas = list(csv.DictReader(f))
         r = json.loads((pasta / "resumo.json").read_text(encoding="utf-8-sig"))
-        p = por_pessoa.setdefault(r["pessoa"], {"tentativas": [], "falsos": 0, "minutos": 0.0, "sessoes": 0})
+        modelo = r.get("modelo", "?").replace("\\", "/")
+        m = por_modelo.setdefault(modelo, {"tentativas": [], "pessoas": {}, "sessoes": 0})
+        p = m["pessoas"].setdefault(r["pessoa"], {"tentativas": [], "falsos": 0, "minutos": 0.0, "sessoes": 0})
         p["tentativas"] += linhas
         p["falsos"] += r["sem_gesto"]["falsos"]
         p["minutos"] += r["sem_gesto"]["minutos"]
         p["sessoes"] += 1
-        tentativas += linhas
-        sessoes += 1
-    if not sessoes:
+        m["tentativas"] += linhas
+        m["sessoes"] += 1
+        todas += [{**l, "modelo": modelo} for l in linhas]
+    if not por_modelo:
         raise SystemExit(f"Nenhuma sessão em {PASTA}.")
-    resumo = resumir(tentativas, sum(p["falsos"] for p in por_pessoa.values()), sum(p["minutos"] for p in por_pessoa.values()))
-    resumo["sessoes"], resumo["pessoas"] = sessoes, sorted(por_pessoa)
-    resumo["por_pessoa"] = {}
-    for nome, p in sorted(por_pessoa.items()):
-        r = resumir(p["tentativas"], p["falsos"], p["minutos"])
-        resumo["por_pessoa"][nome] = {"sessoes": p["sessoes"], "tentativas": r["tentativas"], "acertos": r["acertos"], "taxa_acerto": r["taxa_acerto"],
-                                      "sem_gesto": r["sem_gesto"], "taxa_por_gesto": {g["gesto"]: g["taxa_acerto"] for g in r["gestos"].values()}}
-    (PASTA / "resumo_geral.json").write_text(json.dumps(resumo, indent=2, ensure_ascii=False), encoding="utf-8")
-    if tentativas:
+    geral = {}
+    for modelo, m in por_modelo.items():
+        pessoas = m["pessoas"]
+        resumo = resumir(m["tentativas"], sum(p["falsos"] for p in pessoas.values()), sum(p["minutos"] for p in pessoas.values()))
+        resumo["sessoes"], resumo["pessoas"] = m["sessoes"], sorted(pessoas)
+        resumo["por_pessoa"] = {}
+        for nome, p in sorted(pessoas.items()):
+            r = resumir(p["tentativas"], p["falsos"], p["minutos"])
+            resumo["por_pessoa"][nome] = {"sessoes": p["sessoes"], "tentativas": r["tentativas"], "acertos": r["acertos"], "taxa_acerto": r["taxa_acerto"],
+                                          "sem_gesto": r["sem_gesto"], "taxa_por_gesto": {g["gesto"]: g["taxa_acerto"] for g in r["gestos"].values()}}
+        geral[modelo] = resumo
+        imprimir(resumo, f"Modelo {modelo}: {m['sessoes']} sessão(ões), pessoas: {', '.join(resumo['pessoas'])}")
+        print("Por pessoa:")
+        for nome, p in resumo["por_pessoa"].items():
+            s = p["sem_gesto"]
+            falsos = f"{s['falsos']} falsos em {s['minutos']:.1f} min" if s["minutos"] else "sem bloco sem gesto"
+            taxa = f"{p['taxa_acerto']:.0%}" if p["taxa_acerto"] is not None else "—"
+            print(f"  {nome:20s} {p['acertos']}/{p['tentativas']} ({taxa}), {falsos}, {p['sessoes']} sessão(ões)")
+    (PASTA / "resumo_geral.json").write_text(json.dumps(geral, indent=2, ensure_ascii=False), encoding="utf-8")
+    if todas:
         with (PASTA / "todas_tentativas.csv").open("w", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=list(dict.fromkeys(k for t in tentativas for k in t)), restval="")
+            w = csv.DictWriter(f, fieldnames=list(dict.fromkeys(k for t in todas for k in t)), restval="")
             w.writeheader()
-            w.writerows(tentativas)
-    imprimir(resumo, f"Todas as sessões ({sessoes}, pessoas: {', '.join(resumo['pessoas'])})")
-    print("\nPor pessoa:")
-    for nome, p in resumo["por_pessoa"].items():
-        s = p["sem_gesto"]
-        falsos = f"{s['falsos']} falsos em {s['minutos']:.1f} min" if s["minutos"] else "sem bloco sem gesto"
-        taxa = f"{p['taxa_acerto']:.0%}" if p["taxa_acerto"] is not None else "—"
-        print(f"  {nome:20s} {p['acertos']}/{p['tentativas']} ({taxa}), {falsos}, {p['sessoes']} sessão(ões)")
+            w.writerows(todas)
     print(f"\nSalvo em {PASTA / 'resumo_geral.json'} e {PASTA / 'todas_tentativas.csv'}")
 
 

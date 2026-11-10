@@ -69,6 +69,15 @@
   .licao p { font-size: 17px; }
   .cena3d.escura { background: radial-gradient(900px 520px at 30% 20%, #1e293b, #0b1220 70%); border-color: #1e293b; }
   .cena3d.escura .rotulos3d span { background: rgba(15,23,42,.78); }
+  /* Botões que avançam e voltam a etapa do modelo 3D (separados da troca de slide) */
+  .etapas3d { position: absolute; right: 14px; top: 12px; display: flex; align-items: center; gap: 8px; }
+  .etapas3d button { border: 1px solid rgba(148,163,184,.45); background: rgba(15,23,42,.82); color: #e2e8f0; border-radius: 999px; padding: 9px 16px;
+                     font: 700 15px "Segoe UI", system-ui, sans-serif; cursor: pointer; transition: background .2s, transform .15s; }
+  .etapas3d button:hover { background: #7c3aed; border-color: #7c3aed; }
+  .etapas3d button:active { transform: scale(.96); }
+  .etapas3d button:disabled { opacity: .35; cursor: default; background: rgba(15,23,42,.82); border-color: rgba(148,163,184,.45); }
+  .etapas3d span { min-width: 120px; text-align: center; font: 700 14px "Segoe UI", system-ui, sans-serif; color: #c4b5fd; background: rgba(15,23,42,.78);
+                   padding: 7px 12px; border-radius: 999px; }
   .rotulos3d { position: absolute; left: 16px; bottom: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
   .rotulos3d span { background: rgba(255,255,255,.88); border-radius: 999px; padding: 6px 12px; font-size: 15px; font-weight: 600; color: var(--c); }
   #secaoPilula { color: var(--acento); border-color: var(--acento-claro); background: var(--acento-claro); font-weight: 700; }
@@ -351,6 +360,7 @@
     <h2 class="an" style="--d:1">Por dentro da rede: as ativações reais do nosso modelo</h2>
     <div class="cena3d escura an" style="--d:2;height:450px"><canvas id="cena2"></canvas>
       <div class="rotulos3d"><span style="--c:#cbd5e1">▮ entrada</span><span style="--c:#fda4af">▮ mapas de ativação reais (8 por bloco)</span><span style="--c:#93c5fd">● neurônios</span><span style="--c:#94a3b8">— conexões</span></div>
+      <div class="etapas3d"><button id="e2voltar" title="Etapa anterior do modelo">‹ Etapa anterior</button><span id="e2etapa">Visão geral</span><button id="e2avancar" title="Próxima etapa do modelo">Próxima etapa ›</button></div>
     </div>
     <div class="grade an" style="--d:3;grid-template-columns:1.3fr 1fr;margin-top:16px;gap:20px;align-items:start">
       <div class="cartao estado3d"><p class="rotuloEstado" id="e2modo"></p><h3 id="e2titulo"></h3><p id="e2texto"></p></div>
@@ -1426,9 +1436,17 @@ function montarCena2() {
     else if (classe === "Thumb Down") { est.aberto = !est.aberto; est.sujo = true; aviso(est.aberto ? "Mapas abertos" : "Mapas empilhados"); }
     else if (classe === "Stop Sign") { est.auto = !est.auto; aviso(est.auto ? "▶ Continuando" : "⏸ Pausado"); }
     else return;
-    est.sujo = true; painel(); acenderBotao("cnn2", classe);
+    est.sujo = true; painel(); acenderBotao("cnn2", classe); mostrarEtapa();
   };
-  painel();
+  // Botões no canto da cena: só mudam a etapa do modelo, sem trocar de slide.
+  function mostrarEtapa() {
+    $("e2etapa").textContent = est.foco < 0 ? "Visão geral" : `Camada ${est.foco + 1} de 7`;
+    $("e2voltar").disabled = est.foco <= -1;
+    $("e2avancar").disabled = est.foco >= ETAPAS - 1;
+  }
+  $("e2voltar").onclick = e => { INTERATIVOS.cnn2("Swiping Left"); e.currentTarget.blur(); };
+  $("e2avancar").onclick = e => { INTERATIVOS.cnn2("Swiping Right"); e.currentTarget.blur(); };
+  painel(); mostrarEtapa();
   const DUR = 6000;
   item.passo = t => {
     if (est.auto && t - est.inicio > DUR + 2500) est.inicio = t;
