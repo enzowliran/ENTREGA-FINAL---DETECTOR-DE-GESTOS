@@ -1,0 +1,98 @@
+{
+  "gestos": {
+    "Three Fingers": {
+      "gesto": "Três dedos",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 0,
+      "nao_disparou": 3,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {},
+      "com_posicao": 3,
+      "top1": 1,
+      "top5": 3
+    },
+    "Two Fingers": {
+      "gesto": "Dois dedos",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 0,
+      "nao_disparou": 3,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {},
+      "com_posicao": 3,
+      "top1": 3,
+      "top5": 3
+    },
+    "Four Fingers": {
+      "gesto": "Quatro dedos",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 0,
+      "nao_disparou": 3,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {},
+      "com_posicao": 3,
+      "top1": 0,
+      "top5": 3
+    },
+    "One Finger": {
+      "gesto": "Um dedo",
+      "tentativas": 3,
+      "acertos": 2,
+      "erros": 0,
+      "nao_disparou": 1,
+      "taxa_acerto": 0.667,
+      "latencia_media_s": 3.1,
+      "confundido_com": {},
+      "com_posicao": 3,
+      "top1": 3,
+      "top5": 3
+    },
+    "Fist": {
+      "gesto": "Punho",
+      "tentativas": 3,
+      "acertos": 1,
+      "erros": 0,
+      "nao_disparou": 2,
+      "taxa_acerto": 0.333,
+      "latencia_media_s": 1.12,
+      "confundido_com": {},
+      "com_posicao": 3,
+      "top1": 3,
+      "top5": 3
+    }
+  },
+  "tentativas": 15,
+  "acertos": 3,
+  "ranking": {
+    "tentativas_com_posicao": 15,
+    "top1": 10,
+    "top5": 15
+  },
+  "taxa_acerto": 0.2,
+  "sem_gesto": {
+    "minutos": 1.0,
+    "falsos": 0,
+    "falsos_por_minuto": 0.0
+  },
+  "pessoa": "EnzoLiran",
+  "inicio": "2026-11-10T18:31:51",
+  "modelo": "resultados/jester/cnn_3d_dedos/final.pt",
+  "conjunto": "dedos",
+  "interrompido": false,
+  "regra": {
+    "limiar": 0.7,
+    "seguidas": 3,
+    "pausa_s": 1.2,
+    "janelas_s": [
+      1.0,
+      1.5,
+      3.0
+    ],
+    "tempo_gesto_s": 5.0
+  }
+}
