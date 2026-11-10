@@ -1,0 +1,49 @@
+pessoa,sessao,gesto,gesto_pt,rodada,resultado,disparou,disparou_pt,latencia_s,confianca_max_no_pedido
+EnzoLiran,EnzoLiran_20261110_124749,Shaking Hand,Acenar,1,nao_disparou,,,,0.122
+EnzoLiran,EnzoLiran_20261110_124749,Swiping Right,Deslizar para a direita,1,acerto,Swiping Right,Deslizar para a direita,4.88,0.993
+EnzoLiran,EnzoLiran_20261110_124749,Swiping Left,Deslizar para a esquerda,1,acerto,Swiping Left,Deslizar para a esquerda,0.6,0.991
+EnzoLiran,EnzoLiran_20261110_124749,Two Fingers,Dois dedos,1,nao_disparou,,,,0.148
+EnzoLiran,EnzoLiran_20261110_124749,Stop Sign,Sinal de pare,1,acerto,Stop Sign,Sinal de pare,0.83,0.981
+EnzoLiran,EnzoLiran_20261110_124749,Four Fingers,Quatro dedos,1,nao_disparou,,,,0.052
+EnzoLiran,EnzoLiran_20261110_124749,Pulling Hand In,Puxar a mão,1,acerto,Pulling Hand In,Puxar a mão,0.92,0.975
+EnzoLiran,EnzoLiran_20261110_124749,One Finger,Um dedo,1,nao_disparou,,,,0.019
+EnzoLiran,EnzoLiran_20261110_124749,Fist,Punho,1,acerto,Fist,Punho,2.96,0.976
+EnzoLiran,EnzoLiran_20261110_124749,Drumming Fingers,Tamborilar os dedos,1,acerto,Drumming Fingers,Tamborilar os dedos,0.42,0.895
+EnzoLiran,EnzoLiran_20261110_124749,Pushing Hand Away,Empurrar a mão,1,erro,Swiping Down,Deslizar para baixo,1.48,0.081
+EnzoLiran,EnzoLiran_20261110_124749,Three Fingers,Três dedos,1,nao_disparou,,,,0.043
+EnzoLiran,EnzoLiran_20261110_124749,Zooming In With Full Hand,Zoom in com a mão,1,acerto,Zooming In With Full Hand,Zoom in com a mão,0.29,0.944
+EnzoLiran,EnzoLiran_20261110_124749,Thumb Down,Polegar para baixo,1,acerto,Thumb Down,Polegar para baixo,0.58,0.985
+EnzoLiran,EnzoLiran_20261110_124749,Thumb Up,Polegar para cima,1,acerto,Thumb Up,Polegar para cima,1.4,0.949
+EnzoLiran,EnzoLiran_20261110_124749,Zooming Out With Full Hand,Zoom out com a mão,1,erro,Zooming In With Full Hand,Zoom in com a mão,1.69,0.067
+EnzoLiran,EnzoLiran_20261110_124749,Pushing Hand Away,Empurrar a mão,2,erro,Swiping Down,Deslizar para baixo,0.86,0.018
+EnzoLiran,EnzoLiran_20261110_124749,Swiping Left,Deslizar para a esquerda,2,acerto,Swiping Left,Deslizar para a esquerda,3.55,0.977
+EnzoLiran,EnzoLiran_20261110_124749,Pulling Hand In,Puxar a mão,2,acerto,Pulling Hand In,Puxar a mão,0.43,0.937
+EnzoLiran,EnzoLiran_20261110_124749,Thumb Down,Polegar para baixo,2,nao_disparou,,,,0.996
+EnzoLiran,EnzoLiran_20261110_124749,Fist,Punho,2,acerto,Fist,Punho,0.57,0.985
+EnzoLiran,EnzoLiran_20261110_124749,Stop Sign,Sinal de pare,2,acerto,Stop Sign,Sinal de pare,0.0,0.874
+EnzoLiran,EnzoLiran_20261110_124749,One Finger,Um dedo,2,nao_disparou,,,,0.012
+EnzoLiran,EnzoLiran_20261110_124749,Zooming Out With Full Hand,Zoom out com a mão,2,erro,Swiping Down,Deslizar para baixo,1.19,0.107
+EnzoLiran,EnzoLiran_20261110_124749,Zooming In With Full Hand,Zoom in com a mão,2,acerto,Zooming In With Full Hand,Zoom in com a mão,1.51,0.986
+EnzoLiran,EnzoLiran_20261110_124749,Drumming Fingers,Tamborilar os dedos,2,acerto,Drumming Fingers,Tamborilar os dedos,0.27,0.991
+EnzoLiran,EnzoLiran_20261110_124749,Four Fingers,Quatro dedos,2,nao_disparou,,,,0.101
+EnzoLiran,EnzoLiran_20261110_124749,Swiping Right,Deslizar para a direita,2,erro,Stop Sign,Sinal de pare,0.66,0.002
+EnzoLiran,EnzoLiran_20261110_124749,Thumb Up,Polegar para cima,2,acerto,Thumb Up,Polegar para cima,4.92,0.986
+EnzoLiran,EnzoLiran_20261110_124749,Two Fingers,Dois dedos,2,nao_disparou,,,,0.021
+EnzoLiran,EnzoLiran_20261110_124749,Shaking Hand,Acenar,2,nao_disparou,,,,0.675
+EnzoLiran,EnzoLiran_20261110_124749,Three Fingers,Três dedos,2,nao_disparou,,,,0.04
+EnzoLiran,EnzoLiran_20261110_124749,Zooming Out With Full Hand,Zoom out com a mão,3,erro,Zooming In With Full Hand,Zoom in com a mão,1.17,0.32
+EnzoLiran,EnzoLiran_20261110_124749,Three Fingers,Três dedos,3,nao_disparou,,,,0.023
+EnzoLiran,EnzoLiran_20261110_124749,Zooming In With Full Hand,Zoom in com a mão,3,acerto,Zooming In With Full Hand,Zoom in com a mão,1.23,0.984
+EnzoLiran,EnzoLiran_20261110_124749,Fist,Punho,3,acerto,Fist,Punho,1.93,0.963
+EnzoLiran,EnzoLiran_20261110_124749,Two Fingers,Dois dedos,3,nao_disparou,,,,0.289
+EnzoLiran,EnzoLiran_20261110_124749,One Finger,Um dedo,3,erro,Pulling Two Fingers In,Puxar com dois dedos,1.75,0.003
+EnzoLiran,EnzoLiran_20261110_124749,Thumb Up,Polegar para cima,3,acerto,Thumb Up,Polegar para cima,1.5,0.883
+EnzoLiran,EnzoLiran_20261110_124749,Pulling Hand In,Puxar a mão,3,acerto,Pulling Hand In,Puxar a mão,2.37,0.987
+EnzoLiran,EnzoLiran_20261110_124749,Four Fingers,Quatro dedos,3,erro,Stop Sign,Sinal de pare,3.85,0.095
+EnzoLiran,EnzoLiran_20261110_124749,Swiping Left,Deslizar para a esquerda,3,acerto,Swiping Left,Deslizar para a esquerda,0.96,0.926
+EnzoLiran,EnzoLiran_20261110_124749,Stop Sign,Sinal de pare,3,acerto,Stop Sign,Sinal de pare,0.18,0.971
+EnzoLiran,EnzoLiran_20261110_124749,Shaking Hand,Acenar,3,nao_disparou,,,,0.757
+EnzoLiran,EnzoLiran_20261110_124749,Thumb Down,Polegar para baixo,3,acerto,Thumb Down,Polegar para baixo,0.61,0.979
+EnzoLiran,EnzoLiran_20261110_124749,Pushing Hand Away,Empurrar a mão,3,erro,Swiping Down,Deslizar para baixo,2.04,0.094
+EnzoLiran,EnzoLiran_20261110_124749,Drumming Fingers,Tamborilar os dedos,3,acerto,Drumming Fingers,Tamborilar os dedos,0.86,0.997
+EnzoLiran,EnzoLiran_20261110_124749,Swiping Right,Deslizar para a direita,3,acerto,Swiping Right,Deslizar para a direita,1.43,0.788

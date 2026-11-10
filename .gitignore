@@ -8,3 +8,7 @@ __pycache__/
 
 # Estado de otimizador dos treinos curtos de arquitetura: não serve para retomar nada útil e pesa demais.
 resultados/jester/arq_*/ultimo.pt
+
+# Gerados por demo/testar_webcam.py --resumo a partir das pastas de cada sessao
+resultados/webcam/resumo_geral.json
+resultados/webcam/todas_tentativas.csv

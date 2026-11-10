@@ -8,7 +8,8 @@ Cada tentativa tem um tempo de preparo, com a mão abaixada, e um tempo para faz
 No fim vem um bloco "sem gesto", em que a pessoa age normalmente: todo disparo ali é falso.
 
 Não grava vídeo nem imagem (a câmera mostra o rosto). Grava só números, em resultados/webcam/<pessoa>_<data>/:
-  tentativas.csv, disparos.csv e resumo.json. Também acrescenta as tentativas em resultados/webcam/todas_tentativas.csv.
+  tentativas.csv, disparos.csv e resumo.json. Com --resumo, junta as sessões de todos os integrantes em
+  resultados/webcam/resumo_geral.json e todas_tentativas.csv (refeitos a cada vez, fora do git).
 
 Teclas: Espaço pula a tentativa, R recomeça a tentativa atual, P pausa, Q ou Esc encerra e salva o que já foi feito.
 
@@ -203,22 +204,46 @@ def imprimir(resumo, titulo):
 
 
 def resumo_geral():
-    """Junta todas as sessões de resultados/webcam (por pessoa e no total)."""
-    tentativas, falsos, minutos, sessoes = [], 0, 0.0, 0
-    for pasta in sorted(p for p in PASTA.glob("*_*") if (p / "resumo.json").exists()):
+    """Junta as sessões de todos os integrantes (uma pasta por sessão em resultados/webcam), por pessoa e no total.
+
+    Cada pessoa envia só a pasta da própria sessão; os arquivos gerais são refeitos aqui a partir delas,
+    por isso ficam fora do git e nunca entram em conflito.
+    """
+    tentativas, por_pessoa, sessoes = [], {}, 0
+    for pasta in sorted(p for p in PASTA.iterdir() if p.is_dir() and (p / "resumo.json").exists()):
         with (pasta / "tentativas.csv").open(encoding="utf-8") as f:
-            tentativas += list(csv.DictReader(f))
+            linhas = list(csv.DictReader(f))
         r = json.loads((pasta / "resumo.json").read_text(encoding="utf-8"))
-        falsos += r["sem_gesto"]["falsos"]
-        minutos += r["sem_gesto"]["minutos"]
+        p = por_pessoa.setdefault(r["pessoa"], {"tentativas": [], "falsos": 0, "minutos": 0.0, "sessoes": 0})
+        p["tentativas"] += linhas
+        p["falsos"] += r["sem_gesto"]["falsos"]
+        p["minutos"] += r["sem_gesto"]["minutos"]
+        p["sessoes"] += 1
+        tentativas += linhas
         sessoes += 1
     if not sessoes:
         raise SystemExit(f"Nenhuma sessão em {PASTA}.")
-    resumo = resumir(tentativas, falsos, minutos)
-    resumo["sessoes"], resumo["pessoas"] = sessoes, sorted({t["pessoa"] for t in tentativas})
+    resumo = resumir(tentativas, sum(p["falsos"] for p in por_pessoa.values()), sum(p["minutos"] for p in por_pessoa.values()))
+    resumo["sessoes"], resumo["pessoas"] = sessoes, sorted(por_pessoa)
+    resumo["por_pessoa"] = {}
+    for nome, p in sorted(por_pessoa.items()):
+        r = resumir(p["tentativas"], p["falsos"], p["minutos"])
+        resumo["por_pessoa"][nome] = {"sessoes": p["sessoes"], "tentativas": r["tentativas"], "acertos": r["acertos"], "taxa_acerto": r["taxa_acerto"],
+                                      "sem_gesto": r["sem_gesto"], "taxa_por_gesto": {g["gesto"]: g["taxa_acerto"] for g in r["gestos"].values()}}
     (PASTA / "resumo_geral.json").write_text(json.dumps(resumo, indent=2, ensure_ascii=False), encoding="utf-8")
+    if tentativas:
+        with (PASTA / "todas_tentativas.csv").open("w", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=list(tentativas[0].keys()))
+            w.writeheader()
+            w.writerows(tentativas)
     imprimir(resumo, f"Todas as sessões ({sessoes}, pessoas: {', '.join(resumo['pessoas'])})")
-    print(f"\nSalvo em {PASTA / 'resumo_geral.json'}")
+    print("\nPor pessoa:")
+    for nome, p in resumo["por_pessoa"].items():
+        s = p["sem_gesto"]
+        falsos = f"{s['falsos']} falsos em {s['minutos']:.1f} min" if s["minutos"] else "sem bloco sem gesto"
+        taxa = f"{p['taxa_acerto']:.0%}" if p["taxa_acerto"] is not None else "—"
+        print(f"  {nome:20s} {p['acertos']}/{p['tentativas']} ({taxa}), {falsos}, {p['sessoes']} sessão(ões)")
+    print(f"\nSalvo em {PASTA / 'resumo_geral.json'} e {PASTA / 'todas_tentativas.csv'}")
 
 
 def main():
@@ -435,15 +460,10 @@ def main():
         w = csv.DictWriter(f, fieldnames=["momento", "fase", "pedido", "disparou", "confianca"])
         w.writeheader()
         w.writerows(disparos)
-    todas = PASTA / "todas_tentativas.csv"
-    novo = not todas.exists()
-    with todas.open("a", newline="", encoding="utf-8") as f:
-        w = csv.DictWriter(f, fieldnames=campos)
-        if novo:
-            w.writeheader()
-        w.writerows(tentativas)
     resumo = resumir(tentativas, falsos_sem_gesto, minutos_sem_gesto)
-    resumo.update({"pessoa": args.pessoa, "inicio": inicio_sessao.isoformat(timespec="seconds"), "modelo": str(Path(args.modelo).relative_to(RAIZ)) if Path(args.modelo).is_relative_to(RAIZ) else args.modelo,
+    caminho_modelo = Path(args.modelo).resolve()
+    resumo.update({"pessoa": args.pessoa, "inicio": inicio_sessao.isoformat(timespec="seconds"),
+                   "modelo": caminho_modelo.relative_to(RAIZ).as_posix() if caminho_modelo.is_relative_to(RAIZ) else args.modelo,
                    "conjunto": args.conjunto, "interrompido": interrompido,
                    "regra": {"limiar": args.limiar, "seguidas": args.seguidas, "pausa_s": args.pausa, "janelas_s": modelo.janelas, "tempo_gesto_s": args.tempo}})
     (pasta / "resumo.json").write_text(json.dumps(resumo, indent=2, ensure_ascii=False), encoding="utf-8")

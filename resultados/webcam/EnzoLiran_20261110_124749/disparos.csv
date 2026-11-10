@@ -1,0 +1,43 @@
+momento,fase,pedido,disparou,confianca
+2026-11-10T12:48:06.470,gesto,Swiping Right,Swiping Right,0.993
+2026-11-10T12:48:09.701,gesto,Swiping Left,Swiping Left,0.989
+2026-11-10T12:48:19.327,preparo,Stop Sign,Pulling Two Fingers In,0.965
+2026-11-10T12:48:20.633,gesto,Stop Sign,Stop Sign,0.978
+2026-11-10T12:48:31.710,gesto,Pulling Hand In,Pulling Hand In,0.975
+2026-11-10T12:48:40.436,preparo,Fist,Pulling Two Fingers In,0.764
+2026-11-10T12:48:44.820,gesto,Fist,Fist,0.976
+2026-11-10T12:48:47.832,gesto,Drumming Fingers,Drumming Fingers,0.895
+2026-11-10T12:48:51.927,gesto,Pushing Hand Away,Swiping Down,0.965
+2026-11-10T12:49:00.229,preparo,Zooming In With Full Hand,Stop Sign,0.924
+2026-11-10T12:49:02.329,gesto,Zooming In With Full Hand,Zooming In With Full Hand,0.944
+2026-11-10T12:49:05.500,gesto,Thumb Down,Thumb Down,0.985
+2026-11-10T12:49:09.501,gesto,Thumb Up,Thumb Up,0.949
+2026-11-10T12:49:13.769,gesto,Zooming Out With Full Hand,Zooming In With Full Hand,0.972
+2026-11-10T12:49:17.195,gesto,Pushing Hand Away,Swiping Down,0.956
+2026-11-10T12:49:23.347,gesto,Swiping Left,Swiping Left,0.976
+2026-11-10T12:49:26.400,gesto,Pulling Hand In,Pulling Hand In,0.937
+2026-11-10T12:49:28.729,preparo,Thumb Down,Thumb Down,0.988
+2026-11-10T12:49:37.063,gesto,Fist,Fist,0.985
+2026-11-10T12:49:39.639,gesto,Stop Sign,Stop Sign,0.874
+2026-11-10T12:49:50.919,gesto,Zooming Out With Full Hand,Swiping Down,0.821
+2026-11-10T12:49:55.020,gesto,Zooming In With Full Hand,Zooming In With Full Hand,0.986
+2026-11-10T12:49:57.881,gesto,Drumming Fingers,Drumming Fingers,0.991
+2026-11-10T12:50:06.801,preparo,Swiping Right,Stop Sign,0.829
+2026-11-10T12:50:08.708,gesto,Swiping Right,Stop Sign,0.719
+2026-11-10T12:50:10.019,preparo,Thumb Up,Swiping Right,0.856
+2026-11-10T12:50:16.194,gesto,Thumb Up,Thumb Up,0.986
+2026-11-10T12:50:24.330,preparo,Shaking Hand,Pulling Two Fingers In,0.706
+2026-11-10T12:50:42.673,gesto,Zooming Out With Full Hand,Zooming In With Full Hand,0.741
+2026-11-10T12:50:43.973,preparo,Three Fingers,Zooming Out With Full Hand,0.985
+2026-11-10T12:50:54.039,gesto,Zooming In With Full Hand,Zooming In With Full Hand,0.984
+2026-11-10T12:50:58.599,gesto,Fist,Fist,0.963
+2026-11-10T12:51:10.504,gesto,One Finger,Pulling Two Fingers In,0.835
+2026-11-10T12:51:14.613,gesto,Thumb Up,Thumb Up,0.861
+2026-11-10T12:51:19.596,gesto,Pulling Hand In,Pulling Hand In,0.987
+2026-11-10T12:51:25.994,gesto,Four Fingers,Stop Sign,0.757
+2026-11-10T12:51:29.554,gesto,Swiping Left,Swiping Left,0.926
+2026-11-10T12:51:32.309,gesto,Stop Sign,Stop Sign,0.971
+2026-11-10T12:51:43.038,gesto,Thumb Down,Thumb Down,0.979
+2026-11-10T12:51:47.644,gesto,Pushing Hand Away,Swiping Down,0.762
+2026-11-10T12:51:51.089,gesto,Drumming Fingers,Drumming Fingers,0.997
+2026-11-10T12:51:55.063,gesto,Swiping Right,Swiping Right,0.788

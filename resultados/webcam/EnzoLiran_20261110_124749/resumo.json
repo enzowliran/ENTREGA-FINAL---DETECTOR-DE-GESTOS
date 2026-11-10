@@ -1,0 +1,199 @@
+{
+  "gestos": {
+    "Shaking Hand": {
+      "gesto": "Acenar",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 0,
+      "nao_disparou": 3,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {}
+    },
+    "Swiping Right": {
+      "gesto": "Deslizar para a direita",
+      "tentativas": 3,
+      "acertos": 2,
+      "erros": 1,
+      "nao_disparou": 0,
+      "taxa_acerto": 0.667,
+      "latencia_media_s": 3.15,
+      "confundido_com": {
+        "Sinal de pare": 1
+      }
+    },
+    "Swiping Left": {
+      "gesto": "Deslizar para a esquerda",
+      "tentativas": 3,
+      "acertos": 3,
+      "erros": 0,
+      "nao_disparou": 0,
+      "taxa_acerto": 1.0,
+      "latencia_media_s": 1.7,
+      "confundido_com": {}
+    },
+    "Two Fingers": {
+      "gesto": "Dois dedos",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 0,
+      "nao_disparou": 3,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {}
+    },
+    "Stop Sign": {
+      "gesto": "Sinal de pare",
+      "tentativas": 3,
+      "acertos": 3,
+      "erros": 0,
+      "nao_disparou": 0,
+      "taxa_acerto": 1.0,
+      "latencia_media_s": 0.34,
+      "confundido_com": {}
+    },
+    "Four Fingers": {
+      "gesto": "Quatro dedos",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 1,
+      "nao_disparou": 2,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {
+        "Sinal de pare": 1
+      }
+    },
+    "Pulling Hand In": {
+      "gesto": "Puxar a mão",
+      "tentativas": 3,
+      "acertos": 3,
+      "erros": 0,
+      "nao_disparou": 0,
+      "taxa_acerto": 1.0,
+      "latencia_media_s": 1.24,
+      "confundido_com": {}
+    },
+    "One Finger": {
+      "gesto": "Um dedo",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 1,
+      "nao_disparou": 2,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {
+        "Puxar com dois dedos": 1
+      }
+    },
+    "Fist": {
+      "gesto": "Punho",
+      "tentativas": 3,
+      "acertos": 3,
+      "erros": 0,
+      "nao_disparou": 0,
+      "taxa_acerto": 1.0,
+      "latencia_media_s": 1.82,
+      "confundido_com": {}
+    },
+    "Drumming Fingers": {
+      "gesto": "Tamborilar os dedos",
+      "tentativas": 3,
+      "acertos": 3,
+      "erros": 0,
+      "nao_disparou": 0,
+      "taxa_acerto": 1.0,
+      "latencia_media_s": 0.52,
+      "confundido_com": {}
+    },
+    "Pushing Hand Away": {
+      "gesto": "Empurrar a mão",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 3,
+      "nao_disparou": 0,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {
+        "Deslizar para baixo": 3
+      }
+    },
+    "Three Fingers": {
+      "gesto": "Três dedos",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 0,
+      "nao_disparou": 3,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {}
+    },
+    "Zooming In With Full Hand": {
+      "gesto": "Zoom in com a mão",
+      "tentativas": 3,
+      "acertos": 3,
+      "erros": 0,
+      "nao_disparou": 0,
+      "taxa_acerto": 1.0,
+      "latencia_media_s": 1.01,
+      "confundido_com": {}
+    },
+    "Thumb Down": {
+      "gesto": "Polegar para baixo",
+      "tentativas": 3,
+      "acertos": 2,
+      "erros": 0,
+      "nao_disparou": 1,
+      "taxa_acerto": 0.667,
+      "latencia_media_s": 0.59,
+      "confundido_com": {}
+    },
+    "Thumb Up": {
+      "gesto": "Polegar para cima",
+      "tentativas": 3,
+      "acertos": 3,
+      "erros": 0,
+      "nao_disparou": 0,
+      "taxa_acerto": 1.0,
+      "latencia_media_s": 2.61,
+      "confundido_com": {}
+    },
+    "Zooming Out With Full Hand": {
+      "gesto": "Zoom out com a mão",
+      "tentativas": 3,
+      "acertos": 0,
+      "erros": 3,
+      "nao_disparou": 0,
+      "taxa_acerto": 0.0,
+      "latencia_media_s": null,
+      "confundido_com": {
+        "Zoom in com a mão": 2,
+        "Deslizar para baixo": 1
+      }
+    }
+  },
+  "tentativas": 48,
+  "acertos": 25,
+  "taxa_acerto": 0.521,
+  "sem_gesto": {
+    "minutos": 1.0,
+    "falsos": 0,
+    "falsos_por_minuto": 0.0
+  },
+  "pessoa": "EnzoLiran",
+  "inicio": "2026-11-10T12:47:49",
+  "modelo": "resultados/jester/cnn_3d_mais_gestos/melhor.pt",
+  "conjunto": "todos",
+  "interrompido": false,
+  "regra": {
+    "limiar": 0.7,
+    "seguidas": 3,
+    "pausa_s": 1.2,
+    "janelas_s": [
+      1.0,
+      1.5,
+      3.0
+    ],
+    "tempo_gesto_s": 5.0
+  }
+}
