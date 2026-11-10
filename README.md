@@ -178,6 +178,13 @@ O painel do carro (`abrir_painel.bat`) usa esse modelo só para o gesto de um de
 python src/avaliar_webcam.py --modelo resultados/jester/cnn_3d_mais_gestos/melhor.pt
 ```
 
+Também dá para medir ao vivo, sem gravar nada, com `demo/abrir_teste_webcam.bat` (`demo/testar_webcam.py`):
+- O programa pede um gesto de cada vez, em ordem sorteada, e roda o modelo com a mesma regra das demos.
+- Cada tentativa é anotada como acerto (com o tempo até disparar), erro (com a classe que disparou) ou não disparou.
+- No fim, um minuto "sem gesto" conta os falsos disparos.
+- Os resultados vão para `resultados/webcam/<pessoa>_<data>/`, só com números e nenhuma imagem.
+- `python demo/testar_webcam.py --resumo` junta todas as sessões, por gesto e no total.
+
 Para refazer: `python src/baixar_hagrid.py --por-classe 4000 --fracao-val 0.1` (cerca de 6,4 GB) e `python src/treinar_gestos_novos.py --nome outro_nome --epocas 8 --jester-por-epoca 60000 --dividir-outros 1`. Na GPU que usamos, levou cerca de 1h40.
 
 Tentativas já descartadas, para não repetir: limiar por gesto e ajuste fino de esquerda e direita. Os dois não trouxeram ganho real, e os resultados estão no notebook.
