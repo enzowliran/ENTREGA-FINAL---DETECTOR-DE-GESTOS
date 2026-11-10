@@ -304,6 +304,25 @@
     <p class="lead an" style="--d:8;margin-top:44px;font-size:22px">A rede olha <b>movimento</b>, não uma foto: a convolução 3D percorre o espaço e o tempo ao mesmo tempo. O gatilho é a segunda defesa contra o disparo sem querer.</p>
   </section>
 
+  <!-- 3a. Antes da 3D: uma CNN 2D olha uma imagem só -->
+  <section class="slide" data-titulo="O que é uma CNN 2D">
+    <p class="kicker an">Por dentro do modelo · primeiro, o caso comum</p>
+    <h2 class="an" style="--d:1">CNN 2D: um filtro que percorre uma imagem</h2>
+    <div class="grade" style="grid-template-columns:1.45fr 1fr;align-items:stretch;gap:26px">
+      <div class="cena3d escura an" style="--d:2;height:540px"><canvas id="cena0"></canvas>
+        <div class="rotulos3d"><span style="--c:#cbd5e1">▮ uma imagem</span><span style="--c:#c4b5fd">▮ filtro 3×3</span><span style="--c:#fda4af">▮ mapa de ativação</span></div>
+      </div>
+      <div class="grade an" style="--d:3;gap:16px;align-content:start">
+        <div class="cartao estado3d"><p class="rotuloEstado">O filtro procura “mão”</p><h3 id="e0titulo"></h3><p id="e0texto"></p>
+          <div class="medidor"><div id="e0barra"></div></div></div>
+        <div class="cartao"><h3 style="font-size:21px">Como funciona</h3>
+          <p style="font-size:17px">O filtro é uma janelinha de 3×3 pixels com pesos aprendidos. Ele desliza pela imagem e, em cada posição, dá uma nota: alta quando o pedaço parece o padrão que ele procura. As notas formam o <b>mapa de ativação</b>.</p></div>
+        <div class="cartao licao" style="border-top-color:var(--alerta)"><p><b>O limite:</b> a 2D vê <b>uma foto de cada vez</b>. Mão deslizando ou mão parada dão a mesma foto, então ela não sabe se houve movimento.</p></div>
+        <p class="nota">Deslize para ver o que muda quando o filtro também atravessa o tempo →</p>
+      </div>
+    </div>
+  </section>
+
   <!-- 3b. O que é uma CNN 3D (interativo) -->
   <section class="slide" data-titulo="O que é uma CNN 3D" data-interativo="cnn1">
     <p class="kicker an">Por dentro do modelo · interativo</p>
@@ -1111,7 +1130,66 @@ function texturaQuadro(b64, lado) {
 }
 function borda(geo, cor, opacidade = 0.7) { return new THREE.LineSegments(new THREE.EdgesGeometry(geo), new THREE.LineBasicMaterial({ color: cor, transparent: true, opacity: opacidade })); }
 
+// Slide 0: a CNN 2D. Um filtro 3x3 percorre uma imagem só (o mesmo quadro que abre a transição do slide 3D).
+const QUADRO_2D = 3, LADO_2D = 2.2, PASSOS_2D = 5;
+function montarCena0() {
+  const A = D.ativacoes, item = novaCena($("cena0"), [1.4, 0.5, 7.4], [1.4, 0, 0]);
+  const tam = LADO_2D / PASSOS_2D, geo = new THREE.PlaneGeometry(LADO_2D, LADO_2D);
+  const imagem = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: texturaQuadro(A.quadros[QUADRO_2D], A.lado_quadro), side: THREE.DoubleSide }));
+  imagem.add(borda(geo, 0x94a3b8, 0.9)); imagem.position.set(-0.6, 0, 0); item.cena.add(imagem);
+  const r1 = texto3d("uma imagem (1 quadro)", "#cbd5e1", 0.85); r1.position.set(-0.6, -1.5, 0); item.cena.add(r1);
+  // Filtro: 3x3 células, desenhado por cima da imagem.
+  const filtro = new THREE.Group(), gq = new THREE.PlaneGeometry(tam, tam);
+  filtro.add(new THREE.Mesh(gq, new THREE.MeshBasicMaterial({ color: 0xa78bfa, transparent: true, opacity: 0.32 })), borda(gq, 0xc4b5fd, 1));
+  const pts = [];
+  for (let k = 1; k < 3; k++) { const o = -tam / 2 + k * tam / 3; pts.push(new THREE.Vector3(o, -tam / 2, 0), new THREE.Vector3(o, tam / 2, 0), new THREE.Vector3(-tam / 2, o, 0), new THREE.Vector3(tam / 2, o, 0)); }
+  filtro.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: 0xc4b5fd, transparent: true, opacity: 0.7 })));
+  filtro.traverse(o => { if (o.material) { o.material.depthTest = false; o.material.transparent = true; } o.renderOrder = 10; });
+  item.cena.add(filtro);
+  const r2 = texto3d("filtro 3×3", "#c4b5fd", 0.75); r2.position.set(-0.6, 1.5, 0); item.cena.add(r2);
+  // Mapa de ativação 5x5 à direita.
+  const c = document.createElement("canvas"); c.width = c.height = PASSOS_2D * 16;
+  const tex = new THREE.CanvasTexture(c); tex.magFilter = THREE.NearestFilter;
+  const gm = new THREE.PlaneGeometry(1.6, 1.6), mapa = new THREE.Mesh(gm, new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide }));
+  mapa.add(borda(gm, 0xfda4af, 0.8)); mapa.position.set(3.2, 0, 0); item.cena.add(mapa);
+  const r3 = texto3d("mapa de ativação", "#fda4af", 0.85); r3.position.set(3.2, -1.3, 0); item.cena.add(r3);
+  const linha = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]), new THREE.LineDashedMaterial({ color: 0xc4b5fd, dashSize: 0.12, gapSize: 0.08 }));
+  item.cena.add(linha);
+  const valores = new Float32Array(PASSOS_2D * PASSOS_2D);
+  // Os quadros mostrados são os de número par do vídeo sintético; neste, a mão está em x = 18 + 60 * 6 / 15 pixels de 96.
+  const xMao = (18 + 60 * (2 * QUADRO_2D) / 15) / 96 * LADO_2D - LADO_2D / 2, yMao = 0.07;
+  function pintar(marcado) {
+    const g = c.getContext("2d"), L = 16;
+    for (let a = 0; a < PASSOS_2D; a++) for (let b = 0; b < PASSOS_2D; b++) { const [r, gg, bb] = magma(valores[a * PASSOS_2D + b]); g.fillStyle = `rgb(${r},${gg},${bb})`; g.fillRect(b * L, a * L, L, L); }
+    if (marcado !== undefined) { g.strokeStyle = "#c4b5fd"; g.lineWidth = 3; g.strokeRect((marcado % PASSOS_2D) * L + 1.5, Math.floor(marcado / PASSOS_2D) * L + 1.5, L - 3, L - 3); }
+    tex.needsUpdate = true;
+  }
+  let k = -1, tempo = 0;
+  function passo() {
+    k = (k + 1) % (PASSOS_2D * PASSOS_2D);
+    if (k === 0) valores.fill(0);
+    const a = Math.floor(k / PASSOS_2D), b = k % PASSOS_2D, x = (b - 2) * tam, y = (2 - a) * tam;
+    filtro.position.set(imagem.position.x + x, y, 0.02);
+    const ativ = Math.max(0, 1 - Math.hypot(x - xMao, y - yMao) / 0.5);
+    valores[k] = ativ; pintar(k);
+    linha.geometry.setFromPoints([filtro.position.clone(), new THREE.Vector3(mapa.position.x + (b - 2) * 0.32, (2 - a) * 0.32, 0)]); linha.computeLineDistances();
+    $("e0titulo").textContent = `Posição ${k + 1} de ${PASSOS_2D * PASSOS_2D}: linha ${a + 1}, coluna ${b + 1}`;
+    $("e0texto").textContent = ativ > 0.5 ? "Acendeu: este pedaço da imagem tem uma mão." : ativ > 0.15 ? "Acendeu um pouco: só parte da mão está aqui." : "Apagado: aqui só tem fundo.";
+    $("e0barra").style.width = Math.round(ativ * 100) + "%";
+  }
+  passo();
+  item.passo = t => {
+    // No fim de cada volta, o mapa completo fica 3 s na tela antes de recomeçar.
+    const ultimo = k === PASSOS_2D * PASSOS_2D - 1;
+    if (t - tempo > (ultimo ? 3000 : 260)) { tempo = t; passo(); }
+    if (ultimo) { $("e0titulo").textContent = "Mapa pronto: acende onde está a mão"; $("e0texto").textContent = "É tudo o que a 2D sabe desta imagem: onde há mão, não para onde ela vai."; }
+    const ang = Math.sin(t / 5000) * 0.12;
+    item.camera.position.set(1.3 + Math.sin(ang) * 7.4, 0.5, Math.cos(ang) * 7.4); item.camera.lookAt(1.3, 0, 0);
+  };
+}
+
 // Slide 1: o filtro 3x3x3 percorre o vídeo de entrada e monta um mapa de ativação.
+// Ao entrar, começa igual ao slide 2D (um quadro, filtro plano, de frente) e se desdobra no tempo.
 function montarCena1() {
   const A = D.ativacoes, item = novaCena($("cena1"), [-1.8, 2.6, 7.2], [3.6, -0.1, 0]);
   const N = A.quadros.length, ESP = 0.55, LADO = 2.2, PASSOS = 5, tam = LADO / PASSOS;
@@ -1163,7 +1241,7 @@ function montarCena1() {
     const m = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide }));
     m.add(borda(geo, 0xfda4af, 0.8));
     m.rotation.y = Math.PI / 2; m.position.set(X0 + t * 0.42, 0, 0); item.cena.add(m);
-    mapas.push({ c, tex, valores: new Float32Array(PASSOS * PASSOS) });
+    mapas.push({ c, tex, valores: new Float32Array(PASSOS * PASSOS), malha: m });
   }
   const rotM = texto3d("mapa de ativação", "#fda4af", 0.85); rotM.position.set(X0 + 1.1, -1.25, 0); item.cena.add(rotM);
   function pintarMapa(t, marcado) {
@@ -1206,6 +1284,7 @@ function montarCena1() {
   }
   function mudar(passo) { est.k = (est.k + passo + TOTAL) % TOTAL; if (est.k === 0 && passo > 0) limparMapas(); aplicar(); }
   INTERATIVOS.cnn1 = classe => {
+    if (intro !== undefined && intro !== null) intro = -1e9;  // um gesto durante a transição pula para o fim dela
     if (classe === "Swiping Right" || classe === "Swiping Left") { est.auto = false; mudar(classe === "Swiping Right" ? 1 : -1); }
     else if (classe === "Stop Sign") { est.auto = !est.auto; aplicar(); aviso(est.auto ? "▶ Automático" : "⏸ Passo a passo"); }
     else if (classe === "Thumb Up") { est.video = est.video === "deslizando" ? "parada" : "deslizando"; mostrarVideo(); limparMapas(); est.k = 0; aplicar(); aviso(`Mão ${est.video}`); }
@@ -1214,7 +1293,41 @@ function montarCena1() {
     acenderBotao("cnn1", classe);
   };
   aplicar();
+  // Transição 2D → 3D: começa com um só quadro e o filtro plano, vistos de frente, como no slide anterior;
+  // os outros quadros se espalham no eixo do tempo e o filtro ganha profundidade.
+  const DUR_INTRO = 4200, XMEIO = QUADRO_2D * ESP;
+  const suave = x => x < 0.5 ? 4 * x * x * x : 1 - (-2 * x + 2) ** 3 / 2;
+  let intro = null;
+  function quadroIntro(t) {
+    if (intro === null) intro = t;
+    const p = Math.min(1, (t - intro) / DUR_INTRO);
+    const abre = suave(Math.min(1, Math.max(0, (p - 0.15) / 0.55)));  // quadros se espalham
+    const fundo = suave(Math.min(1, Math.max(0, (p - 0.45) / 0.4)));  // filtro ganha profundidade
+    planos.forEach((pl, i) => {
+      pl.position.x = XMEIO + (i * ESP - XMEIO) * abre;
+      pl.material.opacity = i === QUADRO_2D ? 0.88 : 0.88 * abre;
+    });
+    filtro.scale.x = Math.max(0.02, fundo);
+    filtro.position.set(XMEIO, yMao, zMao(QUADRO_2D));
+    const fim = p >= 1;
+    mapas.forEach(m => { m.malha.visible = fim; }); rotM.visible = fim; linha.visible = fim; rotT.visible = abre > 0.3;
+    // Começa de frente para o quadro, do lado em que ele não aparece espelhado, e gira até a vista de lado.
+    const ang = Math.PI / 2 + (-0.64 - Math.PI / 2) * suave(Math.min(1, Math.max(0, (p - 0.1) / 0.8)));
+    item.camera.position.set(3.6 + Math.sin(ang) * 9, 2.6 * suave(Math.min(1, p / 0.9)) + 0.2, Math.cos(ang) * 9); item.camera.lookAt(3.6, -0.1, 0);
+    $("e1modo").textContent = "De 2D para 3D";
+    $("e1titulo").textContent = p < 0.45 ? "Era assim na 2D: uma imagem e um filtro plano" : p < 0.85 ? "Os quadros do vídeo se enfileiram no tempo" : "O filtro ganha profundidade: 3×3 vira 3×3×3";
+    $("e1texto").innerHTML = p < 0.45 ? "Uma foto só, sem passado nem futuro." : p < 0.85 ? "Agora a entrada são <b>vários quadros</b> em sequência: o vídeo." : "Ele cobre <b>3 quadros seguidos</b> de uma vez, então enxerga a mão mudando de lugar.";
+    $("e1barra").style.width = Math.round(p * 100) + "%";
+    if (fim) { filtro.scale.x = 1; est.tempo = t; limparMapas(); est.k = 0; aplicar(); intro = undefined; }
+  }
+  // Ao entrar no slide, a transição recomeça (o filtro volta a 3D e o vídeo a deslizar, como no início).
+  $("cena1").closest(".slide")._aoEntrar = () => {
+    if (est.filtro !== "3d") { est.filtro = "3d"; montarFiltro(); }
+    if (est.video !== "deslizando") { est.video = "deslizando"; mostrarVideo(); }
+    est.auto = true; intro = null;
+  };
   item.passo = t => {
+    if (intro !== undefined) { quadroIntro(t); return; }
     if (est.auto && t - est.tempo > 160) { est.tempo = t; mudar(1); }
     // Vista de frente e um pouco de lado, para ver o conteúdo dos quadros e dos mapas.
     const ang = -0.64 + Math.sin(t / 4500) * 0.18;
@@ -1354,7 +1467,7 @@ function montarCena2() {
 }
 if (typeof THREE !== "undefined") {
   // Uma cena com problema não pode impedir a outra de aparecer.
-  for (const montar of [montarCena1, montarCena2]) { try { montar(); } catch (erro) { console.error("Cena 3D indisponível:", erro); } }
+  for (const montar of [montarCena0, montarCena1, montarCena2]) { try { montar(); } catch (erro) { console.error("Cena 3D indisponível:", erro); } }
   const laco3d = t => {
     requestAnimationFrame(laco3d);
     for (const item of CENAS3D) {
@@ -1429,6 +1542,7 @@ function mostrar(n) {
   slides.forEach(x => x.classList.toggle("aberta", x === s && !!x.dataset.demo));
   prepararTracos(s, true); requestAnimationFrame(() => requestAnimationFrame(() => prepararTracos(s, false)));
   contar(s);
+  if (s._aoEntrar) s._aoEntrar();
   atual = n; history.replaceState(null, "", "#" + (n + 1));
   $("numSlide").textContent = `${n + 1} / ${slides.length}`;
   $("progresso").firstElementChild.style.width = ((n + 1) / slides.length * 100) + "%";
