@@ -627,7 +627,54 @@
       <div class="an" style="--d:2"><svg id="matriz2" width="820" height="560"></svg></div>
       <div class="an" style="--d:3">
         <div class="cartao"><h3>Fotos de validação</h3><p><b data-texto="matriz2_acerto"></b>% de acerto em <span data-texto="matriz2_n"></span> fotos de pessoas fora do treino. Quatro dedos se confunde com o sinal de pare.</p></div>
-        <div class="cartao" style="margin-top:20px;border-left:6px solid var(--alerta)"><h3>Teste na webcam</h3><p>No teste informal ao vivo, só <b>um dedo</b> passou do limiar com folga. Foto e vídeo real são diferentes: por isso as demos usam um e dois dedos, e a medida formal na webcam é o próximo passo.</p></div>
+        <div class="cartao" style="margin-top:20px;border-left:6px solid var(--alerta)"><h3>Teste na webcam</h3><p>No testador ao vivo, um e dois dedos dispararam <b><span data-texto="w_antes_ac"></span> de <span data-texto="w_antes_n"></span></b> vezes. Foto e vídeo real são diferentes: por isso tentamos de novo, com vídeo real.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15b. Dedos: 2ª tentativa, com vídeo real -->
+  <section class="slide" data-titulo="Dedos: 2ª tentativa">
+    <p class="kicker an">Passo 6 · 2ª tentativa · vídeo real</p>
+    <h2 class="an" style="--d:1">Treinamos de novo, agora com vídeo real. Ainda não deu certo</h2>
+    <div class="grade" style="grid-template-columns:400px 1fr;gap:28px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="cartao licao an" style="--d:2"><h3>🎥 Vídeo real de webcam</h3><p>IPN Hand: pessoas apontando com um e dois dedos em webcam de notebook. Só os trechos com a mão quase parada.</p></div>
+        <div class="cartao licao an" style="--d:3"><h3>🖐️ Fotos com movimento natural</h3><p>No lugar do tremor quadro a quadro: deslize suave, leve zoom e giro, desfoque.</p></div>
+        <div class="cartao licao an" style="--d:4"><h3>🎯 Escolha em vídeo real</h3><p>O modelo passou a ser julgado em vídeo de pessoas fora do treino, nunca em foto.</p></div>
+      </div>
+      <div>
+        <div class="cartao an" style="--d:3;padding:16px 22px"><h3 style="font-size:20px">Acerto (1º lugar), pessoas fora do treino: antes → depois</h3><svg id="graficoDedos2" width="880" height="270"></svg></div>
+        <div class="grade" style="grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
+          <div class="cartao an" style="--d:4;border-top-color:var(--alerta)"><h3>Na webcam do grupo</h3><p>Um e dois dedos ficaram em 1º lugar <b><span data-texto="w_dep_pri"></span> de <span data-texto="w_dep_npos"></span></b> vezes, mas dispararam só <b><span data-texto="w_dep_ac"></span> de <span data-texto="w_dep_n"></span></b>: a confiança fica abaixo de 70%.</p></div>
+          <div class="cartao an" style="--d:5;border-top-color:var(--ouro)"><h3>O custo</h3><p>Acerto nos gestos antigos caiu de <b><span data-texto="d2_jantes"></span>%</b> para <b><span data-texto="d2_jdep"></span>%</b>. Nos vídeos de língua de sinais, os dedos ficaram em 0%.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15c. Dedos: o que aprendemos e o objetivo até a entrega -->
+  <section class="slide" data-titulo="Dedos: próximo objetivo">
+    <p class="kicker an">Passo 6 · o que aprendemos</p>
+    <h2 class="an" style="--d:1">Os dedos são o objetivo do grupo até a entrega final</h2>
+    <div class="grade" style="grid-template-columns:1fr 1fr;gap:28px;align-items:stretch">
+      <div class="cartao an" style="--d:2">
+        <h3>Achado: o vídeo real dispara mais</h3>
+        <p style="font-size:17px;margin-bottom:16px">Falsos disparos por minuto, com o gatilho das demos, em vídeos sem gesto:</p>
+        <div class="grade" style="grid-template-columns:repeat(3,1fr);gap:12px">
+          <div><div class="numero bom" style="font-size:44px" data-texto="d2_fj"></div><div class="rotulo">no Jester (modelo atual)</div></div>
+          <div><div class="numero ruim" style="font-size:44px" data-texto="d2_fr_antes"></div><div class="rotulo">em webcam real, IPN (modelo atual)</div></div>
+          <div><div class="numero destaque" style="font-size:44px" data-texto="d2_fr_dep"></div><div class="rotulo">em webcam real, IPN (2ª tentativa)</div></div>
+        </div>
+        <p class="nota" style="margin-top:16px">Medido em <span data-texto="d2_min"></span> min sem gesto de 13 pessoas fora do treino. Medir só no Jester subestima o uso real; o treino com vídeo real reduz esses disparos.</p>
+      </div>
+      <div class="cartao an" style="--d:3;border-top:6px solid var(--acento)">
+        <h3>Até a entrega final (17–18/11)</h3>
+        <ul class="lista" style="margin-top:6px">
+          <li data-i="📹" style="font-size:20px">Gravar o grupo fazendo um e dois dedos parados, na nossa câmera e na nossa luz.</li>
+          <li data-i="🎚️" style="font-size:20px">Testar um limiar próprio para os dedos, medindo antes os falsos disparos em vídeo real.</li>
+          <li data-i="🧠" style="font-size:20px">Retreinar sem perder os gestos antigos, com mais vídeos do Jester por época.</li>
+        </ul>
+        <p class="nota" style="margin-top:14px">Até lá, as demos seguem com o modelo anterior.</p>
       </div>
     </div>
   </section>
@@ -767,6 +814,12 @@ const textos = {
     h_baixado: fmt(h.gb_baixados), h_usadas: n(h.fotos_treino + h.fotos_validacao), h_n_classes: Object.keys(h.usadas).length, d_seg: n(dm.segmentos),
     d_pessoas: dm.pessoas, d_dur: fmt(dm.duracao_media_s, 2), d_grav: dm.gravacoes_baixadas, d_gb: fmt(dm.gb_baixados),
     h_p_treino: n(h.pessoas_treino), h_p_val: n(h.pessoas_validacao), h_p_comum: h.pessoas_em_comum, h_fotos_treino: n(h.fotos_treino),
+    w_antes_ac: D.dedos2.webcam_antes.acertos, w_antes_n: D.dedos2.webcam_antes.tentativas,
+    w_dep_ac: D.dedos2.webcam_depois.acertos, w_dep_n: D.dedos2.webcam_depois.tentativas,
+    w_dep_pri: D.dedos2.webcam_depois.primeiro, w_dep_npos: D.dedos2.webcam_depois.com_posicao,
+    d2_jantes: fmt(D.dedos2.jester_antes), d2_jdep: fmt(D.dedos2.jester_depois),
+    d2_fj: fmt(D.dedos2.falsos_jester, 2), d2_fr_antes: fmt(D.dedos2.falsos_real_antes, 2), d2_fr_dep: fmt(D.dedos2.falsos_real_depois, 2),
+    d2_min: fmt(D.dedos2.minutos_real),
     t_jester: n(t.jester_por_epoca), t_antigas: t.saidas_antigas, t_saidas: t.saidas, t_lr: taxa(t.lr), t_lr_cabeca: taxa(t.lr_cabeca), t_epocas: t.epocas,
   });
 })();
@@ -918,6 +971,29 @@ matriz($("matriz1"), D.matriz, { celula: 40, esquerda: 230, topo: 175 });
 barrasH($("graficoRanking"), D.ranking);
 linhas($("graficoNovos"), [{ nome: "gestos novos", valores: D.novos.epocas.map(e => e.novos), cor: COR.azul }, { nome: "gestos antigos", valores: D.novos.epocas.map(e => e.antigos), cor: COR.acento }], { min: 60, max: 100, marca: D.novos.escolhida });
 matriz($("matriz2"), D.matriz2, { celula: 46, esquerda: 200, topo: 170 });
+
+// 2ª tentativa dos dedos: antes (modelo atual) e depois, em vídeo real de pessoas fora do treino.
+(() => {
+  const svg = $("graficoDedos2"), L = +svg.getAttribute("width"), A = +svg.getAttribute("height"), base = 58, topo = 28;
+  const grupos = [["Um dedo", "IPN (webcam)", "ipn_um"], ["Dois dedos", "IPN (webcam)", "ipn_dois"], ["Um dedo", "língua de sinais", "sinais_um"], ["Dois dedos", "língua de sinais", "sinais_dois"]];
+  const passo = (L - 20) / grupos.length, larg = 70, Y = v => A - base - (A - base - topo) * v / 100;
+  no(svg, "line", { x1: 10, x2: L - 10, y1: A - base, y2: A - base, stroke: COR.linha, "stroke-width": 2 });
+  grupos.forEach(([g, fonte, k], i) => {
+    const [antes, depois] = D.dedos2.ipn[k], x0 = 10 + passo * i + passo / 2 - larg - 4;
+    [[antes, COR.cinza, 0], [depois, COR.acento, 1]].forEach(([v, cor, j]) => {
+      const x = x0 + j * (larg + 8), y = Y(v);
+      no(svg, "rect", { x, y, width: larg, height: Math.max(2, A - base - y), rx: 8, fill: cor, class: "barra", style: `transition-delay:${300 + (i * 2 + j) * 120}ms` });
+      no(svg, "text", { x: x + larg / 2, y: y - 8, "text-anchor": "middle", "font-size": 20, "font-weight": 800, fill: j ? COR.tinta : COR.suave, class: "ponto",
+                        style: `transition-delay:${900 + (i * 2 + j) * 120}ms` }, fmt(v) + "%");
+    });
+    no(svg, "text", { x: 10 + passo * i + passo / 2, y: A - base + 24, "text-anchor": "middle", "font-size": 17, "font-weight": 700, fill: COR.tinta }, g);
+    no(svg, "text", { x: 10 + passo * i + passo / 2, y: A - base + 44, "text-anchor": "middle", "font-size": 15, fill: COR.suave }, fonte);
+  });
+  [["antes (modelo atual)", COR.cinza], ["2ª tentativa", COR.acento]].forEach(([t, c], i) => {
+    no(svg, "rect", { x: L - 360 + i * 190, y: 2, width: 14, height: 14, rx: 3, fill: c });
+    no(svg, "text", { x: L - 340 + i * 190, y: 14, "font-size": 15, fill: COR.suave }, t);
+  });
+})();
 
 // Jester: vídeos de treino por classe, em três colunas de barras.
 (() => {

@@ -187,7 +187,34 @@ def main():
                          "lr": config("cnn_3d_mais_gestos")["lr"], "lr_cabeca": config("cnn_3d_mais_gestos")["lr_cabeca"],
                          "saidas_antigas": len(salvo_nomes := __import__("torch").load(R / "cnn_3d/melhor.pt", map_location="cpu", weights_only=False)["nomes"]),
                          "saidas": len(salvo_nomes) + len(NOVOS)}
-    d["jester_classes"] = [{"gesto": PT[g], "n": n} for g, n in d["bases"]["jester"]["treino_por_classe"].items()]
+    # 2ª tentativa dos dedos (src/treinar_dedos.py), com vídeo real; e as sessões do testador na webcam, por modelo.
+    origem2 = ler_json("resultados/jester/cnn_3d_dedos/origem.json")
+    final2 = ler_json("resultados/jester/cnn_3d_dedos/resumo.json")[-1]
+    fluxo2 = ler_json("resultados/jester/cnn_3d_dedos/fluxo.json")
+    fluxo_ipn = ler_json("resultados/dedos/fluxo_ipn.json")
+    sessoes = {}
+    for pasta in sorted((RAIZ / "resultados/webcam").glob("*_*")):
+        if not (pasta / "resumo.json").exists():
+            continue
+        modelo = ler_json(pasta.relative_to(RAIZ).as_posix() + "/resumo.json")["modelo"].replace("\\", "/")
+        with (pasta / "tentativas.csv").open(encoding="utf-8-sig") as f:
+            sessoes.setdefault(modelo, []).extend(l for l in csv.DictReader(f) if l["gesto"] in ("One Finger", "Two Fingers"))
+    def webcam(modelo):
+        t = sessoes.get(modelo, [])
+        com_posicao = [l for l in t if l.get("melhor_posicao", "").strip()]
+        return {"tentativas": len(t), "acertos": sum(l["resultado"] == "acerto" for l in t),
+                "primeiro": sum(l["melhor_posicao"] == "1" for l in com_posicao), "com_posicao": len(com_posicao)}
+    antigo, novo = "resultados/jester/cnn_3d_mais_gestos/melhor.pt", "resultados/jester/cnn_3d_dedos/final.pt"
+    d["dedos2"] = {
+        "ipn": {k: [round(100 * origem2[f"{p}_{g}_top1"], 1), round(100 * final2[f"{p}_{g}_top1"], 1)]
+                for k, (p, g) in {"ipn_um": ("ipn", "One Finger"), "ipn_dois": ("ipn", "Two Fingers"),
+                                  "sinais_um": ("sinais", "One Finger"), "sinais_dois": ("sinais", "Two Fingers")}.items()},
+        "jester_antes": d["novos"]["top1_antigos"], "jester_depois": round(100 * fluxo2["top1_antigos_validacao"], 1),
+        "falsos_real_antes": fluxo_ipn[antigo]["falsos_por_minuto_sem_gesto"], "falsos_real_depois": fluxo_ipn[novo]["falsos_por_minuto_sem_gesto"],
+        "minutos_real": fluxo_ipn[antigo]["minutos_sem_gesto"], "falsos_jester": round(fluxo2["origem"]["falsos_por_min"], 2),
+        "webcam_antes": webcam(antigo), "webcam_depois": webcam(novo),
+    }
+    d["jester_classes"] =[{"gesto": PT[g], "n": n} for g, n in d["bases"]["jester"]["treino_por_classe"].items()]
     d["matriz2"] = matriz("resultados/jester/cnn_3d_mais_gestos/matriz_confusao_hagrid_val.json", NOVOS + ["Stop Sign", "Thumb Up", "Thumb Down"], NOVOS + ["Stop Sign", "Thumb Up", "Thumb Down"])
 
     modelo = (RAIZ / "demo/apresentacao_modelo.html").read_text(encoding="utf-8")
