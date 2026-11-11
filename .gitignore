@@ -12,3 +12,6 @@ resultados/jester/arq_*/ultimo.pt
 # Gerados por demo/testar_webcam.py --resumo a partir das pastas de cada sessao
 resultados/webcam/resumo_geral.json
 resultados/webcam/todas_tentativas.csv
+
+# Ponto de retomada do treino dos dedos (o modelo esta em final.pt)
+resultados/jester/cnn_3d_dedos/ultimo.pt
