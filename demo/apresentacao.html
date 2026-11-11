@@ -289,7 +289,7 @@
     <div class="grade an" style="--d:4;grid-template-columns:repeat(3,1fr);margin-top:36px">
       <div class="cartao"><h3>Métrica principal</h3><p><b class="destaque">Falsos disparos por minuto</b>, e não só a acurácia.</p></div>
       <div class="cartao"><h3>Restrição</h3><p>Rede treinada <b>do zero</b>, sem pesos prontos de terceiros.</p></div>
-      <div class="cartao"><h3>Teste real</h3><p>Webcam comum, em <b>tempo real</b>, em três aplicações.</p></div>
+      <div class="cartao"><h3>Teste real</h3><p>Webcam comum, em <b>tempo real</b>, em três demos ao vivo.</p></div>
     </div>
   </section>
 
@@ -637,8 +637,8 @@
     <div class="enfeite an" style="--d:2" data-icone="🎥" aria-hidden="true"></div>
     <div class="numParte an">03</div>
     <h1 class="an" style="--d:1">Ao vivo</h1>
-    <p class="lead an" style="--d:2">O mesmo modelo, em tempo real, em quatro situações diferentes.</p>
-    <div class="indice an" style="--d:3"><span><b>1</b>Teste geral</span><span><b>2</b>Tênis</span><span><b>3</b>Carro</span><span><b>4</b>Sala cirúrgica</span></div>
+    <p class="lead an" style="--d:2">O mesmo modelo, em tempo real, em três situações diferentes.</p>
+    <div class="indice an" style="--d:3"><span><b>1</b>Teste geral</span><span><b>2</b>Carro</span><span><b>3</b>Sala cirúrgica</span></div>
   </section>
 
   <!-- 16. Teste ao vivo -->
@@ -655,13 +655,6 @@
         <ul id="listaDisparos"></ul>
       </div>
     </div>
-  </section>
-
-  <!-- 17. Tênis -->
-  <section class="slide demo" data-titulo="Tênis" data-demo="tenis">
-    <div class="topo"><span class="vivo">AO VIVO</span><h2>Jogo de tênis</h2><span class="espaco"></span>
-      <span class="chip">Deslizar: <b>golpes</b></span><span class="chip">Pare: <b>pausa</b></span><span class="chip">Rolar a mão: <b>troca o slide</b></span></div>
-    <div class="quadro"></div>
   </section>
 
   <!-- 18. Carro -->
@@ -725,7 +718,7 @@
     <div class="cartao an" style="--d:5;margin-top:28px;display:flex;gap:40px;align-items:center">
       <div><div class="numero destaque" style="font-size:52px"><span data-texto="teste_top1"></span>%</div><div class="rotulo">acerto no teste</div></div>
       <div><div class="numero destaque" style="font-size:52px"><span data-texto="falsos_por_min"></span></div><div class="rotulo">falso disparo por minuto</div></div>
-      <div><div class="numero destaque" style="font-size:52px">3</div><div class="rotulo">aplicações ao vivo com o mesmo modelo</div></div>
+      <div><div class="numero destaque" style="font-size:52px">3</div><div class="rotulo">demos ao vivo com o mesmo modelo</div></div>
       <p class="lead" style="font-size:20px;flex:1">Obrigado! Perguntas e sugestões são muito bem-vindas.</p>
     </div>
   </section>
@@ -1523,10 +1516,9 @@ const NOMES_PARTES = {};
 })();
 let atual = Math.min(slides.length - 1, Math.max(0, parseInt(location.hash.slice(1)) - 1 || 0));
 let travada = false, bloqueados = 0, disparosTeste = 0;
-const DEMOS = { tenis: "tenis.html", painel: "painel_carro.html", hospital: "hospital.html" };
+const DEMOS = { painel: "painel_carro.html", hospital: "hospital.html" };
 const BASE = { "Swiping Left": "anterior", "Swiping Right": "proxima", "Stop Sign": "alternar" };
 const MAPAS = {
-  tenis: BASE,
   painel: { ...BASE, "Thumb Up": "volume_mais", "Thumb Down": "volume_menos", "Drumming Fingers": "tamborilar", "Pushing Hand Away": "ajuda",
             "One Finger": "funcao", "Pulling Hand In": "funcao_anterior", "Two Fingers": "tamborilar" },
   hospital: { ...BASE, "Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking Hand": "normal", "Zooming In With Full Hand": "zoom_mais",
