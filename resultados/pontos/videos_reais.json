@@ -1,0 +1,130 @@
+{
+  "opcoes": {
+    "qps": 15.0,
+    "tempo_estavel": 0.5
+  },
+  "ipn": {
+    "videos": 52,
+    "minutos_de_video": 118.1,
+    "minutos_sem_gesto": 31.5,
+    "falsos_em_sem_gesto": 84,
+    "falsos_por_minuto_sem_gesto": 2.666,
+    "falsos_por_classe": {
+      "Fist": 51,
+      "Two Fingers": 17,
+      "Four Fingers": 7,
+      "Three Fingers": 5,
+      "One Finger": 4
+    },
+    "disparos_por_trecho": {
+      "B0A": 468,
+      "B0B": 443,
+      "logo após um gesto": 153,
+      "D0X": 84,
+      "G11": 58,
+      "G10": 49,
+      "G08": 45,
+      "G09": 42,
+      "G02": 41,
+      "G01": 35,
+      "G05": 25,
+      "G07": 21,
+      "G06": 17,
+      "G03": 16,
+      "G04": 13,
+      "entre trechos": 1
+    },
+    "apontar_One Finger": {
+      "trechos": 265,
+      "trechos_com_disparo_certo": 223,
+      "pct_trechos_certos": 84.2,
+      "trechos_com_algum_disparo": 227,
+      "disparos": {
+        "One Finger": 364,
+        "Two Fingers": 73,
+        "Fist": 45,
+        "Three Fingers": 2,
+        "Four Fingers": 1
+      },
+      "pct_quadros_com_mao": 92.7,
+      "pct_quadros_pose_certa": 59.7
+    },
+    "apontar_Two Fingers": {
+      "trechos": 264,
+      "trechos_com_disparo_certo": 229,
+      "pct_trechos_certos": 86.7,
+      "trechos_com_algum_disparo": 235,
+      "disparos": {
+        "Two Fingers": 368,
+        "Fist": 55,
+        "Three Fingers": 26,
+        "One Finger": 15
+      },
+      "pct_quadros_com_mao": 91.7,
+      "pct_quadros_pose_certa": 66.1
+    }
+  },
+  "Slovo sinais": {
+    "One Finger": {
+      "videos": 20,
+      "videos_com_disparo_certo": 11,
+      "pct_videos_certos": 55.0,
+      "disparos": {
+        "One Finger": 11,
+        "Three Fingers": 1,
+        "Four Fingers": 1,
+        "Fist": 1
+      },
+      "pct_quadros_com_mao": 66.2,
+      "pct_quadros_pose_certa": 35.1
+    },
+    "Two Fingers": {
+      "videos": 20,
+      "videos_com_disparo_certo": 15,
+      "pct_videos_certos": 75.0,
+      "disparos": {
+        "Two Fingers": 15
+      },
+      "pct_quadros_com_mao": 74.7,
+      "pct_quadros_pose_certa": 46.1
+    }
+  },
+  "ASL Citizen sinais": {
+    "One Finger": {
+      "videos": 31,
+      "videos_com_disparo_certo": 12,
+      "pct_videos_certos": 38.7,
+      "disparos": {
+        "One Finger": 12,
+        "Fist": 1
+      },
+      "pct_quadros_com_mao": 33.9,
+      "pct_quadros_pose_certa": 24.4
+    },
+    "Two Fingers": {
+      "videos": 32,
+      "videos_com_disparo_certo": 8,
+      "pct_videos_certos": 25.0,
+      "disparos": {
+        "Two Fingers": 8,
+        "Fist": 1
+      },
+      "pct_quadros_com_mao": 34.4,
+      "pct_quadros_pose_certa": 27.0
+    }
+  },
+  "Slovo sem sinal": {
+    "videos": 400,
+    "minutos": 11.0,
+    "falsos": 25,
+    "falsos_por_minuto": 2.28,
+    "falsos_por_classe": {
+      "Fist": 11,
+      "Two Fingers": 5,
+      "One Finger": 4,
+      "Four Fingers": 4,
+      "Three Fingers": 1
+    },
+    "pct_quadros_com_mao": 35.9
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "resultados/jester/cnn_3d/melhor.pt": {
+    "minutos_de_video": 118.1,
+    "minutos_sem_gesto": 31.5,
+    "falsos_em_sem_gesto": 24,
+    "falsos_por_minuto_sem_gesto": 0.762,
+    "falsos_por_classe": {
+      "Sliding Two Fingers Down": 9,
+      "Zooming Out With Two Fingers": 5,
+      "Pushing Two Fingers Away": 4,
+      "Sliding Two Fingers Up": 2,
+      "Sliding Two Fingers Left": 2,
+      "Sliding Two Fingers Right": 1,
+      "Swiping Down": 1
+    },
+    "disparos_por_trecho": {
+      "B0B": 643,
+      "B0A": 548,
+      "logo após um gesto": 98,
+      "G02": 30,
+      "G09": 26,
+      "D0X": 24,
+      "G11": 23,
+      "G07": 23,
+      "G03": 17,
+      "G01": 17,
+      "G10": 16,
+      "G04": 16,
+      "G05": 15,
+      "G06": 12,
+      "G08": 11,
+      "entre trechos": 1
+    },
+    "apontar_um_dedo": {
+      "trechos": 265,
+      "disparos_certos": 0,
+      "disparos": {
+        "Sliding Two Fingers Right": 174,
+        "Sliding Two Fingers Up": 120,
+        "Sliding Two Fingers Down": 107,
+        "Sliding Two Fingers Left": 98,
+        "Pushing Two Fingers Away": 22
+      }
+    },
+    "apontar_dois_dedos": {
+      "trechos": 264,
+      "disparos_certos": 0,
+      "disparos": {
+        "Sliding Two Fingers Right": 167,
+        "Sliding Two Fingers Up": 154,
+        "Sliding Two Fingers Down": 151,
+        "Sliding Two Fingers Left": 69,
+        "Pushing Two Fingers Away": 65
+      }
+    }
+  }
+}
