@@ -1,0 +1,8 @@
+# Ambiente separado (.venv_pontos) para a parte nova com o MediaPipe Hand Landmarker.
+# O demo/python_pontos.bat cria o ambiente sozinho na primeira vez. Para criar à mão:
+#   uv venv .venv_pontos --python 3.12
+#   uv pip install --python .venv_pontos -r requirements_pontos.txt --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple --index-strategy unsafe-best-match
+# O mediapipe já instala o opencv-contrib-python e o numpy. Não instale o opencv-python aqui: os dois disputam o mesmo cv2.
+mediapipe
+torch
+pillow

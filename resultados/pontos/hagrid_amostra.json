@@ -1,0 +1,312 @@
+{
+  "o_que_e": "Contagem de dedos por regras sobre os pontos do MediaPipe, em fotos de validação do HaGRIDv2. Limiares ajustados na metade 'ajuste' das pessoas e medidos na metade 'teste'.",
+  "limiares_iniciais": {
+    "reta": 0.8,
+    "angulo": 60.0,
+    "polegar_reta": 0.85,
+    "polegar_fora": 1.2
+  },
+  "limiares_em_uso_em_pontos_mao": {
+    "reta": 0.85,
+    "angulo": 65.0,
+    "polegar_reta": 0.95,
+    "polegar_fora": 1.2
+  },
+  "limiares_ajustados": {
+    "reta": 0.85,
+    "angulo": 65.0,
+    "polegar_reta": 0.95,
+    "polegar_fora": 1.2
+  },
+  "nota_na_metade_de_ajuste": 0.9040573929568821,
+  "teste_com_limiares_iniciais": {
+    "fotos": 410,
+    "mao_encontrada": 0.9365853658536586,
+    "acerto_medio_numeros": 0.8707556743901474,
+    "acerto_numeros_quando_acha_mao": 0.9396984924623115,
+    "nao_numero_ficou_sem_numero": 0.9237093030717892,
+    "acerto_por_classe": {
+      "call": 0.6538461538461539,
+      "dislike": 0.9230769230769231,
+      "fist": 0.6521739130434783,
+      "four": 1.0,
+      "like": 0.9375,
+      "little_finger": 0.8928571428571429,
+      "one": 0.8387096774193549,
+      "palm": 0.9310344827586207,
+      "peace": 0.8888888888888888,
+      "rock": 0.8,
+      "stop": 0.9032258064516129,
+      "three": 0.84375,
+      "three2": 0.90625,
+      "two_up": 0.9655172413793104
+    },
+    "confusao": {
+      "call": {
+        "None": 4,
+        "sem_mao": 4,
+        "Two Fingers": 17,
+        "Fist": 1
+      },
+      "dislike": {
+        "None": 24,
+        "sem_mao": 1,
+        "Fist": 1
+      },
+      "fist": {
+        "Fist": 15,
+        "sem_mao": 4,
+        "None": 3,
+        "Three Fingers": 1
+      },
+      "four": {
+        "Four Fingers": 30
+      },
+      "like": {
+        "None": 30,
+        "sem_mao": 2
+      },
+      "little_finger": {
+        "One Finger": 25,
+        "Two Fingers": 2,
+        "sem_mao": 1
+      },
+      "mute": {
+        "One Finger": 4,
+        "Two Fingers": 18,
+        "None": 3,
+        "Fist": 2,
+        "sem_mao": 1
+      },
+      "no_gesture": {
+        "None": 21,
+        "Three Fingers": 7,
+        "Two Fingers": 4,
+        "sem_mao": 1,
+        "Four Fingers": 1
+      },
+      "ok": {
+        "Four Fingers": 34,
+        "Two Fingers": 1,
+        "sem_mao": 1
+      },
+      "one": {
+        "One Finger": 26,
+        "Two Fingers": 3,
+        "sem_mao": 2
+      },
+      "palm": {
+        "None": 27,
+        "sem_mao": 2
+      },
+      "peace": {
+        "Two Fingers": 32,
+        "One Finger": 1,
+        "sem_mao": 2,
+        "None": 1
+      },
+      "point": {
+        "sem_mao": 6,
+        "None": 13,
+        "One Finger": 8,
+        "Two Fingers": 8,
+        "Fist": 3
+      },
+      "rock": {
+        "Two Fingers": 20,
+        "Three Fingers": 4,
+        "One Finger": 1
+      },
+      "stop": {
+        "None": 28,
+        "sem_mao": 2,
+        "Four Fingers": 1
+      },
+      "three": {
+        "Three Fingers": 27,
+        "Four Fingers": 3,
+        "sem_mao": 2
+      },
+      "three2": {
+        "Three Fingers": 29,
+        "sem_mao": 3
+      },
+      "two_up": {
+        "Two Fingers": 28,
+        "sem_mao": 1
+      }
+    }
+  },
+  "teste_com_limiares_ajustados": {
+    "fotos": 410,
+    "mao_encontrada": 0.9365853658536586,
+    "acerto_medio_numeros": 0.8831780346385948,
+    "acerto_numeros_quando_acha_mao": 0.949748743718593,
+    "nao_numero_ficou_sem_numero": 0.9054732288012322,
+    "acerto_por_classe": {
+      "call": 0.6923076923076923,
+      "dislike": 0.8846153846153846,
+      "fist": 0.7391304347826086,
+      "four": 1.0,
+      "like": 0.9375,
+      "little_finger": 0.9285714285714286,
+      "one": 0.8387096774193549,
+      "palm": 0.896551724137931,
+      "peace": 0.8888888888888888,
+      "rock": 0.8,
+      "stop": 0.9032258064516129,
+      "three": 0.84375,
+      "three2": 0.90625,
+      "two_up": 0.9655172413793104
+    },
+    "confusao": {
+      "call": {
+        "None": 3,
+        "sem_mao": 4,
+        "Two Fingers": 18,
+        "Fist": 1
+      },
+      "dislike": {
+        "None": 23,
+        "sem_mao": 1,
+        "Four Fingers": 1,
+        "Fist": 1
+      },
+      "fist": {
+        "Fist": 17,
+        "sem_mao": 4,
+        "None": 1,
+        "Two Fingers": 1
+      },
+      "four": {
+        "Four Fingers": 30
+      },
+      "like": {
+        "None": 30,
+        "sem_mao": 2
+      },
+      "little_finger": {
+        "One Finger": 26,
+        "Two Fingers": 1,
+        "sem_mao": 1
+      },
+      "mute": {
+        "One Finger": 4,
+        "Two Fingers": 18,
+        "None": 3,
+        "Fist": 2,
+        "sem_mao": 1
+      },
+      "no_gesture": {
+        "None": 15,
+        "Four Fingers": 8,
+        "Two Fingers": 1,
+        "Three Fingers": 5,
+        "Fist": 4,
+        "sem_mao": 1
+      },
+      "ok": {
+        "Four Fingers": 23,
+        "Three Fingers": 9,
+        "One Finger": 1,
+        "sem_mao": 1,
+        "None": 2
+      },
+      "one": {
+        "One Finger": 26,
+        "Two Fingers": 3,
+        "sem_mao": 2
+      },
+      "palm": {
+        "None": 26,
+        "sem_mao": 2,
+        "Four Fingers": 1
+      },
+      "peace": {
+        "Two Fingers": 32,
+        "One Finger": 1,
+        "sem_mao": 2,
+        "None": 1
+      },
+      "point": {
+        "sem_mao": 6,
+        "Fist": 11,
+        "None": 7,
+        "One Finger": 6,
+        "Two Fingers": 8
+      },
+      "rock": {
+        "Two Fingers": 20,
+        "Three Fingers": 4,
+        "One Finger": 1
+      },
+      "stop": {
+        "None": 28,
+        "sem_mao": 2,
+        "Four Fingers": 1
+      },
+      "three": {
+        "Three Fingers": 27,
+        "Four Fingers": 3,
+        "sem_mao": 2
+      },
+      "three2": {
+        "Three Fingers": 29,
+        "sem_mao": 3
+      },
+      "two_up": {
+        "Two Fingers": 28,
+        "sem_mao": 1
+      }
+    }
+  },
+  "informativas_com_limiares_ajustados": {
+    "mute": {
+      "One Finger": 18,
+      "Two Fingers": 32,
+      "None": 3,
+      "sem_mao": 4,
+      "Fist": 2,
+      "Three Fingers": 1
+    },
+    "no_gesture": {
+      "None": 28,
+      "Four Fingers": 10,
+      "Two Fingers": 3,
+      "Three Fingers": 6,
+      "Fist": 10,
+      "sem_mao": 2,
+      "One Finger": 1
+    },
+    "ok": {
+      "Four Fingers": 40,
+      "Three Fingers": 13,
+      "None": 5,
+      "One Finger": 1,
+      "sem_mao": 1
+    },
+    "point": {
+      "Fist": 19,
+      "sem_mao": 9,
+      "None": 8,
+      "One Finger": 12,
+      "Two Fingers": 12
+    }
+  },
+  "esperado": {
+    "one": "One Finger",
+    "peace": "Two Fingers",
+    "two_up": "Two Fingers",
+    "three": "Three Fingers",
+    "three2": "Three Fingers",
+    "four": "Four Fingers",
+    "fist": "Fist",
+    "like": null,
+    "dislike": null,
+    "stop": null,
+    "palm": null,
+    "call": "Two Fingers",
+    "rock": "Two Fingers",
+    "little_finger": "One Finger"
+  }
+}
