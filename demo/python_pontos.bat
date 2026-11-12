@@ -15,6 +15,8 @@ if not exist "%RAIZ%\.venv_pontos\Lib\site-packages\mediapipe" (
 set "BASE=%APPDATA%\uv\python\cpython-3.12-windows-x86_64-none\python.exe"
 if exist "%BASE%" (
     set "PYTHONPATH=%RAIZ%\.venv_pontos\Lib\site-packages;%PYTHONPATH%"
+    rem Sem torch no .venv_pontos, usa o torch do .venv (com GPU), depois dos pacotes do MediaPipe.
+    if not exist "%RAIZ%\.venv_pontos\Lib\site-packages\torch" if exist "%RAIZ%\.venv\Lib\site-packages\torch" set "PYTHONPATH=%RAIZ%\.venv_pontos\Lib\site-packages;%PYTHONPATH%;%RAIZ%\.venv\Lib\site-packages"
     "%BASE%" %*
 ) else (
     "%RAIZ%\.venv_pontos\Scripts\python.exe" %*

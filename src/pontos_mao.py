@@ -1,7 +1,7 @@
 """Números feitos com a mão a partir dos 21 pontos do MediaPipe Hand Landmarker.
 
 Parte nova do projeto: a CNN 3D continua com os gestos de movimento do Jester, e os números
-(um a quatro dedos e punho) passam a ser decididos aqui, pela forma da mão.
+(um a quatro dedos) passam a ser decididos aqui, pela forma da mão.
 
 Três peças:
   - DetectorMao: roda o Hand Landmarker (modelo do Google, baixado sozinho na primeira vez) e
@@ -31,8 +31,10 @@ MODELO_MAO = RAIZ / "modelos_externos" / "hand_landmarker.task"
 URL_MODELO_MAO = ("https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/"
                   "float16/latest/hand_landmarker.task")
 
-NUMEROS = ("One Finger", "Two Fingers", "Three Fingers", "Four Fingers", "Fist")
-POR_CONTAGEM = {0: "Fist", 1: "One Finger", 2: "Two Fingers", 3: "Three Fingers", 4: "Four Fingers"}
+# Sem o punho (13/11): no IPN, 51 dos 84 falsos disparos eram mão relaxada lida como punho
+# (resultados/pontos/videos_reais.json). Com zero dedos esticados, a pose não é número.
+NUMEROS = ("One Finger", "Two Fingers", "Three Fingers", "Four Fingers")
+POR_CONTAGEM = {1: "One Finger", 2: "Two Fingers", 3: "Three Fingers", 4: "Four Fingers"}
 NOMES_DEDOS = ("polegar", "indicador", "médio", "anelar", "mínimo")
 # Pontos de cada dedo, da base para a ponta: (MCP, PIP, DIP, ponta). O polegar usa (CMC, MCP, IP, ponta).
 DEDOS = ((1, 2, 3, 4), (5, 6, 7, 8), (9, 10, 11, 12), (13, 14, 15, 16), (17, 18, 19, 20))
@@ -184,7 +186,9 @@ class DecisorNumeros:
     leitura errada isolada não interromper a contagem.
     """
 
-    def __init__(self, tempo_estavel=0.5, movimento=0.5, escala=0.25, bloqueio=1.0, votos=5, rearmar=0.25):
+    def __init__(self, tempo_estavel=0.5, movimento=0.5, escala=0.25, bloqueio=1.0, votos=5, rearmar=0.25, classificador=None):
+        # classificador: função mão -> pose (ou None). Sem ele, valem as regras de contar_dedos/classificar_pose.
+        self.classificador = classificador
         self.tempo_estavel, self.movimento, self.escala = tempo_estavel, movimento, escala
         self.bloqueio, self.rearmar = bloqueio, rearmar
         self.votos = collections.deque(maxlen=votos)
@@ -199,6 +203,9 @@ class DecisorNumeros:
         self.mao = mao
         if mao is None:
             self.dedos, pose_quadro = None, None
+        elif self.classificador:
+            self.dedos = getattr(mao, "dedos", None)
+            pose_quadro = self.classificador(mao)
         else:
             self.dedos = contar_dedos(mao.mundo)
             pose_quadro = classificar_pose(self.dedos)
