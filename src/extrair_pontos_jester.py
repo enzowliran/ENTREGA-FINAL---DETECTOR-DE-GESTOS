@@ -68,6 +68,7 @@ def main():
     a.add_argument("--treino", type=int, default=300, help="clipes de treino por classe")
     a.add_argument("--validacao", type=int, default=100, help="clipes da validação oficial por classe")
     a.add_argument("--processos", type=int, default=7)
+    a.add_argument("--saida", default="data/pontos/jester_amostra.pkl")
     args = a.parse_args()
     rot = RAIZ / "data/Jester/rotulos/jester_labels"
     nomes = [l.strip() for l in (rot / "labels.csv").read_text().splitlines() if l.strip()]
@@ -94,7 +95,7 @@ def main():
             saida.append(r)
             if k % 1000 == 0:
                 print(f"  {k}/{len(clipes)} ({time.time() - t0:.0f} s)", flush=True)
-    pickle.dump({"nomes": nomes, "clipes": saida}, open(RAIZ / "data/pontos/jester_amostra.pkl", "wb"))
+    pickle.dump({"nomes": nomes, "clipes": saida}, open(RAIZ / args.saida, "wb"))
     print(f"Pronto em {(time.time() - t0) / 60:.1f} min")
 
 

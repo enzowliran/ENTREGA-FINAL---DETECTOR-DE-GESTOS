@@ -1,0 +1,396 @@
+{
+  "classes": [
+    "Swiping Left",
+    "Swiping Right",
+    "Swiping Down",
+    "Swiping Up",
+    "Pushing Hand Away",
+    "Pulling Hand In",
+    "Sliding Two Fingers Left",
+    "Sliding Two Fingers Right",
+    "Sliding Two Fingers Down",
+    "Sliding Two Fingers Up",
+    "Pushing Two Fingers Away",
+    "Pulling Two Fingers In",
+    "Rolling Hand Forward",
+    "Rolling Hand Backward",
+    "Turning Hand Clockwise",
+    "Turning Hand Counterclockwise",
+    "Zooming In With Full Hand",
+    "Zooming Out With Full Hand",
+    "Zooming In With Two Fingers",
+    "Zooming Out With Two Fingers",
+    "Thumb Up",
+    "Thumb Down",
+    "Shaking Hand",
+    "Stop Sign",
+    "Drumming Fingers",
+    "No gesture",
+    "Doing other things",
+    "One Finger",
+    "Two Fingers",
+    "Three Fingers",
+    "Four Fingers",
+    "Volante: FlickDown",
+    "Volante: FlickUp",
+    "Volante: SwipeLeft",
+    "Volante: SwipeRight",
+    "Volante: Tap"
+  ],
+  "modelos": {
+    "GRU sobre pontos": {
+      "todos": 76.5,
+      "com_mao": 84.4,
+      "por_fonte": {
+        "DriverMHG": {
+          "n": 42,
+          "todos": 19.0,
+          "com_mao": 19.0
+        },
+        "HaGRID": {
+          "n": 400,
+          "todos": 96.5,
+          "com_mao": 98.5
+        },
+        "IPN": {
+          "n": 400,
+          "todos": 81.2,
+          "com_mao": 82.1
+        },
+        "Jester": {
+          "n": 2700,
+          "todos": 73.1,
+          "com_mao": 81.8
+        },
+        "Slovo": {
+          "n": 100,
+          "todos": 93.0,
+          "com_mao": 94.9
+        }
+      }
+    },
+    "CNN 3D do zero": {
+      "todos": 66.9,
+      "com_mao": 61.1,
+      "por_fonte": {
+        "DriverMHG": {
+          "n": 42,
+          "todos": 54.8,
+          "com_mao": 54.8
+        },
+        "HaGRID": {
+          "n": 400,
+          "todos": 27.0,
+          "com_mao": 27.0
+        },
+        "IPN": {
+          "n": 400,
+          "todos": 65.0,
+          "com_mao": 64.3
+        },
+        "Jester": {
+          "n": 2700,
+          "todos": 72.4,
+          "com_mao": 73.3
+        },
+        "Slovo": {
+          "n": 100,
+          "todos": 91.0,
+          "com_mao": 87.2
+        }
+      }
+    },
+    "CNN 3D partindo do Jester inteiro": {
+      "todos": 84.0,
+      "com_mao": 74.7,
+      "por_fonte": {
+        "DriverMHG": {
+          "n": 42,
+          "todos": 35.7,
+          "com_mao": 35.7
+        },
+        "HaGRID": {
+          "n": 400,
+          "todos": 41.8,
+          "com_mao": 41.8
+        },
+        "IPN": {
+          "n": 400,
+          "todos": 67.5,
+          "com_mao": 66.9
+        },
+        "Jester": {
+          "n": 2700,
+          "todos": 93.1,
+          "com_mao": 92.6
+        },
+        "Slovo": {
+          "n": 100,
+          "todos": 92.0,
+          "com_mao": 84.6
+        }
+      }
+    }
+  },
+  "por_classe": {
+    "Swiping Left": {
+      "teste": 100,
+      "com_mao": 9,
+      "GRU sobre pontos": 64,
+      "CNN 3D do zero": 73,
+      "CNN 3D partindo do Jester inteiro": 90
+    },
+    "Swiping Right": {
+      "teste": 100,
+      "com_mao": 13,
+      "GRU sobre pontos": 62,
+      "CNN 3D do zero": 66,
+      "CNN 3D partindo do Jester inteiro": 94
+    },
+    "Swiping Down": {
+      "teste": 100,
+      "com_mao": 16,
+      "GRU sobre pontos": 75,
+      "CNN 3D do zero": 72,
+      "CNN 3D partindo do Jester inteiro": 97
+    },
+    "Swiping Up": {
+      "teste": 100,
+      "com_mao": 16,
+      "GRU sobre pontos": 70,
+      "CNN 3D do zero": 67,
+      "CNN 3D partindo do Jester inteiro": 94
+    },
+    "Pushing Hand Away": {
+      "teste": 100,
+      "com_mao": 34,
+      "GRU sobre pontos": 85,
+      "CNN 3D do zero": 83,
+      "CNN 3D partindo do Jester inteiro": 98
+    },
+    "Pulling Hand In": {
+      "teste": 100,
+      "com_mao": 7,
+      "GRU sobre pontos": 68,
+      "CNN 3D do zero": 67,
+      "CNN 3D partindo do Jester inteiro": 94
+    },
+    "Sliding Two Fingers Left": {
+      "teste": 100,
+      "com_mao": 15,
+      "GRU sobre pontos": 76,
+      "CNN 3D do zero": 68,
+      "CNN 3D partindo do Jester inteiro": 90
+    },
+    "Sliding Two Fingers Right": {
+      "teste": 100,
+      "com_mao": 13,
+      "GRU sobre pontos": 74,
+      "CNN 3D do zero": 72,
+      "CNN 3D partindo do Jester inteiro": 92
+    },
+    "Sliding Two Fingers Down": {
+      "teste": 100,
+      "com_mao": 16,
+      "GRU sobre pontos": 71,
+      "CNN 3D do zero": 65,
+      "CNN 3D partindo do Jester inteiro": 89
+    },
+    "Sliding Two Fingers Up": {
+      "teste": 100,
+      "com_mao": 26,
+      "GRU sobre pontos": 72,
+      "CNN 3D do zero": 73,
+      "CNN 3D partindo do Jester inteiro": 94
+    },
+    "Pushing Two Fingers Away": {
+      "teste": 100,
+      "com_mao": 26,
+      "GRU sobre pontos": 74,
+      "CNN 3D do zero": 61,
+      "CNN 3D partindo do Jester inteiro": 89
+    },
+    "Pulling Two Fingers In": {
+      "teste": 100,
+      "com_mao": 11,
+      "GRU sobre pontos": 75,
+      "CNN 3D do zero": 53,
+      "CNN 3D partindo do Jester inteiro": 94
+    },
+    "Rolling Hand Forward": {
+      "teste": 100,
+      "com_mao": 36,
+      "GRU sobre pontos": 61,
+      "CNN 3D do zero": 73,
+      "CNN 3D partindo do Jester inteiro": 94
+    },
+    "Rolling Hand Backward": {
+      "teste": 100,
+      "com_mao": 46,
+      "GRU sobre pontos": 74,
+      "CNN 3D do zero": 83,
+      "CNN 3D partindo do Jester inteiro": 94
+    },
+    "Turning Hand Clockwise": {
+      "teste": 100,
+      "com_mao": 50,
+      "GRU sobre pontos": 66,
+      "CNN 3D do zero": 54,
+      "CNN 3D partindo do Jester inteiro": 84
+    },
+    "Turning Hand Counterclockwise": {
+      "teste": 100,
+      "com_mao": 62,
+      "GRU sobre pontos": 62,
+      "CNN 3D do zero": 63,
+      "CNN 3D partindo do Jester inteiro": 85
+    },
+    "Zooming In With Full Hand": {
+      "teste": 100,
+      "com_mao": 69,
+      "GRU sobre pontos": 86,
+      "CNN 3D do zero": 65,
+      "CNN 3D partindo do Jester inteiro": 96
+    },
+    "Zooming Out With Full Hand": {
+      "teste": 100,
+      "com_mao": 68,
+      "GRU sobre pontos": 85,
+      "CNN 3D do zero": 70,
+      "CNN 3D partindo do Jester inteiro": 93
+    },
+    "Zooming In With Two Fingers": {
+      "teste": 100,
+      "com_mao": 66,
+      "GRU sobre pontos": 71,
+      "CNN 3D do zero": 71,
+      "CNN 3D partindo do Jester inteiro": 89
+    },
+    "Zooming Out With Two Fingers": {
+      "teste": 100,
+      "com_mao": 59,
+      "GRU sobre pontos": 77,
+      "CNN 3D do zero": 76,
+      "CNN 3D partindo do Jester inteiro": 93
+    },
+    "Thumb Up": {
+      "teste": 100,
+      "com_mao": 29,
+      "GRU sobre pontos": 75,
+      "CNN 3D do zero": 76,
+      "CNN 3D partindo do Jester inteiro": 98
+    },
+    "Thumb Down": {
+      "teste": 100,
+      "com_mao": 43,
+      "GRU sobre pontos": 83,
+      "CNN 3D do zero": 84,
+      "CNN 3D partindo do Jester inteiro": 98
+    },
+    "Shaking Hand": {
+      "teste": 100,
+      "com_mao": 46,
+      "GRU sobre pontos": 87,
+      "CNN 3D do zero": 92,
+      "CNN 3D partindo do Jester inteiro": 97
+    },
+    "Stop Sign": {
+      "teste": 100,
+      "com_mao": 57,
+      "GRU sobre pontos": 82,
+      "CNN 3D do zero": 75,
+      "CNN 3D partindo do Jester inteiro": 91
+    },
+    "Drumming Fingers": {
+      "teste": 100,
+      "com_mao": 55,
+      "GRU sobre pontos": 86,
+      "CNN 3D do zero": 90,
+      "CNN 3D partindo do Jester inteiro": 99
+    },
+    "No gesture": {
+      "teste": 306,
+      "com_mao": 121,
+      "GRU sobre pontos": 230,
+      "CNN 3D do zero": 266,
+      "CNN 3D partindo do Jester inteiro": 247
+    },
+    "Doing other things": {
+      "teste": 206,
+      "com_mao": 145,
+      "GRU sobre pontos": 117,
+      "CNN 3D do zero": 165,
+      "CNN 3D partindo do Jester inteiro": 187
+    },
+    "One Finger": {
+      "teste": 200,
+      "com_mao": 191,
+      "GRU sobre pontos": 188,
+      "CNN 3D do zero": 93,
+      "CNN 3D partindo do Jester inteiro": 134
+    },
+    "Two Fingers": {
+      "teste": 200,
+      "com_mao": 191,
+      "GRU sobre pontos": 191,
+      "CNN 3D do zero": 76,
+      "CNN 3D partindo do Jester inteiro": 112
+    },
+    "Three Fingers": {
+      "teste": 100,
+      "com_mao": 98,
+      "GRU sobre pontos": 95,
+      "CNN 3D do zero": 23,
+      "CNN 3D partindo do Jester inteiro": 2
+    },
+    "Four Fingers": {
+      "teste": 100,
+      "com_mao": 100,
+      "GRU sobre pontos": 99,
+      "CNN 3D do zero": 10,
+      "CNN 3D partindo do Jester inteiro": 46
+    },
+    "Volante: FlickDown": {
+      "teste": 6,
+      "com_mao": 6,
+      "GRU sobre pontos": 0,
+      "CNN 3D do zero": 2,
+      "CNN 3D partindo do Jester inteiro": 0
+    },
+    "Volante: FlickUp": {
+      "teste": 7,
+      "com_mao": 7,
+      "GRU sobre pontos": 4,
+      "CNN 3D do zero": 4,
+      "CNN 3D partindo do Jester inteiro": 0
+    },
+    "Volante: SwipeLeft": {
+      "teste": 6,
+      "com_mao": 6,
+      "GRU sobre pontos": 0,
+      "CNN 3D do zero": 2,
+      "CNN 3D partindo do Jester inteiro": 2
+    },
+    "Volante: SwipeRight": {
+      "teste": 6,
+      "com_mao": 6,
+      "GRU sobre pontos": 0,
+      "CNN 3D do zero": 1,
+      "CNN 3D partindo do Jester inteiro": 0
+    },
+    "Volante: Tap": {
+      "teste": 5,
+      "com_mao": 5,
+      "GRU sobre pontos": 0,
+      "CNN 3D do zero": 3,
+      "CNN 3D partindo do Jester inteiro": 2
+    }
+  },
+  "amostras_com_mao_por_fonte": {
+    "DriverMHG": 100.0,
+    "HaGRID": 98.0,
+    "IPN": 86.8,
+    "Jester": 35.0,
+    "Slovo": 39.0
+  }
+}

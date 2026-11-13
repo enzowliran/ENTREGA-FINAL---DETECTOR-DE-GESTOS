@@ -1,0 +1,72 @@
+{
+  "cnn": "cnn_pre",
+  "pesos_escolhidos": {
+    "média": [
+      0.2,
+      0.3
+    ],
+    "média só com mão": [
+      0.3,
+      0.3
+    ]
+  },
+  "curva_pesos_todo_teste": {
+    "0.0": 84.0,
+    "0.1": 91.7,
+    "0.2": 92.3,
+    "0.3": 92.4,
+    "0.4": 91.7,
+    "0.5": 89.7,
+    "0.6": 86.6,
+    "0.7": 83.6,
+    "0.8": 78.9,
+    "0.9": 77.1,
+    "1.0": 76.5
+  },
+  "modelos": {
+    "GRU sobre pontos": {
+      "todos": 76.5,
+      "com_mao": 84.4,
+      "por_fonte": {
+        "DriverMHG": 19.0,
+        "HaGRID": 96.5,
+        "IPN": 81.2,
+        "Jester": 73.1,
+        "Slovo": 93.0
+      }
+    },
+    "CNN 3D": {
+      "todos": 84.0,
+      "com_mao": 74.7,
+      "por_fonte": {
+        "DriverMHG": 35.7,
+        "HaGRID": 41.8,
+        "IPN": 67.5,
+        "Jester": 93.1,
+        "Slovo": 92.0
+      }
+    },
+    "Pontos + CNN (média)": {
+      "todos": 92.2,
+      "com_mao": 91.2,
+      "por_fonte": {
+        "DriverMHG": 33.3,
+        "HaGRID": 97.5,
+        "IPN": 83.8,
+        "Jester": 93.4,
+        "Slovo": 96.0
+      }
+    },
+    "Pontos + CNN (média só com mão)": {
+      "todos": 92.1,
+      "com_mao": 91.5,
+      "por_fonte": {
+        "DriverMHG": 33.3,
+        "HaGRID": 97.5,
+        "IPN": 84.2,
+        "Jester": 93.1,
+        "Slovo": 98.0
+      }
+    }
+  }
+}
