@@ -147,6 +147,8 @@ def main():
     a.add_argument("--min-mao", type=float, default=0.7)
     a.add_argument("--epocas", type=int, default=80)
     a.add_argument("--saida", default="resultados/pontos/jester_coordenadas.json")
+    a.add_argument("--fracao", type=float, default=1.0, help="fração dos clipes de treino usada (curva de aprendizado)")
+    a.add_argument("--sem-cnn", action="store_true", help="não roda a CNN 3D nos clipes de teste")
     args = a.parse_args()
     torch.manual_seed(0)
     rng = np.random.default_rng(0)
@@ -160,6 +162,8 @@ def main():
     P, Y, D, V = np.array(P), np.array(Y), np.array(D), np.array(V)
     ok = P >= args.min_mao
     tr = np.nonzero((D == "treino") & ok)[0]
+    if args.fracao < 1:
+        tr = np.sort(np.random.default_rng(1).permutation(tr)[:int(len(tr) * args.fracao)])
     va_todos = np.nonzero(D == "validacao")[0]
     va_mao = np.nonzero((D == "validacao") & ok)[0]
     print(f"treino com mão: {len(tr)} de {(D == 'treino').sum()} clipes; validação com mão: {len(va_mao)} de {len(va_todos)}", flush=True)
@@ -213,6 +217,11 @@ def main():
     top1 = lambda p, i: round(float((p.argmax(1).numpy() == Y[i]).mean() * 100), 1)
     top5 = lambda p, i: round(float(p.topk(5, 1).indices.eq(torch.from_numpy(Y[i])[:, None]).any(1).float().mean() * 100), 1)
     p_mao = prever(va_mao)
+    if args.sem_cnn:
+        r = {"fracao": args.fracao, "treino_com_mao": int(len(tr)), "com_mao_top1": top1(p_mao, va_mao), "todos_top1": top1(p_todos, va_todos)}
+        (RAIZ / args.saida).write_text(json.dumps(r, indent=2, ensure_ascii=False), encoding="utf-8")
+        print("CURVA", json.dumps(r, ensure_ascii=False), flush=True)
+        return
     pred_cnn, nomes_cnn = cnn_nos_clipes(V[va_todos].tolist(), Y[va_todos].tolist())
     assert nomes_cnn == nomes, "ordem das classes da CNN diferente"
     cnn_ok = pred_cnn == Y[va_todos]
