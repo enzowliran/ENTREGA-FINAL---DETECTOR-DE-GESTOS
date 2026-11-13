@@ -1,0 +1,1926 @@
+{
+  "clipes_por_classe": 20,
+  "clipes": 540,
+  "configuracoes": [
+    {
+      "escala": 1,
+      "modo": "video",
+      "det_pres": 0.3,
+      "ms_por_quadro": 21.3,
+      "mediana_pct_clipes_70": 45.0,
+      "pior_classe_pct_clipes_70": 10.0,
+      "pct_quadros_mao_25_classes": 60.9,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 39.6,
+          "pct_clipes_70": 15.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 53.9,
+          "pct_clipes_70": 30.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 54.8,
+          "pct_clipes_70": 25.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 47.6,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 69.0,
+          "pct_clipes_70": 60.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 50.5,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 43.6,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 57.9,
+          "pct_clipes_70": 45.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 39.9,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 58.5,
+          "pct_clipes_70": 35.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 45.4,
+          "pct_clipes_70": 25.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 50.1,
+          "pct_clipes_70": 25.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 65.5,
+          "pct_clipes_70": 45.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 69.9,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 69.4,
+          "pct_clipes_70": 55.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 73.1,
+          "pct_clipes_70": 55.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 84.2,
+          "pct_clipes_70": 75.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 78.7,
+          "pct_clipes_70": 80.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 75.0,
+          "pct_clipes_70": 70.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 75.1,
+          "pct_clipes_70": 70.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 64.7,
+          "pct_clipes_70": 35.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 52.0,
+          "pct_clipes_70": 30.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 64.5,
+          "pct_clipes_70": 50.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 67.6,
+          "pct_clipes_70": 50.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 73.1,
+          "pct_clipes_70": 60.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 10.5,
+          "pct_clipes_70": 5.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 49.2,
+          "pct_clipes_70": 30.0
+        }
+      }
+    },
+    {
+      "escala": 1,
+      "modo": "video",
+      "det_pres": 0.5,
+      "ms_por_quadro": 19.0,
+      "mediana_pct_clipes_70": 30.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 53.8,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 32.9,
+          "pct_clipes_70": 10.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 39.0,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 45.1,
+          "pct_clipes_70": 15.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 42.1,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 66.7,
+          "pct_clipes_70": 60.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 46.0,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 35.5,
+          "pct_clipes_70": 5.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 44.2,
+          "pct_clipes_70": 30.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 31.5,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 51.9,
+          "pct_clipes_70": 30.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 36.4,
+          "pct_clipes_70": 15.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 41.9,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 59.6,
+          "pct_clipes_70": 30.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 64.6,
+          "pct_clipes_70": 40.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 60.0,
+          "pct_clipes_70": 50.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 65.6,
+          "pct_clipes_70": 50.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 79.7,
+          "pct_clipes_70": 70.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 73.2,
+          "pct_clipes_70": 70.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 70.8,
+          "pct_clipes_70": 65.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 70.3,
+          "pct_clipes_70": 65.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 44.3,
+          "pct_clipes_70": 25.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 47.3,
+          "pct_clipes_70": 20.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 62.4,
+          "pct_clipes_70": 40.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 65.3,
+          "pct_clipes_70": 45.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 68.3,
+          "pct_clipes_70": 55.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 2.7,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 44.6,
+          "pct_clipes_70": 25.0
+        }
+      }
+    },
+    {
+      "escala": 1,
+      "modo": "image",
+      "det_pres": 0.3,
+      "ms_por_quadro": 19.3,
+      "mediana_pct_clipes_70": 30.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 52.2,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 34.2,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 41.0,
+          "pct_clipes_70": 10.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 44.8,
+          "pct_clipes_70": 15.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 45.6,
+          "pct_clipes_70": 15.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 59.5,
+          "pct_clipes_70": 45.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 46.4,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 36.3,
+          "pct_clipes_70": 5.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 48.3,
+          "pct_clipes_70": 25.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 31.1,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 51.0,
+          "pct_clipes_70": 30.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 36.4,
+          "pct_clipes_70": 15.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 43.1,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 60.9,
+          "pct_clipes_70": 40.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 63.2,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 61.0,
+          "pct_clipes_70": 50.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 64.4,
+          "pct_clipes_70": 50.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 73.1,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 69.1,
+          "pct_clipes_70": 65.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 64.5,
+          "pct_clipes_70": 55.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 65.5,
+          "pct_clipes_70": 50.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 44.0,
+          "pct_clipes_70": 20.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 42.0,
+          "pct_clipes_70": 10.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 57.3,
+          "pct_clipes_70": 40.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 62.5,
+          "pct_clipes_70": 45.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 59.4,
+          "pct_clipes_70": 45.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 6.4,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 44.3,
+          "pct_clipes_70": 20.0
+        }
+      }
+    },
+    {
+      "escala": 1,
+      "modo": "image",
+      "det_pres": 0.5,
+      "ms_por_quadro": 19.7,
+      "mediana_pct_clipes_70": 20.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 46.0,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 29.6,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 31.7,
+          "pct_clipes_70": 0.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 36.3,
+          "pct_clipes_70": 10.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 39.6,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 56.6,
+          "pct_clipes_70": 45.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 42.1,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 30.8,
+          "pct_clipes_70": 5.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 36.3,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 24.8,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 43.9,
+          "pct_clipes_70": 20.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 30.6,
+          "pct_clipes_70": 10.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 36.9,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 54.2,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 55.5,
+          "pct_clipes_70": 30.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 53.8,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 58.1,
+          "pct_clipes_70": 30.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 69.0,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 63.0,
+          "pct_clipes_70": 55.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 59.7,
+          "pct_clipes_70": 50.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 61.0,
+          "pct_clipes_70": 45.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 32.9,
+          "pct_clipes_70": 15.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 35.3,
+          "pct_clipes_70": 10.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 54.7,
+          "pct_clipes_70": 35.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 60.4,
+          "pct_clipes_70": 40.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 54.1,
+          "pct_clipes_70": 40.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 1.0,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 36.9,
+          "pct_clipes_70": 15.0
+        }
+      }
+    },
+    {
+      "escala": 2,
+      "modo": "video",
+      "det_pres": 0.3,
+      "ms_por_quadro": 26.8,
+      "mediana_pct_clipes_70": 45.0,
+      "pior_classe_pct_clipes_70": 5.0,
+      "pct_quadros_mao_25_classes": 58.7,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 39.6,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 42.9,
+          "pct_clipes_70": 20.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 48.5,
+          "pct_clipes_70": 20.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 47.2,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 72.0,
+          "pct_clipes_70": 60.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 49.5,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 42.4,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 58.3,
+          "pct_clipes_70": 50.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 34.7,
+          "pct_clipes_70": 5.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 56.5,
+          "pct_clipes_70": 40.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 43.0,
+          "pct_clipes_70": 20.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 47.0,
+          "pct_clipes_70": 25.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 66.4,
+          "pct_clipes_70": 55.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 69.2,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 69.7,
+          "pct_clipes_70": 60.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 71.2,
+          "pct_clipes_70": 55.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 82.8,
+          "pct_clipes_70": 75.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 73.7,
+          "pct_clipes_70": 75.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 73.4,
+          "pct_clipes_70": 65.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 71.6,
+          "pct_clipes_70": 70.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 49.2,
+          "pct_clipes_70": 30.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 53.8,
+          "pct_clipes_70": 30.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 65.2,
+          "pct_clipes_70": 55.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 68.9,
+          "pct_clipes_70": 50.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 71.0,
+          "pct_clipes_70": 55.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 9.1,
+          "pct_clipes_70": 5.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 50.5,
+          "pct_clipes_70": 35.0
+        }
+      }
+    },
+    {
+      "escala": 2,
+      "modo": "video",
+      "det_pres": 0.5,
+      "ms_por_quadro": 19.8,
+      "mediana_pct_clipes_70": 30.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 53.1,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 31.3,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 35.7,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 44.9,
+          "pct_clipes_70": 20.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 41.4,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 68.4,
+          "pct_clipes_70": 60.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 43.7,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 32.8,
+          "pct_clipes_70": 5.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 45.8,
+          "pct_clipes_70": 25.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 30.3,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 50.8,
+          "pct_clipes_70": 30.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 38.5,
+          "pct_clipes_70": 15.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 41.8,
+          "pct_clipes_70": 15.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 60.3,
+          "pct_clipes_70": 35.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 64.5,
+          "pct_clipes_70": 40.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 63.8,
+          "pct_clipes_70": 50.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 67.9,
+          "pct_clipes_70": 50.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 81.9,
+          "pct_clipes_70": 75.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 67.5,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 66.8,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 69.6,
+          "pct_clipes_70": 65.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 42.0,
+          "pct_clipes_70": 20.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 46.9,
+          "pct_clipes_70": 15.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 61.4,
+          "pct_clipes_70": 40.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 65.7,
+          "pct_clipes_70": 45.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 64.4,
+          "pct_clipes_70": 50.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 0.3,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 40.5,
+          "pct_clipes_70": 20.0
+        }
+      }
+    },
+    {
+      "escala": 2,
+      "modo": "image",
+      "det_pres": 0.3,
+      "ms_por_quadro": 25.6,
+      "mediana_pct_clipes_70": 30.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 51.1,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 34.8,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 38.0,
+          "pct_clipes_70": 15.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 40.6,
+          "pct_clipes_70": 10.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 43.6,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 59.2,
+          "pct_clipes_70": 45.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 45.5,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 34.6,
+          "pct_clipes_70": 5.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 49.2,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 29.4,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 51.2,
+          "pct_clipes_70": 30.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 35.0,
+          "pct_clipes_70": 10.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 43.6,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 61.8,
+          "pct_clipes_70": 40.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 62.8,
+          "pct_clipes_70": 40.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 61.0,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 62.6,
+          "pct_clipes_70": 35.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 72.8,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 66.3,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 62.3,
+          "pct_clipes_70": 55.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 65.1,
+          "pct_clipes_70": 50.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 37.9,
+          "pct_clipes_70": 20.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 42.2,
+          "pct_clipes_70": 15.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 56.6,
+          "pct_clipes_70": 35.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 62.9,
+          "pct_clipes_70": 45.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 58.0,
+          "pct_clipes_70": 45.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 2.8,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 42.8,
+          "pct_clipes_70": 30.0
+        }
+      }
+    },
+    {
+      "escala": 2,
+      "modo": "image",
+      "det_pres": 0.5,
+      "ms_por_quadro": 18.5,
+      "mediana_pct_clipes_70": 20.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 45.3,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 28.9,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 30.6,
+          "pct_clipes_70": 0.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 32.8,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 38.2,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 56.1,
+          "pct_clipes_70": 45.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 41.5,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 28.2,
+          "pct_clipes_70": 5.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 37.3,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 22.9,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 43.9,
+          "pct_clipes_70": 25.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 30.8,
+          "pct_clipes_70": 10.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 37.9,
+          "pct_clipes_70": 15.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 54.5,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 55.5,
+          "pct_clipes_70": 30.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 53.6,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 56.6,
+          "pct_clipes_70": 30.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 69.6,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 60.8,
+          "pct_clipes_70": 45.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 58.5,
+          "pct_clipes_70": 55.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 61.6,
+          "pct_clipes_70": 45.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 31.3,
+          "pct_clipes_70": 15.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 35.3,
+          "pct_clipes_70": 10.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 53.7,
+          "pct_clipes_70": 35.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 60.3,
+          "pct_clipes_70": 40.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 53.2,
+          "pct_clipes_70": 40.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 0.1,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 36.4,
+          "pct_clipes_70": 15.0
+        }
+      }
+    },
+    {
+      "escala": 3,
+      "modo": "video",
+      "det_pres": 0.3,
+      "ms_por_quadro": 22.0,
+      "mediana_pct_clipes_70": 35.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 58.4,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 38.7,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 42.9,
+          "pct_clipes_70": 20.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 50.4,
+          "pct_clipes_70": 20.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 47.6,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 71.6,
+          "pct_clipes_70": 60.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 49.3,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 41.1,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 52.7,
+          "pct_clipes_70": 35.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 34.4,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 55.0,
+          "pct_clipes_70": 35.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 42.8,
+          "pct_clipes_70": 20.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 48.1,
+          "pct_clipes_70": 25.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 66.4,
+          "pct_clipes_70": 50.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 70.3,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 69.4,
+          "pct_clipes_70": 55.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 71.6,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 84.3,
+          "pct_clipes_70": 80.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 73.2,
+          "pct_clipes_70": 75.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 70.3,
+          "pct_clipes_70": 65.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 74.6,
+          "pct_clipes_70": 70.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 48.7,
+          "pct_clipes_70": 35.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 53.9,
+          "pct_clipes_70": 25.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 64.7,
+          "pct_clipes_70": 50.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 67.9,
+          "pct_clipes_70": 50.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 70.6,
+          "pct_clipes_70": 55.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 9.2,
+          "pct_clipes_70": 5.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 46.8,
+          "pct_clipes_70": 35.0
+        }
+      }
+    },
+    {
+      "escala": 3,
+      "modo": "video",
+      "det_pres": 0.5,
+      "ms_por_quadro": 23.4,
+      "mediana_pct_clipes_70": 25.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 53.0,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 30.3,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 36.9,
+          "pct_clipes_70": 10.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 44.3,
+          "pct_clipes_70": 20.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 41.1,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 67.8,
+          "pct_clipes_70": 55.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 44.0,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 33.1,
+          "pct_clipes_70": 10.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 43.4,
+          "pct_clipes_70": 25.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 30.0,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 50.9,
+          "pct_clipes_70": 35.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 38.3,
+          "pct_clipes_70": 15.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 43.9,
+          "pct_clipes_70": 25.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 61.0,
+          "pct_clipes_70": 25.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 64.8,
+          "pct_clipes_70": 40.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 63.5,
+          "pct_clipes_70": 50.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 68.8,
+          "pct_clipes_70": 50.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 81.9,
+          "pct_clipes_70": 75.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 66.6,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 67.2,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 69.1,
+          "pct_clipes_70": 65.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 41.5,
+          "pct_clipes_70": 20.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 45.8,
+          "pct_clipes_70": 20.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 61.4,
+          "pct_clipes_70": 45.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 65.4,
+          "pct_clipes_70": 45.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 63.9,
+          "pct_clipes_70": 50.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 0.4,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 40.5,
+          "pct_clipes_70": 20.0
+        }
+      }
+    },
+    {
+      "escala": 3,
+      "modo": "image",
+      "det_pres": 0.3,
+      "ms_por_quadro": 27.4,
+      "mediana_pct_clipes_70": 30.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 50.9,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 34.2,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 38.0,
+          "pct_clipes_70": 15.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 42.6,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 42.8,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 59.2,
+          "pct_clipes_70": 45.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 45.6,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 33.9,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 45.9,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 28.0,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 49.9,
+          "pct_clipes_70": 30.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 35.3,
+          "pct_clipes_70": 10.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 44.7,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 62.4,
+          "pct_clipes_70": 35.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 63.0,
+          "pct_clipes_70": 40.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 61.0,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 62.3,
+          "pct_clipes_70": 40.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 73.2,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 65.9,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 62.1,
+          "pct_clipes_70": 55.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 65.5,
+          "pct_clipes_70": 55.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 37.2,
+          "pct_clipes_70": 20.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 42.0,
+          "pct_clipes_70": 15.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 57.9,
+          "pct_clipes_70": 40.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 62.8,
+          "pct_clipes_70": 45.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 57.9,
+          "pct_clipes_70": 45.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 3.3,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 42.8,
+          "pct_clipes_70": 30.0
+        }
+      }
+    },
+    {
+      "escala": 3,
+      "modo": "image",
+      "det_pres": 0.5,
+      "ms_por_quadro": 19.0,
+      "mediana_pct_clipes_70": 20.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 45.0,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 28.5,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 31.3,
+          "pct_clipes_70": 0.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 32.6,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 37.7,
+          "pct_clipes_70": 5.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 55.8,
+          "pct_clipes_70": 45.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 41.3,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 28.0,
+          "pct_clipes_70": 5.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 36.9,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 23.0,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 43.1,
+          "pct_clipes_70": 20.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 30.6,
+          "pct_clipes_70": 10.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 39.0,
+          "pct_clipes_70": 15.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 55.3,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 55.2,
+          "pct_clipes_70": 30.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 53.3,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 56.2,
+          "pct_clipes_70": 25.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 69.9,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 59.5,
+          "pct_clipes_70": 40.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 57.8,
+          "pct_clipes_70": 50.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 60.9,
+          "pct_clipes_70": 45.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 28.9,
+          "pct_clipes_70": 15.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 34.5,
+          "pct_clipes_70": 10.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 53.7,
+          "pct_clipes_70": 35.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 59.6,
+          "pct_clipes_70": 40.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 53.5,
+          "pct_clipes_70": 45.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 0.3,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 36.4,
+          "pct_clipes_70": 15.0
+        }
+      }
+    },
+    {
+      "escala": 4,
+      "modo": "video",
+      "det_pres": 0.3,
+      "ms_por_quadro": 22.7,
+      "mediana_pct_clipes_70": 40.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 58.4,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 35.9,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 42.5,
+          "pct_clipes_70": 20.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 50.1,
+          "pct_clipes_70": 20.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 47.9,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 73.6,
+          "pct_clipes_70": 65.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 50.5,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 41.4,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 56.2,
+          "pct_clipes_70": 40.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 34.4,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 54.7,
+          "pct_clipes_70": 35.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 42.7,
+          "pct_clipes_70": 20.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 48.2,
+          "pct_clipes_70": 25.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 66.2,
+          "pct_clipes_70": 50.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 69.2,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 68.4,
+          "pct_clipes_70": 55.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 71.4,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 88.1,
+          "pct_clipes_70": 85.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 72.3,
+          "pct_clipes_70": 70.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 71.2,
+          "pct_clipes_70": 65.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 71.2,
+          "pct_clipes_70": 65.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 45.2,
+          "pct_clipes_70": 25.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 54.6,
+          "pct_clipes_70": 30.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 64.7,
+          "pct_clipes_70": 50.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 67.4,
+          "pct_clipes_70": 50.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 70.8,
+          "pct_clipes_70": 55.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 8.5,
+          "pct_clipes_70": 5.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 49.1,
+          "pct_clipes_70": 30.0
+        }
+      }
+    },
+    {
+      "escala": 4,
+      "modo": "video",
+      "det_pres": 0.5,
+      "ms_por_quadro": 26.5,
+      "mediana_pct_clipes_70": 30.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 53.0,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 30.1,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 37.3,
+          "pct_clipes_70": 15.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 42.9,
+          "pct_clipes_70": 15.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 40.7,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 68.4,
+          "pct_clipes_70": 55.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 44.1,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 32.3,
+          "pct_clipes_70": 10.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 43.4,
+          "pct_clipes_70": 25.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 29.7,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 51.3,
+          "pct_clipes_70": 35.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 38.8,
+          "pct_clipes_70": 15.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 42.9,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 60.9,
+          "pct_clipes_70": 30.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 63.7,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 62.3,
+          "pct_clipes_70": 50.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 68.8,
+          "pct_clipes_70": 50.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 82.2,
+          "pct_clipes_70": 75.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 66.8,
+          "pct_clipes_70": 55.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 67.3,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 69.4,
+          "pct_clipes_70": 65.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 40.2,
+          "pct_clipes_70": 25.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 47.9,
+          "pct_clipes_70": 20.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 61.4,
+          "pct_clipes_70": 45.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 65.7,
+          "pct_clipes_70": 45.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 66.1,
+          "pct_clipes_70": 55.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 0.0,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 39.6,
+          "pct_clipes_70": 20.0
+        }
+      }
+    },
+    {
+      "escala": 4,
+      "modo": "image",
+      "det_pres": 0.3,
+      "ms_por_quadro": 22.2,
+      "mediana_pct_clipes_70": 30.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 50.6,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 32.5,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 37.7,
+          "pct_clipes_70": 10.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 42.8,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 42.5,
+          "pct_clipes_70": 10.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 59.0,
+          "pct_clipes_70": 45.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 45.7,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 34.9,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 47.9,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 27.8,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 49.8,
+          "pct_clipes_70": 30.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 34.3,
+          "pct_clipes_70": 10.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 44.2,
+          "pct_clipes_70": 25.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 61.1,
+          "pct_clipes_70": 35.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 62.4,
+          "pct_clipes_70": 40.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 60.7,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 62.3,
+          "pct_clipes_70": 35.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 73.3,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 64.7,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 61.4,
+          "pct_clipes_70": 50.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 64.5,
+          "pct_clipes_70": 50.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 36.1,
+          "pct_clipes_70": 15.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 42.2,
+          "pct_clipes_70": 15.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 57.6,
+          "pct_clipes_70": 40.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 62.6,
+          "pct_clipes_70": 45.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 58.0,
+          "pct_clipes_70": 50.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 2.7,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 42.9,
+          "pct_clipes_70": 30.0
+        }
+      }
+    },
+    {
+      "escala": 4,
+      "modo": "image",
+      "det_pres": 0.5,
+      "ms_por_quadro": 20.4,
+      "mediana_pct_clipes_70": 20.0,
+      "pior_classe_pct_clipes_70": 0.0,
+      "pct_quadros_mao_25_classes": 45.1,
+      "passa_portao": false,
+      "por_classe": {
+        "Swiping Left": {
+          "pct_quadros_mao": 28.1,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Right": {
+          "pct_quadros_mao": 31.6,
+          "pct_clipes_70": 0.0
+        },
+        "Swiping Down": {
+          "pct_quadros_mao": 32.9,
+          "pct_clipes_70": 5.0
+        },
+        "Swiping Up": {
+          "pct_quadros_mao": 37.3,
+          "pct_clipes_70": 5.0
+        },
+        "Pushing Hand Away": {
+          "pct_quadros_mao": 55.4,
+          "pct_clipes_70": 45.0
+        },
+        "Pulling Hand In": {
+          "pct_quadros_mao": 41.3,
+          "pct_clipes_70": 15.0
+        },
+        "Sliding Two Fingers Left": {
+          "pct_quadros_mao": 28.4,
+          "pct_clipes_70": 5.0
+        },
+        "Sliding Two Fingers Right": {
+          "pct_quadros_mao": 37.0,
+          "pct_clipes_70": 20.0
+        },
+        "Sliding Two Fingers Down": {
+          "pct_quadros_mao": 22.3,
+          "pct_clipes_70": 0.0
+        },
+        "Sliding Two Fingers Up": {
+          "pct_quadros_mao": 43.5,
+          "pct_clipes_70": 25.0
+        },
+        "Pushing Two Fingers Away": {
+          "pct_quadros_mao": 30.6,
+          "pct_clipes_70": 10.0
+        },
+        "Pulling Two Fingers In": {
+          "pct_quadros_mao": 39.4,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Forward": {
+          "pct_quadros_mao": 55.6,
+          "pct_clipes_70": 20.0
+        },
+        "Rolling Hand Backward": {
+          "pct_quadros_mao": 55.1,
+          "pct_clipes_70": 30.0
+        },
+        "Turning Hand Clockwise": {
+          "pct_quadros_mao": 52.6,
+          "pct_clipes_70": 45.0
+        },
+        "Turning Hand Counterclockwise": {
+          "pct_quadros_mao": 56.1,
+          "pct_clipes_70": 25.0
+        },
+        "Zooming In With Full Hand": {
+          "pct_quadros_mao": 69.9,
+          "pct_clipes_70": 60.0
+        },
+        "Zooming Out With Full Hand": {
+          "pct_quadros_mao": 59.4,
+          "pct_clipes_70": 45.0
+        },
+        "Zooming In With Two Fingers": {
+          "pct_quadros_mao": 58.2,
+          "pct_clipes_70": 50.0
+        },
+        "Zooming Out With Two Fingers": {
+          "pct_quadros_mao": 61.3,
+          "pct_clipes_70": 45.0
+        },
+        "Thumb Up": {
+          "pct_quadros_mao": 29.9,
+          "pct_clipes_70": 15.0
+        },
+        "Thumb Down": {
+          "pct_quadros_mao": 34.2,
+          "pct_clipes_70": 10.0
+        },
+        "Shaking Hand": {
+          "pct_quadros_mao": 53.6,
+          "pct_clipes_70": 35.0
+        },
+        "Stop Sign": {
+          "pct_quadros_mao": 59.4,
+          "pct_clipes_70": 40.0
+        },
+        "Drumming Fingers": {
+          "pct_quadros_mao": 53.8,
+          "pct_clipes_70": 40.0
+        },
+        "No gesture": {
+          "pct_quadros_mao": 0.0,
+          "pct_clipes_70": 0.0
+        },
+        "Doing other things": {
+          "pct_quadros_mao": 35.9,
+          "pct_clipes_70": 15.0
+        }
+      }
+    }
+  ]
+}

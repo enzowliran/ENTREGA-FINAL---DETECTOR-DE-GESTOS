@@ -1,0 +1,667 @@
+{
+  "amostra": {
+    "treino_com_mao": 3035,
+    "treino_total": 8100,
+    "validacao_com_mao": 944,
+    "validacao_total": 2700,
+    "min_mao": 0.7
+  },
+  "coordenadas": {
+    "com_mao_top1": 80.8,
+    "com_mao_top5": 92.8,
+    "todos_top1": 67.7,
+    "todos_top5": 83.6
+  },
+  "cnn_3d": {
+    "todos_top1": 93.4,
+    "com_mao_top1": 93.9
+  },
+  "parametros": 525212,
+  "historico": [
+    {
+      "epoca": 1,
+      "perda": 3.182,
+      "val_com_mao": 19.5
+    },
+    {
+      "epoca": 2,
+      "perda": 2.796,
+      "val_com_mao": 33.9
+    },
+    {
+      "epoca": 3,
+      "perda": 2.102,
+      "val_com_mao": 51.5
+    },
+    {
+      "epoca": 4,
+      "perda": 1.597,
+      "val_com_mao": 58.7
+    },
+    {
+      "epoca": 5,
+      "perda": 1.358,
+      "val_com_mao": 68.6
+    },
+    {
+      "epoca": 6,
+      "perda": 1.145,
+      "val_com_mao": 74.5
+    },
+    {
+      "epoca": 7,
+      "perda": 1.264,
+      "val_com_mao": 74.8
+    },
+    {
+      "epoca": 8,
+      "perda": 1.033,
+      "val_com_mao": 74.0
+    },
+    {
+      "epoca": 9,
+      "perda": 1.151,
+      "val_com_mao": 77.0
+    },
+    {
+      "epoca": 10,
+      "perda": 1.116,
+      "val_com_mao": 77.9
+    },
+    {
+      "epoca": 11,
+      "perda": 0.942,
+      "val_com_mao": 76.7
+    },
+    {
+      "epoca": 12,
+      "perda": 0.991,
+      "val_com_mao": 76.7
+    },
+    {
+      "epoca": 13,
+      "perda": 1.051,
+      "val_com_mao": 76.5
+    },
+    {
+      "epoca": 14,
+      "perda": 0.963,
+      "val_com_mao": 77.0
+    },
+    {
+      "epoca": 15,
+      "perda": 0.921,
+      "val_com_mao": 76.1
+    },
+    {
+      "epoca": 16,
+      "perda": 0.96,
+      "val_com_mao": 77.9
+    },
+    {
+      "epoca": 17,
+      "perda": 0.794,
+      "val_com_mao": 78.1
+    },
+    {
+      "epoca": 18,
+      "perda": 0.843,
+      "val_com_mao": 75.8
+    },
+    {
+      "epoca": 19,
+      "perda": 0.905,
+      "val_com_mao": 77.8
+    },
+    {
+      "epoca": 20,
+      "perda": 0.777,
+      "val_com_mao": 78.4
+    },
+    {
+      "epoca": 21,
+      "perda": 0.835,
+      "val_com_mao": 78.3
+    },
+    {
+      "epoca": 22,
+      "perda": 0.855,
+      "val_com_mao": 80.3
+    },
+    {
+      "epoca": 23,
+      "perda": 0.795,
+      "val_com_mao": 78.7
+    },
+    {
+      "epoca": 24,
+      "perda": 0.784,
+      "val_com_mao": 77.9
+    },
+    {
+      "epoca": 25,
+      "perda": 0.772,
+      "val_com_mao": 80.1
+    },
+    {
+      "epoca": 26,
+      "perda": 0.766,
+      "val_com_mao": 79.0
+    },
+    {
+      "epoca": 27,
+      "perda": 0.793,
+      "val_com_mao": 78.5
+    },
+    {
+      "epoca": 28,
+      "perda": 0.825,
+      "val_com_mao": 79.8
+    },
+    {
+      "epoca": 29,
+      "perda": 0.743,
+      "val_com_mao": 80.2
+    },
+    {
+      "epoca": 30,
+      "perda": 0.726,
+      "val_com_mao": 79.1
+    },
+    {
+      "epoca": 31,
+      "perda": 0.755,
+      "val_com_mao": 80.0
+    },
+    {
+      "epoca": 32,
+      "perda": 0.748,
+      "val_com_mao": 79.8
+    },
+    {
+      "epoca": 33,
+      "perda": 0.717,
+      "val_com_mao": 79.9
+    },
+    {
+      "epoca": 34,
+      "perda": 0.698,
+      "val_com_mao": 80.0
+    },
+    {
+      "epoca": 35,
+      "perda": 0.702,
+      "val_com_mao": 79.6
+    },
+    {
+      "epoca": 36,
+      "perda": 0.682,
+      "val_com_mao": 79.3
+    },
+    {
+      "epoca": 37,
+      "perda": 0.718,
+      "val_com_mao": 79.3
+    },
+    {
+      "epoca": 38,
+      "perda": 0.68,
+      "val_com_mao": 80.5
+    },
+    {
+      "epoca": 39,
+      "perda": 0.687,
+      "val_com_mao": 80.8
+    },
+    {
+      "epoca": 40,
+      "perda": 0.679,
+      "val_com_mao": 80.0
+    },
+    {
+      "epoca": 41,
+      "perda": 0.697,
+      "val_com_mao": 79.3
+    },
+    {
+      "epoca": 42,
+      "perda": 0.698,
+      "val_com_mao": 79.4
+    },
+    {
+      "epoca": 43,
+      "perda": 0.671,
+      "val_com_mao": 80.9
+    },
+    {
+      "epoca": 44,
+      "perda": 0.673,
+      "val_com_mao": 80.3
+    },
+    {
+      "epoca": 45,
+      "perda": 0.664,
+      "val_com_mao": 80.6
+    },
+    {
+      "epoca": 46,
+      "perda": 0.67,
+      "val_com_mao": 80.1
+    },
+    {
+      "epoca": 47,
+      "perda": 0.68,
+      "val_com_mao": 80.5
+    },
+    {
+      "epoca": 48,
+      "perda": 0.682,
+      "val_com_mao": 80.3
+    },
+    {
+      "epoca": 49,
+      "perda": 0.671,
+      "val_com_mao": 80.2
+    },
+    {
+      "epoca": 50,
+      "perda": 0.66,
+      "val_com_mao": 80.7
+    },
+    {
+      "epoca": 51,
+      "perda": 0.661,
+      "val_com_mao": 80.6
+    },
+    {
+      "epoca": 52,
+      "perda": 0.665,
+      "val_com_mao": 81.1
+    },
+    {
+      "epoca": 53,
+      "perda": 0.664,
+      "val_com_mao": 80.3
+    },
+    {
+      "epoca": 54,
+      "perda": 0.669,
+      "val_com_mao": 80.6
+    },
+    {
+      "epoca": 55,
+      "perda": 0.672,
+      "val_com_mao": 80.2
+    },
+    {
+      "epoca": 56,
+      "perda": 0.663,
+      "val_com_mao": 80.8
+    },
+    {
+      "epoca": 57,
+      "perda": 0.665,
+      "val_com_mao": 81.1
+    },
+    {
+      "epoca": 58,
+      "perda": 0.664,
+      "val_com_mao": 79.9
+    },
+    {
+      "epoca": 59,
+      "perda": 0.662,
+      "val_com_mao": 80.5
+    },
+    {
+      "epoca": 60,
+      "perda": 0.665,
+      "val_com_mao": 80.7
+    },
+    {
+      "epoca": 61,
+      "perda": 0.67,
+      "val_com_mao": 80.3
+    },
+    {
+      "epoca": 62,
+      "perda": 0.663,
+      "val_com_mao": 79.9
+    },
+    {
+      "epoca": 63,
+      "perda": 0.66,
+      "val_com_mao": 80.7
+    },
+    {
+      "epoca": 64,
+      "perda": 0.672,
+      "val_com_mao": 80.7
+    },
+    {
+      "epoca": 65,
+      "perda": 0.658,
+      "val_com_mao": 81.0
+    },
+    {
+      "epoca": 66,
+      "perda": 0.659,
+      "val_com_mao": 81.6
+    },
+    {
+      "epoca": 67,
+      "perda": 0.672,
+      "val_com_mao": 81.6
+    },
+    {
+      "epoca": 68,
+      "perda": 0.661,
+      "val_com_mao": 81.5
+    },
+    {
+      "epoca": 69,
+      "perda": 0.662,
+      "val_com_mao": 81.4
+    },
+    {
+      "epoca": 70,
+      "perda": 0.694,
+      "val_com_mao": 81.4
+    },
+    {
+      "epoca": 71,
+      "perda": 0.676,
+      "val_com_mao": 81.2
+    },
+    {
+      "epoca": 72,
+      "perda": 0.661,
+      "val_com_mao": 81.4
+    },
+    {
+      "epoca": 73,
+      "perda": 0.659,
+      "val_com_mao": 81.0
+    },
+    {
+      "epoca": 74,
+      "perda": 0.668,
+      "val_com_mao": 80.9
+    },
+    {
+      "epoca": 75,
+      "perda": 0.657,
+      "val_com_mao": 80.9
+    },
+    {
+      "epoca": 76,
+      "perda": 0.656,
+      "val_com_mao": 80.9
+    },
+    {
+      "epoca": 77,
+      "perda": 0.665,
+      "val_com_mao": 80.9
+    },
+    {
+      "epoca": 78,
+      "perda": 0.658,
+      "val_com_mao": 80.8
+    },
+    {
+      "epoca": 79,
+      "perda": 0.661,
+      "val_com_mao": 80.8
+    },
+    {
+      "epoca": 80,
+      "perda": 0.658,
+      "val_com_mao": 80.8
+    }
+  ],
+  "por_classe": {
+    "Swiping Left": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 9,
+      "clipes_treino_com_mao": 42,
+      "acertos_coordenadas_todos": 61,
+      "acertos_cnn_3d_todos": 90,
+      "acertos_coordenadas_com_mao": 7,
+      "acertos_cnn_3d_com_mao": 8
+    },
+    "Swiping Right": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 13,
+      "clipes_treino_com_mao": 42,
+      "acertos_coordenadas_todos": 51,
+      "acertos_cnn_3d_todos": 96,
+      "acertos_coordenadas_com_mao": 9,
+      "acertos_cnn_3d_com_mao": 11
+    },
+    "Swiping Down": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 16,
+      "clipes_treino_com_mao": 60,
+      "acertos_coordenadas_todos": 47,
+      "acertos_cnn_3d_todos": 95,
+      "acertos_coordenadas_com_mao": 5,
+      "acertos_cnn_3d_com_mao": 16
+    },
+    "Swiping Up": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 16,
+      "clipes_treino_com_mao": 62,
+      "acertos_coordenadas_todos": 60,
+      "acertos_cnn_3d_todos": 94,
+      "acertos_coordenadas_com_mao": 10,
+      "acertos_cnn_3d_com_mao": 16
+    },
+    "Pushing Hand Away": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 34,
+      "clipes_treino_com_mao": 136,
+      "acertos_coordenadas_todos": 80,
+      "acertos_cnn_3d_todos": 96,
+      "acertos_coordenadas_com_mao": 29,
+      "acertos_cnn_3d_com_mao": 34
+    },
+    "Pulling Hand In": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 7,
+      "clipes_treino_com_mao": 52,
+      "acertos_coordenadas_todos": 59,
+      "acertos_cnn_3d_todos": 96,
+      "acertos_coordenadas_com_mao": 5,
+      "acertos_cnn_3d_com_mao": 7
+    },
+    "Sliding Two Fingers Left": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 15,
+      "clipes_treino_com_mao": 68,
+      "acertos_coordenadas_todos": 61,
+      "acertos_cnn_3d_todos": 92,
+      "acertos_coordenadas_com_mao": 10,
+      "acertos_cnn_3d_com_mao": 14
+    },
+    "Sliding Two Fingers Right": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 13,
+      "clipes_treino_com_mao": 56,
+      "acertos_coordenadas_todos": 52,
+      "acertos_cnn_3d_todos": 91,
+      "acertos_coordenadas_com_mao": 10,
+      "acertos_cnn_3d_com_mao": 13
+    },
+    "Sliding Two Fingers Down": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 16,
+      "clipes_treino_com_mao": 52,
+      "acertos_coordenadas_todos": 59,
+      "acertos_cnn_3d_todos": 92,
+      "acertos_coordenadas_com_mao": 11,
+      "acertos_cnn_3d_com_mao": 14
+    },
+    "Sliding Two Fingers Up": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 26,
+      "clipes_treino_com_mao": 85,
+      "acertos_coordenadas_todos": 67,
+      "acertos_cnn_3d_todos": 94,
+      "acertos_coordenadas_com_mao": 20,
+      "acertos_cnn_3d_com_mao": 25
+    },
+    "Pushing Two Fingers Away": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 26,
+      "clipes_treino_com_mao": 79,
+      "acertos_coordenadas_todos": 61,
+      "acertos_cnn_3d_todos": 95,
+      "acertos_coordenadas_com_mao": 19,
+      "acertos_cnn_3d_com_mao": 26
+    },
+    "Pulling Two Fingers In": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 11,
+      "clipes_treino_com_mao": 61,
+      "acertos_coordenadas_todos": 68,
+      "acertos_cnn_3d_todos": 92,
+      "acertos_coordenadas_com_mao": 8,
+      "acertos_cnn_3d_com_mao": 9
+    },
+    "Rolling Hand Forward": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 36,
+      "clipes_treino_com_mao": 94,
+      "acertos_coordenadas_todos": 56,
+      "acertos_cnn_3d_todos": 92,
+      "acertos_coordenadas_com_mao": 23,
+      "acertos_cnn_3d_com_mao": 34
+    },
+    "Rolling Hand Backward": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 46,
+      "clipes_treino_com_mao": 119,
+      "acertos_coordenadas_todos": 67,
+      "acertos_cnn_3d_todos": 94,
+      "acertos_coordenadas_com_mao": 37,
+      "acertos_cnn_3d_com_mao": 43
+    },
+    "Turning Hand Clockwise": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 50,
+      "clipes_treino_com_mao": 186,
+      "acertos_coordenadas_todos": 63,
+      "acertos_cnn_3d_todos": 79,
+      "acertos_coordenadas_com_mao": 38,
+      "acertos_cnn_3d_com_mao": 42
+    },
+    "Turning Hand Counterclockwise": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 62,
+      "clipes_treino_com_mao": 176,
+      "acertos_coordenadas_todos": 64,
+      "acertos_cnn_3d_todos": 84,
+      "acertos_coordenadas_com_mao": 45,
+      "acertos_cnn_3d_com_mao": 48
+    },
+    "Zooming In With Full Hand": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 69,
+      "clipes_treino_com_mao": 206,
+      "acertos_coordenadas_todos": 81,
+      "acertos_cnn_3d_todos": 98,
+      "acertos_coordenadas_com_mao": 62,
+      "acertos_cnn_3d_com_mao": 67
+    },
+    "Zooming Out With Full Hand": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 68,
+      "clipes_treino_com_mao": 200,
+      "acertos_coordenadas_todos": 86,
+      "acertos_cnn_3d_todos": 93,
+      "acertos_coordenadas_com_mao": 63,
+      "acertos_cnn_3d_com_mao": 66
+    },
+    "Zooming In With Two Fingers": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 66,
+      "clipes_treino_com_mao": 206,
+      "acertos_coordenadas_todos": 72,
+      "acertos_cnn_3d_todos": 86,
+      "acertos_coordenadas_com_mao": 57,
+      "acertos_cnn_3d_com_mao": 61
+    },
+    "Zooming Out With Two Fingers": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 59,
+      "clipes_treino_com_mao": 198,
+      "acertos_coordenadas_todos": 78,
+      "acertos_cnn_3d_todos": 94,
+      "acertos_coordenadas_com_mao": 52,
+      "acertos_cnn_3d_com_mao": 55
+    },
+    "Thumb Up": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 29,
+      "clipes_treino_com_mao": 92,
+      "acertos_coordenadas_todos": 71,
+      "acertos_cnn_3d_todos": 98,
+      "acertos_coordenadas_com_mao": 26,
+      "acertos_cnn_3d_com_mao": 28
+    },
+    "Thumb Down": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 43,
+      "clipes_treino_com_mao": 117,
+      "acertos_coordenadas_todos": 84,
+      "acertos_cnn_3d_todos": 99,
+      "acertos_coordenadas_com_mao": 42,
+      "acertos_cnn_3d_com_mao": 42
+    },
+    "Shaking Hand": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 46,
+      "clipes_treino_com_mao": 172,
+      "acertos_coordenadas_todos": 88,
+      "acertos_cnn_3d_todos": 97,
+      "acertos_coordenadas_com_mao": 44,
+      "acertos_cnn_3d_com_mao": 44
+    },
+    "Stop Sign": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 57,
+      "clipes_treino_com_mao": 161,
+      "acertos_coordenadas_todos": 82,
+      "acertos_cnn_3d_todos": 94,
+      "acertos_coordenadas_com_mao": 49,
+      "acertos_cnn_3d_com_mao": 54
+    },
+    "Drumming Fingers": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 55,
+      "clipes_treino_com_mao": 170,
+      "acertos_coordenadas_todos": 86,
+      "acertos_cnn_3d_todos": 99,
+      "acertos_coordenadas_com_mao": 52,
+      "acertos_cnn_3d_com_mao": 54
+    },
+    "No gesture": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 13,
+      "clipes_treino_com_mao": 24,
+      "acertos_coordenadas_todos": 78,
+      "acertos_cnn_3d_todos": 97,
+      "acertos_coordenadas_com_mao": 3,
+      "acertos_cnn_3d_com_mao": 13
+    },
+    "Doing other things": {
+      "clipes_teste": 100,
+      "clipes_teste_com_mao": 43,
+      "clipes_treino_com_mao": 119,
+      "acertos_coordenadas_todos": 47,
+      "acertos_cnn_3d_todos": 96,
+      "acertos_coordenadas_com_mao": 27,
+      "acertos_cnn_3d_com_mao": 42
+    }
+  }
+}
