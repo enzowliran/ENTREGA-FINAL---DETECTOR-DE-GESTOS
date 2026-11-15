@@ -143,6 +143,8 @@ def main():
     if "gru" in args.modelos:
         if not feito.exists():
             np.save(feito, prever_gru(te).softmax(1).numpy())
+            torch.save({"modelo": gru.state_dict(), "nomes": nomes, "media": media, "desvio": desvio, "entrada": Xn[0].shape[1]},
+                       PASTA / "gru_final.pt")
         probs["GRU sobre pontos"] = np.load(feito)
         print("GRU pronta (probabilidades salvas)" if feito.exists() else "", flush=True)
 

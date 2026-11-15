@@ -1,0 +1,180 @@
+{
+  "peso_gru": 0.3,
+  "ipn_minutos_sem_gesto": 31.5,
+  "slovo_minutos": 2.9,
+  "modelos": {
+    "CNN pré-treinada": {
+      "ipn_falsos_por_minuto": 0.19,
+      "ipn_falsos": 6,
+      "ipn_falsos_por_classe": {
+        "Zooming Out With Two Fingers": 3,
+        "Sliding Two Fingers Down": 2,
+        "Pushing Two Fingers Away": 1
+      },
+      "ipn_um_dedo_trechos_certos": "5/265",
+      "ipn_dois_dedos_trechos_certos": "0/264",
+      "slovo_falsos_por_minuto": 0.0,
+      "slovo_falsos_por_classe": {},
+      "disparos_por_trecho": {
+        "B0B": 40,
+        "B0A": 20,
+        "logo após um gesto": 13,
+        "D0X": 6,
+        "G04": 5,
+        "G02": 3,
+        "G11": 2,
+        "G07": 2,
+        "G05": 2,
+        "G10": 1,
+        "G09": 1,
+        "G08": 1
+      }
+    },
+    "GRU sobre pontos": {
+      "ipn_falsos_por_minuto": 1.46,
+      "ipn_falsos": 46,
+      "ipn_falsos_por_classe": {
+        "Thumb Up": 13,
+        "Sliding Two Fingers Down": 7,
+        "Sliding Two Fingers Right": 4,
+        "Two Fingers": 3,
+        "Pulling Two Fingers In": 3,
+        "Zooming Out With Full Hand": 3,
+        "Pulling Hand In": 3,
+        "Swiping Up": 3,
+        "Sliding Two Fingers Up": 2,
+        "Swiping Right": 1,
+        "Pushing Two Fingers Away": 1,
+        "Sliding Two Fingers Left": 1,
+        "Rolling Hand Forward": 1,
+        "Swiping Left": 1
+      },
+      "ipn_um_dedo_trechos_certos": "255/265",
+      "ipn_dois_dedos_trechos_certos": "243/264",
+      "slovo_falsos_por_minuto": 0.0,
+      "slovo_falsos_por_classe": {},
+      "disparos_por_trecho": {
+        "B0B": 384,
+        "B0A": 336,
+        "logo após um gesto": 60,
+        "D0X": 46,
+        "G05": 15,
+        "G09": 13,
+        "G02": 13,
+        "G01": 8,
+        "G03": 7,
+        "G10": 5,
+        "G11": 5,
+        "G04": 5,
+        "G08": 5,
+        "G07": 5,
+        "G06": 4,
+        "entre trechos": 3
+      }
+    },
+    "Combinação (0.3 GRU)": {
+      "ipn_falsos_por_minuto": 0.095,
+      "ipn_falsos": 3,
+      "ipn_falsos_por_classe": {
+        "Sliding Two Fingers Down": 3
+      },
+      "ipn_um_dedo_trechos_certos": "36/265",
+      "ipn_dois_dedos_trechos_certos": "0/264",
+      "slovo_falsos_por_minuto": 0.0,
+      "slovo_falsos_por_classe": {},
+      "disparos_por_trecho": {
+        "B0A": 34,
+        "B0B": 10,
+        "logo após um gesto": 8,
+        "D0X": 3,
+        "G02": 2,
+        "G11": 1,
+        "G07": 1,
+        "G09": 1
+      }
+    },
+    "Combinação (0.3 GRU; números 0.6 GRU)": {
+      "ipn_falsos_por_minuto": 0.19,
+      "ipn_falsos": 6,
+      "ipn_falsos_por_classe": {
+        "Sliding Two Fingers Down": 3,
+        "One Finger": 2,
+        "Sliding Two Fingers Up": 1
+      },
+      "ipn_um_dedo_trechos_certos": "138/265",
+      "ipn_dois_dedos_trechos_certos": "53/264",
+      "slovo_falsos_por_minuto": 0.0,
+      "slovo_falsos_por_classe": {},
+      "disparos_por_trecho": {
+        "B0A": 187,
+        "B0B": 65,
+        "logo após um gesto": 17,
+        "D0X": 6,
+        "G09": 2,
+        "G02": 2,
+        "G05": 1,
+        "G03": 1,
+        "G08": 1,
+        "G06": 1
+      }
+    },
+    "Combinação (0.3 GRU; números 0.8 GRU)": {
+      "ipn_falsos_por_minuto": 0.19,
+      "ipn_falsos": 6,
+      "ipn_falsos_por_classe": {
+        "Sliding Two Fingers Down": 3,
+        "Two Fingers": 2,
+        "Sliding Two Fingers Up": 1
+      },
+      "ipn_um_dedo_trechos_certos": "207/265",
+      "ipn_dois_dedos_trechos_certos": "189/264",
+      "slovo_falsos_por_minuto": 0.0,
+      "slovo_falsos_por_classe": {},
+      "disparos_por_trecho": {
+        "B0A": 295,
+        "B0B": 283,
+        "logo após um gesto": 26,
+        "D0X": 6,
+        "G02": 4,
+        "G04": 3,
+        "G11": 3,
+        "G09": 3,
+        "G10": 2,
+        "G03": 2,
+        "G07": 2,
+        "entre trechos": 1
+      }
+    },
+    "Combinação (0.3 GRU; números 1.0 GRU)": {
+      "ipn_falsos_por_minuto": 0.254,
+      "ipn_falsos": 8,
+      "ipn_falsos_por_classe": {
+        "Sliding Two Fingers Down": 3,
+        "Two Fingers": 3,
+        "One Finger": 1,
+        "Sliding Two Fingers Up": 1
+      },
+      "ipn_um_dedo_trechos_certos": "251/265",
+      "ipn_dois_dedos_trechos_certos": "240/264",
+      "slovo_falsos_por_minuto": 0.0,
+      "slovo_falsos_por_classe": {},
+      "disparos_por_trecho": {
+        "B0B": 402,
+        "B0A": 378,
+        "logo após um gesto": 22,
+        "D0X": 8,
+        "G02": 4,
+        "G04": 3,
+        "G11": 3,
+        "G07": 2,
+        "G05": 2,
+        "G10": 2,
+        "G09": 2,
+        "G06": 2,
+        "G08": 2,
+        "G01": 1,
+        "G03": 1
+      }
+    }
+  }
+}
