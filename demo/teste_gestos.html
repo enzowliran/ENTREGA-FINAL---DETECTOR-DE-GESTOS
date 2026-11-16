@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teste ao vivo</title>
+<!-- Teste guiado na webcam com o modelo final (o mesmo do carro: demo/abrir_teste_ao_vivo.bat).
+     Pede um gesto de cada vez, fala em voz alta o que o sistema reconheceu e com que confiança, anota tudo e grava a
+     sessão em resultados/webcam_ao_vivo/<nome>.json (só números e nomes de gestos; nenhuma imagem). -->
+<style>
+  :root { --fundo: #f4f6fa; --painel: #ffffff; --texto: #0a1f44; --suave: #5b6576; --azul: #1e4fbf; --azulClaro: #eaf1fb;
+          --linha: #d6deea; --certo: #1e4fbf; --erro: #0a1f44; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--fundo); color: var(--texto); font: 16px "Segoe UI", system-ui, sans-serif; }
+  main { display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; padding: 24px; height: 100%; }
+  section { background: var(--painel); border: 1px solid var(--linha); padding: 22px 26px; display: flex; flex-direction: column; min-height: 0; overflow: auto; }
+  h1 { margin: 0 0 4px; font-size: 22px; }
+  .sub { color: var(--suave); margin: 0 0 18px; }
+  #camera { width: 100%; background: #000; aspect-ratio: 16 / 9; object-fit: contain; }
+  #fase { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--azul); font-weight: 700; margin-top: 18px; }
+  #pedido { font-size: 44px; font-weight: 700; margin: 6px 0 4px; }
+  #instrucao { color: var(--suave); min-height: 22px; }
+  .barra { height: 8px; background: var(--azulClaro); margin-top: 14px; }
+  .barra div { height: 100%; width: 0; background: var(--azul); transition: width .1s linear; }
+  .agora { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 18px; }
+  .caixa { border: 1px solid var(--linha); padding: 12px 14px; }
+  .caixa .r { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--suave); }
+  .caixa .v { font-size: 22px; font-weight: 600; margin-top: 4px; }
+  .caixa .d { color: var(--suave); font-size: 13px; margin-top: 2px; }
+  #placar { font-size: 15px; color: var(--suave); margin-bottom: 10px; }
+  #placar b { color: var(--texto); font-size: 20px; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th { text-align: left; background: var(--texto); color: #fff; font-weight: 600; padding: 7px 10px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  td { padding: 6px 10px; border-bottom: 1px solid var(--linha); }
+  .lista { overflow: auto; flex: 1; min-height: 0; }
+  .certo { color: var(--certo); font-weight: 700; }
+  .erro { color: var(--erro); font-weight: 700; text-decoration: underline; }
+  .nada { color: var(--suave); }
+  .inicio { display: flex; gap: 12px; align-items: center; margin-top: 18px; flex-wrap: wrap; }
+  input, select { font: inherit; padding: 9px 10px; border: 1px solid var(--linha); background: #fff; color: var(--texto); }
+  button { font: inherit; font-weight: 600; padding: 10px 18px; border: 0; background: var(--azul); color: #fff; cursor: pointer; }
+  button.sec { background: #fff; color: var(--texto); border: 1px solid var(--linha); }
+  #salvo { color: var(--suave); font-size: 13px; margin-top: 8px; }
+  .teclas { color: var(--suave); font-size: 13px; margin-top: 10px; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; height: auto; } }
+</style>
+</head>
+<body>
+<main>
+  <section>
+    <h1>Teste ao vivo · modelo final</h1>
+    <p class="sub">O mesmo modelo do carro (CNN 3D + contagem de dedos). Sem janela de ativação: todo gesto conta.</p>
+    <img id="camera" src="/video" alt="câmera">
+    <div id="fase">Pronto para começar</div>
+    <div id="pedido">—</div>
+    <div id="instrucao">Escolha as opções e clique em Começar. Deixe o som ligado.</div>
+    <div class="barra"><div id="tempo"></div></div>
+    <div class="agora">
+      <div class="caixa"><div class="r">Reconhecendo agora</div><div class="v" id="agoraGesto">—</div><div class="d" id="agoraConf"></div></div>
+      <div class="caixa"><div class="r">Por dentro</div><div class="v" id="agoraCnn" style="font-size:16px">—</div><div class="d" id="agoraDedos"></div></div>
+    </div>
+    <div class="inicio" id="opcoes">
+      <input id="pessoa" placeholder="seu nome" value="enzo" size="10">
+      <select id="tentativas"><option value="2">2 tentativas por gesto</option><option value="3" selected>3 tentativas por gesto</option><option value="5">5 tentativas por gesto</option></select>
+      <select id="semGesto"><option value="0">sem bloco "sem gesto"</option><option value="30">30 s sem gesto no fim</option><option value="60" selected>60 s sem gesto no fim</option></select>
+      <button id="comecar">Começar</button>
+    </div>
+    <div class="teclas">Espaço = pular a tentativa · R = repetir a tentativa · P = pausar · Esc = encerrar e salvar</div>
+    <div id="salvo"></div>
+  </section>
+  <section>
+    <div id="placar">Acertos: <b>0 de 0</b></div>
+    <div class="lista">
+      <table><thead><tr><th>#</th><th>Pedido</th><th>Reconhecido</th><th>Confiança</th><th>Tempo</th></tr></thead><tbody id="linhas"></tbody></table>
+    </div>
+  </section>
+</main>
+<script>
+// Gestos que viram comando no carro (demo/player.py, COMANDOS_CARRO3D). O nome é o que o servidor manda em "gesto".
+const GESTOS = ["Um dedo", "Dois dedos", "Quatro dedos", "Deslizar para a direita", "Deslizar para a esquerda",
+  "Polegar para cima", "Polegar para baixo", "Sinal de pare", "Empurrar a mão", "Puxar a mão", "Tamborilar os dedos"];
+const DICA = {
+  "Um dedo": "Mão parada, só o indicador esticado, de frente para a câmera.",
+  "Dois dedos": "Mão parada, indicador e médio esticados.",
+  "Quatro dedos": "Mão parada, quatro dedos esticados e o polegar dobrado.",
+  "Deslizar para a direita": "Passe a mão de um lado para o outro, para a direita.",
+  "Deslizar para a esquerda": "Passe a mão de um lado para o outro, para a esquerda.",
+  "Polegar para cima": "Joinha, parado.", "Polegar para baixo": "Polegar para baixo, parado.",
+  "Sinal de pare": "Mão aberta, palma para a câmera, parada.",
+  "Empurrar a mão": "Mão aberta indo em direção à câmera.", "Puxar a mão": "Mão aberta vindo em sua direção.",
+  "Tamborilar os dedos": "Mexa os dedos como quem tamborila na mesa.",
+};
+const PREPARO = 3, TEMPO = 5;   // segundos com a mão abaixada antes e segundos para fazer o gesto
+const $ = id => document.getElementById(id);
+
+// ---- voz ----
+let vozPt = null;
+function carregarVoz() { vozPt = speechSynthesis.getVoices().find(v => /pt(-|_)BR/i.test(v.lang)) || speechSynthesis.getVoices().find(v => /^pt/i.test(v.lang)) || null; }
+speechSynthesis.onvoiceschanged = carregarVoz; carregarVoz();
+function falar(texto, cortar = false) {
+  if (cortar) speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(texto); u.lang = "pt-BR"; if (vozPt) u.voice = vozPt; u.rate = 1.1;
+  speechSynthesis.speak(u);
+}
+const pct = x => Math.round(x * 100);
+
+// ---- sessão ----
+const sessao = { inicio: new Date().toISOString(), pessoa: "", config: {}, tentativas: [], disparos: [], linha_do_tempo: [], sem_gesto: null };
+let fase = "parado", alvo = null, faseInicio = 0, tentativaAtual = null, fila = [], pausado = false, encerrado = false;
+let ultimoEstado = null;
+
+// ---- eventos do modelo ----
+const ev = new EventSource("/eventos");
+ev.onmessage = m => {
+  const e = JSON.parse(m.data), t = performance.now() / 1000;
+  if (e.tipo === "estado") {
+    ultimoEstado = e;
+    $("agoraGesto").textContent = e.gesto || "—";
+    $("agoraConf").textContent = e.confianca != null ? `confiança ${pct(e.confianca)}%` : "";
+    const q = e.pontos || {}, c = e.cnn;
+    $("agoraCnn").textContent = c ? `CNN sozinha: ${c.gesto} ${pct(c.confianca)}%` : "CNN sozinha: —";
+    $("agoraDedos").textContent = !q.mao ? "pontos: sem mão" : `mão ${q.parada ? "parada" : "em movimento"} · dedos: ${q.regra || "—"}`;
+    if (fase !== "parado") sessao.linha_do_tempo.push({ t: +t.toFixed(2), fase, alvo, gesto: e.gesto, confianca: +(+e.confianca).toFixed(3),
+      cnn: c ? c.gesto : null, cnn_conf: c ? +c.confianca.toFixed(3) : null, mao: !!q.mao, parada: !!q.parada, dedos: q.regra || null,
+      gru_numero: q.numero || null, gru_nota: q.nota != null ? +q.nota.toFixed(3) : null });
+  } else if (e.tipo === "comando") {
+    if (e.repeticao) return;   // polegar mantido repetindo: não conta como novo reconhecimento
+    const d = { t: +t.toFixed(2), fase, alvo, gesto: e.gesto, confianca: +e.confianca.toFixed(3) };
+    sessao.disparos.push(d);
+    if (fase === "gesto" && tentativaAtual && !tentativaAtual.reconhecido) {
+      tentativaAtual.reconhecido = e.gesto; tentativaAtual.confianca = e.confianca; tentativaAtual.tempo_s = +(t - faseInicio).toFixed(2);
+      const certo = e.gesto === alvo;
+      falar(`${e.gesto}, ${pct(e.confianca)} por cento. ${certo ? "Certo" : "Errado"}`, true);
+      fecharTentativa(certo ? "acerto" : "erro");
+    } else if (fase === "gesto") {
+      falar(`${e.gesto}, ${pct(e.confianca)} por cento`, true);
+    } else if (fase === "sem_gesto") {
+      falar(`${e.gesto}, ${pct(e.confianca)} por cento. Disparo falso`, true);
+      $("instrucao").textContent = `Disparos falsos até agora: ${sessao.disparos.filter(x => x.fase === "sem_gesto").length}`;
+    } else if (fase === "preparo") {
+      falar(`${e.gesto}, ${pct(e.confianca)} por cento, com a mão abaixada`, true);
+    }
+  }
+};
+
+// ---- fluxo do teste ----
+function embaralhar(v) { for (let i = v.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [v[i], v[j]] = [v[j], v[i]]; } return v; }
+function comecar() {
+  const n = +$("tentativas").value;
+  sessao.pessoa = ($("pessoa").value || "anonimo").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 30) || "anonimo";
+  sessao.config = { tentativas_por_gesto: n, preparo_s: PREPARO, tempo_s: TEMPO, sem_gesto_s: +$("semGesto").value, gestos: GESTOS };
+  fila = [];
+  for (let r = 1; r <= n; r++) fila.push(...embaralhar(GESTOS.slice()).map(g => ({ gesto: g, rodada: r })));
+  $("opcoes").style.display = "none";
+  falar("Vamos começar. Em cada pedido, abaixe a mão, espere o sinal e faça o gesto.", true);
+  setTimeout(proxima, 3500);
+}
+function proxima() {
+  if (encerrado) return;
+  if (!fila.length) return semGesto();
+  const p = fila.shift();
+  tentativaAtual = { n: sessao.tentativas.length + 1, pedido: p.gesto, rodada: p.rodada, resultado: null, reconhecido: null, confianca: null, tempo_s: null };
+  alvo = p.gesto; fase = "preparo"; faseInicio = performance.now() / 1000;
+  $("fase").textContent = `Prepare-se · ${tentativaAtual.n} de ${tentativaAtual.n + fila.length}`;
+  $("pedido").textContent = p.gesto; $("instrucao").textContent = "Mão abaixada. " + (DICA[p.gesto] || "");
+  falar(`Próximo: ${p.gesto}`);
+}
+function fecharTentativa(resultado) {
+  tentativaAtual.resultado = resultado;
+  sessao.tentativas.push(tentativaAtual);
+  desenharLinha(tentativaAtual);
+  fase = "intervalo"; faseInicio = performance.now() / 1000;
+  salvar();
+}
+function semGesto() {
+  const s = sessao.config.sem_gesto_s;
+  if (!s) return terminar();
+  fase = "sem_gesto"; alvo = null; faseInicio = performance.now() / 1000;
+  $("fase").textContent = `Sem gesto · ${s} s`; $("pedido").textContent = "Aja normalmente";
+  $("instrucao").textContent = "Mexa-se, fale, ajeite o cabelo, segure o volante. Não faça os gestos. Todo disparo aqui é falso.";
+  falar(`Agora, ${s} segundos sem gesto. Aja normalmente.`, true);
+}
+function terminar() {
+  if (encerrado) return;
+  encerrado = true;
+  if (fase === "sem_gesto") {
+    const dur = performance.now() / 1000 - faseInicio, falsos = sessao.disparos.filter(x => x.fase === "sem_gesto");
+    sessao.sem_gesto = { segundos: +dur.toFixed(1), disparos: falsos.length, por_minuto: +(falsos.length / Math.max(dur / 60, 1e-3)).toFixed(2) };
+  }
+  fase = "parado"; alvo = null;
+  sessao.fim = new Date().toISOString();
+  salvar();
+  const ac = sessao.tentativas.filter(x => x.resultado === "acerto").length, tot = sessao.tentativas.length;
+  $("fase").textContent = "Fim"; $("pedido").textContent = `${ac} de ${tot} acertos`;
+  $("instrucao").textContent = sessao.sem_gesto ? `Sem gesto: ${sessao.sem_gesto.disparos} disparos falsos em ${sessao.sem_gesto.segundos} s.` : "";
+  falar(`Fim do teste. ${ac} acertos em ${tot}.`, true);
+}
+function tick() {
+  requestAnimationFrame(tick);
+  if (pausado || encerrado || fase === "parado") return;
+  const t = performance.now() / 1000, dt = t - faseInicio;
+  if (fase === "preparo") {
+    $("tempo").style.width = Math.min(100, dt / PREPARO * 100) + "%";
+    if (dt >= PREPARO) { fase = "gesto"; faseInicio = t; $("fase").textContent = "Agora"; $("instrucao").textContent = DICA[alvo] || ""; falar("Agora", true); }
+  } else if (fase === "gesto") {
+    $("tempo").style.width = Math.max(0, 100 - dt / TEMPO * 100) + "%";
+    if (dt >= TEMPO) { falar("Não reconheceu", true); fecharTentativa("nao_disparou"); }
+  } else if (fase === "intervalo") {
+    if (dt >= 1.6) proxima();
+  } else if (fase === "sem_gesto") {
+    const s = sessao.config.sem_gesto_s;
+    $("tempo").style.width = Math.max(0, 100 - dt / s * 100) + "%";
+    if (dt >= s) terminar();
+  }
+}
+requestAnimationFrame(tick);
+
+function desenharLinha(x) {
+  const tr = document.createElement("tr");
+  const rec = x.resultado === "nao_disparou" ? '<span class="nada">não disparou</span>'
+    : `<span class="${x.resultado === "acerto" ? "certo" : "erro"}">${x.reconhecido}</span>`;
+  tr.innerHTML = `<td>${x.n}</td><td>${x.pedido}</td><td>${rec}</td><td>${x.confianca != null ? pct(x.confianca) + "%" : "—"}</td><td>${x.tempo_s != null ? x.tempo_s.toFixed(1) + " s" : "—"}</td>`;
+  $("linhas").prepend(tr);
+  const ac = sessao.tentativas.filter(y => y.resultado === "acerto").length;
+  $("placar").innerHTML = `Acertos: <b>${ac} de ${sessao.tentativas.length}</b>`;
+}
+
+const nomeArquivo = () => `${sessao.pessoa}_${sessao.inicio.replace(/[-:]/g, "").replace("T", "_").slice(0, 15)}`;
+function salvar() {
+  fetch(`/teste/salvar?nome=${nomeArquivo()}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(sessao) })
+    .then(r => { $("salvo").textContent = r.ok ? `Salvo em resultados/webcam_ao_vivo/${nomeArquivo()}.json (${sessao.tentativas.length} tentativas)` : "Não consegui salvar."; })
+    .catch(() => { $("salvo").textContent = "Não consegui salvar (servidor fechado?)."; });
+}
+
+$("comecar").onclick = comecar;
+addEventListener("keydown", e => {
+  if (fase === "parado") return;
+  if (e.key === "Escape") { if (tentativaAtual && !tentativaAtual.resultado && fase !== "sem_gesto") { tentativaAtual.resultado = "interrompida"; } terminar(); }
+  else if (e.key === " " && (fase === "preparo" || fase === "gesto")) { e.preventDefault(); falar("Pulando", true); fecharTentativa("pulada"); }
+  else if ((e.key === "r" || e.key === "R") && (fase === "preparo" || fase === "gesto")) { fila.unshift({ gesto: tentativaAtual.pedido, rodada: tentativaAtual.rodada }); fase = "intervalo"; faseInicio = performance.now() / 1000; falar("Repetindo", true); }
+  else if (e.key === "p" || e.key === "P") { pausado = !pausado; if (!pausado) faseInicio = performance.now() / 1000; $("fase").textContent = pausado ? "Pausado" : $("fase").textContent; falar(pausado ? "Pausado" : "Continuando", true); }
+});
+</script>
+</body>
+</html>

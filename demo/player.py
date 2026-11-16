@@ -440,6 +440,7 @@ def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pont
     gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if (args.painel or args.apresentacao) else (), args.repetir)
     proximo_quadro, ultima_inferencia, ultimo_estado = time.time(), 0.0, 0.0
     nome_atual, confianca, ms = "Aquecendo", 0.0, 0.0
+    cnn_sozinha = None  # o que a CNN dizia antes de juntar com os pontos (mostrado no teste ao vivo)
     passo = 1 / V.QUADROS_POR_SEGUNDO
     while not parar.is_set() and not camera["parou"]:
         agora = time.time()
@@ -467,8 +468,11 @@ def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pont
             with torch.no_grad(), torch.autocast(dispositivo, dtype=torch.bfloat16):
                 x = (torch.from_numpy(np.stack(lotes)).to(dispositivo) - 127.5) / 127.5
                 todas = modelo(x).float().softmax(1).cpu().numpy()
+            so_cnn = todas.copy()
             todas = pontos.combinar(todas, lista_pontos, usadas)
             escolhida = int(np.argmax([q[indices_gesto].max() for q in todas]))
+            k = int(so_cnn[escolhida].argmax())
+            cnn_sozinha = {"gesto": V.TRADUCAO.get(nomes[k], nomes[k]), "confianca": float(so_cnn[escolhida][k])}
             historico.append(todas[escolhida])
             media = np.mean(historico, axis=0)
             melhor = int(media.argmax())
@@ -490,7 +494,8 @@ def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pont
                              "por_minuto": estado.disparos / minutos, "fps": camera["fps"], "ms": ms,
                              "aquecendo": len(lista) < minimo,
                              "pontos": {"mao": u["mao"], "parada": u["parada"], "numero": V.TRADUCAO.get(u["numero"], u["numero"]), "nota": u["nota"],
-                                        "regra": {None: None, "nao_numero": "não é número"}.get(u["regra"], V.TRADUCAO.get(u["regra"], u["regra"]))}})
+                                        "regra": {None: None, "nao_numero": "não é número"}.get(u["regra"], V.TRADUCAO.get(u["regra"], u["regra"]))},
+                             "cnn": cnn_sozinha})
             ultimo_estado = agora
     leitor.join(timeout=2)
     if captura is not None:
@@ -605,6 +610,28 @@ def criar_servidor(args, estado, parar):
     class Atendente(BaseHTTPRequestHandler):
         def log_message(self, *a):
             pass
+
+        def do_POST(self):
+            # Teste ao vivo (demo/teste_gestos.html): grava a sessão em resultados/webcam_ao_vivo/<nome>.json.
+            # Só números e nomes de gestos; nenhuma imagem.
+            url = urlparse(self.path)
+            nome = parse_qs(url.query).get("nome", [""])[0]
+            if url.path != "/teste/salvar" or not re.fullmatch(r"[A-Za-z0-9_-]{1,80}", nome):
+                self.send_response(404)
+                self.end_headers()
+                return
+            corpo = self.rfile.read(min(int(self.headers.get("Content-Length", 0)), 50_000_000))
+            try:
+                json.loads(corpo)
+            except ValueError:
+                self.send_response(400)
+                self.end_headers()
+                return
+            pasta = RAIZ.parent / "resultados" / "webcam_ao_vivo"
+            pasta.mkdir(parents=True, exist_ok=True)
+            (pasta / f"{nome}.json").write_bytes(corpo)
+            self.send_response(204)
+            self.end_headers()
 
         def enviar_audio(self, arquivo):
             """Entrega o áudio, inclusive em partes, para o navegador poder avançar na faixa."""
