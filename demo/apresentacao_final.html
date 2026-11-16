@@ -225,6 +225,13 @@
   .faixaOk b { font-size: 34px; font-weight: 800; color: var(--marinho); min-width: 330px; }
   .faixaOk span { font-size: 30px; font-weight: 700; color: var(--marinho); }
 
+  .fotoCam { display: block; height: 190px; margin: 20px 0 0; }
+
+  .qrBloco { position: absolute; right: 150px; top: 50%; transform: translateY(-50%); width: 330px; text-align: center; z-index: 2; }
+  .qrBloco img { display: block; width: 330px; height: 330px; background: #fff; padding: 12px; image-rendering: pixelated; }
+  .qrBloco .t { margin-top: 18px; font-size: 24px; font-weight: 600; color: #fff; }
+  .qrBloco .u { margin-top: 6px; font-size: 16px; color: #c9d6ea; }
+
 </style>
 <script src="/vendor/three.min.js"></script>
 </head>
@@ -481,7 +488,8 @@
         <div class="col an" style="--d:3"><div class="n">03</div><h3>Gestos sem soltar o volante</h3>
           <p>Micro-gestos dos dedos, com as mãos no volante. A rede já conhece cinco deles; falta treinar com mais motoristas.</p></div>
         <div class="col an" style="--d:4"><div class="n">04</div><h3>Câmera infravermelha</h3>
-          <p>Para funcionar à noite e com sol forte, numa placa embarcada no lugar do notebook.</p></div>
+          <p>Para funcionar à noite e com sol forte, numa placa embarcada no lugar do notebook.</p>
+          <img class="fotoCam" src="/demo/camera_infravermelha.png" alt="Módulo de câmera com LEDs infravermelhos"></div>
       </div>
     </div>
   </section>
@@ -496,6 +504,7 @@
     <h1 class="an">Obrigado</h1>
     <div class="linhaCapa an" style="--d:1;width:420px;height:2px;background:#fff;margin:30px 0 0"></div>
     <p class="sub2 an" style="--d:2">Perguntas</p>
+    <div class="qrBloco an" style="--d:3"><img src="/demo/qr_mao.png" alt="QR code da página A sua mão em 3D"><div class="t">Teste no seu celular: a sua mão em 3D</div><div class="u">gestos-ao-volante-mao.netlify.app</div></div>
   </section>
 
   <!-- ===================== Apêndice ===================== -->
@@ -900,7 +909,9 @@
           <tr><td>Nosso modelo</td><td>A contagem de dedos é só geometria e roda em qualquer processador; a CNN 3D iria para o acelerador de IA. Só os pontos da mão precisam sair da câmera: menos dados e mais privacidade</td></tr>
           <tr><td>O que falta medir</td><td>Tempo de resposta e consumo no hardware de destino; efeito de reduzir a precisão para 8 bits no acerto</td></tr>
         </table>
-        <div class="an" style="--d:2"><p class="tituloBloco">Como seria a montagem</p>
+        <div class="an" style="--d:2"><p class="tituloBloco">A câmera e a montagem</p>
+          <img class="fotoCam" style="height:210px;margin:0 auto 6px" src="/demo/camera_infravermelha.png" alt="Módulo de câmera com LEDs infravermelhos">
+          <p class="nota" style="text-align:center;margin:0 0 14px">Exemplo de câmera para o painel: módulo de 1080p com seis LEDs infravermelhos.</p>
           <svg viewBox="0 0 640 200" width="100%" style="display:block;margin:16px 0 4px" role="img" aria-label="Ilustração: câmera infravermelha ligada a uma placa FPGA que envia o comando">
             <defs><marker id="setaHw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
             <g font-family="Segoe UI, system-ui, sans-serif">
