@@ -24,12 +24,13 @@ Quem faz a demo do carro (slide 9) deve ser quem mais treinou os gestos na webca
 - A 110 km/h, tarefas simples levam 10 s com botões e 30,4 s na tela: cerca de 930 m sem olhar a estrada.
 - Mexer em tela ou aparelho do carro multiplica o risco de acidente por 4,6 (estudo SHRP2).
 - 3.275 mortes nos EUA em 2023 em acidentes com distração.
-- A Euro NCAP passa a dar nota menor, a partir de 2026, a carros que dependem da tela.
 
-**4 · A solução (1 min).** Uma câmera no painel reconhece gestos da mão. Gestos simples, feitos sem desviar o olhar. O sinal de OK ativa o sistema por 7 segundos.
+Guardar a Euro NCAP para o slide de impacto.
+
+**4 · A solução (1 min).** Uma câmera no painel reconhece gestos da mão. Gestos simples, feitos sem desviar o olhar. Um sinal com a mão liga o sistema; sem ele, nenhum gesto é executado.
 
 **5 · Como funciona (1min30).** Ler o slide da esquerda para a direita, em três passos.
-1. *Ativar:* o sinal de OK abre uma janela de 7 s, com bip e voz.
+1. *Ativar:* o sinal de OK abre a janela em que os gestos valem. O detalhe vem no slide 8.
 2. *Reconhecer:* a cada instante o sistema faz uma pergunta: a mão está parada e mostrando de 1 a 4 dedos?
    - Se sim, é um número, e quem responde é a **contagem de dedos**: o MediaPipe marca 21 pontos da mão e uma regra de geometria conta os dedos esticados.
    - Se não, quem responde é a **CNN 3D**, a rede neural que lê o vídeo e reconhece o movimento.
@@ -41,10 +42,10 @@ Frase para fechar: "número parado é com a contagem de dedos; movimento é com 
 
 **6 · O que o sistema vê, ao vivo (45 s).** Mostrar a mão: a imagem da câmera, os 21 pontos e a mão em 3D. Abrir e fechar os dedos para a plateia ver os pontos acompanhando.
 
-**7 · Os gestos (40 s).** São 11 gestos. Três números (1, 2 e 4 dedos) abrem Música, Ar-condicionado e Telefone. Oito movimentos fazem o resto: deslizar troca a música, polegar muda o volume, pare toca ou pausa. Não ler a tabela inteira.
+**7 · Os gestos (40 s).** São 11 gestos, mais o OK, que ativa. Três números (1, 2 e 4 dedos) abrem Música, Ar-condicionado e Telefone. Oito movimentos fazem o resto: deslizar troca a música, polegar muda o volume, pare toca ou pausa. Não ler a tabela inteira.
 
 **8 · A ativação pelo OK (50 s).**
-- Um comando errado também distrai o motorista. Por isso nada vale antes do sinal de OK.
+- Um comando errado também distrai o motorista. Por isso nada vale antes do sinal de OK: polegar no indicador por 0,4 s abre 7 segundos para o comando, com bip e voz.
 - Em 31,5 minutos de vídeo real sem gesto, nenhum movimento foi disparado por engano: a CNN 3D não confunde a mão em repouso com um comando.
 - Com a ativação, os números disparados por engano caem 30%: passam a ser precisos dois sinais seguidos, o OK e o gesto.
 
@@ -61,10 +62,10 @@ Dicas: mão parada por meio segundo nos números; soltar o OK antes de fazer o g
 **10 · O que construímos (1min15).** Quatro etapas, uma frase para cada:
 1. Comparamos 6 arquiteturas treinadas do zero e escolhemos a CNN 3D.
 2. A CNN 3D chegou a 92,6% no teste do Jester, com 27 gestos de movimento.
-3. A contagem de dedos resolveu os números: de 58,4% para 82,0%.
-4. As duas partes juntas, ao vivo: 87,7% nos gestos do carro.
+3. A contagem de dedos resolveu os números: 23,6 pontos a mais, de 58,4% para 82,0%.
+4. As duas partes juntas comandam 11 gestos ao vivo, na webcam.
 
-Apontar para o gráfico de baixo: é o ganho de juntar a CNN com a contagem de dedos.
+Não falar o 87,7% aqui: ele é a abertura do slide seguinte.
 
 **11 · Resultados (1min10).**
 - O modelo final acerta **87,7%** dos 11 gestos do carro, em 1.300 clipes de pessoas que não estavam no treino.
@@ -72,7 +73,7 @@ Apontar para o gráfico de baixo: é o ganho de juntar a CNN com a contagem de d
 - Destaques do gráfico: quatro dedos 97%, polegar para baixo 98%, polegar para cima e empurrar a mão 95%.
 - A CNN coloca o gesto certo entre as 5 maiores notas em 99,6% dos clipes.
 
-**12 · Impacto (40 s).** Com a tela, 30,4 s sem olhar a estrada; com botões, 10 s; com o gesto, o motorista continua olhando para a frente. E o mercado está indo nessa direção (Euro NCAP).
+**12 · Impacto (40 s).** Retomar o número do começo: 30,4 s sem olhar a estrada com a tela; com o gesto, o motorista continua olhando para a frente. E o mercado vai nessa direção: a partir de 2026, a Euro NCAP dá nota menor a carros que dependem da tela.
 
 **13 · Próximos passos (50 s).** Do protótipo no notebook para dentro do carro:
 1. Treinar um modelo só com a mão em 3D: rosto, fundo e luz deixam de interferir.

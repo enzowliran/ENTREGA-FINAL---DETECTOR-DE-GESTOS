@@ -96,11 +96,7 @@ def tabela_modelos(d, f):
     regras = ler("resultados/pontos/videos_reais.json") or {}
     hag = (ler("resultados/pontos/hagrid_amostra.json") or {}).get("teste_com_limiares_ajustados", {})
     jc = (ler("resultados/pontos/jester_coordenadas.json") or {}).get("coordenadas", {})
-    linhas = [(f"Comparação de arquiteturas · Jester, treino curto ({br(d['pequeno_cfg']['videos'] / 1000, 0)} mil vídeos, "
-               f"{d['pequeno_cfg']['epocas']} épocas) · falsa ativação = % dos vídeos sem gesto acima de 0,6", None)]
-    for r in arq["resultados"]:
-        nome = r["nome"] + (" (a escolhida)" if r["arquitetura"] == "cnn_3d" else "")
-        linhas.append((nome, f"{br(r['top1_val'])}% (validação)", f"{br(r['falsa_ativacao_06'], 2)}% dos vídeos", "—"))
+    linhas = []
     linhas.append(("Modelos completos · falsos por minuto em fluxo contínuo: Jester simulado e IPN (13 pessoas, vídeo real)", None))
     mg, dd = fi.get("resultados/jester/cnn_3d_mais_gestos/melhor.pt", {}), fi.get("resultados/jester/cnn_3d_dedos/final.pt", {})
     linhas += [
@@ -402,6 +398,7 @@ def main():
         "mov_falsos": cnn_carro.get("ipn_falsos"), "fl_cnn_carro": cnn_carro.get("ipn_falsos_por_minuto"),
         "fl_veto_carro": fvar.get("CNN 3D + contagem de dedos + veto da CNN (janela mais longa)", {}).get(so_carro, {}).get("ipn_falsos_por_minuto"),
         "ok_menos_pct": round(100 * (1 - f_com / f_sem)) if f_sem else None,
+        "car_num_ganho": GF.br(gc["numeros"]["acerto_pct"] - gc["numeros"]["cnn_sozinha_pct"]) if gc.get("numeros") else None,
     })
     tab_contagem, campos_contagem = confianca_contagem()
     f.update(campos_contagem)
@@ -414,7 +411,6 @@ def main():
         "<!--F:GRAFICO_GESTOS-->": GF.grafico_gestos(gc, V.TRADUCAO),
         "<!--F:GESTOS_NUMEROS-->": tab_numeros, "<!--F:GESTOS_MOVIMENTOS-->": tab_movimentos,
         "<!--F:TABELA_ARQUITETURAS-->": GF.tabela_arquiteturas(arq),
-        "<!--F:GRAFICO_GANHO-->": GF.grafico_ganho(gc),
     }
     modelo = (RAIZ / "demo/apresentacao_final_modelo.html").read_text(encoding="utf-8")
     for k, v in trocas.items():

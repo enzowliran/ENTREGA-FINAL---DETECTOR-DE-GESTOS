@@ -58,7 +58,7 @@
   .tabela tr.vencedora td { color: var(--marinho); font-weight: 700; background: var(--gelo); }
   .tabela tr.bloco td { background: #e2e9f4; color: var(--marinho); font-weight: 600; font-size: 12.5px; letter-spacing: .03em; text-align: left; padding: 7px 14px; }
   .tabTexto td, .tabTexto th { text-align: left !important; vertical-align: top; }
-  .tabModelos { font-size: 13px; } .tabModelos td { padding: 1.5px 12px; } .tabModelos th { padding: 6px 12px; font-size: 11px; } .tabModelos tr.bloco td { padding: 4px 12px; }
+  .tabModelos { font-size: 14.5px; } .tabModelos td { padding: 4px 12px; } .tabModelos th { padding: 8px 12px; font-size: 11px; } .tabModelos tr.bloco td { padding: 6px 12px; }
   .tabGestos { font-size: 16px; } .tabGestos td { padding: 7px 14px; text-align: left; } .tabGestos th { text-align: left; }
   .tabDados { font-size: 17px; } .tabDados td, .tabDados th { text-align: left; }
   .barraCel { display: flex; align-items: center; justify-content: flex-start; gap: 12px; }
@@ -248,7 +248,7 @@
   </section>
 
   <!-- 3. O problema: a tela e o risco -->
-  <section class="slide" data-titulo="O problema · a tela" data-fonte="Fonte: Vi Bilägare (teste a 110 km/h); NHTSA (SHRP2; Traffic Safety Facts 2023); Euro NCAP">
+  <section class="slide" data-titulo="O problema · a tela" data-fonte="Fonte: Vi Bilägare (teste a 110 km/h); NHTSA (SHRP2; Traffic Safety Facts 2023)">
     <div class="cab an"><h2>O problema</h2><p class="sub">A tela de toque é mais lenta que botões, e mexer nela ao dirigir multiplica o risco de acidente</p></div>
     <div class="corpo">
       <div class="duas" style="grid-template-columns:1.15fr 1fr;gap:70px">
@@ -271,7 +271,6 @@
           <div class="kpi"><div class="v">3.275<small>mortes</small></div><div class="r">em acidentes com distração ao volante nos EUA em 2023, cerca de 8% das mortes no trânsito.</div></div>
         </div>
       </div>
-      <div class="caixa an" style="--d:3;margin-top:40px"><h3>Mercado</h3><p>A partir de 2026, a Euro NCAP dá nota de segurança menor a carros que dependem da tela para funções básicas.</p></div>
     </div>
   </section>
 
@@ -283,7 +282,7 @@
       <div class="colunas">
         <div class="col an" style="--d:2"><div class="n">01</div><h3>Uma câmera no painel</h3><p>Olha para o motorista, como as câmeras que já monitoram o cansaço em carros novos.</p></div>
         <div class="col an" style="--d:3"><div class="n">02</div><h3>Gestos simples</h3><p>Deslizar, polegar, empurrar a mão e números com os dedos, feitos sem desviar o olhar.</p></div>
-        <div class="col an" style="--d:4"><div class="n">03</div><h3>Ativação antes do comando</h3><p>O sinal de OK abre uma janela de 7 segundos, com aviso sonoro e por voz. Fora dela, nada é executado.</p></div>
+        <div class="col an" style="--d:4"><div class="n">03</div><h3>Ativação antes do comando</h3><p>Um sinal com a mão liga o sistema. Sem ele, nenhum gesto é executado.</p></div>
       </div>
     </div>
   </section>
@@ -312,10 +311,8 @@
 
         <div class="fx fxBox fxEsc" style="left:0;top:150px;width:250px;height:230px">
           <h3>Sinal de OK</h3>
-          <p>Polegar encostado no indicador por 0,4 s.</p>
-          <p class="dest">Abre uma janela de 7 s, com bip e voz.</p>
+          <p>Abre a janela em que os gestos valem.</p>
         </div>
-        <p class="fx fxNota" style="left:0;top:394px;width:250px">Fora da janela, nenhum gesto vira comando.</p>
 
         <div class="fx fxBox fxPerg" style="left:300px;top:170px;width:250px;height:190px">
           <p class="rot">A pergunta</p>
@@ -330,7 +327,7 @@
         </div>
         <div class="fx fxBox fxCam" style="left:640px;top:292px;width:490px;height:196px">
           <span class="tag">Movimentos</span><h3>CNN 3D</h3>
-          <p>Rede neural que lê o vídeo e reconhece o movimento: deslizar, polegar, pare, empurrar, puxar e tamborilar.</p>
+          <p>Rede neural que lê o vídeo e reconhece o movimento da mão.</p>
           <p class="regra">Vale se o mesmo gesto tiver nota ≥ 70% em 3 análises seguidas.</p>
         </div>
 
@@ -338,9 +335,8 @@
           <h3>Comando</h3>
           <p>na central do carro, com resposta por voz</p>
         </div>
-        <p class="fx fxNota" style="left:1180px;top:349px;width:244px">Exemplos: dois dedos abrem o Ar-condicionado; deslizar para a direita passa a música.</p>
 
-        <div class="fx fxBase" style="left:0;top:522px;width:1250px"><b>Quem decide.</b> A contagem de dedos e a CNN 3D olham a câmera ao mesmo tempo. Se a contagem vê um número com a mão parada, vale o número. Em todo o resto, quem decide é a CNN 3D, que nunca responde número.</div>
+        <div class="fx fxBase" style="left:0;top:522px;width:1250px"><b>Quem decide.</b> As duas partes analisam a câmera ao mesmo tempo. Com a mão parada e um número à mostra, vale a contagem de dedos; em todo o resto, a CNN 3D.</div>
       </div>
     </div>
   </section>
@@ -359,7 +355,7 @@
         <div class="an" style="--d:1">
           <p class="tituloBloco">Ativação · geometria dos pontos da mão</p>
           <table class="tabela tabGestos tabPrincipal"><tr><th>Gesto</th><th>O que faz</th></tr>
-            <tr class="vencedora"><td><b>Sinal de OK</b></td><td>abre a janela de 7 s em que os comandos valem</td></tr></table>
+            <tr class="vencedora"><td><b>Sinal de OK</b></td><td>ativa o sistema</td></tr></table>
           <p class="tituloBloco" style="margin-top:38px">Números · contagem de dedos</p>
           <!--F:GESTOS_NUMEROS-->
           <p class="nota" style="margin-top:14px">Três dedos também é contado, mas não tem comando no carro.</p>
@@ -369,7 +365,7 @@
           <!--F:GESTOS_MOVIMENTOS-->
         </div>
       </div>
-      <p class="nota an" style="--d:3;margin-top:26px">Os comandos atuam em três telas: Música, Ar-condicionado e Telefone. A CNN 3D conhece {{n_classes}} classes; ao vivo, as de número ficam com a contagem de dedos. Lista completa no apêndice (A9).</p>
+      <p class="nota an" style="--d:3;margin-top:26px">Os comandos atuam em três telas: Música, Ar-condicionado e Telefone. Lista completa no apêndice (A9).</p>
     </div>
   </section>
 
@@ -399,7 +395,7 @@
 
   <!-- 8. Demo do carro 3D -->
   <section class="slide demo" data-titulo="Carro" data-demo="carro3d">
-    <div class="cab"><h2>No carro, pela visão do motorista<span class="aoVivo">AO VIVO</span></h2><p class="sub">O sinal de OK ativa; os gestos comandam a música, o ar-condicionado e o telefone</p></div>
+    <div class="cab"><h2>No carro, pela visão do motorista<span class="aoVivo">AO VIVO</span></h2><p class="sub">Música, ar-condicionado e telefone comandados só com a mão</p></div>
     <div class="quadro"></div>
   </section>
 
@@ -411,29 +407,28 @@
         <div class="col an" style="--d:1"><div class="n">01 · Escolha da rede</div><div class="v">{{arq_n}}<small>arquiteturas</small></div>
           <h3>Comparadas do zero</h3><p>Treinamos seis redes no mesmo protocolo. A CNN 3D teve o melhor equilíbrio entre acerto, tamanho e velocidade.</p></div>
         <div class="col an" style="--d:2"><div class="n">02 · Movimentos</div><div class="v">{{teste_top1}}%<small>no Jester</small></div>
-          <h3>CNN 3D</h3><p>Treinada com {{jester_treino}} vídeos, reconhece 27 gestos em {{jester_teste}} vídeos de teste que nunca viu.</p></div>
-        <div class="col an" style="--d:3"><div class="n">03 · Números</div><div class="v">{{car_num}}%<small>nos números</small></div>
+          <h3>CNN 3D</h3><p>Treinada com {{jester_treino}} vídeos, reconhece as 27 classes do Jester em {{jester_teste}} vídeos de teste que nunca viu.</p></div>
+        <div class="col an" style="--d:3"><div class="n">03 · Números</div><div class="v">+{{car_num_ganho}}<small>pontos nos números</small></div>
           <h3>Contagem de dedos</h3><p>Os 21 pontos da mão resolveram o que a rede sozinha não via: de {{car_num_cnn}}% para {{car_num}}% em 1, 2 e 4 dedos.</p></div>
-        <div class="col an" style="--d:4"><div class="n">04 · Sistema completo</div><div class="v">{{car_acc}}%<small>nos gestos do carro</small></div>
-          <h3>Ao vivo, na webcam</h3><p>CNN 3D e contagem de dedos juntas, com ativação pelo OK, comandando música, ar e telefone em tempo real.</p></div>
+        <div class="col an" style="--d:4"><div class="n">04 · Sistema completo</div><div class="v">{{n_comandos}}<small>gestos ao vivo</small></div>
+          <h3>Na webcam, em tempo real</h3><p>CNN 3D e contagem de dedos juntas, com ativação pelo OK, comandando o carro da demo.</p></div>
       </div>
-      <div class="an" style="--d:5;margin-top:44px"><p class="tituloBloco">O ganho de juntar as duas partes</p><!--F:GRAFICO_GANHO--></div>
     </div>
   </section>
 
   <!-- 9. Acerto: só o modelo final, nos gestos que o carro usa -->
   <section class="slide" data-titulo="Acerto" data-fonte="Fonte: resultados do projeto · teste misto (Jester, IPN Hand, HaGRID), pessoas fora do treino · src/medir_gestos_do_carro.py">
-    <div class="cab an"><h2>Resultados</h2><p class="sub">O modelo final acerta {{car_acc}}% dos gestos que o carro usa, com pessoas que não estavam no treino</p></div>
+    <div class="cab an"><h2>Resultados</h2><p class="sub">O modelo final, testado com pessoas que não estavam no treino</p></div>
     <div class="corpo">
       <div class="duas" style="grid-template-columns:780px 1fr;gap:64px;align-items:center">
         <div class="an" style="--d:1"><p class="tituloBloco">Acerto em cada gesto do carro</p><!--F:GRAFICO_GESTOS--></div>
         <div class="kpis an" style="--d:2;gap:32px">
-          <div class="kpi forte"><div class="v">{{car_acc}}%<small>nos {{n_comandos}} gestos do carro</small></div><div class="r">{{car_n}} clipes de teste. Em cada um, o modelo escolhe entre as {{n_classes}} classes que conhece.</div></div>
+          <div class="kpi forte"><div class="v">{{car_acc}}%<small>nos {{n_comandos}} gestos do carro</small></div><div class="r">em {{car_n}} clipes de teste, de três bases públicas.</div></div>
           <div class="kpi"><div class="v">{{car_mov}}%<small>movimentos</small></div><div class="r">8 gestos, reconhecidos pela CNN 3D.</div></div>
           <div class="kpi"><div class="v">{{car_num}}%<small>números</small></div><div class="r">1, 2 e 4 dedos, pela contagem de dedos.</div></div>
         </div>
       </div>
-      <p class="nota an" style="--d:3;margin-top:20px;max-width:1250px">{{car_n}} clipes de três bases (Jester, IPN Hand e HaGRID), só com pessoas que não estavam no treino. A CNN 3D coloca o gesto certo entre as suas 5 maiores notas em {{car_top5}}% dos clipes.</p>
+      <p class="nota an" style="--d:3;margin-top:20px;max-width:1250px">A CNN 3D coloca o gesto certo entre as suas 5 maiores notas em {{car_top5}}% dos clipes.</p>
     </div>
   </section>
 
@@ -452,7 +447,7 @@
           <text x="520" y="142" font-size="21" font-weight="600" fill="#0a1f44">10 s · ≈ 300 m</text>
           <text x="0" y="220" font-size="18" fill="#364152">Gesto</text>
           <rect x="208" y="196" width="5" height="38" fill="#1e4fbf"/>
-          <text x="230" y="222" font-size="21" font-weight="600" fill="#1e4fbf">≈ 0 s · o gesto é feito olhando a estrada</text>
+          <text x="230" y="222" font-size="21" font-weight="600" fill="#1e4fbf">≈ 0 s</text>
           <line x1="210" x2="210" y1="24" y2="250" stroke="#d6dce4"/>
         </svg>
       </div>
@@ -524,7 +519,7 @@
     <div class="corpo">
       <div class="duas" style="grid-template-columns:400px 1fr;gap:56px;align-items:start">
         <div class="kpis an" style="--d:1;gap:26px">
-          <div class="kpi forte"><div class="v">{{jester_total}}<small>vídeos</small></div><div class="r">de {{jester_classes}} gestos, com cerca de 3 s cada, a 12 quadros por segundo: {{jester_frames_mi}} milhões de quadros, {{jester_gb}} GB.</div></div>
+          <div class="kpi forte"><div class="v">{{jester_total}}<small>vídeos</small></div><div class="r">de {{jester_classes}} classes, com cerca de 3 s cada, a 12 quadros por segundo: {{jester_frames_mi}} milhões de quadros, {{jester_gb}} GB.</div></div>
           <div class="kpi"><div class="v">{{jester_treino}}</div><div class="r">vídeos de treino; {{jester_val}} de validação e {{jester_teste}} de teste, na divisão oficial da base.</div></div>
           <div class="kpi"><div class="v">{{n_teste}}</div><div class="r">amostras no teste misto final: Jester {{mix_jester}}, IPN {{mix_ipn}}, HaGRID {{mix_hagrid}}, Slovo {{mix_slovo}} e DriverMHG {{mix_driver}}. Sempre pessoas fora do treino.</div></div>
         </div>
@@ -537,7 +532,7 @@
             <tr><td>Sem espelhar</td><td>Inverter a imagem trocaria deslizar para a esquerda por deslizar para a direita</td></tr>
             <tr><td>Exemplos de “sem gesto”</td><td>10% das amostras de treino viram “sem gesto”: um quadro repetido (mão parada), ruído ou cor lisa. Ensina a rede a não disparar sem movimento</td></tr>
             <tr><td>Treino</td><td>AdamW, taxa de aprendizado até 0,001 em ciclo único, 20 épocas, lote de 48, suavização dos rótulos de 0,05</td></tr>
-            <tr><td>Teste misto</td><td>As cinco bases juntas, {{n_classes}} classes: os 27 gestos do Jester, os números de 1 a 4 e cinco gestos do volante</td></tr>
+            <tr><td>Teste misto</td><td>As cinco bases juntas, {{n_classes}} classes: as 27 do Jester, os números de 1 a 4 e cinco gestos do volante</td></tr>
           </table>
         </div>
       </div>
@@ -708,7 +703,7 @@
           </g>
           <!-- rodapé do esquema -->
           <text x="0" y="380" font-size="16" fill="#364152">Leve: {{gru_params}} parâmetros (GRU do teste com o Jester). Treinada do zero sobre os pontos; o MediaPipe entra pronto e congelado.</text>
-          <text x="0" y="408" font-size="16" fill="#0a1f44"><tspan font-weight="600">Testada, não usada ao vivo:</tspan> {{acc_gru}}% sozinha e {{acc_pesos}}% combinada com a CNN no teste misto, mas ao vivo dava nota baixa nos números e confundia a mão aberta com quatro dedos.</text>
+          <text x="0" y="408" font-size="16" fill="#0a1f44"><tspan font-weight="600">Testada, não usada ao vivo:</tspan> {{car_gru_so}}% sozinha e {{car_gru}}% combinada com a CNN nos gestos do carro, mas ao vivo dava nota baixa nos números e confundia a mão aberta com quatro dedos.</text>
         </g>
       </svg>
     </div>
@@ -730,7 +725,7 @@
 
   <!-- A7. Como contamos os dedos -->
   <section class="slide" data-titulo="A7 · Como contamos os dedos" data-fonte="Fonte: src/pontos_mao.py (contar_dedos, LIMIARES) · demo/player.py (Pontos)">
-    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · Como contamos os dedos</h2><p class="sub">Uma regra de geometria sobre os 21 pontos da mão; nada aqui foi treinado por nós</p></div>
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · Como contamos os dedos</h2><p class="sub">A regra de geometria que diz, em cada quadro, quantos dedos estão esticados</p></div>
     <div class="corpo">
       <div class="duas" style="grid-template-columns:380px 1fr;gap:56px;align-items:center">
         <div class="an" style="--d:1">
@@ -759,14 +754,11 @@
         <div class="an" style="--d:2">
           <table class="tabela tabTexto tabDensa">
             <tr><th>Passo</th><th>Regra</th></tr>
-            <tr><td>1 · Pontos</td><td>O MediaPipe Hand Landmarker (Google, pronto) devolve 21 pontos da mão em 3D, a cada quadro</td></tr>
-            <tr><td>2 · Dedo esticado</td><td>Distância da base à ponta ÷ comprimento do dedo ≥ 0,85, e ângulo entre o dedo e a direção da palma ≤ 65°</td></tr>
-            <tr><td>3 · Polegar</td><td>Regra própria: reto (≥ 0,95) e afastado, com a ponta a pelo menos 1,2 largura de palma do dedo mínimo</td></tr>
-            <tr><td>4 · Contagem</td><td>De 1 a 4 dedos esticados é número. Cinco dedos, só o polegar ou punho não são número: ficam com a CNN 3D</td></tr>
-            <tr><td>5 · Mão parada</td><td>Mão visível em 5 dos 6 últimos quadros, e o pulso andou no máximo meia palma em 0,5 s</td></tr>
-            <tr class="vencedora"><td>6 · Estabilidade</td><td>A mesma contagem em 5 de 6 quadros: o número vale na hora, sem porcentagem</td></tr>
+            <tr><td>1 · Dedo esticado</td><td>Distância da base à ponta ÷ comprimento do dedo ≥ 0,85, e ângulo entre o dedo e a direção da palma ≤ 65°</td></tr>
+            <tr><td>2 · Polegar</td><td>Regra própria: reto (≥ 0,95) e afastado, com a ponta a pelo menos 1,2 largura de palma do dedo mínimo</td></tr>
+            <tr class="vencedora"><td>3 · Contagem</td><td>De 1 a 4 dedos esticados é número. Cinco dedos, só o polegar ou punho não são número: ficam com a CNN 3D</td></tr>
           </table>
-          <p class="nota">Os limiares (0,85 e 65°) foram ajustados com metade das pessoas do HaGRID; a outra metade ficou no teste. A regra não tem porcentagem porque não é um modelo: a confirmação é a estabilidade em 5 de 6 quadros.</p>
+          <p class="nota">Os limiares (0,85 e 65°) foram ajustados com metade das pessoas do HaGRID; a outra metade ficou no teste. A regra não dá porcentagem: a confirmação é a mesma contagem em 5 de 6 quadros, com a mão parada.</p>
         </div>
       </div>
     </div>
@@ -785,7 +777,7 @@
       </table>
       <div class="grade an" style="--d:2;grid-template-columns:1fr 1fr;gap:30px;margin-top:30px">
         <div class="caixa"><h3>Por que os dados e a webcam divergem (causa provável)</h3><p>As bases têm outra câmera, outra distância e outro fundo. A GRU aprendeu os números sobretudo com fotos do HaGRID. E a CNN 3D lê o número parado da nossa webcam como “outro movimento”: {{vivo_outro_mov}} das {{vivo_leituras}} leituras do teste.</p></div>
-        <div class="caixa"><h3>O que aprendemos</h3><p>O teste com dados seleciona candidatos; quem decide é o uso real. Um modelo com 95% nos dados que não reconhece o gesto na câmera não serve ao motorista. O passo seguinte é gravar a nossa câmera, para treinar e medir no cenário certo (slide 12).</p></div>
+        <div class="caixa"><h3>O que aprendemos</h3><p>O teste com dados seleciona candidatos; quem decide é o uso real. Um modelo com 95% nos dados que não reconhece o gesto na câmera não serve ao motorista. O passo seguinte é gravar a nossa câmera, para treinar e medir no cenário certo (slide 13).</p></div>
       </div>
     </div>
   </section>
@@ -794,7 +786,7 @@
   <section class="slide" data-titulo="A8 · Todos os modelos" data-fonte="Fonte: resultados do projeto">
     <div class="cab an" style="margin-bottom:12px"><p class="rotuloCab">Apêndice</p><h2>A8 · Todos os modelos testados</h2></div>
     <div class="an" style="--d:1;padding-right:70px"><!--F:TABELA_MODELOS--></div>
-    <p class="nota an" style="--d:2;margin-top:6px;font-size:12.5px">— = não medido. * Quase não dispara os números ({{um_media}} trechos de 1 dedo, {{dois_media}} de 2). Cada bloco foi medido num conjunto diferente: compare dentro do bloco.</p>
+    <p class="nota an" style="--d:2;margin-top:6px;font-size:12.5px">— = não medido. * Quase não dispara os números ({{um_media}} trechos de 1 dedo, {{dois_media}} de 2). Cada bloco foi medido num conjunto diferente: compare dentro do bloco. As seis arquiteturas comparadas na entrega intermediária estão no slide seguinte.</p>
   </section>
 
   <!-- A8 (terceira parte). Arquiteturas treinadas do zero -->
@@ -805,7 +797,7 @@
       <p class="nota an" style="--d:2">Protocolo: {{arq_protocolo}}. Falsa ativação: % dos vídeos sem gesto em que a rede apontou um gesto com nota ≥ 0,6. Tempo por análise: um clipe, na GPU do notebook. Ficou de fora a R(2+1)D (convolução separada em espaço e tempo): com lote de 48 passava dos 8 GB da GPU.</p>
       <div class="grade an" style="--d:3;grid-template-columns:1fr 1fr;gap:30px;margin-top:20px">
         <div class="caixa"><h3>Por que a CNN 3D</h3><p>Acerto próximo ao da versão larga, com menos da metade dos parâmetros, menos falsas ativações e análise mais rápida. Treinada depois no Jester inteiro, chegou a {{teste_top1}}% no teste.</p></div>
-        <div class="caixa"><h3>Por que não CNN 2D + GRU ou Transformer</h3><p>No mesmo protocolo, ficaram em {{arq_transformer}}% e {{arq_gru}}%. Explicação provável: a CNN 2D resume cada quadro sozinho, antes de olhar o tempo, e o movimento se perde nesse resumo. Na CNN 3D, o filtro já vê o movimento nos pixels.</p></div>
+        <div class="caixa"><h3>Por que não CNN 2D + GRU ou Transformer</h3><p>No mesmo protocolo, ficaram em {{arq_gru}}% e {{arq_transformer}}%. Explicação provável: a CNN 2D resume cada quadro sozinho, antes de olhar o tempo, e o movimento se perde nesse resumo. Na CNN 3D, o filtro já vê o movimento nos pixels.</p></div>
       </div>
     </div>
   </section>
@@ -817,8 +809,8 @@
       <table class="tabela tabTexto tabDensa an" style="--d:1">
         <tr><th>Etapa</th><th>O que treinamos</th><th>Resultado</th><th>O que levou ao passo seguinte</th></tr>
         <tr><td>1 · Comparação de arquiteturas</td><td>Seis redes do zero, com 20 mil vídeos do Jester</td><td>CNN 3D: {{arq_cnn3d}}% · larga: {{arq_larga}}%</td><td>CNN 3D escolhida pelo custo e benefício</td></tr>
-        <tr><td>2 · CNN 3D no Jester inteiro</td><td>{{jester_treino}} vídeos, 27 gestos, 20 épocas</td><td>{{teste_top1}}% no teste</td><td>O Jester não tem os números (1, 2 e 4 dedos)</td></tr>
-        <tr><td>3 · Números com a CNN</td><td>Fotos do HaGRID viradas vídeo; depois, vídeos do IPN</td><td>{{d1_um}} e {{d2_um}} disparos certos de 1 dedo; {{d1_fpm}} e {{d2_fpm}} falsos/min</td><td>A CNN aprendia o fundo, não a forma da mão</td></tr>
+        <tr><td>2 · CNN 3D no Jester inteiro</td><td>{{jester_treino}} vídeos, 27 classes, 20 épocas</td><td>{{teste_top1}}% no teste</td><td>O Jester não tem os números (1, 2 e 4 dedos)</td></tr>
+        <tr><td>3 · Números com a CNN</td><td>Fotos do HaGRID viradas vídeo; depois, vídeos do IPN</td><td>Não funcionou fora dos vídeos de treino (A10)</td><td>A CNN aprendia o fundo, não a forma da mão</td></tr>
         <tr><td>4 · Pontos da mão</td><td>MediaPipe + regras de geometria; depois, uma GRU sobre os pontos</td><td>GRU: {{car_gru_so}}% nos gestos do carro</td><td>Boa nos números; a CNN é melhor nos movimentos</td></tr>
         <tr><td>5 · CNN pré-treinada + ajuste</td><td>A CNN da etapa 2, ajustada nas cinco bases, {{n_classes}} classes</td><td>{{car_cnn}}% nos gestos do carro</td><td>Movimentos em {{car_mov_cnn}}%; faltavam os números</td></tr>
         <tr><td>6 · Combinações</td><td>GRU + CNN; contagem de dedos + veto da CNN</td><td>{{car_gru}}% e {{car_veto}}% nos gestos do carro</td><td>Na webcam, os números não eram reconhecidos</td></tr>
@@ -840,7 +832,7 @@
     <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A10 · Três tentativas para reconhecer os números</h2><p class="sub">Trechos = vezes em que a pessoa mostrou 1 e 2 dedos no vídeo do IPN e o comando certo disparou (de {{um_total}} e {{dois_total}})</p></div>
     <div class="corpo">
       <table class="tabela tabTexto an" style="--d:1">
-        <tr><th>Tentativa</th><th>O que mudou</th><th>Resultado no IPN</th><th>Lição</th></tr>
+        <tr><th>Tentativa</th><th>O que mudou</th><th>Resultado no IPN (todos os gestos)</th><th>Lição</th></tr>
         <tr><td>1 · CNN com fotos</td><td>Fotos do HaGRID viraram vídeos com movimento simulado</td><td>{{d1_um}} disparos certos de 1 dedo · {{d1_fpm}} falsos/min</td><td>Foto não ensina como a mão aparece em vídeo</td></tr>
         <tr><td>2 · CNN com vídeo real</td><td>Treino com vídeos do IPN</td><td>{{d2_um}} disparos certos · {{d2_fpm}} falsos/min · 0% nos vídeos de sinais</td><td>Aprendeu o fundo, não a mão</td></tr>
         <tr><td>3a · Pontos + regras</td><td>Dedos esticados contados nos 21 pontos</td><td>{{regras_um}}% e {{regras_dois}}% dos trechos · {{regras_fpm}} falsos/min</td><td>Forma certa, mas dispara demais</td></tr>
@@ -862,7 +854,7 @@
         <tr><td>Gatilho</td><td>O mesmo gesto com nota ≥ 0,7 em 3 análises seguidas; depois, 1,2 s de pausa</td></tr>
         <tr><td>Contagem</td><td>Disparo num trecho sem gesto conta como falso; até 1,5 s depois de um gesto, não (atraso do gatilho)</td></tr>
         <tr><td>Acerto dos números</td><td>Trechos de apontar com 1 e 2 dedos em que o comando certo disparou</td></tr>
-        <tr><td>Janela do OK</td><td>Simulação com os pontos da mão nos mesmos vídeos: o detector do OK decide quando a janela de 7 s está aberta. Comandos por engano: {{fl_ok_sem}} por minuto sem a janela e {{fl_ok_com}} com ela; o OK abriu sem ser pedido {{fl_ok_abre}} vezes por minuto</td></tr>
+        <tr><td>Janela do OK</td><td>Simulação com os pontos da mão nos mesmos vídeos: o detector do OK decide quando a janela de 7 s está aberta. Comandos do carro por engano: {{fl_ok_sem}} por minuto sem a janela e {{fl_ok_com}} com ela; o OK abriu sem ser pedido {{fl_ok_abre}} vezes por minuto</td></tr>
       </table>
     </div>
   </section>
