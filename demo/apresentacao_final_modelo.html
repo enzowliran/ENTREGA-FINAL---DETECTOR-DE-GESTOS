@@ -197,7 +197,7 @@
   .fxNota { font-size: 14.5px; line-height: 1.45; color: var(--cinza); }
   .fxBase { border-top: 1px solid var(--linha); padding-top: 16px; font-size: 17.5px; line-height: 1.5; color: var(--texto); }
   .fxBase b { color: var(--marinho); }
-  .tabPrincipal { font-size: 18px; } .tabPrincipal td { padding: 3px 14px; }
+  .tabPrincipal { font-size: 18px; } .tabPrincipal td { padding: 2px 14px; }
   .tabArq { font-size: 15.5px; } .tabArq td { padding: 9px 12px; } .tabArq td:nth-child(2), .tabArq th:nth-child(2) { text-align: left; }
   .tabArq td:first-child { white-space: nowrap; }
   .tabDensa { font-size: 16px; } .tabDensa td { padding: 8px 12px; }
@@ -213,10 +213,10 @@
   .marcos .col .v small { font-size: 18px; font-weight: 400; color: var(--cinza); margin-left: 8px; letter-spacing: 0; }
   .marcos .col h3 { font-size: 22px; margin: 16px 0 8px; } .marcos .col p { font-size: 16.5px; line-height: 1.5; }
 
-  .tabPrincipal td.ic { width: 70px; padding: 3px 4px 3px 14px; line-height: 0; } .tabPrincipal th:first-child { width: 70px; }
+  .tabPrincipal td.ic { width: 70px; padding: 2px 4px 2px 14px; line-height: 0; } .tabPrincipal th:first-child { width: 70px; }
   .tabPrincipal td:nth-child(2) { white-space: nowrap; width: 230px; }
   .col .icone { height: 96px; margin: 0 0 14px; }
-  .colunas.grande .col h3 { font-size: 28px; margin: 12px 0 12px; } .colunas.grande .col p { font-size: 20.5px; line-height: 1.5; }
+  .colunas.grande .col h3 { font-size: 24px; margin: 12px 0 12px; } .colunas.grande .col p { font-size: 18.5px; line-height: 1.5; }
   .colunas.grande .col .n { font-size: 16px; }
   .textoApoio { font-size: 18px; line-height: 1.5; color: var(--texto); margin: 0 0 8px; } .textoApoio b { color: var(--marinho); }
 
@@ -231,6 +231,11 @@
   .qrBloco img { display: block; width: 330px; height: 330px; background: #fff; padding: 4px; image-rendering: pixelated; }
   .qrBloco .t { margin-top: 18px; font-size: 24px; font-weight: 600; color: #fff; }
   .qrBloco .u { margin-top: 6px; font-size: 16px; color: #c9d6ea; }
+
+  #mini3d { position: absolute; right: 146px; bottom: 70px; width: 124px; z-index: 6; overflow: hidden; background: #0a1a33; border: 1px solid var(--linha); transition: opacity .3s; }
+  #mini3d iframe { display: block; width: 124px; height: 70px; border: 0; background: #101418; pointer-events: none; }
+  #mini3d div { font-size: 10.5px; font-weight: 600; padding: 4px 8px; background: #fff; color: var(--tinta); white-space: nowrap; }
+  #mini3d.oculto { opacity: 0; pointer-events: none; }
 
 </style>
 <script src="/vendor/three.min.js"></script>
@@ -480,15 +485,17 @@
   <section class="slide" data-titulo="Próximos passos">
     <div class="cab an"><h2>Próximos passos</h2><p class="sub">Do protótipo no notebook para dentro do carro</p></div>
     <div class="corpo">
-      <div class="colunas grande" style="grid-template-columns:repeat(4,1fr);gap:40px">
+      <div class="colunas grande" style="grid-template-columns:repeat(5,1fr);gap:28px">
         <div class="col an" style="--d:1"><div class="n">01</div><h3>Treinar com a mão em 3D</h3>
           <p>Um modelo que recebe só a mão reconstruída em 3D. Rosto, fundo e luz deixam de interferir: tudo fica padronizado.</p></div>
         <div class="col an" style="--d:2"><div class="n">02</div><h3>Gravar o cenário real</h3>
           <p>Vídeos da nossa câmera e de motoristas, para treinar e validar onde o sistema vai ser usado.</p></div>
         <div class="col an" style="--d:3"><div class="n">03</div><h3>Gestos sem soltar o volante</h3>
-          <p>Micro-gestos dos dedos, com as mãos no volante. A rede já conhece cinco deles; falta treinar com mais motoristas.</p></div>
+          <p>Micro-gestos dos dedos, com as mãos no volante. A rede já foi treinada com cinco deles, com poucos dados; falta gravar mais motoristas.</p></div>
         <div class="col an" style="--d:4"><div class="n">04</div><h3>Câmera infravermelha</h3>
           <p>Para funcionar à noite e com sol forte, numa placa embarcada no lugar do notebook.</p></div>
+        <div class="col an" style="--d:5"><div class="n">05</div><h3>Streaming de verdade</h3>
+          <p>Ligar o sistema à API do Spotify ou de outra plataforma, como o SoundCloud, para comandar músicas reais e chegar a uma central completa.</p></div>
       </div>
     </div>
   </section>
@@ -1458,6 +1465,7 @@
     <div id="progresso"><div></div></div>
     <span id="navegacao"><button id="btVoltar" title="Slide anterior (PageUp)" aria-label="Slide anterior">‹</button><button id="btAvancar" title="Próximo slide (PageDown)" aria-label="Próximo slide">›</button></span>
   </div>
+  <div id="mini3d"><iframe id="miniMao" title="Mão em 3D" allow="autoplay"></iframe><div>mão em 3D</div></div>
   <div id="mini"><img id="miniVideo" alt="Webcam"><div id="miniGesto">conectando...</div></div>
   <div id="aviso"></div>
 </div>
@@ -2323,6 +2331,10 @@ function mostrar(n) {
   // Nas demos, a câmera já aparece grande: a miniatura sai e o vídeo dela é desligado.
   $("mini").classList.toggle("oculto", !!s.dataset.demo);
   if (s.dataset.demo) $("miniVideo").removeAttribute("src"); else if (!$("miniVideo").getAttribute("src")) $("miniVideo").src = "/video";
+  // A mão 3D em miniatura acompanha a webcam; nas demos ela é desligada (a demo já usa a câmera e o MediaPipe).
+  $("mini3d").classList.toggle("oculto", !!s.dataset.demo);
+  if (s.dataset.demo) { if ($("miniMao").getAttribute("src")) $("miniMao").src = "about:blank"; }
+  else if (!($("miniMao").getAttribute("src") || "").includes("hand3d")) $("miniMao").src = "/demo/hand3d.html?embutido=1&mini=1";
   if (s.dataset.secao) $("palco").dataset.secao = s.dataset.secao; else delete $("palco").dataset.secao;
   $("secaoPilula").textContent = NOMES_PARTES[n] || "Abertura";
   [...$("trilha").children].forEach(x => x.classList.toggle("atual", x.dataset.parte === NOMES_PARTES[n]));

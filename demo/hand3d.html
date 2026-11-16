@@ -13,6 +13,7 @@
   #cam canvas { position: absolute; inset: 0; height: 100%; }
   #hud { position: fixed; left: 12px; top: 12px; background: rgba(16,20,24,.8); padding: 10px 12px; border-radius: 8px; line-height: 1.5; }
   #hud b { color: #7fd1ff; }
+  body.mini #hud, body.mini #cam, body.mini #start { display: none !important; }
   body.tres { background: #0a1a33; }
   body.tres #hud, body.tres #cam, body.tres #start { display: none !important; }
   body.tres #scene { position: static; }
@@ -76,6 +77,10 @@ if (TRES) {
 }
 function tamanhoCena() { return TRES ? [cena3.clientWidth || 400, cena3.clientHeight || 600] : [innerWidth, innerHeight]; }
 const EMBUTIDO = PARAMS.has("embutido");
+// Miniatura (?mini=1, no canto dos slides): só a mão 3D, com zoom automático para ela ocupar o quadro.
+const MINI = PARAMS.has("mini");
+if (MINI) document.body.classList.add("mini");
+let fovMini = 40;   // campo de visão da miniatura (zoom automático)
 const DO_SERVIDOR = EMBUTIDO || PARAMS.has("servidor");
 const stream = document.getElementById("stream");
 const quadroCanvas = document.createElement("canvas"), qctx = quadroCanvas.getContext("2d");
@@ -112,7 +117,7 @@ function resetView() {
 function updateCameraFov() {
   const [vw, vh] = tamanhoFonte();
   const aspect = vw && vh ? vh / vw : 9 / 16;
-  camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(HFOV) / 2) * aspect));
+  camera.fov = MINI ? fovMini : THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(HFOV) / 2) * aspect));
   const [cw, ch] = tamanhoCena();
   camera.aspect = cw / ch;
   camera.updateProjectionMatrix();
@@ -262,7 +267,7 @@ const MaoReal = ((ESPELHO, ROTULO_FIXO) => {
     mostrarRotulo();
   }
   return { criar, atualizar, alternar, visual: () => visual, poseTeste, projetar };
-})(-1, !TRES && !EMBUTIDO);
+})(-1, !TRES && !EMBUTIDO && !MINI);
 
 function makeHand(color) {
   const skin = new THREE.MeshPhysicalMaterial({
@@ -397,6 +402,24 @@ function desenharAntiga(h) {
   h.palm.geometry.computeBoundingSphere();
 }
 
+// Miniatura: a câmera virtual continua no lugar da webcam, mira no centro das mãos e fecha o campo de visão (zoom).
+const centroMini = new THREE.Vector3();
+function enquadrarMini() {
+  const vis = hands.filter(h => h.group.visible);
+  if (!vis.length) return;
+  centroMini.set(0, 0, 0);
+  for (const h of vis) for (const p of h.pts) centroMini.add(p);
+  centroMini.divideScalar(vis.length * 21);
+  let raio = 0;
+  for (const h of vis) for (const p of h.pts) raio = Math.max(raio, p.distanceTo(centroMini));
+  const a = Math.asin(Math.min((raio + 0.03) / Math.max(centroMini.length(), 0.05), 0.9));
+  const vertical = camera.aspect >= 1 ? a : Math.atan(Math.tan(a) / camera.aspect);
+  fovMini += (THREE.MathUtils.clamp(THREE.MathUtils.radToDeg(2 * vertical) * 1.1, 8, 75) - fovMini) * 0.1;
+  controls.target.lerp(centroMini, 0.18);
+  camera.fov = fovMini;
+  camera.updateProjectionMatrix();
+}
+
 // ---------- MediaPipe ----------
 let landmarker;
 async function createLandmarker() {
@@ -485,6 +508,7 @@ function loop() {
       .replace(/^(.+)$/, "distância da câmera: $1");
   }
   if (MAOTESTE) statusEl.textContent = "Teste: " + aplicarTeste();
+  if (MINI) enquadrarMini();
   controls.update();
   renderer.render(scene, camera);
 }

@@ -111,7 +111,7 @@ def icone_camera(tam=92):
 def gestos_principal(traducao):
     """Slide Os gestos: três listas (ativação, números e movimentos), cada gesto com o desenho e o comando."""
     def tabela(linhas, cabecalho, classe=""):
-        corpo = "".join(f'<tr{classe}><td class="ic">{icone_mao(g)}</td><td><b>{html.escape(nome)}</b></td><td>{html.escape(acao)}</td></tr>'
+        corpo = "".join(f'<tr{classe}><td class="ic">{icone_mao(g, 44)}</td><td><b>{html.escape(nome)}</b></td><td>{html.escape(acao)}</td></tr>'
                         for g, nome, acao in linhas)
         return f'<table class="tabela tabGestos tabPrincipal"><tr><th></th><th>Gesto</th><th>{cabecalho}</th></tr>{corpo}</table>'
     ok = tabela([("OK", "Sinal de OK", "ativa o sistema")], "O que faz", ' class="vencedora"')
