@@ -100,7 +100,7 @@
     "Pushing Hand Away": 3
    }
   },
-  "veto B: CNN diz Outros gestos ou um movimento": {
+  "veto B (ao vivo): CNN diz Outros gestos ou um movimento": {
    "acerto_36_classes_pct": 87.9,
    "acerto_pct": 91.0,
    "acerto_numeros_pct": 75.2,
@@ -133,7 +133,7 @@
     "Volante: SwipeLeft": 2
    }
   },
-  "veto C (ao vivo): Outros gestos, um movimento ou Sem gesto": {
+  "veto C (testado): Outros gestos, um movimento ou Sem gesto": {
    "acerto_36_classes_pct": 88.3,
    "acerto_pct": 91.4,
    "acerto_numeros_pct": 75.2,

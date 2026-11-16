@@ -205,8 +205,9 @@ class Pontos:
         a mesma em 5 dos 6 últimos quadros (contagem_estavel), o número está detectado. Não há porcentagem: a
         estabilidade em 5 de 6 quadros é a própria confirmação (o Gatilho dispara sem limiar, ver Gatilho._pela_regra);
       - veto da CNN (16/11): os gestos que não são comando no carro (zoom, deslizar com dois dedos, girar a mão...) têm as
-        notas somadas em "Outros gestos"; se a CNN aponta "Outros gestos", um movimento do carro ou "Sem gesto" (na janela mais longa), o número da regra é
-        ignorado. Em vídeo contínuo (IPN, sem a janela do OK), os falsos caíram de 1,62 para 0,35 por minuto
+        notas somadas em "Outros gestos"; se a CNN aponta "Outros gestos" ou um movimento do carro (na janela mais longa), o número da regra é
+        ignorado. "Sem gesto" e números NÃO vetam: a CNN é fraca nos números parados e costuma lê-los como "sem gesto";
+        quem decide se é número é a contagem. Em vídeo contínuo (IPN, sem a janela do OK), os falsos caíram de 1,62 para 1,24 por minuto
         (src/medir_veto_outros.py; em vídeo contínuo, src/fluxo_ao_vivo.py);
       - todo o resto: decide a CNN, com as classes de número zeradas e as notas renormalizadas (ver combinar).
     A GRU de --pontos não entra em nenhuma decisão e não é mais rodada ao vivo (menos carga na placa de vídeo). O arquivo
@@ -289,11 +290,11 @@ class Pontos:
         numero = regra if regra in self.nomes and self.nomes.index(regra) in num else None
         veto = False
         if numero is not None:
-            # veto da CNN, na janela mais longa disponível: "Outros gestos", um movimento ou "Sem gesto" derruba o número
+            # veto da CNN, na janela mais longa disponível: "Outros gestos" ou um movimento derruba o número
             q = notas_cnn[-1]
             outros_soma = float(q[self.idx_outros].sum())
             k = int(self.idx_ficam[int(q[self.idx_ficam].argmax())])
-            veto = outros_soma > float(q[k]) or k in self.idx_movimentos or k == self.idx_sem_gesto
+            veto = outros_soma > float(q[k]) or k in self.idx_movimentos   # "Sem gesto" e números não vetam
             if veto:
                 numero = None
         outros = notas_cnn.copy()

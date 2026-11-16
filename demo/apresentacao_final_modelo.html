@@ -291,8 +291,8 @@
           <rect x="580" y="290" width="6" height="130" fill="#1e4fbf"/>
           <text x="602" y="332" font-size="21" font-weight="600" fill="#0a1f44">Veto da CNN</text>
           <text x="602" y="362" font-size="14" fill="#364152">não passa se a CNN</text>
-          <text x="602" y="382" font-size="14" fill="#364152">vê outro gesto, um</text>
-          <text x="602" y="402" font-size="14" fill="#364152">movimento ou sem gesto</text>
+          <text x="602" y="382" font-size="14" fill="#364152">vê outro gesto ou</text>
+          <text x="602" y="402" font-size="14" fill="#364152">um movimento</text>
 
           <rect x="810" y="290" width="300" height="130" fill="#eaf1fb" stroke="#9db9ea"/>
           <text x="960" y="322" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">PASSA SE</text>
@@ -388,7 +388,7 @@
             <tr><td>3 · Pontos da mão + GRU (testada)</td><td>{{um_final}} trechos</td><td>{{fl_final}}</td></tr>
             <tr class="vencedora"><td>Ao vivo · contagem + veto da CNN</td><td>{{um_vivo}} trechos</td><td>{{fl_vivo}}</td></tr>
           </table>
-          <p class="nota">Tentativas 1 e 2 contavam disparos certos (podem repetir no mesmo trecho); a 3, trechos com o comando certo. Ao vivo, a GRU deu lugar à contagem de dedos com o veto da CNN. Sem o veto, quase todos os falsos eram números; com ele, sobram sobretudo zoom e deslizar com dois dedos, que não são comando no carro. Nos vídeos do Slovo (sem sinal): {{slovo_vivo}} falsos/min.</p></div>
+          <p class="nota">Tentativas 1 e 2 contavam disparos certos (podem repetir no mesmo trecho); a 3, trechos com o comando certo. Ao vivo, a GRU deu lugar à contagem de dedos com o veto da CNN. Sem o veto, quase todos os falsos eram números; com ele, os que sobram são sobretudo números lidos com a mão parada à toa. Nos vídeos do Slovo (sem sinal): {{slovo_vivo}} falsos/min.</p></div>
       </div>
     </div>
   </section>
@@ -716,7 +716,7 @@
             <tr><td>Portão da GRU: a GRU decide se é número (mão parada); senão, a CNN</td><td>{{acc_mistura}}% no teste misto; {{acc_mistura_num}}% nos números; ao vivo, nota baixa nos números</td></tr>
             <tr><td>Números pela GRU (peso 1,0 nos números, 0,3 no resto)</td><td>{{acc_pesos}}% no teste misto; em vídeo, disparava bem mais os números</td></tr>
             <tr><td>Contagem de dedos sem veto: mão parada e o mesmo número em 5 de 6 quadros → número; senão, a CNN</td><td>{{acc_semveto}}% no teste misto; {{fl_semveto}} falsos por minuto no IPN; {{semveto_sem_numero}}% das amostras sem número viravam número</td></tr>
-            <tr class="vencedora"><td>Usada ao vivo: o mesmo, mas a CNN veta o número se vê outro gesto, um movimento ou sem gesto</td><td>{{acc_vivo}}% no teste misto ({{acc_vivo_num}}% nos números); {{fl_vivo}} falsos por minuto no IPN; confiança nos próximos slides</td></tr>
+            <tr class="vencedora"><td>Usada ao vivo: o mesmo, mas a CNN veta o número se vê outro gesto ou um movimento</td><td>{{acc_vivo}}% no teste misto ({{acc_vivo_num}}% nos números); {{fl_vivo}} falsos por minuto no IPN; confiança nos próximos slides</td></tr>
           </table>
         </div>
       </div>
@@ -778,7 +778,7 @@
 
           <text x="0" y="424" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Mão parada:</tspan> presente em 5 dos últimos 6 quadros e o pulso andou no máximo 0,5 palma em 0,5 s (palma = pulso até a base do dedo médio).</text>
           <text x="0" y="452" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Dedo esticado:</tspan> distância base→ponta ÷ comprimento do dedo ≥ 0,85 e ângulo com a direção da palma ≤ 65°; o polegar tem regra própria.</text>
-          <text x="0" y="480" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Veto da CNN:</tspan> na janela mais longa, os gestos sem comando no carro somam-se em “Outros gestos”; se a CNN aponta essa classe, um movimento ou sem gesto, o número não passa.</text>
+          <text x="0" y="480" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Veto da CNN:</tspan> na janela mais longa, os gestos sem comando no carro somam-se em “Outros gestos”; se a CNN aponta essa classe ou um movimento, o número não passa; “sem gesto” e números passam para a contagem.</text>
           <text x="0" y="508" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Não é número:</tspan> cinco dedos, só o polegar ou punho. <tspan font-weight="600" fill="#0a1f44">Ativação:</tspan> o OK (mantido 0,4 s) abre 7 s; fora deles, nada dispara. A GRU não é usada ao vivo.</text>
         </g>
       </svg>
@@ -825,7 +825,7 @@
         <tr><td>3a · Pontos + regras</td><td>Dedos esticados contados nos 21 pontos</td><td>{{regras_um}}% e {{regras_dois}}% dos trechos · {{regras_fpm}} falsos/min</td><td>Forma certa, mas dispara demais</td></tr>
         <tr><td>3b · Pontos + GRU</td><td>Rede pequena treinada sobre os pontos</td><td>{{um_final}} e {{dois_final}} trechos · {{fl_final}} falsos/min</td><td>Boa no teste; ao vivo, nota baixa nos números</td></tr>
         <tr><td>3c · Contagem sem veto (testada)</td><td>Regras só com a mão parada e a mesma contagem em 5 de 6 quadros; o resto fica com a CNN</td><td>Confiança {{cs1}}%, {{cs2}}% e {{cs4}}% (1, 2 e 4 dedos) · {{fl_semveto}} falsos/min</td><td>Contar dedos é forma da mão, não movimento</td></tr>
-        <tr class="vencedora"><td>3d · Usada ao vivo</td><td>A mesma contagem, com veto da CNN: outro gesto, movimento ou sem gesto derruba o número</td><td>Confiança {{cv1}}%, {{cv2}}% e {{cv4}}% (1, 2 e 4 dedos) · {{fl_vivo}} falsos/min</td><td>A CNN sabe o que não é número</td></tr>
+        <tr class="vencedora"><td>3d · Usada ao vivo</td><td>A mesma contagem, com veto da CNN: outro gesto ou movimento derruba o número</td><td>Confiança {{cv1}}%, {{cv2}}% e {{cv4}}% (1, 2 e 4 dedos) · {{fl_vivo}} falsos/min</td><td>A CNN sabe o que não é número</td></tr>
       </table>
     </div>
   </section>

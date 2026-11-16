@@ -196,7 +196,7 @@ def confianca_contagem():
     Dados: resultados/pontos/veto_outros.json (src/medir_veto_outros.py), teste misto completo, sem rodar rede.
     """
     vo = (ler("resultados/pontos/veto_outros.json") or {}).get("variantes", {})
-    com = vo.get("veto C (ao vivo): Outros gestos, um movimento ou Sem gesto", {}).get("por_numero", {})
+    com = vo.get("veto B (ao vivo): CNN diz Outros gestos ou um movimento", {}).get("por_numero", {})
     sem = vo.get("sem veto", {}).get("por_numero", {})
 
     def pct(v):
@@ -296,9 +296,9 @@ def main():
         return flm.get(chave, {}).get(campo)
     final_chave = "Combinação (0.3 GRU; números 1.0 GRU)"
     vo = (ler("resultados/pontos/veto_outros.json") or {}).get("variantes", {})
-    vivo, semveto = vo.get("veto C (ao vivo): Outros gestos, um movimento ou Sem gesto", {}), vo.get("sem veto", {})
+    vivo, semveto = vo.get("veto B (ao vivo): CNN diz Outros gestos ou um movimento", {}), vo.get("sem veto", {})
     fvar = (ler("resultados/pontos/fluxo_ao_vivo_veto2.json") or {}).get("variantes", {})
-    fv_todas = fvar.get("CNN 3D + contagem de dedos + veto da CNN com Sem gesto (janela mais longa)", {})
+    fv_todas = fvar.get("CNN 3D + contagem de dedos + veto da CNN (janela mais longa)", {})
     fv, fvc = fv_todas.get("todos os gestos", {}), fv_todas.get("só comandos do carro", {})
     fs = fvar.get("CNN 3D + contagem de dedos (confirmada em 1 análise)", {}).get("todos os gestos", {})
     f = {

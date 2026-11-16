@@ -8,8 +8,8 @@ gesto de movimento), o número da contagem é ignorado.
 Mede no teste misto (mesmos dados e notas salvas de src/medir_modelo_ao_vivo.py), sem rodar rede:
   - sem veto (o modelo de hoje);
   - veto A: a classe de maior nota da CNN (36 classes, não usados somados em "Outros gestos") é "Outros gestos";
-  - veto B: é "Outros gestos" ou um gesto de movimento do carro;
-  - veto C (o usado ao vivo): é "Outros gestos", um movimento do carro ou "No gesture".
+  - veto B (o usado ao vivo desde 16/11 à noite): é "Outros gestos" ou um gesto de movimento do carro;
+  - veto C (testado): também "No gesture". Saiu porque a CNN lê números parados como "sem gesto" e vetava números certos.
 Acerto em dois critérios: nas 36 classes (como as outras linhas da tabela) e com os gestos não usados juntos.
 Para cada um: acerto geral, nos números e nos outros gestos; confiança da contagem por número (quando ela passa, em
 quantos % era o número certo) e % das amostras sem número em que passou um número.
@@ -57,9 +57,9 @@ def main():
     p_ficam[:, outros] = 0
     top = np.where(p_outros > p_ficam.max(1), -1, p_ficam.argmax(1))   # -1 = "Outros gestos"
     veto = {"sem veto": np.zeros(len(y), bool), "veto A: CNN diz Outros gestos": top == -1,
-            "veto B: CNN diz Outros gestos ou um movimento": (top == -1) | np.isin(top, movimento),
+            "veto B (ao vivo): CNN diz Outros gestos ou um movimento": (top == -1) | np.isin(top, movimento),
             # o usado ao vivo (16/11): também veta quando a CNN diz "Sem gesto"
-            "veto C (ao vivo): Outros gestos, um movimento ou Sem gesto": (top == -1) | np.isin(top, movimento) | (top == idx["No gesture"])}
+            "veto C (testado): Outros gestos, um movimento ou Sem gesto": (top == -1) | np.isin(top, movimento) | (top == idx["No gesture"])}
 
     regra = [MC.disparo(s) for s in te]
     sem_num = probs.copy()
