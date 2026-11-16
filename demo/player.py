@@ -169,9 +169,8 @@ class Pontos:
     """Pontos da mão (MediaPipe) + GRU, combinados com a CNN como em src/fluxo_combinado.py.
 
     A cada quadro do buffer da CNN (12 por segundo), o MediaPipe acha a mão no quadro inteiro. Em cada análise, a GRU
-    lê os pontos das mesmas janelas da CNN e as notas viram uma média por classe: nos números (1 a 4 dedos) decide a
-    GRU (peso 1,0); nos outros gestos ela entra com peso --peso-pontos (0 = só a CNN, o padrão: no teste misto, com 0,3
-    só 66% dos acertos do Jester passavam da confiança 0,7 do gatilho; com 0, 80%, e o acerto quase não muda).
+    lê os pontos das mesmas janelas da CNN. Nos números (1 a 4 dedos) decide a
+    GRU, com a mão parada; nos outros, a CNN (ver combinar).
     """
 
     def __init__(self, args, nomes, dispositivo):
@@ -184,12 +183,11 @@ class Pontos:
         self.gru = TP.Rede(e["entrada"], len(nomes)).to(dispositivo).eval()
         self.gru.load_state_dict(e["modelo"])
         self.media, self.desvio = e["media"], e["desvio"]
-        self.pesos = np.full(len(nomes), args.peso_pontos, np.float32)
-        for n in ("One Finger", "Two Fingers", "Three Fingers", "Four Fingers"):
-            if n in nomes:
-                self.pesos[nomes.index(n)] = 1.0
+        self.nomes = list(nomes)
+        self.numeros = np.array([nomes.index(n) for n in ("One Finger", "Two Fingers", "Three Fingers", "Four Fingers") if n in nomes])
         self.detector = P.DetectorMao(video=True)
-        print(f"Pontos da mão + GRU ligados ({Path(args.pontos).name}); peso da GRU {args.peso_pontos}, e 1,0 nos números", flush=True)
+        self.ultimo = {"mao": False, "numero": None, "nota": 0.0, "parada": False}
+        print(f"Pontos da mão + GRU ligados ({Path(args.pontos).name}): números pela GRU (com a mão parada), o resto pela CNN", flush=True)
 
     def quadro(self, quadro, agora):
         """Pontos da mão principal de um quadro, no formato da GRU."""
@@ -200,9 +198,25 @@ class Pontos:
             img[0], world[0], pres[0], score[0] = mao.imagem, mao.mundo, True, mao.confianca
         return img, world, pres, score, quadro.shape[:2]
 
+    def mao_parada(self, lista, n=6):
+        """A mão apareceu em quase todos os últimos `n` quadros (0,5 s) e o pulso andou menos de meia palma."""
+        q = lista[-n:]
+        pres = [x[2][0] for x in q]
+        if sum(pres) < n - 1:
+            return False
+        a, l = q[-1][4]
+        xy = [(x[0][0, :, :2] * np.array([l, a], np.float32)) for x, ok in zip(q, pres) if ok]
+        palma = max(float(np.linalg.norm(xy[-1][9] - xy[-1][0])), 1e-6)
+        return max(float(np.linalg.norm(t[0] - xy[-1][0])) for t in xy) / palma <= 0.5
+
     @torch.no_grad()
     def combinar(self, notas_cnn, lista, janelas):
-        """notas_cnn: [janelas, classes], na ordem de `janelas` (em quadros). Devolve as notas combinadas."""
+        """notas_cnn: [janelas, classes], na ordem de `janelas` (em quadros). Devolve as notas combinadas.
+
+        A GRU diz se é um número (a soma das notas dela nos números) e qual é. Se for, a nota de cada número é a da GRU;
+        o resto (1 - essa soma) fica com a CNN, sem as classes de número. Com a mão em movimento, número não vale.
+        No teste misto: 91,2% de acerto (Jester 93,1%, números 95,7%) e 97% dos números certos com nota >= 0,7.
+        """
         xs, ms = [], []
         for n in janelas:
             q = lista[-n:]
@@ -215,8 +229,18 @@ class Pontos:
             ms.append(m)
         notas_gru = self.gru(torch.from_numpy(np.stack(xs)).to(self.dispositivo),
                              torch.from_numpy(np.stack(ms)).to(self.dispositivo)).float().softmax(1).cpu().numpy()
-        p = (1 - self.pesos) * notas_cnn + self.pesos * notas_gru
-        return p / p.sum(1, keepdims=True)
+        parada = self.mao_parada(lista)
+        num = self.numeros
+        pn = notas_gru[:, num].sum(1, keepdims=True) if parada else np.zeros((len(notas_gru), 1), np.float32)
+        outros = notas_cnn.copy()
+        outros[:, num] = 0
+        outros /= np.maximum(outros.sum(1, keepdims=True), 1e-9)
+        p = (1 - pn) * outros
+        if parada:
+            p[:, num] = notas_gru[:, num]
+        k = int(notas_gru[0, num].argmax())  # janela mais curta
+        self.ultimo = {"mao": bool(lista[-1][2][0]), "parada": parada, "numero": self.nomes[num[k]], "nota": float(notas_gru[0, num[k]])}
+        return p
 
 
 def laco_modelo(args, estado, parar):
@@ -424,10 +448,12 @@ def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pont
                                  "confianca": confianca, "repeticao": gatilho.foi_repeticao})
         if agora - ultimo_estado >= 0.2:
             minutos = max((agora - estado.inicio) / 60, 1e-3)
+            u = pontos.ultimo
             estado.publicar({"tipo": "estado", "gesto": V.TRADUCAO.get(nome_atual, nome_atual),
                              "e_comando": nome_atual in COMANDOS, "confianca": confianca, "disparos": estado.disparos,
                              "por_minuto": estado.disparos / minutos, "fps": camera["fps"], "ms": ms,
-                             "aquecendo": len(lista) < minimo})
+                             "aquecendo": len(lista) < minimo,
+                             "pontos": {"mao": u["mao"], "parada": u["parada"], "numero": V.TRADUCAO.get(u["numero"], u["numero"]), "nota": u["nota"]}})
             ultimo_estado = agora
     leitor.join(timeout=2)
     if captura is not None:
@@ -728,8 +754,6 @@ def main():
     a.add_argument("--apresentacao", action="store_true", help="Dispara os gestos de todas as demos; a página repassa cada um ao slide aberto")
     a.add_argument("--carro3d", action="store_true", help="Comandos do carro 3D: os números (1 a 4 dedos) abrem uma página da central")
     a.add_argument("--pontos", default=None, help="GRU sobre os pontos da mão (resultados/pontos/modelo_final/gru.pt), combinada com a CNN")
-    a.add_argument("--peso-pontos", type=float, default=0.0,
-                   help="Peso da GRU fora dos números (nos números, só a GRU decide). Com 0,3 a confiança da CNN cai e o gatilho de 0,7 falha mais")
     args = a.parse_args()
     if args.apresentacao:
         COMANDOS.clear()

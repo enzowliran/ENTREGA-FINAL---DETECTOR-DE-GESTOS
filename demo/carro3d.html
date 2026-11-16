@@ -26,6 +26,8 @@
   #barra { height: 5px; border-radius: 3px; background: rgba(255,255,255,.12); margin-top: 6px; overflow: hidden; }
   #barra i { display: block; height: 100%; width: 0; background: var(--acento); transition: width .15s; }
   #info { font-size: 12px; opacity: .7; margin-top: 6px; }
+  #pontosInfo { font-size: 13px; margin-top: 6px; color: #b9c6d2; }
+  #pontosInfo b { color: #7dd3a6; }
   #mini { right: 14px; top: 14px; width: 240px; overflow: hidden; padding: 0; }
   #mini img, #mini canvas { display: block; width: 100%; transform: scaleX(-1); }
   #mini canvas { position: absolute; inset: 0; height: 100%; }
@@ -53,6 +55,7 @@
   <div class="linha"><span id="ponto"></span><span id="conexao">Conectando aos gestos…</span></div>
   <div id="gesto">—</div>
   <div id="barra"><i id="confianca"></i></div>
+  <div id="pontosInfo">pontos da mão: aguardando o servidor…</div>
   <div id="info">mãos: <span id="nMaos">0</span> · comandos: <span id="nComandos">0</span> · <span id="nMs">—</span> ms por análise</div>
 </div>
 <div id="mini" class="caixa"><img id="stream" alt=""><canvas id="sobre"></canvas><span class="rot">câmera (espelhada)</span></div>
@@ -440,7 +443,8 @@ const NOMES_LIMPADOR = ["Desligado", "Intermitente", "Normal", "Rápido"];
 const CAMPOS = ["Temperatura", "Ventilação", "Direção do ar"], DIRECOES = ["Rosto", "Pés", "Rosto e pés", "Para-brisa"];
 const CONTATOS = ["Casa", "Trabalho", "Oficina"];
 const st = { pagina: "musica", tocando: false, volume: 0.6, faixa: 0, clima: { ligado: false, temp: 22, vent: 2, dir: 0, campo: 0 },
-             limpador: 0, ultimoLimpador: 2, farois: false, chamada: null, contato: 0, comandos: 0, gesto: "—", conf: 0 };
+             limpador: 0, ultimoLimpador: 2, farois: false, chamada: null, contato: 0, comandos: 0, gesto: "—", conf: 0,
+             menu: false, selecionada: 0 };
 let faixas = [];
 const SINTETICAS = [
   { titulo: "Estrada aberta", artista: "Sintetizada", cor: "#3f7fd6", notas: [57, 60, 64, 67, 64, 60], bpm: 112 },
@@ -516,13 +520,14 @@ function falar(frases) {
 function comandosAtuais() {
   const c = st.chamada, p = st.pagina;
   if (c && c.estado === "tocando") return [["Manter polegar para cima", "atende"], ["Manter polegar para baixo", "recusa"]];
+  if (st.menu) return [["Polegar para cima ou baixo", "navega"], ["Sinal de pare", "toca a escolhida"], ["Tamborilar", "fecha o menu"]];
   if (c) return [["Sinal de pare", "encerra"]];
   const funcao = ["1 · 2 · 3 · 4 dedos", "Música · Clima · Telefone · Limpador"], volta = ["Puxar a mão", "página anterior"];
   if (p === "clima") return [["Deslizar para os lados", "troca o ajuste"], ["Polegar", "muda o valor"], ["Sinal de pare", st.clima.ligado ? "desliga" : "liga"], funcao, volta];
   if (p === "telefone") return [["Sinal de pare", "simula uma chamada"], funcao, volta];
   if (p === "limpador") return [["Polegar", "muda a velocidade"], ["Sinal de pare", st.limpador ? "desliga" : "liga"], funcao, volta];
   if (p === "farois") return [["Sinal de pare", st.farois ? "desliga" : "liga"], funcao, volta];
-  return [["Deslizar à direita", "próxima música"], ["Deslizar à esquerda", "música anterior"], ["Sinal de pare", st.tocando ? "pausa" : "toca"], ["Polegar", "volume"], funcao, volta];
+  return [["Deslizar à direita", "próxima música"], ["Deslizar à esquerda", "música anterior"], ["Sinal de pare", st.tocando ? "pausa" : "toca"], ["Polegar", "volume"], ["Tamborilar os dedos", "menu de músicas"], funcao, volta];
 }
 function atualizarLegenda() {
   $("legenda").innerHTML = `<h4>${NOMES_PAGINA[st.pagina]}${st.chamada ? " · chamada" : ""}</h4>` +
@@ -559,6 +564,20 @@ function executar(c, repeticao = false) {
         else terminarChamada("Chamada recusada: " + ch.nome);
       } else feito = false;
     } else feito = false;
+  }
+  else if (st.menu) {
+    // com o menu aberto, só valem navegar, escolher e fechar
+    if (c === "volume_mais") { st.selecionada = (st.selecionada - 1 + faixas.length) % faixas.length; avisar(faixas[st.selecionada].titulo); }
+    else if (c === "volume_menos") { st.selecionada = (st.selecionada + 1) % faixas.length; avisar(faixas[st.selecionada].titulo); }
+    else if (repeticao) feito = false;
+    else if (c === "alternar") { st.menu = false; if (st.selecionada !== st.faixa) { st.faixa = st.selecionada; passoSintese = 0; if (audioEl) audioEl.removeAttribute("src"); } tocar(); avisar("▶ " + faixas[st.faixa].titulo); atualizarLegenda(); }
+    else if (c === "tamborilar") { st.menu = false; avisar("Menu fechado"); atualizarLegenda(); }
+    else feito = false;
+  }
+  else if (c === "tamborilar") {
+    if (repeticao) return;
+    if (st.pagina !== "musica") { st.pagina = "musica"; }
+    st.menu = true; st.selecionada = st.faixa; avisar("Menu de músicas"); atualizarLegenda(); falar(["Menu de músicas"]);
   }
   else if (c.startsWith("pagina_")) {
     // 1 a 4 dedos (reconhecidos pelos pontos da mão + GRU) abrem direto uma página
@@ -630,6 +649,15 @@ function desenharCentral() {
     g.font = "500 34px system-ui"; g.fillStyle = "#b7e4c7";
     g.fillText(st.chamada.estado === "tocando" ? "Chamada recebida (simulada)" : "Em chamada · " + formatar((performance.now() - st.chamada.inicio) / 1000), 110, y0 + 200);
     g.fillText(st.chamada.estado === "tocando" ? "Manter 👍 atende · manter 👎 recusa" : "✋ Sinal de pare encerra", 110, y0 + 260);
+  } else if (st.menu && faixas.length) {
+    g.fillStyle = "#9aa7b4"; g.font = "500 32px system-ui"; g.fillText("Menu de músicas", 60, y0 + 40);
+    const inicio = Math.max(0, Math.min(st.selecionada - 2, faixas.length - 5));
+    faixas.slice(inicio, inicio + 5).forEach((f, k) => {
+      const i = inicio + k, y = y0 + 70 + k * 86, sel = i === st.selecionada;
+      caixaArred(g, 60, y, W - 120, 72, 16); g.fillStyle = sel ? "#2d7ff9" : "#18202a"; g.fill();
+      g.fillStyle = "#fff"; g.font = (sel ? "700" : "500") + " 34px system-ui"; g.fillText(`${i + 1}. ${f.titulo.slice(0, 34)}`, 90, y + 47);
+      if (i === st.faixa) { g.fillStyle = sel ? "#dbe8ff" : "#7dd3a6"; g.font = "600 24px system-ui"; g.textAlign = "right"; g.fillText("ATUAL", W - 90, y + 45); g.textAlign = "left"; }
+    });
   } else if (st.pagina === "musica" && faixas.length) {
     const f = faixas[st.faixa];
     g.fillStyle = f.cor; caixaArred(g, 60, y0 + 10, 300, 300, 24); g.fill();
@@ -702,6 +730,11 @@ function receber(e) {
     st.gesto = e.aquecendo ? "aquecendo…" : e.gesto; st.conf = e.confianca || 0;
     $("gesto").textContent = st.gesto; $("gesto").className = e.e_comando ? "comando" : "";
     $("confianca").style.width = (st.conf * 100) + "%"; $("nMs").textContent = Math.round(e.ms || 0);
+    if (e.pontos) {
+      const q = e.pontos;
+      $("pontosInfo").innerHTML = !q.mao ? "pontos da mão: <b>sem mão</b>"
+        : `pontos da mão: <b>${q.parada ? "parada" : "em movimento"}</b> · GRU: ${q.numero} ${Math.round(q.nota * 100)}%`;
+    } else $("pontosInfo").textContent = "pontos da mão: desligados (servidor sem --pontos)";
   }
 }
 if (EMBUTIDO) {
@@ -720,6 +753,7 @@ addEventListener("keydown", e => {
   else if (e.key === "ArrowUp") { e.preventDefault(); executar("volume_mais", e.repeat); }
   else if (e.key === "ArrowDown") { e.preventDefault(); executar("volume_menos", e.repeat); }
   else if (["1", "2", "3", "4"].includes(e.key)) executar("pagina_" + e.key);
+  else if (e.key.toLowerCase() === "m") executar("tamborilar");
   else if (e.key === "r") executar("funcao");
   else if (e.key === "R") executar("funcao_anterior");
   else if (e.key.toLowerCase() === "e") executar("ajuda");
@@ -767,7 +801,7 @@ function laco(agora) {
   farolLuzes.forEach(l => { l.intensity += ((st.farois ? 40 : 0) - l.intensity) * Math.min(1, dt * 6); });
   matAr.emissive.setHex(st.clima.ligado ? (st.clima.temp <= 21 ? 0x1d5a8a : st.clima.temp >= 25 ? 0x8a3d1d : 0x2d4f66) : 0x000000);
   analisarMaos();
-  if (agora - ultimaTela > 250) { ultimaTela = agora; desenharQuadro(); if (st.pagina === "musica" || st.chamada) desenharCentral(); }
+  if (agora - ultimaTela > 250) { ultimaTela = agora; desenharQuadro(); if (st.pagina === "musica" || st.chamada || st.menu) desenharCentral(); }
   renderer.render(scene, camera);
 }
 atualizarLegenda(); carregarFaixas(); desenharQuadro();
