@@ -339,7 +339,7 @@
     <div class="corpo">
       <div class="duas" style="grid-template-columns:640px 1fr;gap:56px">
         <div class="an" style="--d:1"><p class="tituloBloco">Acerto no teste misto</p><svg viewBox="0 0 620 470" width="620" height="470" role="img" aria-label="Acerto por modelo no teste misto"><line x1="40" x2="610" y1="400.0" y2="400.0" stroke="#e3e7ec"/><text x="32" y="405.0" text-anchor="end" font-size="13" fill="#7b8594">0%</text><line x1="40" x2="610" y1="310.0" y2="310.0" stroke="#e3e7ec"/><text x="32" y="315.0" text-anchor="end" font-size="13" fill="#7b8594">25%</text><line x1="40" x2="610" y1="220.0" y2="220.0" stroke="#e3e7ec"/><text x="32" y="225.0" text-anchor="end" font-size="13" fill="#7b8594">50%</text><line x1="40" x2="610" y1="130.0" y2="130.0" stroke="#e3e7ec"/><text x="32" y="135.0" text-anchor="end" font-size="13" fill="#7b8594">75%</text><line x1="40" x2="610" y1="40.0" y2="40.0" stroke="#e3e7ec"/><text x="32" y="45.0" text-anchor="end" font-size="13" fill="#7b8594">100%</text><rect class="barra" x="62.0" y="159.15999999999997" width="67.66666666666667" height="240.84000000000003" fill="#c9d8f0"/><text x="95.83333333333334" y="149.15999999999997" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">66,9%</text><text x="95.83333333333334" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D</text><text x="95.83333333333334" y="443" text-anchor="middle" font-size="14" fill="#364152">do zero</text><rect class="barra" x="153.66666666666669" y="124.60000000000002" width="67.66666666666667" height="275.4" fill="#9db9ea"/><text x="187.50000000000003" y="114.60000000000002" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">76,5%</text><text x="187.50000000000003" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU sobre</text><text x="187.50000000000003" y="443" text-anchor="middle" font-size="14" fill="#364152">os pontos</text><rect class="barra" x="245.33333333333334" y="97.60000000000002" width="67.66666666666667" height="302.4" fill="#3d74d6"/><text x="279.1666666666667" y="87.60000000000002" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">84,0%</text><text x="279.1666666666667" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D</text><text x="279.1666666666667" y="443" text-anchor="middle" font-size="14" fill="#364152">pré-treinada</text><rect class="barra" x="337.0" y="68.07999999999998" width="67.66666666666667" height="331.92" fill="#3d74d6"/><text x="370.8333333333333" y="58.079999999999984" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">92,2%</text><text x="370.8333333333333" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU + CNN</text><text x="370.8333333333333" y="443" text-anchor="middle" font-size="14" fill="#364152">(média)</text><rect class="barra" x="428.6666666666667" y="68.80000000000001" width="67.66666666666667" height="331.2" fill="#1e4fbf"/><text x="462.5" y="58.80000000000001" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">92,0%</text><text x="462.5" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU + CNN</text><text x="462.5" y="443" text-anchor="middle" font-size="14" fill="#364152">(números</text><text x="462.5" y="462" text-anchor="middle" font-size="14" fill="#364152">pela GRU)</text><rect class="barra" x="520.3333333333334" y="144.75999999999996" width="67.66666666666667" height="255.24000000000004" fill="#0a1f44"/><text x="554.1666666666667" y="134.75999999999996" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">70,9%</text><text x="554.1666666666667" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D +</text><text x="554.1666666666667" y="443" text-anchor="middle" font-size="14" fill="#364152">contagem</text><text x="554.1666666666667" y="462" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf">usada ao vivo</text></svg></div>
-        <div class="an" style="--d:2"><p class="tituloBloco">Acerto e falsos disparos por modelo</p><table class="tabela"><tr><th>Modelo</th><th>Acerto</th><th>Falsos / min (IPN)</th></tr><tr><td>GRU sobre os pontos</td><td>76,5%</td><td>1,46</td></tr><tr><td>CNN 3D do zero</td><td>66,9%</td><td>—</td></tr><tr><td>CNN 3D pré-treinada + ajuste</td><td>84,0%</td><td>0,19</td></tr><tr><td>GRU + CNN (média 0,3 / 0,7)</td><td>92,2%</td><td>0,10</td></tr><tr><td>GRU + CNN, números pela GRU</td><td>92,0%</td><td>0,25</td></tr><tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem de dedos</td><td>70,9%</td><td>a medir</td></tr></table>
+        <div class="an" style="--d:2"><p class="tituloBloco">Acerto e falsos disparos por modelo</p><table class="tabela"><tr><th>Modelo</th><th>Acerto</th><th>Falsos / min (IPN)</th></tr><tr><td>GRU sobre os pontos</td><td>76,5%</td><td>1,46</td></tr><tr><td>CNN 3D do zero</td><td>66,9%</td><td>—</td></tr><tr><td>CNN 3D pré-treinada + ajuste</td><td>84,0%</td><td>0,19</td></tr><tr><td>GRU + CNN (média 0,3 / 0,7)</td><td>92,2%</td><td>0,10</td></tr><tr><td>GRU + CNN, números pela GRU</td><td>92,0%</td><td>0,25</td></tr><tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem de dedos</td><td>70,9%</td><td>1,62</td></tr></table>
           <p class="nota">3.642 amostras de 5 bases, 36 classes. A GRU foi testada, mas não é usada ao vivo. Ao vivo, os números vêm da contagem de dedos: confiança por número no apêndice (A7); teste ao vivo com gestos parecidos a medir. Todos os modelos: A8.</p></div>
       </div>
     </div>
@@ -347,12 +347,12 @@
 
   <!-- 10. Segurança -->
   <section class="slide" data-titulo="Segurança" data-fonte="Fonte: resultados do projeto · IPN Hand, 13 pessoas fora do treino, vídeo contínuo">
-    <div class="cab an"><h2>Resultados</h2><p class="sub">Quantas vezes o sistema dispara sozinho, em vídeo real e contínuo (versão testada com a GRU)</p></div>
+    <div class="cab an"><h2>Resultados</h2><p class="sub">Quantas vezes o sistema dispara sozinho, em vídeo real e contínuo, sem a janela do OK</p></div>
     <div class="corpo">
       <div class="kpis an" style="--d:1;grid-template-columns:repeat(3,1fr);margin-bottom:38px">
-        <div class="kpi forte"><div class="v">0,25<small>falsos por minuto</small></div><div class="r">cerca de 1 a cada 4 min sem gesto; na versão usada ao vivo, a medir</div></div>
-        <div class="kpi"><div class="v">251/265</div><div class="r">trechos de 1 dedo com o comando certo</div></div>
-        <div class="kpi"><div class="v">240/264</div><div class="r">trechos de 2 dedos com o comando certo</div></div>
+        <div class="kpi forte"><div class="v">1,62<small>falsos por minuto</small></div><div class="r">versão usada ao vivo: cerca de 1 a cada 0,6 min sem gesto, quase todos números</div></div>
+        <div class="kpi"><div class="v">228/265</div><div class="r">trechos de 1 dedo com o comando certo</div></div>
+        <div class="kpi"><div class="v">242/264</div><div class="r">trechos de 2 dedos com o comando certo</div></div>
       </div>
       <div class="duas an" style="--d:2;grid-template-columns:1.15fr 1fr;gap:50px">
         <div><p class="tituloBloco">Por modelo</p>
@@ -361,7 +361,8 @@
             <tr><td>CNN 3D pré-treinada</td><td>0,19</td><td>5/265</td><td>0/264</td></tr>
             <tr><td>GRU sobre os pontos</td><td>1,46</td><td>255/265</td><td>243/264</td></tr>
             <tr><td>Média 0,7 CNN + 0,3 GRU</td><td>0,10</td><td>36/265</td><td>0/264</td></tr>
-            <tr class="vencedora"><td>Números pela GRU (testada)</td><td>0,25</td><td>251/265</td><td>240/264</td></tr>
+            <tr><td>Números pela GRU (testada)</td><td>0,25</td><td>251/265</td><td>240/264</td></tr>
+            <tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem de dedos</td><td>1,62</td><td>228/265</td><td>242/264</td></tr>
           </table></div>
         <div><p class="tituloBloco">As três tentativas dos dedos</p>
           <table class="tabela">
@@ -370,7 +371,7 @@
             <tr><td>2 · CNN com vídeo real</td><td>485 disparos</td><td>0,32</td></tr>
             <tr class="vencedora"><td>3 · Pontos da mão + GRU (testada)</td><td>251/265 trechos</td><td>0,25</td></tr>
           </table>
-          <p class="nota">Tentativas 1 e 2 contavam disparos certos (podem repetir no mesmo trecho); a 3, trechos com o comando certo. Ao vivo, a GRU deu lugar à contagem de dedos, ainda não medida neste teste.</p></div>
+          <p class="nota">Tentativas 1 e 2 contavam disparos certos (podem repetir no mesmo trecho); a 3, trechos com o comando certo. Ao vivo, a GRU deu lugar à contagem de dedos (1,62 falsos/min; na tabela ao lado). Nos falsos, quase todos são números: a contagem dispara quando a mão para com dedos à mostra.</p></div>
       </div>
     </div>
   </section>
@@ -642,7 +643,7 @@
             <tr><td>Média simples (peso da GRU 0,2 a 0,3)</td><td>92,2% no teste misto; ao vivo, os números quase nunca passavam do gatilho de 0,7</td></tr>
             <tr><td>Portão da GRU: a GRU decide se é número (mão parada); senão, a CNN</td><td>91,2% no teste misto; 95,7% nos números; ao vivo, nota baixa nos números</td></tr>
             <tr><td>Números pela GRU (peso 1,0 nos números, 0,3 no resto)</td><td>92,0% no teste misto; em vídeo, disparava bem mais os números</td></tr>
-            <tr class="vencedora"><td>Usada ao vivo: mão parada e o mesmo número em 5 de 6 quadros → número pela contagem de dedos, sem nota; senão, a CNN</td><td>70,9% no teste misto (83,8% nos números, 68,3% nos outros gestos); falsos por minuto a medir; confiança da contagem de dedos nos próximos slides</td></tr>
+            <tr class="vencedora"><td>Usada ao vivo: mão parada e o mesmo número em 5 de 6 quadros → número pela contagem de dedos, sem nota; senão, a CNN</td><td>70,9% no teste misto (83,8% nos números, 68,3% nos outros gestos); 1,62 falsos por minuto no IPN; confiança da contagem de dedos nos próximos slides</td></tr>
           </table>
         </div>
       </div>
@@ -750,7 +751,7 @@
 <tr><td>GRU + CNN (média 0,3 / 0,7)</td><td>92,2%</td><td>—</td><td>0,10 / min*</td></tr>
 <tr><td>GRU + CNN, números pela GRU</td><td>92,0%</td><td>—</td><td>0,25 / min</td></tr>
 <tr><td>GRU + CNN, portão da GRU (mão parada)</td><td>91,2%</td><td>—</td><td>—</td></tr>
-<tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem de dedos</td><td>70,9%</td><td>—</td><td>a medir</td></tr>
+<tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem de dedos</td><td>70,9%</td><td>—</td><td>1,62 / min</td></tr>
 </table></div>
     <p class="nota an" style="--d:2;margin-top:6px;font-size:12.5px">— = não medido. * Quase não dispara os números (36/265 trechos de 1 dedo, 0/264 de 2). Cada bloco foi medido num conjunto diferente: compare dentro do bloco.</p>
   </section>
@@ -772,7 +773,7 @@
         <tr><td>2 · CNN com vídeo real</td><td>Treino com vídeos do IPN</td><td>485 disparos certos · 0,32 falsos/min · 0% nos vídeos de sinais</td><td>Aprendeu o fundo, não a mão</td></tr>
         <tr><td>3a · Pontos + regras</td><td>Dedos esticados contados nos 21 pontos</td><td>84,2% e 86,7% dos trechos · 2,67 falsos/min</td><td>Forma certa, mas dispara demais</td></tr>
         <tr><td>3b · Pontos + GRU</td><td>Rede pequena treinada sobre os pontos</td><td>251/265 e 240/264 trechos · 0,25 falsos/min</td><td>Boa no teste; ao vivo, nota baixa nos números</td></tr>
-        <tr class="vencedora"><td>3c · Usada ao vivo</td><td>Regras só com a mão parada e a mesma contagem em 5 de 6 quadros; o resto fica com a CNN</td><td>Confiança 68,2%, 17,3% e 33,8% (1, 2 e 4 dedos) · falsos/min a medir</td><td>Contar dedos é forma da mão, não movimento</td></tr>
+        <tr class="vencedora"><td>3c · Usada ao vivo</td><td>Regras só com a mão parada e a mesma contagem em 5 de 6 quadros; o resto fica com a CNN</td><td>Confiança 68,2%, 17,3% e 33,8% (1, 2 e 4 dedos) · 1,62 falsos/min</td><td>Contar dedos é forma da mão, não movimento</td></tr>
       </table>
     </div>
   </section>
