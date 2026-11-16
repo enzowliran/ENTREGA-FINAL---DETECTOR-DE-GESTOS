@@ -58,7 +58,7 @@
 <div id="mini" class="caixa"><img id="stream" alt=""><canvas id="sobre"></canvas><span class="rot">câmera (espelhada)</span></div>
 <div id="legenda" class="caixa"></div>
 <div id="aviso" class="caixa"></div>
-<div id="dicas" class="caixa">Arraste: olhar em volta · duplo clique: olhar para a frente<br>[ ]: campo de visão da câmera · teclado: ← → ↑ ↓ espaço R E</div>
+<div id="dicas" class="caixa">Arraste: olhar em volta · duplo clique: olhar para a frente<br>[ ]: campo de visão da câmera · teclado: ← → ↑ ↓ espaço 1–4 R E</div>
 <button id="entrar">Entrar no carro<small>liga o som e a música</small></button>
 
 <script type="module">
@@ -351,17 +351,29 @@ function solveTranslation(world, img, W, H) {
 // A webcam vira um sensor no painel, olhando para o motorista. No sistema da câmera (x para a direita da imagem,
 // y para baixo, z para a frente, rumo à pessoa), a direita da imagem é a esquerda do motorista (-X no carro),
 // y para baixo é -Y e a frente da câmera é +Z. Assim a mão direita da pessoa aparece à direita, sobre o volante.
-const SENSOR = new THREE.Vector3(0, 1.0, -0.8);
-const PROFUNDIDADE = 0.85;   // encurta a distância até a câmera para as mãos ficarem entre o volante e o motorista
+// A profundidade estimada oscila bastante (vem do tamanho aparente da mão). Por isso a posição da mão no carro é uma
+// âncora suavizada e presa à região do volante: a distância real até a webcam (0,25 a 0,8 m) vira uma faixa curta
+// atrás do volante, e cada quadro só pode mover a âncora alguns centímetros.
+const ZONA = { x: [-0.5, 0.62], y: [0.8, 1.2], z: [-0.42, -0.2] };   // de perto do volante até perto do motorista
+const DIST = [0.25, 0.8];                                             // distância até a webcam que vira essa faixa
+const ALTURA_BASE = 1.0, GANHO_LATERAL = 1.15, GANHO_ALTURA = 1.0, PASSO_MAX = 0.03;
 const tmp = new THREE.Vector3(), dir = new THREE.Vector3(), cen = new THREE.Vector3(), nrm = new THREE.Vector3();
+const alvo = new THREE.Vector3();
 function updateHand(h, world, img, W, H) {
   const T = solveTranslation(world, img, W, H);
   if (!T || T.z < 0.08 || T.z > 3) return;
-  if (h.fresh) h.T.copy(T); else h.T.lerp(T, 0.35);
+  if (h.fresh) h.T.copy(T); else { h.T.x += (T.x - h.T.x) * 0.35; h.T.y += (T.y - h.T.y) * 0.35; h.T.z += (T.z - h.T.z) * 0.15; }
+  // âncora da mão no carro: direita da imagem = esquerda do motorista; longe da webcam = mais perto do motorista
+  const k = THREE.MathUtils.clamp((h.T.z - DIST[0]) / (DIST[1] - DIST[0]), 0, 1);
+  alvo.set(THREE.MathUtils.clamp(-h.T.x * GANHO_LATERAL, ...ZONA.x),
+           THREE.MathUtils.clamp(ALTURA_BASE - h.T.y * GANHO_ALTURA, ...ZONA.y),
+           THREE.MathUtils.lerp(ZONA.z[0], ZONA.z[1], k));
+  if (!h.ancora) h.ancora = alvo.clone();
+  else if (h.fresh) h.ancora.copy(alvo);
+  else { dir.subVectors(alvo, h.ancora); if (dir.length() > PASSO_MAX) dir.setLength(PASSO_MAX); h.ancora.add(dir); }
   for (let i = 0; i < 21; i++) {
-    const w = world[i];
-    const zc = (h.T.z * PROFUNDIDADE) + w.z;
-    tmp.set(SENSOR.x - (w.x + h.T.x), SENSOR.y - (w.y + h.T.y), SENSOR.z + zc);
+    const w = world[i];   // pontos em metros, em volta do centro da mão (mesmos eixos da câmera)
+    tmp.set(h.ancora.x - w.x, h.ancora.y - w.y, h.ancora.z + w.z);
     if (h.fresh) h.pts[i].copy(tmp); else h.pts[i].lerp(tmp, 0.55);
   }
   h.fresh = false;
@@ -505,7 +517,7 @@ function comandosAtuais() {
   const c = st.chamada, p = st.pagina;
   if (c && c.estado === "tocando") return [["Manter polegar para cima", "atende"], ["Manter polegar para baixo", "recusa"]];
   if (c) return [["Sinal de pare", "encerra"]];
-  const funcao = ["Um dedo", "próxima função"], volta = ["Puxar a mão", "função anterior"];
+  const funcao = ["1 · 2 · 3 · 4 dedos", "Música · Clima · Telefone · Limpador"], volta = ["Puxar a mão", "página anterior"];
   if (p === "clima") return [["Deslizar para os lados", "troca o ajuste"], ["Polegar", "muda o valor"], ["Sinal de pare", st.clima.ligado ? "desliga" : "liga"], funcao, volta];
   if (p === "telefone") return [["Sinal de pare", "simula uma chamada"], funcao, volta];
   if (p === "limpador") return [["Polegar", "muda a velocidade"], ["Sinal de pare", st.limpador ? "desliga" : "liga"], funcao, volta];
@@ -547,6 +559,14 @@ function executar(c, repeticao = false) {
         else terminarChamada("Chamada recusada: " + ch.nome);
       } else feito = false;
     } else feito = false;
+  }
+  else if (c.startsWith("pagina_")) {
+    // 1 a 4 dedos (reconhecidos pelos pontos da mão + GRU) abrem direto uma página
+    if (repeticao) return;
+    const nova = { pagina_1: "musica", pagina_2: "clima", pagina_3: "telefone", pagina_4: "limpador" }[c];
+    if (!nova) return;
+    if (nova !== st.pagina) mostrarPagina(nova);
+    avisar(NOMES_PAGINA[nova]);
   }
   else if (c === "funcao" || c === "funcao_anterior") {
     if (repeticao) return;
@@ -699,6 +719,7 @@ addEventListener("keydown", e => {
   else if (e.key === "ArrowLeft") executar("anterior");
   else if (e.key === "ArrowUp") { e.preventDefault(); executar("volume_mais", e.repeat); }
   else if (e.key === "ArrowDown") { e.preventDefault(); executar("volume_menos", e.repeat); }
+  else if (["1", "2", "3", "4"].includes(e.key)) executar("pagina_" + e.key);
   else if (e.key === "r") executar("funcao");
   else if (e.key === "R") executar("funcao_anterior");
   else if (e.key.toLowerCase() === "e") executar("ajuda");

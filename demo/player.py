@@ -45,7 +45,9 @@ COMANDOS_HOSPITAL = {"Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking
                      "One Finger": "proximo_corte", "Two Fingers": "janela"}
 # Na apresentação, a página repassa cada gesto para o slide aberto. O servidor só dispara gestos desta
 # lista e manda o nome da classe; quem traduz para o comando de cada demo é a própria apresentação.
-GESTOS_APRESENTACAO = sorted({*COMANDOS, *COMANDOS_PAINEL, *COMANDOS_HOSPITAL, "Rolling Hand Forward", "Rolling Hand Backward"})
+# No carro 3D, os números vão direto para uma página da central (só funcionam com --pontos, que reconhece os dedos).
+COMANDOS_CARRO3D = {**COMANDOS_PAINEL, "One Finger": "pagina_1", "Two Fingers": "pagina_2", "Three Fingers": "pagina_3", "Four Fingers": "pagina_4"}
+GESTOS_APRESENTACAO = sorted({*COMANDOS, *COMANDOS_PAINEL, *COMANDOS_HOSPITAL, *COMANDOS_CARRO3D, "Rolling Hand Forward", "Rolling Hand Backward"})
 # Páginas que a apresentação pode abrir dentro de um slide.
 DEMOS_EMBUTIDAS = {"tenis.html", "painel_carro.html", "hospital.html", "hand3d.html", "carro3d.html"}
 # Modelo do MediaPipe usado pela mão 3D (demo/hand3d.html), servido de modelos_externos/.
@@ -163,6 +165,59 @@ def esperar_camera(args, estado, parar, captura):
     return None
 
 
+class Pontos:
+    """Pontos da mão (MediaPipe) + GRU, combinados com a CNN como em src/fluxo_combinado.py.
+
+    A cada quadro do buffer da CNN (12 por segundo), o MediaPipe acha a mão no quadro inteiro. Em cada análise, a GRU
+    lê os pontos das mesmas janelas da CNN e as notas viram uma média por classe: nos números (1 a 4 dedos) decide a
+    GRU (peso 1,0); nos outros gestos ela entra com peso --peso-pontos (0,3, o melhor no teste misto).
+    """
+
+    def __init__(self, args, nomes, dispositivo):
+        import pontos_mao as P
+        import treinar_pontos_jester as TP
+        self.TP, self.dispositivo = TP, dispositivo
+        e = torch.load(args.pontos, map_location=dispositivo, weights_only=False)
+        if list(e["nomes"]) != list(nomes):
+            raise SystemExit("A GRU e a CNN precisam ter as mesmas classes, na mesma ordem.")
+        self.gru = TP.Rede(e["entrada"], len(nomes)).to(dispositivo).eval()
+        self.gru.load_state_dict(e["modelo"])
+        self.media, self.desvio = e["media"], e["desvio"]
+        self.pesos = np.full(len(nomes), args.peso_pontos, np.float32)
+        for n in ("One Finger", "Two Fingers", "Three Fingers", "Four Fingers"):
+            if n in nomes:
+                self.pesos[nomes.index(n)] = 1.0
+        self.detector = P.DetectorMao(video=True)
+        print(f"Pontos da mão + GRU ligados ({Path(args.pontos).name}); peso da GRU {args.peso_pontos}, e 1,0 nos números", flush=True)
+
+    def quadro(self, quadro, agora):
+        """Pontos da mão principal de um quadro, no formato da GRU."""
+        mao = self.detector.detectar(quadro, agora)
+        img, world = np.zeros((2, 21, 3), np.float32), np.zeros((2, 21, 3), np.float32)
+        pres, score = np.zeros(2, bool), np.zeros(2, np.float32)
+        if mao is not None:
+            img[0], world[0], pres[0], score[0] = mao.imagem, mao.mundo, True, mao.confianca
+        return img, world, pres, score, quadro.shape[:2]
+
+    @torch.no_grad()
+    def combinar(self, notas_cnn, lista, janelas):
+        """notas_cnn: [janelas, classes], na ordem de `janelas` (em quadros). Devolve as notas combinadas."""
+        xs, ms = [], []
+        for n in janelas:
+            q = lista[-n:]
+            c = {"img": np.stack([x[0] for x in q]), "world": np.stack([x[1] for x in q]), "present": np.stack([x[2] for x in q]),
+                 "score": np.stack([x[3] for x in q]), "altura_largura": q[-1][4]}
+            x = self.TP.atributos(c)[0]
+            x = np.where(x[:, -2:-1] > 0, (x - self.media) / self.desvio, 0).astype(np.float32)
+            a, m = self.TP.fixar(x)
+            xs.append(a)
+            ms.append(m)
+        notas_gru = self.gru(torch.from_numpy(np.stack(xs)).to(self.dispositivo),
+                             torch.from_numpy(np.stack(ms)).to(self.dispositivo)).float().softmax(1).cpu().numpy()
+        p = (1 - self.pesos) * notas_cnn + self.pesos * notas_gru
+        return p / p.sum(1, keepdims=True)
+
+
 def laco_modelo(args, estado, parar):
     dispositivo = "cuda" if torch.cuda.is_available() and not args.cpu else "cpu"
     # Sem NVIDIA, cada análise leva cerca de 0,4 s em vez de uma fração disso. Com 3 janelas
@@ -176,8 +231,10 @@ def laco_modelo(args, estado, parar):
     if caminho is None or not caminho.exists():
         raise SystemExit("Nenhum modelo treinado encontrado.")
     modelo, nomes, info = V.carregar_modelo(caminho, dispositivo)
-    print(f"Modelo: {caminho.parent.name} (validação {info['top1_val']:.1%}), {dispositivo}", flush=True)
+    validacao = f" (validação {info['top1_val']:.1%})" if "top1_val" in info else ""
+    print(f"Modelo: {caminho.parent.name}/{caminho.name}{validacao}, {dispositivo}", flush=True)
     indices_gesto = [i for i, n in enumerate(nomes) if n not in V.SEM_GESTO]
+    pontos = Pontos(args, nomes, dispositivo) if args.pontos else None
 
     captura = None
     if not args.simular:
@@ -189,12 +246,15 @@ def laco_modelo(args, estado, parar):
 
     if dispositivo == "cpu":
         # Sem NVIDIA, câmera e modelo rodam separados. Com NVIDIA, o laço abaixo segue igual.
+        if pontos is not None:
+            print("Aviso: sem NVIDIA, os pontos da mão ficam desligados (só a CNN).", flush=True)
         laco_separado(args, estado, parar, captura, modelo, nomes, indices_gesto)
         return
 
     maximo = int(round(max(args.janelas) * V.QUADROS_POR_SEGUNDO))
     minimo = int(round(min(args.janelas) * V.QUADROS_POR_SEGUNDO))
     buffer, historico = collections.deque(maxlen=maximo), collections.deque(maxlen=args.suavizar)
+    buffer_pontos = collections.deque(maxlen=maximo)  # pontos da mão de cada quadro do buffer (com --pontos)
     gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if (args.painel or args.apresentacao) else (), args.repetir)
     ultimo_quadro, ultima_inferencia, ultimo_video, ultimo_estado = 0.0, 0.0, 0.0, 0.0
     tempos = collections.deque(maxlen=30)
@@ -203,7 +263,7 @@ def laco_modelo(args, estado, parar):
     while not parar.is_set():
         if captura is not None and estado.soltar_camera.is_set():
             captura = esperar_camera(args, estado, parar, captura)
-            buffer.clear(); historico.clear()
+            buffer.clear(); historico.clear(); buffer_pontos.clear()
             if captura is None:
                 break
             continue
@@ -219,6 +279,8 @@ def laco_modelo(args, estado, parar):
         tempos.append(agora)
         if agora - ultimo_quadro >= 1 / V.QUADROS_POR_SEGUNDO:
             buffer.append(V.preparar_quadro(quadro))
+            if pontos is not None:
+                buffer_pontos.append(pontos.quadro(quadro, agora))
             ultimo_quadro = agora
         if len(buffer) >= minimo and agora - ultima_inferencia >= args.intervalo:
             t0 = time.perf_counter()
@@ -231,6 +293,9 @@ def laco_modelo(args, estado, parar):
             with torch.no_grad(), torch.autocast(dispositivo, dtype=torch.bfloat16):
                 x = (torch.from_numpy(np.stack(lotes)).to(dispositivo) - 127.5) / 127.5
                 todas = modelo(x).float().softmax(1).cpu().numpy()
+            if pontos is not None:
+                usadas = [int(round(d * V.QUADROS_POR_SEGUNDO)) for d in args.janelas if len(lista) >= int(round(d * V.QUADROS_POR_SEGUNDO))]
+                todas = pontos.combinar(todas, list(buffer_pontos), usadas)
             escolhida = int(np.argmax([q[indices_gesto].max() for q in todas]))
             historico.append(todas[escolhida])
             media = np.mean(historico, axis=0)
@@ -241,9 +306,9 @@ def laco_modelo(args, estado, parar):
             curta = todas[0]  # lotes segue a ordem de --janelas, da mais curta para a mais longa
             presente = nomes[int(curta.argmax())] == nome_atual and float(curta.max()) >= args.limiar
             disparo = gatilho.atualizar(nome_atual, confianca, agora, presente)
-            if disparo:
+            if disparo and disparo in COMANDOS:
                 estado.disparos += 1
-                estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "classe": disparo, "gesto": V.TRADUCAO[disparo],
+                estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "classe": disparo, "gesto": V.TRADUCAO.get(disparo, disparo),
                                  "confianca": confianca, "repeticao": gatilho.foi_repeticao})
         if agora - ultimo_video >= 0.05:
             publicar_quadros(estado, quadro, agora)
@@ -552,6 +617,9 @@ def main():
     a.add_argument("--hospital", action="store_true", help="Liga os gestos extras do hospital: polegares, acenar e zoom com a mão inteira")
     a.add_argument("--tela-cheia", action="store_true", help="Abre a página no Chrome ou no Edge em tela cheia")
     a.add_argument("--apresentacao", action="store_true", help="Dispara os gestos de todas as demos; a página repassa cada um ao slide aberto")
+    a.add_argument("--carro3d", action="store_true", help="Comandos do carro 3D: os números (1 a 4 dedos) abrem uma página da central")
+    a.add_argument("--pontos", default=None, help="GRU sobre os pontos da mão (resultados/pontos/modelo_final/gru.pt), combinada com a CNN")
+    a.add_argument("--peso-pontos", type=float, default=0.3, help="Peso da GRU fora dos números (nos números, a GRU decide)")
     args = a.parse_args()
     if args.apresentacao:
         COMANDOS.clear()
@@ -560,6 +628,8 @@ def main():
         COMANDOS.update(COMANDOS_PAINEL)
     if args.hospital:
         COMANDOS.update(COMANDOS_HOSPITAL)
+    if args.carro3d:
+        COMANDOS.update(COMANDOS_CARRO3D)
 
     estado, parar = Estado(), threading.Event()
     servidor = criar_servidor(args, estado, parar)
