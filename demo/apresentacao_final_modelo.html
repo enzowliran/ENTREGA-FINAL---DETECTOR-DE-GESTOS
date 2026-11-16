@@ -2331,26 +2331,32 @@ function mostrar(n) {
   $("rodape").classList.toggle("escuro", s.classList.contains("escuro"));
 }
 let animandoZoom = false;
-function zoomNoOk(depois) {
-  // Amplia o slide em torno do bloco do OK até ele ocupar a tela; aí entra o slide seguinte, que começa com a mesma linha.
-  const s = slides[atual], bloco = $("blocoOk"), rs = s.getBoundingClientRect(), rb = bloco.getBoundingClientRect();
-  if (!rb.width || !rs.width) return depois();
+function morphOk(destino) {
+  // A linha "Sinal de OK" do slide dos gestos vira a faixa do slide seguinte: uma cópia da faixa nasce em cima da linha,
+  // do tamanho dela, e cresce até o lugar final enquanto um slide some e o outro aparece.
+  const palco = $("palco"), linha = $("blocoOk").querySelector("tr.vencedora"), faixa = slides[destino].querySelector(".faixaOk");
+  if (!linha || !faixa) return mostrar(destino);
+  const rp = palco.getBoundingClientRect(), e = rp.width / 1600;
+  const loc = r => ({ x: (r.left - rp.left) / e, y: (r.top - rp.top) / e, w: r.width / e, h: r.height / e });
+  const de = loc(linha.getBoundingClientRect()), para = loc(faixa.getBoundingClientRect());
+  if (!de.w || !para.w) return mostrar(destino);
   animandoZoom = true;
-  const e = rs.width / 1600, k = (rs.width / rb.width) * 0.86;
-  const cx = rb.left + rb.width / 2, cy = rb.top + rb.height / 2;
-  s.style.transformOrigin = `${(cx - rs.left) / e}px ${(cy - rs.top) / e}px`;
-  s.style.transition = "transform .95s cubic-bezier(.6,0,.2,1), opacity .35s ease, visibility .35s";
-  s.style.transform = `translate(${(rs.left + rs.width / 2 - cx) / e}px, ${(rs.top + rs.height * 0.42 - cy) / e}px) scale(${k})`;
-  setTimeout(() => {
-    depois();
-    setTimeout(() => { s.style.transition = ""; s.style.transform = ""; s.style.transformOrigin = ""; animandoZoom = false; }, 450);
-  }, 960);
+  const k = de.h / para.h, copia = faixa.cloneNode(true);
+  Object.assign(copia.style, { position: "absolute", left: para.x + "px", top: para.y + "px", width: de.w / k + "px", height: para.h + "px",
+    margin: "0", zIndex: "4", transformOrigin: "0 0", transform: `translate(${de.x - para.x}px, ${de.y - para.y}px) scale(${k})` });
+  palco.appendChild(copia);
+  linha.style.visibility = "hidden"; faixa.style.visibility = "hidden";
+  copia.getBoundingClientRect();   // fixa o estado inicial antes de animar
+  copia.style.transition = "transform .85s cubic-bezier(.6,0,.2,1), width .85s cubic-bezier(.6,0,.2,1)";
+  copia.style.transform = "none"; copia.style.width = para.w + "px";
+  setTimeout(() => mostrar(destino), 180);
+  setTimeout(() => { faixa.style.visibility = ""; linha.style.visibility = ""; copia.remove(); animandoZoom = false; }, 900);
 }
 function ir(passo) {
   if (animandoZoom || atual + passo < 0 || atual + passo >= slides.length) return;
   const destino = atual + passo;
   if (passo === 1 && slides[atual].dataset.titulo === "Os gestos" && slides[destino].dataset.titulo === "A ativação" && $("blocoOk"))
-    return zoomNoOk(() => mostrar(destino));
+    return morphOk(destino);
   mostrar(destino);
 }
 function mostrarTrava() {
