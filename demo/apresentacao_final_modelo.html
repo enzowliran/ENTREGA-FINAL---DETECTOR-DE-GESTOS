@@ -58,7 +58,7 @@
   .tabela tr.vencedora td { color: var(--marinho); font-weight: 700; background: var(--gelo); }
   .tabela tr.bloco td { background: #e2e9f4; color: var(--marinho); font-weight: 600; font-size: 12.5px; letter-spacing: .03em; text-align: left; padding: 7px 14px; }
   .tabTexto td, .tabTexto th { text-align: left !important; vertical-align: top; }
-  .tabModelos { font-size: 13.5px; } .tabModelos td { padding: 4px 12px; } .tabModelos th { padding: 8px 12px; font-size: 11px; }
+  .tabModelos { font-size: 13.5px; } .tabModelos td { padding: 3px 12px; } .tabModelos th { padding: 8px 12px; font-size: 11px; }
   .tabGestos { font-size: 16px; } .tabGestos td { padding: 7px 14px; text-align: left; } .tabGestos th { text-align: left; }
   .tabDados { font-size: 17px; } .tabDados td, .tabDados th { text-align: left; }
   .barraCel { display: flex; align-items: center; justify-content: flex-start; gap: 12px; }
@@ -251,7 +251,7 @@
 
   <!-- 5. Como funciona -->
   <section class="slide" data-titulo="Como funciona">
-    <div class="cab an"><h2>Como funciona</h2><p class="sub">Movimentos pela CNN 3D; números pela contagem de dedos nos pontos da mão</p></div>
+    <div class="cab an"><h2>Como funciona</h2><p class="sub">Movimentos pela CNN 3D; números pela contagem de dedos nos pontos da mão, com veto da CNN</p></div>
     <div class="corpo an" style="--d:1">
       <svg viewBox="0 0 1430 510" width="1424" height="508" role="img" aria-label="Fluxo do sistema">
         <defs><marker id="seta6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
@@ -268,29 +268,37 @@
           <text x="226" y="114" font-size="17" fill="#364152">Pré-treinada no Jester e ajustada; lê os pixels</text>
           <text x="226" y="148" font-size="15" fill="#7b8594">deslizar · polegar · pare · empurrar · puxar</text>
 
-          <rect x="730" y="40" width="380" height="130" fill="#eaf1fb" stroke="#9db9ea"/>
-          <text x="920" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">PASSA SE</text>
-          <text x="920" y="114" text-anchor="middle" font-size="19" font-weight="600" fill="#0a1f44">o mesmo gesto tiver ≥ 70%</text>
-          <text x="920" y="142" text-anchor="middle" font-size="19" font-weight="600" fill="#0a1f44">em 3 análises seguidas</text>
+          <rect x="810" y="40" width="300" height="130" fill="#eaf1fb" stroke="#9db9ea"/>
+          <text x="960" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">PASSA SE</text>
+          <text x="960" y="114" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">o mesmo gesto tiver ≥ 70%</text>
+          <text x="960" y="142" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">em 3 análises seguidas</text>
 
           <!-- caminho 2: números -->
           <text x="200" y="272" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">NÚMEROS</text>
-          <rect x="200" y="290" width="200" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
+          <rect x="200" y="290" width="150" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
           <rect x="200" y="290" width="6" height="130" fill="#1e4fbf"/>
-          <text x="226" y="332" font-size="22" font-weight="600" fill="#0a1f44">MediaPipe</text>
-          <text x="226" y="364" font-size="17" fill="#364152">21 pontos</text>
-          <text x="226" y="390" font-size="17" fill="#364152">da mão</text>
+          <text x="222" y="332" font-size="21" font-weight="600" fill="#0a1f44">MediaPipe</text>
+          <text x="222" y="364" font-size="16" fill="#364152">21 pontos</text>
+          <text x="222" y="388" font-size="16" fill="#364152">da mão</text>
 
-          <rect x="440" y="290" width="220" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
-          <rect x="440" y="290" width="6" height="130" fill="#1e4fbf"/>
-          <text x="466" y="332" font-size="22" font-weight="600" fill="#0a1f44">Contagem</text>
-          <text x="466" y="358" font-size="22" font-weight="600" fill="#0a1f44">de dedos</text>
-          <text x="466" y="394" font-size="14" fill="#7b8594">regra geométrica,</text><text x="466" y="412" font-size="14" fill="#7b8594">sem treino</text>
+          <rect x="380" y="290" width="170" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
+          <rect x="380" y="290" width="6" height="130" fill="#1e4fbf"/>
+          <text x="402" y="332" font-size="21" font-weight="600" fill="#0a1f44">Contagem</text>
+          <text x="402" y="358" font-size="21" font-weight="600" fill="#0a1f44">de dedos</text>
+          <text x="402" y="390" font-size="14" fill="#7b8594">regra geométrica,</text><text x="402" y="408" font-size="14" fill="#7b8594">sem treino</text>
 
-          <rect x="730" y="290" width="380" height="130" fill="#eaf1fb" stroke="#9db9ea"/>
-          <text x="920" y="330" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">PASSA SE</text>
-          <text x="920" y="364" text-anchor="middle" font-size="19" font-weight="600" fill="#0a1f44">o mesmo número (1 a 4) aparecer</text>
-          <text x="920" y="392" text-anchor="middle" font-size="19" font-weight="600" fill="#0a1f44">em 5 de 6 quadros, mão parada</text>
+          <rect x="580" y="290" width="200" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
+          <rect x="580" y="290" width="6" height="130" fill="#1e4fbf"/>
+          <text x="602" y="332" font-size="21" font-weight="600" fill="#0a1f44">Veto da CNN</text>
+          <text x="602" y="362" font-size="14" fill="#364152">não passa se a CNN</text>
+          <text x="602" y="382" font-size="14" fill="#364152">vê outro gesto, um</text>
+          <text x="602" y="402" font-size="14" fill="#364152">movimento ou sem gesto</text>
+
+          <rect x="810" y="290" width="300" height="130" fill="#eaf1fb" stroke="#9db9ea"/>
+          <text x="960" y="322" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">PASSA SE</text>
+          <text x="960" y="352" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">o mesmo número (1 a 4)</text>
+          <text x="960" y="378" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">em 5 de 6 quadros,</text>
+          <text x="960" y="404" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">mão parada e sem veto</text>
 
           <rect x="1200" y="155" width="230" height="110" fill="#1e4fbf"/>
           <text x="1315" y="202" text-anchor="middle" font-size="22" font-weight="600" fill="#fff">Comando</text>
@@ -298,15 +306,18 @@
 
           <path d="M150 210 H175 V105 H194" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
           <path d="M175 210 V355 H194" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M400 355 H434" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M660 105 H724" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M660 355 H724" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
+          <path d="M350 355 H374" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
+          <path d="M550 355 H574" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
+          <path d="M780 355 H804" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
+          <path d="M660 105 H804" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
+          <path d="M680 170 V284" fill="none" stroke="#1e4fbf" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#seta6)"/>
+          <text x="692" y="234" font-size="14" fill="#1e4fbf">notas da CNN</text>
           <path d="M1110 105 H1150 V195 H1194" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
           <path d="M1110 355 H1150 V225 H1194" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
 
           <line x1="0" x2="1430" y1="458" y2="458" stroke="#d6dce4"/>
           <text x="0" y="496" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">ATIVAÇÃO</text>
-          <text x="104" y="496" font-size="17" fill="#364152">O sinal de OK abre uma janela de 7 s; fora dela, nada é executado. Quando a contagem passa, o número tem prioridade.</text>
+          <text x="104" y="496" font-size="17" fill="#364152">O sinal de OK abre uma janela de 7 s; fora dela, nada é executado. Quando o número passa, ele tem prioridade.</text>
         </g>
       </svg>
     </div>
@@ -325,7 +336,7 @@
       <div class="kpis an" style="--d:1;grid-template-columns:repeat(3,1fr)">
         <div class="kpi forte"><div class="v">{{n_comandos}}<small>gestos</small></div><div class="r">viram comando no carro: Música, Ar-condicionado e Telefone.</div></div>
         <div class="kpi"><div class="v">CNN 3D<small>movimentos</small></div><div class="r">deslizar, polegar, pare, empurrar, puxar e tamborilar. Treinada com {{n_classes}} classes; as de número ficam de fora ao vivo.</div></div>
-        <div class="kpi"><div class="v">1, 2 e 4<small>dedos</small></div><div class="r">pela contagem de dedos nos 21 pontos da mão: regra geométrica, sem treino.</div></div>
+        <div class="kpi"><div class="v">1, 2 e 4<small>dedos</small></div><div class="r">pela contagem de dedos nos 21 pontos da mão (regra geométrica, sem treino), com veto da CNN.</div></div>
       </div>
       <p class="nota an" style="--d:2;margin-top:40px">Ativação: o sinal de OK abre a janela de 7 s em que os comandos valem. A lista de cada gesto e do seu comando está no apêndice (A9).</p>
     </div>
@@ -339,12 +350,12 @@
 
   <!-- 9. Acerto -->
   <section class="slide" data-titulo="Acerto" data-parte="Resultados" data-fonte="Fonte: resultados do projeto · teste misto (Jester, IPN Hand, HaGRID, Slovo, DriverMHG)">
-    <div class="cab an"><h2>Resultados</h2><p class="sub">Acerto no teste misto, com pessoas fora do treino; ao vivo: CNN 3D pré-treinada + contagem de dedos</p></div>
+    <div class="cab an"><h2>Resultados</h2><p class="sub">Acerto no teste misto, com pessoas fora do treino; ao vivo: CNN 3D pré-treinada + contagem de dedos + veto</p></div>
     <div class="corpo">
       <div class="duas" style="grid-template-columns:640px 1fr;gap:56px">
         <div class="an" style="--d:1"><p class="tituloBloco">Acerto no teste misto</p><!--F:GRAFICO_ACERTO--></div>
         <div class="an" style="--d:2"><p class="tituloBloco">Acerto e falsos disparos por modelo</p><!--F:TABELA_MISTO-->
-          <p class="nota">{{n_teste}} amostras de 5 bases, {{n_classes}} classes. A GRU foi testada, mas não é usada ao vivo. Ao vivo, os números vêm da contagem de dedos: confiança por número no apêndice (A7); teste ao vivo com gestos parecidos a medir. Todos os modelos: A8.</p></div>
+          <p class="nota">{{n_teste}} amostras de 5 bases, {{n_classes}} classes. Usada ao vivo: {{acc_vivo_outros}}% se os gestos sem comando no carro contarem juntos como “Outros gestos”; {{acc_vivo_num}}% nos números. A GRU foi testada, mas não é usada ao vivo. Confiança por número: A7. Todos os modelos: A8.</p></div>
       </div>
     </div>
   </section>
@@ -354,9 +365,9 @@
     <div class="cab an"><h2>Resultados</h2><p class="sub">Quantas vezes o sistema dispara sozinho, em vídeo real e contínuo, sem a janela do OK</p></div>
     <div class="corpo">
       <div class="kpis an" style="--d:1;grid-template-columns:repeat(3,1fr);margin-bottom:38px">
-        <div class="kpi forte"><div class="v">{{fl_vivo}}<small>falsos por minuto</small></div><div class="r">versão usada ao vivo: cerca de 1 a cada {{intervalo_vivo}} min sem gesto, quase todos números</div></div>
-        <div class="kpi"><div class="v">{{um_vivo}}</div><div class="r">trechos de 1 dedo com o comando certo</div></div>
-        <div class="kpi"><div class="v">{{dois_vivo}}</div><div class="r">trechos de 2 dedos com o comando certo</div></div>
+        <div class="kpi forte"><div class="v">{{fl_vivo}}<small>falsos por minuto</small></div><div class="r">versão usada ao vivo, com veto (todos os gestos); só com os comandos do carro: {{fl_vivo_carro}}/min, cerca de 1 a cada {{intervalo_vivo_carro}} min</div></div>
+        <div class="kpi"><div class="v">{{um_vivo}}</div><div class="r">trechos de 1 dedo com o comando certo (sem veto: {{um_semveto}})</div></div>
+        <div class="kpi"><div class="v">{{dois_vivo}}</div><div class="r">trechos de 2 dedos com o comando certo (sem veto: {{dois_semveto}})</div></div>
       </div>
       <div class="duas an" style="--d:2;grid-template-columns:1.15fr 1fr;gap:50px">
         <div><p class="tituloBloco">Por modelo</p>
@@ -366,16 +377,18 @@
             <tr><td>GRU sobre os pontos</td><td>{{fl_gru}}</td><td>{{um_gru}}</td><td>{{dois_gru}}</td></tr>
             <tr><td>Média 0,7 CNN + 0,3 GRU</td><td>{{fl_media}}</td><td>{{um_media}}</td><td>{{dois_media}}</td></tr>
             <tr><td>Números pela GRU (testada)</td><td>{{fl_final}}</td><td>{{um_final}}</td><td>{{dois_final}}</td></tr>
-            <tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem de dedos</td><td>{{fl_vivo}}</td><td>{{um_vivo}}</td><td>{{dois_vivo}}</td></tr>
+            <tr><td>Contagem de dedos sem veto (testada)</td><td>{{fl_semveto}}</td><td>{{um_semveto}}</td><td>{{dois_semveto}}</td></tr>
+            <tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem + veto</td><td>{{fl_vivo}}</td><td>{{um_vivo}}</td><td>{{dois_vivo}}</td></tr>
           </table></div>
         <div><p class="tituloBloco">As três tentativas dos dedos</p>
           <table class="tabela">
             <tr><th>Tentativa</th><th>1 dedo</th><th>Falsos / min</th></tr>
             <tr><td>1 · CNN com fotos (HaGRID)</td><td>{{d1_um}} disparos</td><td>{{d1_fpm}}</td></tr>
             <tr><td>2 · CNN com vídeo real</td><td>{{d2_um}} disparos</td><td>{{d2_fpm}}</td></tr>
-            <tr class="vencedora"><td>3 · Pontos da mão + GRU (testada)</td><td>{{um_final}} trechos</td><td>{{fl_final}}</td></tr>
+            <tr><td>3 · Pontos da mão + GRU (testada)</td><td>{{um_final}} trechos</td><td>{{fl_final}}</td></tr>
+            <tr class="vencedora"><td>Ao vivo · contagem + veto da CNN</td><td>{{um_vivo}} trechos</td><td>{{fl_vivo}}</td></tr>
           </table>
-          <p class="nota">Tentativas 1 e 2 contavam disparos certos (podem repetir no mesmo trecho); a 3, trechos com o comando certo. Ao vivo, a GRU deu lugar à contagem de dedos ({{fl_vivo}} falsos/min; na tabela ao lado). Nos falsos, quase todos são números: a contagem dispara quando a mão para com dedos à mostra.</p></div>
+          <p class="nota">Tentativas 1 e 2 contavam disparos certos (podem repetir no mesmo trecho); a 3, trechos com o comando certo. Ao vivo, a GRU deu lugar à contagem de dedos com o veto da CNN. Sem o veto, quase todos os falsos eram números; com ele, sobram sobretudo zoom e deslizar com dois dedos, que não são comando no carro. Nos vídeos do Slovo (sem sinal): {{slovo_vivo}} falsos/min.</p></div>
       </div>
     </div>
   </section>
@@ -413,8 +426,8 @@
       <table class="tabela tabTexto an" style="--d:1;font-size:19px">
         <tr><th>Limitação</th><th>O que seria necessário</th></tr>
         <tr><td>À noite, uma câmera comum não enxerga bem a mão</td><td>Câmera infravermelha no painel</td></tr>
-        <tr><td>Ainda dispara sozinho: cerca de 1 vez a cada {{intervalo_final}} min em vídeo real (versão com a GRU)</td><td>Disparos bem mais raros antes do uso real</td></tr>
-        <tr><td>2 dedos se confunde com gestos de movimento feitos com dois dedos quando a mão para: a regra acerta {{cn_c2}}% das vezes em que diz “2 dedos” ({{cn_c2_sj}}% sem o Jester)</td><td>Validar ao vivo com gestos parecidos (a medir)</td></tr>
+        <tr><td>Ainda dispara sozinho: {{fl_vivo}} vezes por minuto em vídeo real sem gesto ({{fl_vivo_carro}} só com os comandos do carro), sem a janela do OK</td><td>Disparos bem mais raros antes do uso real</td></tr>
+        <tr><td>Com o veto da CNN, os números falsos caíram ({{fl_semveto}} → {{fl_vivo}} falsos/min no IPN), mas passam menos números de verdade: 1 dedo em {{um_semveto}} → {{um_vivo}} trechos; números no teste misto {{acc_semveto_num}}% → {{acc_vivo_num}}%</td><td>Validar ao vivo com gestos parecidos (a medir)</td></tr>
         <tr><td>Poucos dados de dentro do carro: o teste do volante (DriverMHG) teve {{driver_n}} amostras de uma pessoa</td><td>Gravar motoristas reais, na posição do produto</td></tr>
         <tr><td>Testado por poucas pessoas, de frente para a câmera e com boa luz</td><td>Testes com mais pessoas, ângulos e iluminação</td></tr>
       </table>
@@ -702,7 +715,8 @@
             <tr><td>Média simples (peso da GRU 0,2 a 0,3)</td><td>{{acc_media}}% no teste misto; ao vivo, os números quase nunca passavam do gatilho de 0,7</td></tr>
             <tr><td>Portão da GRU: a GRU decide se é número (mão parada); senão, a CNN</td><td>{{acc_mistura}}% no teste misto; {{acc_mistura_num}}% nos números; ao vivo, nota baixa nos números</td></tr>
             <tr><td>Números pela GRU (peso 1,0 nos números, 0,3 no resto)</td><td>{{acc_pesos}}% no teste misto; em vídeo, disparava bem mais os números</td></tr>
-            <tr class="vencedora"><td>Usada ao vivo: mão parada e o mesmo número em 5 de 6 quadros → número pela contagem de dedos, sem nota; senão, a CNN</td><td>{{acc_vivo}}% no teste misto ({{acc_vivo_num}}% nos números, {{acc_vivo_resto}}% nos outros gestos); {{fl_vivo}} falsos por minuto no IPN; confiança da contagem de dedos nos próximos slides</td></tr>
+            <tr><td>Contagem de dedos sem veto: mão parada e o mesmo número em 5 de 6 quadros → número; senão, a CNN</td><td>{{acc_semveto}}% no teste misto; {{fl_semveto}} falsos por minuto no IPN; {{semveto_sem_numero}}% das amostras sem número viravam número</td></tr>
+            <tr class="vencedora"><td>Usada ao vivo: o mesmo, mas a CNN veta o número se vê outro gesto, um movimento ou sem gesto</td><td>{{acc_vivo}}% no teste misto ({{acc_vivo_num}}% nos números); {{fl_vivo}} falsos por minuto no IPN; confiança nos próximos slides</td></tr>
           </table>
         </div>
       </div>
@@ -711,7 +725,7 @@
 
   <!-- A7 (segunda parte). O modelo usado ao vivo -->
   <section class="slide" data-titulo="A7 · Modelo usado ao vivo" data-fonte="Fonte: demo/player.py (laço ao vivo e combinação)">
-    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · O modelo usado ao vivo</h2><p class="sub">A CNN 3D e a contagem de dedos analisam cada instante; a contagem decide qual resposta vale</p></div>
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · O modelo usado ao vivo</h2><p class="sub">A CNN 3D e a contagem de dedos analisam cada instante; a contagem propõe o número e a CNN pode vetá-lo</p></div>
     <div class="corpo an" style="--d:1">
       <svg viewBox="0 0 1430 510" width="1424" height="508" role="img" aria-label="Caminho de cada análise no modelo usado ao vivo">
         <defs><marker id="setaA7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
@@ -734,9 +748,9 @@
 
           <rect x="650" y="130" width="300" height="140" fill="#eaf1fb" stroke="#9db9ea"/>
           <text x="800" y="166" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">DECISÃO</text>
-          <text x="800" y="200" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">Mão parada e o mesmo</text>
-          <text x="800" y="226" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">número (1 a 4) em 5 de 6</text>
-          <text x="800" y="252" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">quadros?</text>
+          <text x="800" y="194" text-anchor="middle" font-size="17" font-weight="600" fill="#0a1f44">Mão parada, mesmo número</text>
+          <text x="800" y="218" text-anchor="middle" font-size="17" font-weight="600" fill="#0a1f44">(1 a 4) em 5 de 6 quadros</text>
+          <text x="800" y="244" text-anchor="middle" font-size="17" font-weight="600" fill="#0a1f44">e a CNN não veta?</text>
 
           <rect x="1040" y="30" width="200" height="100" fill="#fff" stroke="#0a1f44" stroke-width="1.5"/>
           <text x="1140" y="70" text-anchor="middle" font-size="19" font-weight="600" fill="#0a1f44">Número</text>
@@ -764,25 +778,25 @@
 
           <text x="0" y="424" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Mão parada:</tspan> presente em 5 dos últimos 6 quadros e o pulso andou no máximo 0,5 palma em 0,5 s (palma = pulso até a base do dedo médio).</text>
           <text x="0" y="452" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Dedo esticado:</tspan> distância base→ponta ÷ comprimento do dedo ≥ 0,85 e ângulo com a direção da palma ≤ 65°; o polegar tem regra própria.</text>
-          <text x="0" y="480" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Não é número:</tspan> cinco dedos, só o polegar ou punho fechado. Para repetir um comando, é preciso soltar o gesto. A GRU não é usada ao vivo.</text>
-          <text x="0" y="508" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Ativação:</tspan> o OK (ponta do polegar na ponta do indicador, mantido 0,4 s) abre uma janela de 7 s; fora dela, nada dispara.</text>
+          <text x="0" y="480" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Veto da CNN:</tspan> na janela mais longa, os gestos sem comando no carro somam-se em “Outros gestos”; se a CNN aponta essa classe, um movimento ou sem gesto, o número não passa.</text>
+          <text x="0" y="508" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Não é número:</tspan> cinco dedos, só o polegar ou punho. <tspan font-weight="600" fill="#0a1f44">Ativação:</tspan> o OK (mantido 0,4 s) abre 7 s; fora deles, nada dispara. A GRU não é usada ao vivo.</text>
         </g>
       </svg>
     </div>
   </section>
 
   <!-- A7 (terceira parte). Confiabilidade da contagem de dedos -->
-  <section class="slide" data-titulo="A7 · Contagem de dedos" data-fonte="Fonte: resultados/pontos/confianca_numeros.json · src/medir_confianca_numeros.py">
-    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · Quanto confiar na contagem de dedos</h2><p class="sub">Teste sem treino, com pessoas fora do treino e fora do ajuste dos limiares</p></div>
+  <section class="slide" data-titulo="A7 · Contagem de dedos" data-fonte="Fonte: resultados/pontos/veto_outros.json · src/medir_veto_outros.py">
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · Quanto confiar na contagem de dedos</h2><p class="sub">Teste misto, com pessoas fora do treino: a contagem com o veto da CNN (ao vivo) e sem o veto</p></div>
     <div class="corpo">
       <div class="duas" style="grid-template-columns:1fr 360px;gap:56px;align-items:start">
         <div class="an" style="--d:1"><!--F:TABELA_CONTAGEM--></div>
         <div class="kpis an" style="--d:2;gap:30px">
-          <div class="kpi forte"><div class="v">{{cn_sem_numero}}%</div><div class="r">das {{cn_n_sem}} amostras sem número dispararam um número, sobretudo zoom e deslizar com dois dedos (Jester) e “fazendo outra coisa” (IPN)</div></div>
+          <div class="kpi forte"><div class="v">{{semveto_sem_numero}}% → {{vivo_sem_numero}}%</div><div class="r">das amostras sem número viravam número sem o veto (sobretudo zoom e deslizar com dois dedos, e “fazendo outra coisa”); com o veto, nenhuma</div></div>
           <div class="kpi"><div class="v">a medir</div><div class="r">validação ao vivo, na webcam, com gestos parecidos que não devem disparar</div></div>
         </div>
       </div>
-      <p class="nota an" style="--d:3">Confiança: quando a regra disse “k dedos”, em quantos % das vezes eram k dedos. A mistura completa tem {{cn_n_jester}} clipes do Jester (gestos sem número, muitos com dois dedos à mostra), que derrubam a confiança, principalmente em 2 dedos. Simulação do laço ao vivo (mão parada, mesma contagem em 5 de 6 quadros). Amostras: {{cn_amostras}}.</p>
+      <p class="nota an" style="--d:3">Confiança: quando passou “k dedos”, em quantos % das vezes eram k dedos. Mostrado e passou: das amostras de k dedos, em quantos % o número passou. O veto troca alcance por confiança. Simulação do laço ao vivo (mão parada, mesma contagem em 5 de 6 quadros) no teste misto completo ({{n_teste}} amostras), sem retreinar a CNN.</p>
     </div>
   </section>
 
@@ -810,7 +824,8 @@
         <tr><td>2 · CNN com vídeo real</td><td>Treino com vídeos do IPN</td><td>{{d2_um}} disparos certos · {{d2_fpm}} falsos/min · 0% nos vídeos de sinais</td><td>Aprendeu o fundo, não a mão</td></tr>
         <tr><td>3a · Pontos + regras</td><td>Dedos esticados contados nos 21 pontos</td><td>{{regras_um}}% e {{regras_dois}}% dos trechos · {{regras_fpm}} falsos/min</td><td>Forma certa, mas dispara demais</td></tr>
         <tr><td>3b · Pontos + GRU</td><td>Rede pequena treinada sobre os pontos</td><td>{{um_final}} e {{dois_final}} trechos · {{fl_final}} falsos/min</td><td>Boa no teste; ao vivo, nota baixa nos números</td></tr>
-        <tr class="vencedora"><td>3c · Usada ao vivo</td><td>Regras só com a mão parada e a mesma contagem em 5 de 6 quadros; o resto fica com a CNN</td><td>Confiança {{cn_c1}}%, {{cn_c2}}% e {{cn_c4}}% (1, 2 e 4 dedos) · {{fl_vivo}} falsos/min</td><td>Contar dedos é forma da mão, não movimento</td></tr>
+        <tr><td>3c · Contagem sem veto (testada)</td><td>Regras só com a mão parada e a mesma contagem em 5 de 6 quadros; o resto fica com a CNN</td><td>Confiança {{cs1}}%, {{cs2}}% e {{cs4}}% (1, 2 e 4 dedos) · {{fl_semveto}} falsos/min</td><td>Contar dedos é forma da mão, não movimento</td></tr>
+        <tr class="vencedora"><td>3d · Usada ao vivo</td><td>A mesma contagem, com veto da CNN: outro gesto, movimento ou sem gesto derruba o número</td><td>Confiança {{cv1}}%, {{cv2}}% e {{cv4}}% (1, 2 e 4 dedos) · {{fl_vivo}} falsos/min</td><td>A CNN sabe o que não é número</td></tr>
       </table>
     </div>
   </section>
