@@ -714,7 +714,7 @@
   <!-- 18b. Carro em 3D (demo/carro3d.html): visão do motorista, com as mãos 3D dentro do carro -->
   <section class="slide demo" data-titulo="Carro" data-demo="carro3d">
     <div class="topo"><span class="vivo">AO VIVO</span><h2>No carro, pela visão do motorista</h2><span class="espaco"></span>
-      <span class="chip">1 a 4 dedos: <b>página</b></span><span class="chip">Empurrar a mão: <b>explica</b></span><span class="chip">Rolar a mão: <b>troca o slide</b></span></div>
+      <span class="chip">👌 OK: <b>abre a janela</b></span><span class="chip">1 · 2 · 4 dedos: <b>página</b></span><span class="chip">Rolar a mão: <b>troca o slide</b></span></div>
     <div class="quadro"></div>
   </section>
 
@@ -1653,7 +1653,9 @@ const MAPAS = {
               "Zooming Out With Full Hand": "zoom_menos", "One Finger": "proximo_corte", "Two Fingers": "janela" },
   mao3d: {},  // só mostra as mãos; rolar a mão continua trocando o slide
 };
-MAPAS.carro3d = { ...MAPAS.painel, "One Finger": "pagina_1", "Two Fingers": "pagina_2", "Three Fingers": "pagina_3", "Four Fingers": "pagina_4" };  // números abrem páginas
+MAPAS.carro3d = { "Swiping Left": "anterior", "Swiping Right": "proxima", "Thumb Up": "volume_mais", "Thumb Down": "volume_menos",
+  "Drumming Fingers": "tamborilar", "Pushing Hand Away": "alternar", "Pulling Hand In": "ajuda",
+  "One Finger": "pagina_1", "Two Fingers": "pagina_2", "Four Fingers": "pagina_4" };  // mesmo mapa do player.py (COMANDOS_CARRO3D)
 let tempoAviso;
 function aviso(texto) { const a = $("aviso"); a.textContent = texto; a.classList.add("ver"); clearTimeout(tempoAviso); tempoAviso = setTimeout(() => a.classList.remove("ver"), 1100); }
 function quadroDemo() { return slides[atual].querySelector("iframe"); }

@@ -45,8 +45,12 @@ COMANDOS_HOSPITAL = {"Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking
                      "One Finger": "proximo_corte", "Two Fingers": "janela"}
 # Na apresentação, a página repassa cada gesto para o slide aberto. O servidor só dispara gestos desta
 # lista e manda o nome da classe; quem traduz para o comando de cada demo é a própria apresentação.
-# No carro 3D, os números vão direto para uma página da central (só funcionam com --pontos, que reconhece os dedos).
-COMANDOS_CARRO3D = {**COMANDOS_PAINEL, "One Finger": "pagina_1", "Two Fingers": "pagina_2", "Three Fingers": "pagina_3", "Four Fingers": "pagina_4"}
+# Carro 3D (só Música, Ar-condicionado e Telefone). Os números vão direto para uma página (só com --pontos, que reconhece
+# os dedos). Três dedos e o sinal de pare ficam de fora: o OK, gesto de ativação reconhecido na página, tem três dedos
+# esticados. Empurrar a mão faz o papel do pare (tocar/pausar, ligar/desligar, confirmar) e puxar a mão explica.
+COMANDOS_CARRO3D = {"Swiping Left": "anterior", "Swiping Right": "proxima", **COMANDOS_VOLUME, "Drumming Fingers": "tamborilar",
+                    "Pushing Hand Away": "alternar", "Pulling Hand In": "ajuda",
+                    "One Finger": "pagina_1", "Two Fingers": "pagina_2", "Four Fingers": "pagina_4"}
 GESTOS_APRESENTACAO = sorted({*COMANDOS, *COMANDOS_PAINEL, *COMANDOS_HOSPITAL, *COMANDOS_CARRO3D, "Rolling Hand Forward", "Rolling Hand Backward"})
 # Páginas que a apresentação pode abrir dentro de um slide.
 DEMOS_EMBUTIDAS = {"tenis.html", "painel_carro.html", "hospital.html", "hand3d.html", "carro3d.html"}
@@ -763,6 +767,7 @@ def main():
     if args.hospital:
         COMANDOS.update(COMANDOS_HOSPITAL)
     if args.carro3d:
+        COMANDOS.clear()
         COMANDOS.update(COMANDOS_CARRO3D)
 
     estado, parar = Estado(), threading.Event()

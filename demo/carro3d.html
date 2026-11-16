@@ -38,6 +38,15 @@
   #aviso { left: 50%; bottom: 12%; transform: translate(-50%, 20px); padding: 12px 22px; font-size: 22px; font-weight: 700; opacity: 0; transition: .25s; pointer-events: none; }
   #aviso.ver { opacity: 1; transform: translate(-50%, 0); }
   #dicas { right: 14px; bottom: 14px; padding: 8px 12px; font-size: 12px; opacity: .75; line-height: 1.5; }
+  #janela { left: 50%; top: 14px; transform: translateX(-50%); padding: 10px 18px; text-align: center; min-width: 300px; }
+  #janela .titulo { font-size: 18px; font-weight: 700; }
+  #janela .sub { font-size: 12px; opacity: .75; margin-top: 2px; }
+  #janela .tempo { height: 6px; border-radius: 3px; background: rgba(255,255,255,.12); margin-top: 8px; overflow: hidden; }
+  #janela .tempo i { display: block; height: 100%; width: 0; background: #3ad07a; }
+  #janela.aberta { border-color: #3ad07a; box-shadow: 0 0 24px rgba(58,208,122,.45); }
+  #janela.aberta .titulo { color: #3ad07a; }
+  #borda { position: fixed; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 6px rgba(58,208,122,.55); opacity: 0; transition: opacity .2s; }
+  #borda.ver { opacity: 1; }
   #entrar { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 18px 34px; font-size: 20px; font-weight: 700;
             border: 0; border-radius: 14px; background: var(--acento); color: #04121f; cursor: pointer; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
   #entrar small { display: block; font-size: 13px; font-weight: 500; margin-top: 4px; }
@@ -60,8 +69,10 @@
 </div>
 <div id="mini" class="caixa"><img id="stream" alt=""><canvas id="sobre"></canvas><span class="rot">câmera (espelhada)</span></div>
 <div id="legenda" class="caixa"></div>
+<div id="janela" class="caixa"><div class="titulo" id="janelaTitulo">Faça 👌 para ativar</div><div class="sub" id="janelaSub">fora da janela, os gestos não fazem nada</div><div class="tempo"><i id="janelaTempo"></i></div></div>
+<div id="borda"></div>
 <div id="aviso" class="caixa"></div>
-<div id="dicas" class="caixa">Arraste: olhar em volta · duplo clique: olhar para a frente<br>[ ]: campo de visão da câmera · teclado: ← → ↑ ↓ espaço 1–4 R E</div>
+<div id="dicas" class="caixa">Arraste: olhar em volta · duplo clique: olhar para a frente<br>[ ]: campo de visão da câmera · teclado: O (abre a janela) ← → ↑ ↓ espaço 1 2 4 M E</div>
 <button id="entrar">Entrar no carro<small>liga o som e a música</small></button>
 
 <script type="module">
@@ -206,8 +217,7 @@ for (let i = 0; i < 14; i++) {
   m.position.set(lado * (90 + Math.random() * 160), 0, -260 - Math.random() * 300);
   mundo.add(m);
 }
-// chuva: aparece quando o limpador está ligado
-const NGOTAS = 1800;
+const NGOTAS = 0;
 const gotasGeo = new THREE.BufferGeometry();
 const gotasPos = new Float32Array(NGOTAS * 3);
 for (let i = 0; i < NGOTAS; i++) { gotasPos[i * 3] = (Math.random() - .5) * 30; gotasPos[i * 3 + 1] = Math.random() * 12; gotasPos[i * 3 + 2] = -Math.random() * 40; }
@@ -298,7 +308,7 @@ const quadro = tela(0.38, 0.115, 1140);
 quadro.m.position.set(0, 0.975, -0.575); quadro.m.rotation.x = -0.32; cabine.add(quadro.m);
 
 // ---- faróis ----
-const farolLuzes = [-0.62, 0.62].map(x => {
+const farolLuzes = [].map(x => {
   const l = new THREE.SpotLight(0xfff2cc, 0, 70, 0.42, 0.5, 1.2);
   l.position.set(x, 0.75, -2.5); l.target.position.set(x * 0.4, 0, -30);
   scene.add(l, l.target); return l;
@@ -430,6 +440,7 @@ function analisarMaos() {
     updateHand(h, res.worldLandmarks[i], res.landmarks[i], W, H);
   });
   $("nMaos").textContent = res.landmarks.length;
+  verificarOk(res);
   sctx.clearRect(0, 0, W, H); sctx.strokeStyle = "#7fd1ff"; sctx.lineWidth = Math.max(2, W / 240);
   res.landmarks.forEach(lm => { for (const [a, b] of ALL_BONES) { sctx.beginPath(); sctx.moveTo(lm[a].x * W, lm[a].y * H); sctx.lineTo(lm[b].x * W, lm[b].y * H); sctx.stroke(); } });
 }
@@ -437,13 +448,15 @@ function analisarMaos() {
 // ======================================================================
 // Central multimídia: mesmas páginas e comandos do painel antigo (painel_carro.html)
 // ======================================================================
-const PAGINAS = ["musica", "clima", "telefone", "limpador", "farois"];
-const NOMES_PAGINA = { musica: "Música", clima: "Clima", telefone: "Telefone", limpador: "Limpador", farois: "Faróis" };
-const NOMES_LIMPADOR = ["Desligado", "Intermitente", "Normal", "Rápido"];
+const PAGINAS = ["musica", "clima", "telefone"];
+const NOMES_PAGINA = { musica: "Música", clima: "Ar-condicionado", telefone: "Telefone" };
+// Números (pela GRU): 1 dedo = Música, 2 = Ar-condicionado, 4 = Telefone. Três dedos e o sinal de pare (cinco dedos)
+// ficam de fora para não se confundirem com o OK, que é o gesto de ativação.
+const PAGINA_DO_NUMERO = { pagina_1: "musica", pagina_2: "clima", pagina_4: "telefone" };
 const CAMPOS = ["Temperatura", "Ventilação", "Direção do ar"], DIRECOES = ["Rosto", "Pés", "Rosto e pés", "Para-brisa"];
 const CONTATOS = ["Casa", "Trabalho", "Oficina"];
 const st = { pagina: "musica", tocando: false, volume: 0.6, faixa: 0, clima: { ligado: false, temp: 22, vent: 2, dir: 0, campo: 0 },
-             limpador: 0, ultimoLimpador: 2, farois: false, chamada: null, contato: 0, comandos: 0, gesto: "—", conf: 0,
+             chamada: null, contato: 0, comandos: 0, gesto: "—", conf: 0,
              menu: false, selecionada: 0 };
 let faixas = [];
 const SINTETICAS = [
@@ -517,21 +530,20 @@ function falar(frases) {
   });
 }
 // ---- legenda dos gestos ----
+// "Empurrar a mão" faz o papel do antigo sinal de pare (tocar/pausar, ligar/desligar, confirmar); "puxar a mão" explica.
 function comandosAtuais() {
   const c = st.chamada, p = st.pagina;
   if (c && c.estado === "tocando") return [["Manter polegar para cima", "atende"], ["Manter polegar para baixo", "recusa"]];
-  if (st.menu) return [["Polegar para cima ou baixo", "navega"], ["Sinal de pare", "toca a escolhida"], ["Tamborilar", "fecha o menu"]];
-  if (c) return [["Sinal de pare", "encerra"]];
-  const funcao = ["1 · 2 · 3 · 4 dedos", "Música · Clima · Telefone · Limpador"], volta = ["Puxar a mão", "página anterior"];
-  if (p === "clima") return [["Deslizar para os lados", "troca o ajuste"], ["Polegar", "muda o valor"], ["Sinal de pare", st.clima.ligado ? "desliga" : "liga"], funcao, volta];
-  if (p === "telefone") return [["Sinal de pare", "simula uma chamada"], funcao, volta];
-  if (p === "limpador") return [["Polegar", "muda a velocidade"], ["Sinal de pare", st.limpador ? "desliga" : "liga"], funcao, volta];
-  if (p === "farois") return [["Sinal de pare", st.farois ? "desliga" : "liga"], funcao, volta];
-  return [["Deslizar à direita", "próxima música"], ["Deslizar à esquerda", "música anterior"], ["Sinal de pare", st.tocando ? "pausa" : "toca"], ["Polegar", "volume"], ["Tamborilar os dedos", "menu de músicas"], funcao, volta];
+  if (st.menu) return [["Polegar para cima ou baixo", "navega"], ["Empurrar a mão", "toca a escolhida"], ["Tamborilar", "fecha o menu"]];
+  if (c) return [["Empurrar a mão", "encerra"]];
+  const paginas = ["1 · 2 · 4 dedos", "Música · Ar · Telefone"];
+  if (p === "clima") return [["Deslizar para os lados", "troca o ajuste"], ["Polegar", "muda o valor"], ["Empurrar a mão", st.clima.ligado ? "desliga" : "liga"], paginas];
+  if (p === "telefone") return [["Empurrar a mão", "simula uma chamada"], paginas];
+  return [["Deslizar à direita", "próxima música"], ["Deslizar à esquerda", "música anterior"], ["Empurrar a mão", st.tocando ? "pausa" : "toca"], ["Polegar", "volume"], ["Tamborilar os dedos", "menu de músicas"], paginas];
 }
 function atualizarLegenda() {
-  $("legenda").innerHTML = `<h4>${NOMES_PAGINA[st.pagina]}${st.chamada ? " · chamada" : ""}</h4>` +
-    [...comandosAtuais(), ["Empurrar a mão", "explica os comandos"]].map(([g, a]) => `<b>${g}:</b> ${a}`).join("<br>");
+  $("legenda").innerHTML = `<h4>${NOMES_PAGINA[st.pagina]}${st.chamada ? " · chamada" : ""}</h4><b>👌 OK:</b> abre a janela de comandos (${JANELA_S} s)<br>` +
+    [...comandosAtuais(), ["Puxar a mão", "explica os comandos"]].map(([g, a]) => `<b>${g}:</b> ${a}`).join("<br>");
 }
 let tempoAviso;
 function avisar(txt, ms = 1600) { const a = $("aviso"); a.textContent = txt; a.classList.add("ver"); clearTimeout(tempoAviso); tempoAviso = setTimeout(() => a.classList.remove("ver"), ms); }
@@ -582,7 +594,7 @@ function executar(c, repeticao = false) {
   else if (c.startsWith("pagina_")) {
     // 1 a 4 dedos (reconhecidos pelos pontos da mão + GRU) abrem direto uma página
     if (repeticao) return;
-    const nova = { pagina_1: "musica", pagina_2: "clima", pagina_3: "telefone", pagina_4: "limpador" }[c];
+    const nova = PAGINA_DO_NUMERO[c];
     if (!nova) return;
     if (nova !== st.pagina) mostrarPagina(nova);
     avisar(NOMES_PAGINA[nova]);
@@ -608,15 +620,6 @@ function executar(c, repeticao = false) {
   }
   else if (repeticao) feito = false;
   else if (st.pagina === "telefone") { if (c === "alternar") iniciarChamada(); else feito = false; }
-  else if (st.pagina === "limpador") {
-    if (c === "volume_mais" && st.limpador < 3) definirLimpador(st.limpador + 1);
-    else if (c === "volume_menos" && st.limpador > 0) definirLimpador(st.limpador - 1);
-    else if (c === "alternar") definirLimpador(st.limpador ? 0 : st.ultimoLimpador);
-    else feito = false;
-  }
-  else if (st.pagina === "farois") {
-    if (c === "alternar") { st.farois = !st.farois; avisar("Faróis " + (st.farois ? "ligados" : "desligados")); atualizarLegenda(); } else feito = false;
-  }
   else if (c === "proxima") { trocarFaixa(1); if (!st.tocando) tocar(); avisar("▶ " + faixas[st.faixa].titulo); }
   else if (c === "anterior") { trocarFaixa(-1); if (!st.tocando) tocar(); avisar("◀ " + faixas[st.faixa].titulo); }
   else if (c === "alternar") { st.tocando ? pausar() : tocar(); avisar(st.tocando ? "Tocando" : "Pausado"); atualizarLegenda(); }
@@ -625,7 +628,6 @@ function executar(c, repeticao = false) {
   if (feito) st.comandos++;
   desenharCentral(); atualizarHud();
 }
-function definirLimpador(v) { st.limpador = v; if (v) st.ultimoLimpador = v; avisar("Limpador: " + NOMES_LIMPADOR[v]); atualizarLegenda(); }
 
 // ---- desenho da central multimídia ----
 function caixaArred(g, x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
@@ -635,7 +637,7 @@ function desenharCentral() {
   g.fillStyle = grad; g.fillRect(0, 0, W, H);
   // abas
   PAGINAS.forEach((p, i) => {
-    const x = 30 + i * (W - 60) / 5, w = (W - 60) / 5 - 14, ativa = p === st.pagina;
+    const x = 30 + i * (W - 60) / PAGINAS.length, w = (W - 60) / PAGINAS.length - 14, ativa = p === st.pagina;
     caixaArred(g, x, 22, w, 64, 16); g.fillStyle = ativa ? "#2d7ff9" : "#1d242e"; g.fill();
     g.fillStyle = ativa ? "#fff" : "#9aa7b4"; g.font = "600 30px system-ui"; g.textAlign = "center"; g.fillText(NOMES_PAGINA[p], x + w / 2, 65);
   });
@@ -648,7 +650,7 @@ function desenharCentral() {
     g.fillStyle = "#fff"; g.font = "700 64px system-ui"; g.fillText("📞 " + st.chamada.nome, 110, y0 + 140);
     g.font = "500 34px system-ui"; g.fillStyle = "#b7e4c7";
     g.fillText(st.chamada.estado === "tocando" ? "Chamada recebida (simulada)" : "Em chamada · " + formatar((performance.now() - st.chamada.inicio) / 1000), 110, y0 + 200);
-    g.fillText(st.chamada.estado === "tocando" ? "Manter 👍 atende · manter 👎 recusa" : "✋ Sinal de pare encerra", 110, y0 + 260);
+    g.fillText(st.chamada.estado === "tocando" ? "Manter 👍 atende · manter 👎 recusa" : "Empurrar a mão encerra", 110, y0 + 260);
   } else if (st.menu && faixas.length) {
     g.fillStyle = "#9aa7b4"; g.font = "500 32px system-ui"; g.fillText("Menu de músicas", 60, y0 + 40);
     const inicio = Math.max(0, Math.min(st.selecionada - 2, faixas.length - 5));
@@ -687,12 +689,6 @@ function desenharCentral() {
   } else if (st.pagina === "telefone") {
     g.fillStyle = "#9aa7b4"; g.font = "500 34px system-ui"; g.fillText("Contatos", 60, y0 + 50);
     CONTATOS.forEach((n, i) => { caixaArred(g, 60, y0 + 80 + i * 90, W - 120, 74, 18); g.fillStyle = "#18202a"; g.fill(); g.fillStyle = "#fff"; g.font = "600 38px system-ui"; g.fillText("👤  " + n, 90, y0 + 130 + i * 90); });
-  } else if (st.pagina === "limpador") {
-    g.fillStyle = "#fff"; g.font = "700 60px system-ui"; g.fillText("Limpador: " + NOMES_LIMPADOR[st.limpador], 60, y0 + 100);
-    NOMES_LIMPADOR.forEach((n, i) => { const x = 60 + i * (W - 120) / 4, w = (W - 120) / 4 - 20; caixaArred(g, x, y0 + 160, w, 120, 20); g.fillStyle = i === st.limpador ? "#2d7ff9" : "#18202a"; g.fill(); g.fillStyle = "#fff"; g.font = "600 32px system-ui"; g.textAlign = "center"; g.fillText(n, x + w / 2, y0 + 232); g.textAlign = "left"; });
-  } else if (st.pagina === "farois") {
-    g.fillStyle = st.farois ? "#ffe29a" : "#56606b"; g.font = "180px system-ui"; g.fillText("💡", 80, y0 + 240);
-    g.fillStyle = "#fff"; g.font = "700 64px system-ui"; g.fillText(st.farois ? "Faróis ligados" : "Faróis desligados", 320, y0 + 170);
   }
   t.needsUpdate = true;
 }
@@ -708,8 +704,10 @@ function desenharQuadro() {
   g.strokeStyle = "#1c2733"; g.lineWidth = 16; g.beginPath(); g.arc(W / 2, 175, 150, Math.PI * 0.8, Math.PI * 2.2); g.stroke();
   g.strokeStyle = "#2d7ff9"; g.beginPath(); g.arc(W / 2, 175, 150, Math.PI * 0.8, Math.PI * (0.8 + 1.4 * Math.min(1, velocidade / 160))); g.stroke();
   // indicadores
-  const ind = [["💡", st.farois, "#ffe29a"], ["🌧", st.limpador > 0, "#8fd0ff"], ["❄", st.clima.ligado, "#8fd0ff"]];
-  ind.forEach(([ic, on, cor], i) => { g.globalAlpha = on ? 1 : 0.25; g.fillStyle = cor; g.font = "54px system-ui"; g.fillText(ic, 50 + i * 80, 90); });
+  const aberta = janelaAberta();
+  g.globalAlpha = aberta ? 1 : 0.3; g.fillStyle = aberta ? "#3ad07a" : "#9aa7b4"; g.font = "700 44px system-ui";
+  g.fillText(aberta ? "👌 ATIVO" : "👌", 50, 90);
+  g.globalAlpha = st.clima.ligado ? 1 : 0.25; g.fillStyle = "#8fd0ff"; g.font = "54px system-ui"; g.fillText("❄", 290, 90);
   g.globalAlpha = 1;
   g.fillStyle = "#9aa7b4"; g.font = "500 30px system-ui"; g.fillText(st.tocando && faixas.length ? "♪ " + faixas[st.faixa].titulo.slice(0, 22) : "", 50, 300);
   g.textAlign = "right"; g.fillText("Gesto: " + st.gesto, W - 50, 90);
@@ -720,12 +718,67 @@ function desenharQuadro() {
 }
 
 // ======================================================================
+// Janela de ativação: o OK (👌) abre uma janela de JANELA_S segundos com um bip; só dentro dela um gesto vira comando.
+// No fim, outro bip. Fora da janela, o modelo continua reconhecendo (aparece na tela), mas nada é executado.
+// O OK é reconhecido aqui, pela geometria dos pontos da mão (MediaPipe): pontas do polegar e do indicador encostadas
+// e médio, anelar e mínimo esticados, mantido por OK_SEGURAR segundos.
+// ======================================================================
+const JANELA_S = 4, OK_SEGURAR = 0.4;
+let janelaAte = 0, okDesde = 0, okSolto = true, fimAgendado = null;
+function janelaAberta() { return performance.now() < janelaAte; }
+function bip(freqs, duracao = 0.12) {
+  try {
+    if (!ctx) { ctx = new AudioContext(); mestre = ctx.createGain(); mestre.connect(ctx.destination); aplicarVolume(); }
+    ctx.resume();
+    freqs.forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + i * (duracao + 0.03);
+      o.type = "sine"; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.35, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + duracao);
+      o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + duracao + 0.02);
+    });
+  } catch (e) { /* sem som: a janela continua visível na tela */ }
+}
+function abrirJanela() {
+  janelaAte = performance.now() + JANELA_S * 1000;
+  bip([880, 1320]);                      // abre: dois bipes subindo
+  avisar("👌 Janela aberta: faça o comando", 1400);
+  clearTimeout(fimAgendado);
+  fimAgendado = setTimeout(() => { bip([660, 440], 0.18); avisar("Janela fechada", 1000); desenharQuadro(); }, JANELA_S * 1000);   // fecha: dois bipes descendo
+  desenharQuadro();
+}
+function atualizarJanela() {
+  const resta = Math.max(0, janelaAte - performance.now()) / 1000, aberta = resta > 0;
+  $("janela").classList.toggle("aberta", aberta); $("borda").classList.toggle("ver", aberta);
+  $("janelaTitulo").textContent = aberta ? `Janela aberta · ${resta.toFixed(1)} s` : "Faça 👌 para ativar";
+  $("janelaTempo").style.width = (aberta ? resta / JANELA_S * 100 : 0) + "%";
+}
+function reta(p, a, d) {   // dedo esticado: distância base→ponta / comprimento do dedo
+  const dist = (i, j) => Math.hypot(p[i].x - p[j].x, p[i].y - p[j].y, p[i].z - p[j].z);
+  return dist(a, d) / Math.max(dist(a, a + 1) + dist(a + 1, a + 2) + dist(a + 2, d), 1e-6);
+}
+function eOk(w) {          // w: 21 pontos em metros (worldLandmarks)
+  const dist = (i, j) => Math.hypot(w[i].x - w[j].x, w[i].y - w[j].y, w[i].z - w[j].z);
+  const palma = dist(0, 9);
+  return dist(4, 8) < 0.35 * palma && reta(w, 9, 12) > 0.85 && reta(w, 13, 16) > 0.85 && reta(w, 17, 20) > 0.8;
+}
+function verificarOk(res) {
+  const agora = performance.now(), algum = res.worldLandmarks.some(eOk);
+  if (!algum) { okDesde = 0; okSolto = true; return; }
+  if (!okDesde) okDesde = agora;
+  // precisa soltar o OK entre uma ativação e outra; segurar o OK com a janela aberta não reabre
+  if (okSolto && !janelaAberta() && agora - okDesde >= OK_SEGURAR * 1000) { okSolto = false; abrirJanela(); }
+}
+
+// ======================================================================
 // Gestos: da apresentação (postMessage) ou direto do servidor (/eventos)
 // ======================================================================
 function atualizarHud() { $("nComandos").textContent = st.comandos; }
 function receber(e) {
   if (e.tipo === "erro") { $("conexao").textContent = e.mensagem; $("ponto").className = ""; }
-  if (e.tipo === "comando" && e.comando) executar(e.comando, !!e.repeticao);
+  if (e.tipo === "comando" && e.comando) {
+    if (janelaAberta()) executar(e.comando, !!e.repeticao);
+    else if (!e.repeticao) $("janelaSub").textContent = `ignorado: ${e.gesto || e.comando} (janela fechada)`;
+  }
   if (e.tipo === "estado") {
     st.gesto = e.aquecendo ? "aquecendo…" : e.gesto; st.conf = e.confianca || 0;
     $("gesto").textContent = st.gesto; $("gesto").className = e.e_comando ? "comando" : "";
@@ -752,20 +805,19 @@ addEventListener("keydown", e => {
   else if (e.key === "ArrowLeft") executar("anterior");
   else if (e.key === "ArrowUp") { e.preventDefault(); executar("volume_mais", e.repeat); }
   else if (e.key === "ArrowDown") { e.preventDefault(); executar("volume_menos", e.repeat); }
-  else if (["1", "2", "3", "4"].includes(e.key)) executar("pagina_" + e.key);
+  else if (["1", "2", "4"].includes(e.key)) executar("pagina_" + e.key);
+  else if (e.key.toLowerCase() === "o") abrirJanela();
   else if (e.key.toLowerCase() === "m") executar("tamborilar");
-  else if (e.key === "r") executar("funcao");
-  else if (e.key === "R") executar("funcao_anterior");
   else if (e.key.toLowerCase() === "e") executar("ajuda");
   else if (e.key === " ") { e.preventDefault(); executar("alternar"); }
   else if (e.key === "[" || e.key === "]") { HFOV = THREE.MathUtils.clamp(HFOV + (e.key === "]" ? 2 : -2), 30, 110); avisar("Campo de visão da câmera: " + HFOV + "°"); }
 });
-$("entrar").onclick = () => { $("entrar").style.display = "none"; iniciarSom(); tocar(); falar([NOMES_PAGINA[st.pagina], "Empurre a mão para ouvir os comandos"]); };
+$("entrar").onclick = () => { $("entrar").style.display = "none"; iniciarSom(); tocar(); falar([NOMES_PAGINA[st.pagina], "Faça o sinal de OK para abrir a janela de comandos"]); };
 
 // ======================================================================
-// Laço: estrada andando, limpadores, faróis, chuva e mãos
+// Laço: estrada andando, janela de comandos e mãos
 // ======================================================================
-let ultimo = performance.now(), angLimpador = 0, sentidoLimpador = 1, pausaLimpador = 0, ultimaTela = 0;
+let ultimo = performance.now(), ultimaTela = 0;
 function laco(agora) {
   requestAnimationFrame(laco);
   const dt = Math.min(0.05, (agora - ultimo) / 1000); ultimo = agora;
@@ -779,26 +831,8 @@ function laco(agora) {
   cabine.position.y = Math.sin(agora / 170) * 0.0015 + Math.sin(agora / 530) * 0.002;
   camera.position.y = OLHO.y + cabine.position.y * 0.6;
   volante.rotation.z = Math.sin(agora / 2400) * 0.03;
-  // limpadores
-  if (st.limpador > 0 || angLimpador > 0.01) {
-    const vel = [0, 1.6, 2.4, 3.6][st.limpador] || 2.4;
-    if (pausaLimpador > 0) pausaLimpador -= dt;
-    else {
-      angLimpador += sentidoLimpador * vel * dt;
-      if (angLimpador > 1.55) { angLimpador = 1.55; sentidoLimpador = -1; }
-      if (angLimpador < 0) { angLimpador = 0; sentidoLimpador = 1; if (st.limpador === 1) pausaLimpador = 1.4; }
-    }
-  }
-  limpadores.forEach(l => { l.rotation.z = angLimpador; });
-  // chuva
-  chuva.visible = st.limpador > 0;
-  if (chuva.visible) {
-    const p = gotasGeo.attributes.position.array;
-    for (let i = 0; i < NGOTAS; i++) { p[i * 3 + 1] -= 9 * dt; p[i * 3 + 2] += v * dt * 0.3; if (p[i * 3 + 1] < 0 || p[i * 3 + 2] > 0) { p[i * 3 + 1] = 6 + Math.random() * 6; p[i * 3 + 2] = -Math.random() * 40; } }
-    gotasGeo.attributes.position.needsUpdate = true;
-  }
-  // faróis e ar-condicionado
-  farolLuzes.forEach(l => { l.intensity += ((st.farois ? 40 : 0) - l.intensity) * Math.min(1, dt * 6); });
+  // ar-condicionado e janela de comandos
+  atualizarJanela();
   matAr.emissive.setHex(st.clima.ligado ? (st.clima.temp <= 21 ? 0x1d5a8a : st.clima.temp >= 25 ? 0x8a3d1d : 0x2d4f66) : 0x000000);
   analisarMaos();
   if (agora - ultimaTela > 250) { ultimaTela = agora; desenharQuadro(); if (st.pagina === "musica" || st.chamada || st.menu) desenharCentral(); }
