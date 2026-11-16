@@ -180,7 +180,7 @@ class Pontos:
     def __init__(self, args, nomes, dispositivo):
         import pontos_mao as P
         import treinar_pontos_jester as TP
-        self.TP, self.dispositivo = TP, dispositivo
+        self.P, self.TP, self.dispositivo = P, TP, dispositivo
         e = torch.load(args.pontos, map_location=dispositivo, weights_only=False)
         if list(e["nomes"]) != list(nomes):
             raise SystemExit("A GRU e a CNN precisam ter as mesmas classes, na mesma ordem.")
@@ -190,7 +190,7 @@ class Pontos:
         self.nomes = list(nomes)
         self.numeros = np.array([nomes.index(n) for n in ("One Finger", "Two Fingers", "Three Fingers", "Four Fingers") if n in nomes])
         self.detector = P.DetectorMao(video=True)
-        self.ultimo = {"mao": False, "numero": None, "nota": 0.0, "parada": False}
+        self.ultimo = {"mao": False, "numero": None, "nota": 0.0, "parada": False, "regra": None}
         print(f"Pontos da mão + GRU ligados ({Path(args.pontos).name}): números pela GRU (com a mão parada), o resto pela CNN", flush=True)
 
     def quadro(self, quadro, agora):
@@ -213,6 +213,23 @@ class Pontos:
         palma = max(float(np.linalg.norm(xy[-1][9] - xy[-1][0])), 1e-6)
         return max(float(np.linalg.norm(t[0] - xy[-1][0])) for t in xy) / palma <= 0.5
 
+    def contagem_estavel(self, lista, n=6, minimo=5):
+        """Pose dos dedos pela geometria dos pontos (src/pontos_mao.py, sem o punho), se for a mesma em `minimo` dos
+        últimos `n` quadros. Devolve o nome do número (1 a 4 dedos), "nao_numero" (5 dedos, só o polegar, punho) ou None
+        (mão ausente ou leitura instável)."""
+        poses = []
+        for x in lista[-n:]:
+            if not x[2][0]:
+                poses.append(None)
+                continue
+            dedos = self.P.contar_dedos(x[1][0])
+            poses.append(self.P.classificar_pose(dedos) or "nao_numero")
+        validas = [q for q in poses if q is not None]
+        if not validas:
+            return None
+        mais, vezes = max(((q, validas.count(q)) for q in set(validas)), key=lambda t: t[1])
+        return mais if vezes >= minimo else None
+
     @torch.no_grad()
     def combinar(self, notas_cnn, lista, janelas):
         """notas_cnn: [janelas, classes], na ordem de `janelas` (em quadros). Devolve as notas combinadas.
@@ -234,16 +251,31 @@ class Pontos:
         notas_gru = self.gru(torch.from_numpy(np.stack(xs)).to(self.dispositivo),
                              torch.from_numpy(np.stack(ms)).to(self.dispositivo)).float().softmax(1).cpu().numpy()
         parada = self.mao_parada(lista)
+        regra = self.contagem_estavel(lista) if parada else None
         num = self.numeros
-        pn = notas_gru[:, num].sum(1, keepdims=True) if parada else np.zeros((len(notas_gru), 1), np.float32)
+        # A contagem geométrica dos dedos é o juiz (ao vivo, a GRU ficava com nota baixa nos números — treinou quase só
+        # com fotos em que a mão ocupa a imagem — e lia a mão aberta como "quatro dedos", roubando a nota do pare):
+        #  - 1 a 4 dedos estáveis com a mão parada: é número; a nota dele é a maior entre a GRU e 0,9;
+        #  - 5 dedos, só o polegar ou punho: não é número; decide a CNN (pare, polegares);
+        #  - mão em movimento ou leitura instável: decide a CNN.
+        notas_num = notas_gru[:, num].copy()
+        if parada and regra in self.nomes and self.nomes.index(regra) in num:
+            k = list(num).index(self.nomes.index(regra))
+            notas_num[:, k] = np.maximum(notas_num[:, k], 0.9)
+            excesso = notas_num.sum(1, keepdims=True)
+            notas_num = np.where(excesso > 0.98, notas_num * (0.98 / excesso), notas_num)
+            pn = notas_num.sum(1, keepdims=True)
+        else:
+            pn = np.zeros((len(notas_gru), 1), np.float32)
         outros = notas_cnn.copy()
         outros[:, num] = 0
         outros /= np.maximum(outros.sum(1, keepdims=True), 1e-9)
         p = (1 - pn) * outros
-        if parada:
-            p[:, num] = notas_gru[:, num]
-        k = int(notas_gru[0, num].argmax())  # janela mais curta
-        self.ultimo = {"mao": bool(lista[-1][2][0]), "parada": parada, "numero": self.nomes[num[k]], "nota": float(notas_gru[0, num[k]])}
+        if pn.any():
+            p[:, num] = notas_num
+        k = int(notas_num[0].argmax())  # janela mais curta
+        self.ultimo = {"mao": bool(lista[-1][2][0]), "parada": parada, "numero": self.nomes[num[k]], "nota": float(notas_num[0, k] if pn.any() else notas_gru[0, num[k]]),
+                       "regra": regra}
         return p
 
 
@@ -457,7 +489,8 @@ def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pont
                              "e_comando": nome_atual in COMANDOS, "confianca": confianca, "disparos": estado.disparos,
                              "por_minuto": estado.disparos / minutos, "fps": camera["fps"], "ms": ms,
                              "aquecendo": len(lista) < minimo,
-                             "pontos": {"mao": u["mao"], "parada": u["parada"], "numero": V.TRADUCAO.get(u["numero"], u["numero"]), "nota": u["nota"]}})
+                             "pontos": {"mao": u["mao"], "parada": u["parada"], "numero": V.TRADUCAO.get(u["numero"], u["numero"]), "nota": u["nota"],
+                                        "regra": {None: None, "nao_numero": "não é número"}.get(u["regra"], V.TRADUCAO.get(u["regra"], u["regra"]))}})
             ultimo_estado = agora
     leitor.join(timeout=2)
     if captura is not None:

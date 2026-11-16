@@ -838,7 +838,7 @@ function receber(e) {
     if (e.pontos) {
       const q = e.pontos;
       $("pontosInfo").innerHTML = !q.mao ? "pontos da mão: <b>sem mão</b>"
-        : `pontos da mão: <b>${q.parada ? "parada" : "em movimento"}</b> · GRU: ${q.numero} ${Math.round(q.nota * 100)}%`;
+        : `pontos da mão: <b>${q.parada ? "parada" : "em movimento"}</b> · dedos: ${q.regra || "—"} · número: ${q.numero} ${Math.round(q.nota * 100)}%`;
     } else $("pontosInfo").textContent = "pontos da mão: desligados (servidor sem --pontos)";
   }
 }
