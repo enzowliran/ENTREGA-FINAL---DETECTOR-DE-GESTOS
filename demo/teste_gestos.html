@@ -62,6 +62,7 @@
     <div class="inicio" id="opcoes">
       <input id="pessoa" placeholder="seu nome" value="enzo" size="10">
       <select id="tentativas"><option value="2">2 tentativas por gesto</option><option value="3" selected>3 tentativas por gesto</option><option value="5">5 tentativas por gesto</option></select>
+      <select id="conjunto"><option value="comandos">os 11 comandos</option><option value="comandos_parecidos" selected>comandos + gestos parecidos</option><option value="numeros_parecidos">só 1, 2, 4 dedos + parecidos</option></select>
       <select id="semGesto"><option value="0">sem bloco "sem gesto"</option><option value="30">30 s sem gesto no fim</option><option value="60" selected>60 s sem gesto no fim</option></select>
       <button id="comecar">Começar</button>
     </div>
@@ -71,7 +72,7 @@
   <section>
     <div id="placar">Acertos: <b>0 de 0</b></div>
     <div class="lista">
-      <table><thead><tr><th>#</th><th>Pedido</th><th>Reconhecido</th><th>Confiança</th><th>Tempo</th></tr></thead><tbody id="linhas"></tbody></table>
+      <table><thead><tr><th>#</th><th>Pedido (parecido = não deve disparar)</th><th>Reconhecido</th><th>Confiança</th><th>Tempo</th></tr></thead><tbody id="linhas"></tbody></table>
     </div>
   </section>
 </main>
@@ -89,6 +90,21 @@ const DICA = {
   "Sinal de pare": "Mão aberta, palma para a câmera, parada.",
   "Empurrar a mão": "Mão aberta indo em direção à câmera.", "Puxar a mão": "Mão aberta vindo em sua direção.",
   "Tamborilar os dedos": "Mexa os dedos como quem tamborila na mesa.",
+};
+// Gestos parecidos com os comandos, que NÃO devem disparar nada (o teste com dados mostrou que são eles que enganam a
+// contagem de dedos). Neles, acerto = nenhum comando em 5 s.
+const PARECIDOS = ["Zoom com dois dedos", "Deslizar com dois dedos", "Apontar mexendo a mão", "Mão relaxada parada", "Acenar", "Coçar o rosto ou ajeitar o cabelo"];
+Object.assign(DICA, {
+  "Zoom com dois dedos": "Abra e feche o indicador e o médio, como quem dá zoom.",
+  "Deslizar com dois dedos": "Indicador e médio esticados, deslizando para um lado.",
+  "Apontar mexendo a mão": "Aponte com o indicador e mova a mão, como quem mostra algo.",
+  "Mão relaxada parada": "Mão parada, dedos soltos e meio dobrados, sem fazer nada.",
+  "Acenar": "Dê tchau.", "Coçar o rosto ou ajeitar o cabelo": "Um movimento normal do dia a dia.",
+});
+const CONJUNTOS = {
+  comandos: GESTOS,
+  comandos_parecidos: [...GESTOS, ...PARECIDOS],
+  numeros_parecidos: ["Um dedo", "Dois dedos", "Quatro dedos", ...PARECIDOS],
 };
 const PREPARO = 3, TEMPO = 5;   // segundos com a mão abaixada antes e segundos para fazer o gesto
 const $ = id => document.getElementById(id);
@@ -129,8 +145,8 @@ ev.onmessage = m => {
     sessao.disparos.push(d);
     if (fase === "gesto" && tentativaAtual && !tentativaAtual.reconhecido) {
       tentativaAtual.reconhecido = e.gesto; tentativaAtual.confianca = e.confianca; tentativaAtual.tempo_s = +(t - faseInicio).toFixed(2);
-      const certo = e.gesto === alvo;
-      falar(`${e.gesto}, ${pct(e.confianca)} por cento. ${certo ? "Certo" : "Errado"}`, true);
+      const certo = !tentativaAtual.parecido && e.gesto === alvo;
+      falar(`${e.gesto}, ${pct(e.confianca)} por cento. ${certo ? "Certo" : tentativaAtual.parecido ? "Disparo falso" : "Errado"}`, true);
       fecharTentativa(certo ? "acerto" : "erro");
     } else if (fase === "gesto") {
       falar(`${e.gesto}, ${pct(e.confianca)} por cento`, true);
@@ -148,9 +164,10 @@ function embaralhar(v) { for (let i = v.length - 1; i > 0; i--) { const j = Math
 function comecar() {
   const n = +$("tentativas").value;
   sessao.pessoa = ($("pessoa").value || "anonimo").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 30) || "anonimo";
-  sessao.config = { tentativas_por_gesto: n, preparo_s: PREPARO, tempo_s: TEMPO, sem_gesto_s: +$("semGesto").value, gestos: GESTOS };
+  const lista = CONJUNTOS[$("conjunto").value];
+  sessao.config = { tentativas_por_gesto: n, preparo_s: PREPARO, tempo_s: TEMPO, sem_gesto_s: +$("semGesto").value, conjunto: $("conjunto").value, gestos: lista, parecidos: PARECIDOS };
   fila = [];
-  for (let r = 1; r <= n; r++) fila.push(...embaralhar(GESTOS.slice()).map(g => ({ gesto: g, rodada: r })));
+  for (let r = 1; r <= n; r++) fila.push(...embaralhar(lista.slice()).map(g => ({ gesto: g, rodada: r })));
   $("opcoes").style.display = "none";
   falar("Vamos começar. Em cada pedido, abaixe a mão, espere o sinal e faça o gesto.", true);
   setTimeout(proxima, 3500);
@@ -159,10 +176,10 @@ function proxima() {
   if (encerrado) return;
   if (!fila.length) return semGesto();
   const p = fila.shift();
-  tentativaAtual = { n: sessao.tentativas.length + 1, pedido: p.gesto, rodada: p.rodada, resultado: null, reconhecido: null, confianca: null, tempo_s: null };
+  tentativaAtual = { n: sessao.tentativas.length + 1, pedido: p.gesto, rodada: p.rodada, parecido: PARECIDOS.includes(p.gesto), resultado: null, reconhecido: null, confianca: null, tempo_s: null };
   alvo = p.gesto; fase = "preparo"; faseInicio = performance.now() / 1000;
   $("fase").textContent = `Prepare-se · ${tentativaAtual.n} de ${tentativaAtual.n + fila.length}`;
-  $("pedido").textContent = p.gesto; $("instrucao").textContent = "Mão abaixada. " + (DICA[p.gesto] || "");
+  $("pedido").textContent = p.gesto; $("instrucao").textContent = (PARECIDOS.includes(p.gesto) ? "Não deve disparar nada. " : "") + "Mão abaixada. " + (DICA[p.gesto] || "");
   falar(`Próximo: ${p.gesto}`);
 }
 function fecharTentativa(resultado) {
@@ -204,7 +221,10 @@ function tick() {
     if (dt >= PREPARO) { fase = "gesto"; faseInicio = t; $("fase").textContent = "Agora"; $("instrucao").textContent = DICA[alvo] || ""; falar("Agora", true); }
   } else if (fase === "gesto") {
     $("tempo").style.width = Math.max(0, 100 - dt / TEMPO * 100) + "%";
-    if (dt >= TEMPO) { falar("Não reconheceu", true); fecharTentativa("nao_disparou"); }
+    if (dt >= TEMPO) {
+      if (tentativaAtual.parecido) { falar("Nenhum comando. Certo", true); fecharTentativa("acerto"); }
+      else { falar("Não reconheceu", true); fecharTentativa("nao_disparou"); }
+    }
   } else if (fase === "intervalo") {
     if (dt >= 1.6) proxima();
   } else if (fase === "sem_gesto") {
@@ -218,7 +238,8 @@ requestAnimationFrame(tick);
 function desenharLinha(x) {
   const tr = document.createElement("tr");
   const rec = x.resultado === "nao_disparou" ? '<span class="nada">não disparou</span>'
-    : `<span class="${x.resultado === "acerto" ? "certo" : "erro"}">${x.reconhecido}</span>`;
+    : x.parecido && x.resultado === "acerto" ? '<span class="certo">nenhum comando</span>'
+    : `<span class="${x.resultado === "acerto" ? "certo" : "erro"}">${x.reconhecido || x.resultado}</span>`;
   tr.innerHTML = `<td>${x.n}</td><td>${x.pedido}</td><td>${rec}</td><td>${x.confianca != null ? pct(x.confianca) + "%" : "—"}</td><td>${x.tempo_s != null ? x.tempo_s.toFixed(1) + " s" : "—"}</td>`;
   $("linhas").prepend(tr);
   const ac = sessao.tentativas.filter(y => y.resultado === "acerto").length;
