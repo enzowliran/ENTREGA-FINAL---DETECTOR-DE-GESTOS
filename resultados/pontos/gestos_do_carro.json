@@ -1,0 +1,190 @@
+{
+ "o_que_e": "Acerto do modelo final (CNN 3D + contagem de dedos, sem veto) só nos gestos que viram comando no carro.",
+ "criterio": "teste misto, pessoas fora do treino; por clipe; acerto = a classe prevista é a do clipe (36 classes possíveis)",
+ "gestos_do_carro": {
+  "amostras": 1300,
+  "acerto_pct": 87.7,
+  "comando_certo_pct": 88.2,
+  "cnn_sozinha_pct": 81.1
+ },
+ "numeros": {
+  "amostras": 500,
+  "acerto_pct": 82.0,
+  "comando_certo_pct": 82.0,
+  "cnn_sozinha_pct": 58.4
+ },
+ "movimentos": {
+  "amostras": 800,
+  "acerto_pct": 91.2,
+  "comando_certo_pct": 92.1,
+  "cnn_sozinha_pct": 95.2
+ },
+ "todas_as_36_classes_pct": 70.9,
+ "amostras_total": 3642,
+ "por_gesto": {
+  "One Finger": {
+   "amostras": 200,
+   "acerto_pct": 75.0,
+   "comando_certo_pct": 75.0,
+   "cnn_sozinha_pct": 67.0,
+   "quem_decide": "contagem de dedos",
+   "fontes": [
+    "HaGRID",
+    "IPN"
+   ],
+   "erros_mais_comuns": {
+    "Two Fingers": 18,
+    "Sliding Two Fingers Right": 8,
+    "Doing other things": 5
+   }
+  },
+  "Two Fingers": {
+   "amostras": 200,
+   "acerto_pct": 81.5,
+   "comando_certo_pct": 81.5,
+   "cnn_sozinha_pct": 56.0,
+   "quem_decide": "contagem de dedos",
+   "fontes": [
+    "HaGRID",
+    "IPN"
+   ],
+   "erros_mais_comuns": {
+    "Sliding Two Fingers Right": 9,
+    "Sliding Two Fingers Left": 7,
+    "Sliding Two Fingers Up": 4
+   }
+  },
+  "Four Fingers": {
+   "amostras": 100,
+   "acerto_pct": 97.0,
+   "comando_certo_pct": 97.0,
+   "cnn_sozinha_pct": 46.0,
+   "quem_decide": "contagem de dedos",
+   "fontes": [
+    "HaGRID"
+   ],
+   "erros_mais_comuns": {
+    "Volante: FlickUp": 2,
+    "Doing other things": 1
+   }
+  },
+  "Swiping Right": {
+   "amostras": 100,
+   "acerto_pct": 87.0,
+   "comando_certo_pct": 87.0,
+   "cnn_sozinha_pct": 94.0,
+   "quem_decide": "CNN 3D",
+   "fontes": [
+    "Jester"
+   ],
+   "erros_mais_comuns": {
+    "Four Fingers": 5,
+    "Sliding Two Fingers Right": 3,
+    "Swiping Left": 2
+   }
+  },
+  "Swiping Left": {
+   "amostras": 100,
+   "acerto_pct": 90.0,
+   "comando_certo_pct": 90.0,
+   "cnn_sozinha_pct": 90.0,
+   "quem_decide": "CNN 3D",
+   "fontes": [
+    "Jester"
+   ],
+   "erros_mais_comuns": {
+    "Sliding Two Fingers Left": 5,
+    "Swiping Right": 2,
+    "Two Fingers": 1
+   }
+  },
+  "Thumb Up": {
+   "amostras": 100,
+   "acerto_pct": 95.0,
+   "comando_certo_pct": 95.0,
+   "cnn_sozinha_pct": 98.0,
+   "quem_decide": "CNN 3D",
+   "fontes": [
+    "Jester"
+   ],
+   "erros_mais_comuns": {
+    "Two Fingers": 2,
+    "One Finger": 1,
+    "Sliding Two Fingers Left": 1
+   }
+  },
+  "Thumb Down": {
+   "amostras": 100,
+   "acerto_pct": 98.0,
+   "comando_certo_pct": 98.0,
+   "cnn_sozinha_pct": 98.0,
+   "quem_decide": "CNN 3D",
+   "fontes": [
+    "Jester"
+   ],
+   "erros_mais_comuns": {
+    "Doing other things": 2
+   }
+  },
+  "Stop Sign": {
+   "amostras": 100,
+   "acerto_pct": 84.0,
+   "comando_certo_pct": 91.0,
+   "cnn_sozinha_pct": 91.0,
+   "quem_decide": "CNN 3D",
+   "fontes": [
+    "Jester"
+   ],
+   "erros_mais_comuns": {
+    "Pushing Hand Away": 7,
+    "Four Fingers": 6,
+    "One Finger": 1
+   }
+  },
+  "Pushing Hand Away": {
+   "amostras": 100,
+   "acerto_pct": 95.0,
+   "comando_certo_pct": 95.0,
+   "cnn_sozinha_pct": 98.0,
+   "quem_decide": "CNN 3D",
+   "fontes": [
+    "Jester"
+   ],
+   "erros_mais_comuns": {
+    "Four Fingers": 2,
+    "Swiping Down": 1,
+    "Doing other things": 1
+   }
+  },
+  "Drumming Fingers": {
+   "amostras": 100,
+   "acerto_pct": 92.0,
+   "comando_certo_pct": 92.0,
+   "cnn_sozinha_pct": 99.0,
+   "quem_decide": "CNN 3D",
+   "fontes": [
+    "Jester"
+   ],
+   "erros_mais_comuns": {
+    "Three Fingers": 4,
+    "Four Fingers": 2,
+    "Two Fingers": 1
+   }
+  },
+  "Pulling Hand In": {
+   "amostras": 100,
+   "acerto_pct": 89.0,
+   "comando_certo_pct": 89.0,
+   "cnn_sozinha_pct": 94.0,
+   "quem_decide": "CNN 3D",
+   "fontes": [
+    "Jester"
+   ],
+   "erros_mais_comuns": {
+    "Swiping Up": 4,
+    "Two Fingers": 3,
+    "Pulling Two Fingers In": 1
+   }
+  }
+ }
+}

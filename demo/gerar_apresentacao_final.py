@@ -25,6 +25,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(RAIZ / "demo"))
 sys.path.insert(0, str(RAIZ / "src"))
 import gerar_apresentacao as G  # noqa: E402
+import graficos_finais as GF  # noqa: E402
 
 NUMEROS = ("One Finger", "Two Fingers", "Three Fingers", "Four Fingers")
 
@@ -348,18 +349,43 @@ def main():
         "gru_params": (ler("resultados/pontos/jester_coordenadas.json") or {}).get("parametros"),
     }
     f.update(contagem)
+    # modelo final: acerto nos gestos do carro, falsos por classe, arquiteturas e o teste ao vivo de 16/11
+    import ao_vivo as V
+    gc = ler("resultados/pontos/gestos_do_carro.json") or {}
+    vivo_webcam = ler("resultados/webcam_ao_vivo/teste_16-11_sem_veto.json") or {}
+    arq = ler("resultados/jester/comparacao_arquiteturas.json") or {}
+    por_arq = {r["arquitetura"]: r for r in arq.get("resultados", [])}
+    f.update(GF.campos(gc, vivo_webcam))
+    graf_falsos, campos_falsos = GF.grafico_falsos(fvc, V.TRADUCAO)
+    f.update(campos_falsos)
+    tab_numeros, tab_movimentos = GF.gestos_principal(V.TRADUCAO)
+
+    def pct_trechos(txt):
+        a, b = (txt or "0/0").split("/")
+        return round(100 * int(a) / int(b)) if int(b) else None
+    f.update({
+        "um_carro": fvc.get("ipn_um_dedo_trechos_certos"), "dois_carro": fvc.get("ipn_dois_dedos_trechos_certos"),
+        "um_carro_pct": pct_trechos(fvc.get("ipn_um_dedo_trechos_certos")),
+        "dois_carro_pct": pct_trechos(fvc.get("ipn_dois_dedos_trechos_certos")),
+        "cnn_params_mi": GF.br(por_arq.get("cnn_3d", {}).get("parametros_mi"), 2),
+        "arq_cnn3d": por_arq.get("cnn_3d", {}).get("top1_val"), "arq_larga": por_arq.get("cnn_3d_larga", {}).get("top1_val"),
+        "arq_gru": por_arq.get("cnn_gru", {}).get("top1_val"), "arq_transformer": por_arq.get("cnn_transformer", {}).get("top1_val"),
+        "arq_protocolo": arq.get("protocolo"), "jester_treino": d.get("dados", {}).get("videos_treino"),
+    })
     tab_contagem, campos_contagem = confianca_contagem()
     f.update(campos_contagem)
     # um falso disparo a cada N minutos, na regra medida
     f["intervalo_final"] = round(1 / f["fl_final"]) if f.get("fl_final") else None
     trocas = {
         "<!--F:TABELA_MODELOS-->": tabela_modelos(d, f),
-        "<!--F:TABELA_MISTO-->": tabela_misto(f),
         "<!--F:TABELA_GESTOS-->": tab_gestos, "<!--F:RESTO_GESTOS-->": resto_gestos,
-        "<!--F:GRAFICO_ACERTO-->": grafico_acerto(f),
         "<!--F:CURVA_PESOS-->": curva_pesos(fu),
         "<!--F:TABELA_DADOS-->": tabela_dados(d),
         "<!--F:TABELA_CONTAGEM-->": tab_contagem,
+        "<!--F:GRAFICO_GESTOS-->": GF.grafico_gestos(gc, V.TRADUCAO),
+        "<!--F:GESTOS_NUMEROS-->": tab_numeros, "<!--F:GESTOS_MOVIMENTOS-->": tab_movimentos,
+        "<!--F:GRAFICO_FALSOS-->": graf_falsos,
+        "<!--F:TABELA_ARQUITETURAS-->": GF.tabela_arquiteturas(arq),
     }
     modelo = (RAIZ / "demo/apresentacao_final_modelo.html").read_text(encoding="utf-8")
     for k, v in trocas.items():

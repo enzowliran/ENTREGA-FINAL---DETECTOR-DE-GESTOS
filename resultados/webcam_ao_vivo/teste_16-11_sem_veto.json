@@ -1,0 +1,34 @@
+{
+ "o_que_e": "Teste ao vivo na webcam, slide do carro, modelo final sem veto (16/11/2026 à noite). Um usuário, cerca de 2 minutos. Contagens tiradas da gravação de /eventos; os gestos não foram anotados um a um, então não há taxa de acerto.",
+ "duracao_s": 123,
+ "leituras_de_estado": 615,
+ "leituras_com_numero_pela_contagem": 116,
+ "leituras_em_que_o_veto_derrubaria_o_numero": 116,
+ "o_que_a_cnn_apontava_nessas_leituras": {
+  "Outro movimento": 62,
+  "Girar a mão no sentido horário": 12,
+  "Dois dedos para cima": 9,
+  "Sinal de pare": 9,
+  "Um dedo": 5,
+  "Zoom in com a mão": 4,
+  "Zoom in com dois dedos": 4,
+  "Zoom out com dois dedos": 3,
+  "Polegar para cima": 2,
+  "Tamborilar os dedos": 2,
+  "Deslizar para a direita": 2,
+  "Deslizar para baixo": 1,
+  "Sem gesto": 1
+ },
+ "comandos_disparados": 37,
+ "comandos_de_numero": 22,
+ "comandos_por_gesto": {
+  "Quatro dedos": 11,
+  "Um dedo": 6,
+  "Dois dedos": 5,
+  "Deslizar para a direita": 4,
+  "Polegar para baixo": 3,
+  "Sinal de pare": 3,
+  "Deslizar para a esquerda": 3,
+  "Tamborilar os dedos": 2
+ }
+}

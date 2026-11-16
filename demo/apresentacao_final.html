@@ -174,6 +174,35 @@
            padding: 14px 28px; opacity: 0; transition: opacity .2s; z-index: 6; pointer-events: none; }
   #aviso.ver { opacity: 1; }
 
+  /* Fluxo do modelo (slide Como funciona): caixas em HTML sobre um SVG só com as setas */
+  .fluxo { position: relative; width: 1424px; height: 590px; }
+  .fluxo > svg { position: absolute; left: 0; top: 0; width: 1424px; height: 590px; }
+  .fx { position: absolute; margin: 0; }
+  .fxPasso { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--azul); padding-bottom: 9px; border-bottom: 2px solid var(--marinho); }
+  .fxPasso b { color: var(--marinho); margin-right: 10px; }
+  .fxBox { padding: 20px 22px; }
+  .fxBox h3 { font-size: 23px; font-weight: 600; margin: 0 0 8px; color: var(--marinho); line-height: 1.2; }
+  .fxBox p { font-size: 17px; line-height: 1.45; margin: 0; color: var(--texto); }
+  .fxEsc { background: var(--marinho); display: flex; flex-direction: column; justify-content: center; }
+  .fxEsc h3 { color: #fff; font-size: 26px; } .fxEsc p { color: #c9d6ea; }
+  .fxEsc p.dest { color: #fff; font-weight: 600; margin-top: 14px; padding-top: 14px; border-top: 1px solid #2c4a7c; }
+  .fxPerg { background: var(--gelo); border: 1px solid var(--azul3); display: flex; flex-direction: column; justify-content: center; text-align: center; }
+  .fxPerg .rot { font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--azul); margin-bottom: 10px; }
+  .fxPerg h3 { font-size: 21px; } .fxPerg p.peq { font-size: 14px; color: var(--cinza); }
+  .fxCam { background: #fff; border: 1px solid var(--linha); border-left: 6px solid var(--azul); }
+  .fxCam .tag { float: right; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--azul); margin-top: 8px; }
+  .fxCam p.regra { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--linha); color: var(--marinho); font-weight: 600; }
+  .fxCmd { background: var(--azul); display: flex; flex-direction: column; justify-content: center; text-align: center; }
+  .fxCmd h3 { color: #fff; font-size: 26px; } .fxCmd p { color: #e3ecfa; }
+  .fxNota { font-size: 14.5px; line-height: 1.45; color: var(--cinza); }
+  .fxBase { border-top: 1px solid var(--linha); padding-top: 16px; font-size: 17.5px; line-height: 1.5; color: var(--texto); }
+  .fxBase b { color: var(--marinho); }
+  .tabPrincipal { font-size: 17.5px; } .tabPrincipal td { padding: 9px 14px; } .tabPrincipal td:first-child { white-space: nowrap; width: 250px; }
+  .tabArq { font-size: 15.5px; } .tabArq td { padding: 9px 12px; } .tabArq td:nth-child(2), .tabArq th:nth-child(2) { text-align: left; }
+  .tabArq td:first-child { white-space: nowrap; }
+  .tabDensa { font-size: 16px; } .tabDensa td { padding: 8px 12px; }
+  .caixa p + p { margin-top: 10px; }
+
 </style>
 <script src="/vendor/three.min.js"></script>
 </head>
@@ -251,75 +280,58 @@
 
   <!-- 5. Como funciona -->
   <section class="slide" data-titulo="Como funciona">
-    <div class="cab an"><h2>Como funciona</h2><p class="sub">Movimentos pela CNN 3D; números pela contagem de dedos nos pontos da mão</p></div>
+    <div class="cab an"><h2>Como funciona</h2><p class="sub">Três passos: ativar, reconhecer e executar. Uma pergunta decide quem reconhece o gesto</p></div>
     <div class="corpo an" style="--d:1">
-      <svg viewBox="0 0 1430 510" width="1424" height="508" role="img" aria-label="Fluxo do sistema">
-        <defs><marker id="seta6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
-        <g font-family="Segoe UI, system-ui, sans-serif">
-          <rect x="0" y="155" width="150" height="110" fill="#0a1f44"/>
-          <text x="75" y="202" text-anchor="middle" font-size="22" font-weight="600" fill="#fff">Câmera</text>
-          <text x="75" y="230" text-anchor="middle" font-size="14" fill="#c9d6ea">12 quadros/s</text>
+      <div class="fluxo">
+        <svg viewBox="0 0 1424 590" aria-hidden="true">
+          <defs><marker id="seta6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
+          <g fill="none" stroke="#0a1f44" stroke-width="2">
+            <path d="M250 265 H292" marker-end="url(#seta6)"/>
+            <path d="M550 235 H592 V152 H632" marker-end="url(#seta6)"/>
+            <path d="M550 295 H592 V390 H632" marker-end="url(#seta6)"/>
+            <path d="M1130 152 H1154 V250 H1172" marker-end="url(#seta6)"/>
+            <path d="M1130 390 H1154 V280 H1172" marker-end="url(#seta6)"/>
+          </g>
+          <text x="571" y="226" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1">SIM</text>
+          <text x="571" y="316" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1">NÃO</text>
+        </svg>
 
-          <!-- caminho 1: movimentos -->
-          <text x="200" y="22" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">MOVIMENTOS</text>
-          <rect x="200" y="40" width="460" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
-          <rect x="200" y="40" width="6" height="130" fill="#1e4fbf"/>
-          <text x="226" y="82" font-size="22" font-weight="600" fill="#0a1f44">CNN 3D</text>
-          <text x="226" y="114" font-size="17" fill="#364152">Pré-treinada no Jester e ajustada; lê os pixels</text>
-          <text x="226" y="148" font-size="15" fill="#7b8594">deslizar · polegar · pare · empurrar · puxar</text>
+        <div class="fx fxPasso" style="left:0;top:0;width:250px"><b>1</b>Ativar</div>
+        <div class="fx fxPasso" style="left:300px;top:0;width:830px"><b>2</b>Reconhecer</div>
+        <div class="fx fxPasso" style="left:1180px;top:0;width:244px"><b>3</b>Executar</div>
 
-          <rect x="810" y="40" width="300" height="130" fill="#eaf1fb" stroke="#9db9ea"/>
-          <text x="960" y="80" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">PASSA SE</text>
-          <text x="960" y="114" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">o mesmo gesto tiver ≥ 70%</text>
-          <text x="960" y="142" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">em 3 análises seguidas</text>
+        <div class="fx fxBox fxEsc" style="left:0;top:150px;width:250px;height:230px">
+          <h3>Sinal de OK</h3>
+          <p>Polegar encostado no indicador por 0,4 s.</p>
+          <p class="dest">Abre uma janela de 7 s, com bip e voz.</p>
+        </div>
+        <p class="fx fxNota" style="left:0;top:394px;width:250px">Fora da janela, nenhum gesto vira comando.</p>
 
-          <!-- caminho 2: números -->
-          <text x="200" y="272" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">NÚMEROS</text>
-          <rect x="200" y="290" width="150" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
-          <rect x="200" y="290" width="6" height="130" fill="#1e4fbf"/>
-          <text x="222" y="332" font-size="21" font-weight="600" fill="#0a1f44">MediaPipe</text>
-          <text x="222" y="364" font-size="16" fill="#364152">21 pontos</text>
-          <text x="222" y="388" font-size="16" fill="#364152">da mão</text>
+        <div class="fx fxBox fxPerg" style="left:300px;top:170px;width:250px;height:190px">
+          <p class="rot">A pergunta</p>
+          <h3>A mão está parada, mostrando de 1 a 4 dedos?</h3>
+          <p class="peq">conferida a cada 0,15 s</p>
+        </div>
 
-          <rect x="380" y="290" width="170" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
-          <rect x="380" y="290" width="6" height="130" fill="#1e4fbf"/>
-          <text x="402" y="332" font-size="21" font-weight="600" fill="#0a1f44">Contagem</text>
-          <text x="402" y="358" font-size="21" font-weight="600" fill="#0a1f44">de dedos</text>
-          <text x="402" y="390" font-size="14" fill="#7b8594">regra geométrica,</text><text x="402" y="408" font-size="14" fill="#7b8594">sem treino</text>
+        <div class="fx fxBox fxCam" style="left:640px;top:54px;width:490px;height:196px">
+          <span class="tag">Números</span><h3>Contagem de dedos</h3>
+          <p>O MediaPipe marca 21 pontos da mão; uma regra de geometria conta os dedos esticados. Sem rede neural.</p>
+          <p class="regra">Vale se o número for o mesmo em 5 de 6 quadros.</p>
+        </div>
+        <div class="fx fxBox fxCam" style="left:640px;top:292px;width:490px;height:196px">
+          <span class="tag">Movimentos</span><h3>CNN 3D</h3>
+          <p>Rede neural que lê o vídeo e reconhece o movimento: deslizar, polegar, pare, empurrar, puxar e tamborilar.</p>
+          <p class="regra">Vale se o mesmo gesto tiver nota ≥ 70% em 3 análises seguidas.</p>
+        </div>
 
-          <rect x="580" y="290" width="200" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
-          <rect x="580" y="290" width="6" height="130" fill="#1e4fbf"/>
-          <text x="602" y="332" font-size="21" font-weight="600" fill="#0a1f44">Mão parada</text>
-          <text x="602" y="362" font-size="14" fill="#364152">o pulso andou no</text>
-          <text x="602" y="382" font-size="14" fill="#364152">máximo 0,5 palma</text>
-          <text x="602" y="402" font-size="14" fill="#364152">em 6 quadros (0,5 s)</text>
+        <div class="fx fxBox fxCmd" style="left:1180px;top:195px;width:244px;height:140px">
+          <h3>Comando</h3>
+          <p>na central do carro, com resposta por voz</p>
+        </div>
+        <p class="fx fxNota" style="left:1180px;top:349px;width:244px">Exemplos: dois dedos abrem o Ar-condicionado; deslizar para a direita passa a música.</p>
 
-          <rect x="810" y="290" width="300" height="130" fill="#eaf1fb" stroke="#9db9ea"/>
-          <text x="960" y="322" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">PASSA SE</text>
-          <text x="960" y="352" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">o mesmo número (1 a 4)</text>
-          <text x="960" y="378" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">em 5 de 6 quadros</text>
-          <text x="960" y="404" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">e a mão parada</text>
-
-          <rect x="1200" y="155" width="230" height="110" fill="#1e4fbf"/>
-          <text x="1315" y="202" text-anchor="middle" font-size="22" font-weight="600" fill="#fff">Comando</text>
-          <text x="1315" y="230" text-anchor="middle" font-size="14" fill="#e3ecfa">na central, com voz</text>
-
-          <path d="M150 210 H175 V105 H194" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M175 210 V355 H194" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M350 355 H374" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M550 355 H574" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M780 355 H804" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M660 105 H804" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M680 170 V284" fill="none" stroke="#1e4fbf" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#seta6)"/>
-          <text x="692" y="234" font-size="14" fill="#1e4fbf">notas da CNN</text>
-          <path d="M1110 105 H1150 V195 H1194" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-          <path d="M1110 355 H1150 V225 H1194" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#seta6)"/>
-
-          <line x1="0" x2="1430" y1="458" y2="458" stroke="#d6dce4"/>
-          <text x="0" y="496" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">ATIVAÇÃO</text>
-          <text x="104" y="496" font-size="17" fill="#364152">O sinal de OK abre uma janela de 7 s; fora dela, nada é executado. Quando o número passa, ele tem prioridade.</text>
-        </g>
-      </svg>
+        <div class="fx fxBase" style="left:0;top:522px;width:1250px"><b>Quem decide.</b> A contagem de dedos e a CNN 3D olham a câmera ao mesmo tempo. Se a contagem vê um número com a mão parada, vale o número. Em todo o resto, quem decide é a CNN 3D, que nunca responde número.</div>
+      </div>
     </div>
   </section>
 
@@ -331,14 +343,23 @@
 
   <!-- 7. Os gestos -->
   <section class="slide" data-titulo="Os gestos">
-    <div class="cab an"><h2>Os gestos</h2><p class="sub">O que o sistema reconhece ao vivo, e quem reconhece cada gesto</p></div>
+    <div class="cab an"><h2>Os gestos</h2><p class="sub">11 gestos viram comando; cada um tem um responsável: a contagem de dedos ou a CNN 3D</p></div>
     <div class="corpo">
-      <div class="kpis an" style="--d:1;grid-template-columns:repeat(3,1fr)">
-        <div class="kpi forte"><div class="v">11<small>gestos</small></div><div class="r">viram comando no carro: Música, Ar-condicionado e Telefone.</div></div>
-        <div class="kpi"><div class="v">CNN 3D<small>movimentos</small></div><div class="r">deslizar, polegar, pare, empurrar, puxar e tamborilar. Treinada com 36 classes; as de número ficam de fora ao vivo.</div></div>
-        <div class="kpi"><div class="v">1, 2 e 4<small>dedos</small></div><div class="r">pela contagem de dedos nos 21 pontos da mão (regra geométrica, sem treino), com a mão parada.</div></div>
+      <div class="duas" style="grid-template-columns:1fr 1.2fr;gap:56px;align-items:start">
+        <div class="an" style="--d:1">
+          <p class="tituloBloco">Ativação · geometria dos pontos da mão</p>
+          <table class="tabela tabGestos tabPrincipal"><tr><th>Gesto</th><th>O que faz</th></tr>
+            <tr class="vencedora"><td><b>Sinal de OK</b></td><td>abre a janela de 7 s em que os comandos valem</td></tr></table>
+          <p class="tituloBloco" style="margin-top:38px">Números · contagem de dedos</p>
+          <table class="tabela tabGestos tabPrincipal"><tr><th>Gesto</th><th>Comando no carro</th></tr><tr><td><b>Um dedo</b></td><td>abre Música</td></tr><tr><td><b>Dois dedos</b></td><td>abre Ar-condicionado</td></tr><tr><td><b>Quatro dedos</b></td><td>abre Telefone</td></tr></table>
+          <p class="nota" style="margin-top:14px">Três dedos também é contado, mas não tem comando no carro.</p>
+        </div>
+        <div class="an" style="--d:2">
+          <p class="tituloBloco">Movimentos · CNN 3D</p>
+          <table class="tabela tabGestos tabPrincipal"><tr><th>Gesto</th><th>Comando no carro</th></tr><tr><td><b>Deslizar para a direita</b></td><td>próxima música</td></tr><tr><td><b>Deslizar para a esquerda</b></td><td>música anterior</td></tr><tr><td><b>Polegar para cima</b></td><td>aumenta o volume; no ar, sobe a temperatura</td></tr><tr><td><b>Polegar para baixo</b></td><td>diminui o volume; no ar, baixa a temperatura</td></tr><tr><td><b>Sinal de pare</b></td><td>toca ou pausa; liga ou desliga o ar</td></tr><tr><td><b>Empurrar a mão</b></td><td>o mesmo comando do sinal de pare</td></tr><tr><td><b>Tamborilar os dedos</b></td><td>abre o menu de músicas</td></tr><tr><td><b>Puxar a mão</b></td><td>explica os comandos em voz alta</td></tr></table>
+        </div>
       </div>
-      <p class="nota an" style="--d:2;margin-top:40px">Ativação: o sinal de OK abre a janela de 7 s em que os comandos valem. A lista de cada gesto e do seu comando está no apêndice (A9).</p>
+      <p class="nota an" style="--d:3;margin-top:26px">Os comandos atuam em três telas: Música, Ar-condicionado e Telefone. A CNN 3D conhece 36 classes; ao vivo, as de número ficam com a contagem de dedos. Lista completa no apêndice (A9).</p>
     </div>
   </section>
 
@@ -348,47 +369,37 @@
     <div class="quadro"></div>
   </section>
 
-  <!-- 9. Acerto -->
-  <section class="slide" data-titulo="Acerto" data-parte="Resultados" data-fonte="Fonte: resultados do projeto · teste misto (Jester, IPN Hand, HaGRID, Slovo, DriverMHG)">
-    <div class="cab an"><h2>Resultados</h2><p class="sub">Acerto no teste misto, com pessoas fora do treino; ao vivo: CNN 3D pré-treinada + contagem de dedos</p></div>
+  <!-- 9. Acerto: só o modelo final, nos gestos que o carro usa -->
+  <section class="slide" data-titulo="Acerto" data-parte="Resultados" data-fonte="Fonte: resultados do projeto · teste misto (Jester, IPN Hand, HaGRID), pessoas fora do treino · src/medir_gestos_do_carro.py">
+    <div class="cab an"><h2>Resultados</h2><p class="sub">O modelo final acerta 87,7% dos gestos que o carro usa, com pessoas que não estavam no treino</p></div>
     <div class="corpo">
-      <div class="duas" style="grid-template-columns:640px 1fr;gap:56px">
-        <div class="an" style="--d:1"><p class="tituloBloco">Acerto no teste misto</p><svg viewBox="0 0 620 490" width="620" height="490" role="img" aria-label="Acerto por modelo no teste misto"><line x1="40" x2="610" y1="400.0" y2="400.0" stroke="#e3e7ec"/><text x="32" y="405.0" text-anchor="end" font-size="13" fill="#7b8594">0%</text><line x1="40" x2="610" y1="310.0" y2="310.0" stroke="#e3e7ec"/><text x="32" y="315.0" text-anchor="end" font-size="13" fill="#7b8594">25%</text><line x1="40" x2="610" y1="220.0" y2="220.0" stroke="#e3e7ec"/><text x="32" y="225.0" text-anchor="end" font-size="13" fill="#7b8594">50%</text><line x1="40" x2="610" y1="130.0" y2="130.0" stroke="#e3e7ec"/><text x="32" y="135.0" text-anchor="end" font-size="13" fill="#7b8594">75%</text><line x1="40" x2="610" y1="40.0" y2="40.0" stroke="#e3e7ec"/><text x="32" y="45.0" text-anchor="end" font-size="13" fill="#7b8594">100%</text><rect class="barra" x="62.0" y="159.15999999999997" width="67.66666666666667" height="240.84000000000003" fill="#c9d8f0"/><text x="95.83333333333334" y="149.15999999999997" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">66,9%</text><text x="95.83333333333334" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D</text><text x="95.83333333333334" y="443" text-anchor="middle" font-size="14" fill="#364152">do zero</text><rect class="barra" x="153.66666666666669" y="124.60000000000002" width="67.66666666666667" height="275.4" fill="#9db9ea"/><text x="187.50000000000003" y="114.60000000000002" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">76,5%</text><text x="187.50000000000003" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU sobre</text><text x="187.50000000000003" y="443" text-anchor="middle" font-size="14" fill="#364152">os pontos</text><rect class="barra" x="245.33333333333334" y="97.60000000000002" width="67.66666666666667" height="302.4" fill="#3d74d6"/><text x="279.1666666666667" y="87.60000000000002" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">84,0%</text><text x="279.1666666666667" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D</text><text x="279.1666666666667" y="443" text-anchor="middle" font-size="14" fill="#364152">pré-treinada</text><rect class="barra" x="337.0" y="68.07999999999998" width="67.66666666666667" height="331.92" fill="#3d74d6"/><text x="370.8333333333333" y="58.079999999999984" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">92,2%</text><text x="370.8333333333333" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU + CNN</text><text x="370.8333333333333" y="443" text-anchor="middle" font-size="14" fill="#364152">(média)</text><rect class="barra" x="428.6666666666667" y="68.80000000000001" width="67.66666666666667" height="331.2" fill="#1e4fbf"/><text x="462.5" y="58.80000000000001" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">92,0%</text><text x="462.5" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU + CNN</text><text x="462.5" y="443" text-anchor="middle" font-size="14" fill="#364152">(números</text><text x="462.5" y="462" text-anchor="middle" font-size="14" fill="#364152">pela GRU)</text><rect class="barra" x="520.3333333333334" y="144.75999999999996" width="67.66666666666667" height="255.24000000000004" fill="#0a1f44"/><text x="554.1666666666667" y="134.75999999999996" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">70,9%</text><text x="554.1666666666667" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D +</text><text x="554.1666666666667" y="443" text-anchor="middle" font-size="14" fill="#364152">contagem</text><text x="554.1666666666667" y="462" text-anchor="middle" font-size="14" fill="#364152">de dedos</text><text x="554.1666666666667" y="481" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf">usada ao vivo</text></svg></div>
-        <div class="an" style="--d:2"><p class="tituloBloco">Acerto e falsos disparos por modelo</p><table class="tabela"><tr><th>Modelo</th><th>Acerto</th><th>Falsos / min (IPN)</th></tr><tr><td>GRU sobre os pontos</td><td>76,5%</td><td>1,46</td></tr><tr><td>CNN 3D do zero</td><td>66,9%</td><td>—</td></tr><tr><td>CNN 3D pré-treinada + ajuste</td><td>84,0%</td><td>0,19</td></tr><tr><td>GRU + CNN (média 0,3 / 0,7)</td><td>92,2%</td><td>0,10</td></tr><tr><td>GRU + CNN, números pela GRU</td><td>92,0%</td><td>0,25</td></tr><tr><td>Contagem de dedos + veto da CNN (testada)</td><td>87,9%</td><td>1,24</td></tr><tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem de dedos</td><td>70,9%</td><td>1,62</td></tr></table>
-          <p class="nota">3.642 amostras de 5 bases, 36 classes. Usada ao vivo: 83,8% nos números. Foi escolhida pela demo na webcam: a versão com veto da CNN chegou a 87,9% neste teste, mas ao vivo derrubava os números. A GRU foi testada, mas não é usada ao vivo. Confiança por número: A7. Todos os modelos: A8.</p></div>
+      <div class="duas" style="grid-template-columns:780px 1fr;gap:64px;align-items:center">
+        <div class="an" style="--d:1"><p class="tituloBloco">Acerto em cada gesto do carro</p><svg viewBox="0 0 780 458" width="780" height="458" role="img" aria-label="Acerto do modelo final em cada gesto do carro"><text x="0" y="24" font-size="12.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">NÚMEROS · CONTAGEM DE DEDOS</text><text x="0" y="51" font-size="16" fill="#364152">Um dedo</text><rect x="250" y="36" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="36" width="315.0" height="20" fill="#0a1f44"/><text x="684" y="52" font-size="17" font-weight="600" fill="#0a1f44">75%</text><text x="0" y="85" font-size="16" fill="#364152">Dois dedos</text><rect x="250" y="70" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="70" width="342.3" height="20" fill="#0a1f44"/><text x="684" y="86" font-size="17" font-weight="600" fill="#0a1f44">82%</text><text x="0" y="119" font-size="16" fill="#364152">Quatro dedos</text><rect x="250" y="104" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="104" width="407.4" height="20" fill="#0a1f44"/><text x="684" y="120" font-size="17" font-weight="600" fill="#0a1f44">97%</text><text x="0" y="168" font-size="12.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">MOVIMENTOS · CNN 3D</text><text x="0" y="195" font-size="16" fill="#364152">Deslizar para a direita</text><rect x="250" y="180" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="180" width="365.4" height="20" fill="#3d74d6"/><text x="684" y="196" font-size="17" font-weight="600" fill="#0a1f44">87%</text><text x="0" y="229" font-size="16" fill="#364152">Deslizar para a esquerda</text><rect x="250" y="214" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="214" width="378.0" height="20" fill="#3d74d6"/><text x="684" y="230" font-size="17" font-weight="600" fill="#0a1f44">90%</text><text x="0" y="263" font-size="16" fill="#364152">Polegar para cima</text><rect x="250" y="248" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="248" width="399.0" height="20" fill="#3d74d6"/><text x="684" y="264" font-size="17" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="297" font-size="16" fill="#364152">Polegar para baixo</text><rect x="250" y="282" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="282" width="411.6" height="20" fill="#3d74d6"/><text x="684" y="298" font-size="17" font-weight="600" fill="#0a1f44">98%</text><text x="0" y="331" font-size="16" fill="#364152">Sinal de pare</text><rect x="250" y="316" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="316" width="352.8" height="20" fill="#3d74d6"/><text x="684" y="332" font-size="17" font-weight="600" fill="#0a1f44">84%</text><text x="0" y="365" font-size="16" fill="#364152">Empurrar a mão</text><rect x="250" y="350" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="350" width="399.0" height="20" fill="#3d74d6"/><text x="684" y="366" font-size="17" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="399" font-size="16" fill="#364152">Tamborilar os dedos</text><rect x="250" y="384" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="384" width="386.4" height="20" fill="#3d74d6"/><text x="684" y="400" font-size="17" font-weight="600" fill="#0a1f44">92%</text><text x="0" y="433" font-size="16" fill="#364152">Puxar a mão</text><rect x="250" y="418" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="418" width="373.8" height="20" fill="#3d74d6"/><text x="684" y="434" font-size="17" font-weight="600" fill="#0a1f44">89%</text><line x1="250" x2="250" y1="30" y2="446" stroke="#d6dce4"/></svg></div>
+        <div class="kpis an" style="--d:2;gap:32px">
+          <div class="kpi forte"><div class="v">87,7%<small>nos 11 gestos do carro</small></div><div class="r">1.300 clipes de teste. Em cada um, o modelo escolhe entre as 36 classes que conhece.</div></div>
+          <div class="kpi"><div class="v">91,2%<small>movimentos</small></div><div class="r">8 gestos, reconhecidos pela CNN 3D.</div></div>
+          <div class="kpi"><div class="v">82,0%<small>números</small></div><div class="r">1, 2 e 4 dedos, pela contagem de dedos. A CNN 3D sozinha acertava 58,4% deles.</div></div>
+        </div>
       </div>
+      <p class="nota an" style="--d:3;margin-top:20px;max-width:1250px">No teste completo, com as 36 classes (25 não são comando no carro), o acerto é 70,9%: a contagem lê números em gestos de dois dedos que o carro não usa. Testamos modelos com acerto maior nos dados; na webcam, eles não reconheciam os números (apêndice A8).</p>
     </div>
   </section>
 
-  <!-- 10. Segurança -->
-  <section class="slide" data-titulo="Segurança" data-fonte="Fonte: resultados do projeto · IPN Hand, 13 pessoas fora do treino, vídeo contínuo">
-    <div class="cab an"><h2>Resultados</h2><p class="sub">Quantas vezes o sistema dispara sozinho, em vídeo real e contínuo, sem a janela do OK</p></div>
+  <!-- 10. Segurança: só o modelo final -->
+  <section class="slide" data-titulo="Segurança" data-fonte="Fonte: resultados do projeto · IPN Hand, 13 pessoas fora do treino, vídeo contínuo · src/fluxo_ao_vivo.py">
+    <div class="cab an"><h2>Resultados</h2><p class="sub">Quantas vezes o modelo dispara sozinho em vídeo real e contínuo, e por que existe a ativação pelo OK</p></div>
     <div class="corpo">
-      <div class="kpis an" style="--d:1;grid-template-columns:repeat(3,1fr);margin-bottom:38px">
-        <div class="kpi forte"><div class="v">1,62<small>falsos por minuto</small></div><div class="r">versão usada ao vivo (todos os gestos); só com os comandos do carro: 1,05/min, cerca de 1 a cada 1 min</div></div>
-        <div class="kpi"><div class="v">228/265</div><div class="r">trechos de 1 dedo com o comando certo (com o veto testado: 182/265)</div></div>
-        <div class="kpi"><div class="v">242/264</div><div class="r">trechos de 2 dedos com o comando certo (com o veto testado: 180/264)</div></div>
+      <div class="kpis an" style="--d:1;grid-template-columns:repeat(3,1fr);margin-bottom:46px">
+        <div class="kpi forte"><div class="v">1,05<small>falsos por minuto</small></div><div class="r">comandos do carro disparados sem ninguém pedir, em 31,5 min de vídeo sem gesto e sem a janela do OK. Contando também os gestos sem comando: 1,62.</div></div>
+        <div class="kpi"><div class="v">87%<small>1 dedo</small></div><div class="r">dos trechos em que a pessoa mostra 1 dedo dispararam o comando certo (231/265).</div></div>
+        <div class="kpi"><div class="v">93%<small>2 dedos</small></div><div class="r">dos trechos em que a pessoa mostra 2 dedos dispararam o comando certo (246/264).</div></div>
       </div>
-      <div class="duas an" style="--d:2;grid-template-columns:1.15fr 1fr;gap:50px">
-        <div><p class="tituloBloco">Por modelo</p>
-          <table class="tabela">
-            <tr><th>Modelo</th><th>Falsos / min</th><th>1 dedo</th><th>2 dedos</th></tr>
-            <tr><td>CNN 3D pré-treinada</td><td>0,19</td><td>5/265</td><td>0/264</td></tr>
-            <tr><td>GRU sobre os pontos</td><td>1,46</td><td>255/265</td><td>243/264</td></tr>
-            <tr><td>Média 0,7 CNN + 0,3 GRU</td><td>0,10</td><td>36/265</td><td>0/264</td></tr>
-            <tr><td>Números pela GRU (testada)</td><td>0,25</td><td>251/265</td><td>240/264</td></tr>
-            <tr><td>Contagem de dedos + veto da CNN (testada)</td><td>1,24</td><td>182/265</td><td>180/264</td></tr>
-            <tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem de dedos</td><td>1,62</td><td>228/265</td><td>242/264</td></tr>
-          </table></div>
-        <div><p class="tituloBloco">As três tentativas dos dedos</p>
-          <table class="tabela">
-            <tr><th>Tentativa</th><th>1 dedo</th><th>Falsos / min</th></tr>
-            <tr><td>1 · CNN com fotos (HaGRID)</td><td>6 disparos</td><td>0,79</td></tr>
-            <tr><td>2 · CNN com vídeo real</td><td>485 disparos</td><td>0,32</td></tr>
-            <tr><td>3 · Pontos da mão + GRU (testada)</td><td>251/265 trechos</td><td>0,25</td></tr>
-            <tr class="vencedora"><td>Ao vivo · contagem de dedos</td><td>228/265 trechos</td><td>1,62</td></tr>
-          </table>
-          <p class="nota">Tentativas 1 e 2 contavam disparos certos (podem repetir no mesmo trecho); a 3, trechos com o comando certo. Ao vivo, a GRU deu lugar à contagem de dedos. A maioria dos falsos são números lidos com a mão parada à toa; a janela do OK existe para barrá-los. Nos vídeos do Slovo (sem sinal): 3,1 falsos/min.</p></div>
+      <div class="duas an" style="--d:2;grid-template-columns:700px 1fr;gap:64px;align-items:start">
+        <div><p class="tituloBloco">De onde vêm os 33 falsos disparos</p><svg viewBox="0 0 700 144" width="700" height="144" role="img" aria-label="Falsos disparos por classe"><text x="0" y="22" font-size="18" fill="#364152">Dois dedos</text><rect class="barraH" x="220" y="2" width="380.0" height="28" fill="#0a1f44"/><text x="612.0" y="23" font-size="20" font-weight="600" fill="#0a1f44">18</text><text x="0" y="70" font-size="18" fill="#364152">Quatro dedos</text><rect class="barraH" x="220" y="50" width="168.9" height="28" fill="#0a1f44"/><text x="400.9" y="71" font-size="20" font-weight="600" fill="#0a1f44">8</text><text x="0" y="118" font-size="18" fill="#364152">Um dedo</text><rect class="barraH" x="220" y="98" width="147.8" height="28" fill="#0a1f44"/><text x="379.8" y="119" font-size="20" font-weight="600" fill="#0a1f44">7</text><line x1="220" x2="220" y1="0" y2="136" stroke="#d6dce4"/></svg>
+          <p class="nota">Todos são números: uma mão parada à toa, com alguns dedos à mostra, parece um número. Nenhum movimento disparou sozinho.</p></div>
+        <div class="caixa"><h3>Por isso a ativação pelo OK</h3>
+          <p>No carro, um gesto só vira comando nos 7 s depois do sinal de OK. Fora da janela, a mão parada não dispara nada.</p>
+          <p>A taxa de falsos com a janela incluída ainda não foi medida: é o próximo passo (slide 13).</p></div>
       </div>
     </div>
   </section>
@@ -427,7 +438,7 @@
         <tr><th>Limitação</th><th>O que seria necessário</th></tr>
         <tr><td>À noite, uma câmera comum não enxerga bem a mão</td><td>Câmera infravermelha no painel</td></tr>
         <tr><td>Ainda dispara sozinho: 1,62 vezes por minuto em vídeo real sem gesto (1,05 só com os comandos do carro), sem a janela do OK</td><td>Disparos bem mais raros antes do uso real</td></tr>
-        <tr><td>O veto da CNN reduzia os falsos nos dados (1,62 → 1,24 falsos/min no IPN), mas na webcam derrubava os números de verdade; ficou desligado</td><td>Um filtro para os números que funcione ao vivo, validado na webcam</td></tr>
+        <tr><td>Os modelos com mais acerto nos dados (GRU sobre os pontos, veto da CNN) não reconheceram os números na webcam; o modelo final confunde gestos de dois dedos com números</td><td>Gravar vídeos da nossa webcam para treinar e validar</td></tr>
         <tr><td>Poucos dados de dentro do carro: o teste do volante (DriverMHG) teve 42 amostras de uma pessoa</td><td>Gravar motoristas reais, na posição do produto</td></tr>
         <tr><td>Testado por poucas pessoas, de frente para a câmera e com boa luz</td><td>Testes com mais pessoas, ângulos e iluminação</td></tr>
       </table>
@@ -511,8 +522,8 @@
   <section class="slide escuro" data-titulo="Apêndice" data-parte="Apêndice" style="padding:90px 120px">
     <div class="agenda">
       <div class="an"><h1>Apêndice</h1><div class="conteudo">
-        A1 · Dados<br>A2 · Por que não só a voz<br>A3 · CNN 2D e CNN 3D<br>A4 · CNN 3D por dentro<br>A5 · Mão 3D ao vivo<br>A6 · GRU
-        <br>A7 · Combinações, modelo ao vivo e contagem de dedos<br>A8 · Todos os modelos<br>A9 · Gestos e comandos<br>A10 · Histórico dos dedos<br>A11 · Falsos disparos: método
+        A1 · Dados<br>A2 · Por que não só a voz<br>A3 · CNN 2D e CNN 3D<br>A4 · CNN 3D: arquitetura e ativações<br>A5 · Mão 3D ao vivo<br>A6 · GRU (testada, não usada)
+        <br>A7 · Modelo final e contagem de dedos<br>A8 · Modelos testados e arquiteturas<br>A9 · Gestos e comandos<br>A10 · Histórico dos dedos<br>A11 · Falsos disparos: método
         <br>A12 · Hardware<br>A13 · Riscos<br>A14 · Outras aplicações<br>A15 · Referências</div></div>
       <div class="itens an" style="--d:1">
         <div class="item"><b>I.</b>O problema</div>
@@ -596,6 +607,54 @@
           <button data-acao="Thumb Down">Polegar para baixo: <b>filtro 2D ou 3D</b></button>
         </div>
         <div class="cartao licao"><p><b>Experimente:</b> com a mão <b>parada</b>, o filtro 2D ainda acende, porque vê a mão. O filtro 3D não acende, porque procura o <b>movimento</b>.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- A4 (primeira parte). Arquitetura da CNN 3D -->
+  <section class="slide" data-titulo="A4 · Arquitetura da CNN 3D" data-fonte="Fonte: src/modelos.py (CNN3D) · src/treinar_jester.py · src/comparar_misto.py">
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A4 · A CNN 3D do projeto, bloco a bloco</h2><p class="sub">3,52 milhões de parâmetros; a mesma rede em todas as etapas, do Jester ao modelo final</p></div>
+    <div class="corpo an" style="--d:1">
+      <svg viewBox="0 0 1424 330" width="1424" height="330" role="img" aria-label="Arquitetura da CNN 3D">
+        <defs><marker id="setaArq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
+        <g font-family="Segoe UI, system-ui, sans-serif">
+          <!-- entrada: pilha de quadros -->
+          <rect x="24" y="40" width="120" height="150" fill="#eaf1fb" stroke="#9db9ea"/><rect x="12" y="52" width="120" height="150" fill="#eaf1fb" stroke="#9db9ea"/>
+          <rect x="0" y="64" width="120" height="150" fill="#fff" stroke="#1e4fbf" stroke-width="1.5"/>
+          <text x="60" y="134" text-anchor="middle" font-size="15" font-weight="600" fill="#0a1f44">Vídeo</text><text x="60" y="156" text-anchor="middle" font-size="13" fill="#7b8594">16 quadros</text>
+          <text x="72" y="246" text-anchor="middle" font-size="15" font-weight="600" fill="#0a1f44">Entrada</text>
+          <text x="72" y="268" text-anchor="middle" font-size="13" fill="#7b8594">16 × 96 × 96, em cores</text>
+          <!-- blocos -->
+          <g fill="#fff" stroke="#1e4fbf" stroke-width="2">
+            <rect x="200" y="30" width="150" height="200"/><rect x="410" y="52" width="150" height="156"/><rect x="620" y="72" width="150" height="116"/><rect x="830" y="90" width="150" height="80"/>
+          </g>
+          <g fill="#1e4fbf"><rect x="200" y="30" width="6" height="200"/><rect x="410" y="52" width="6" height="156"/><rect x="620" y="72" width="6" height="116"/><rect x="830" y="90" width="6" height="80"/></g>
+          <g text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">
+            <text x="278" y="124">Bloco 1</text><text x="488" y="124">Bloco 2</text><text x="698" y="124">Bloco 3</text><text x="908" y="124">Bloco 4</text>
+          </g>
+          <g text-anchor="middle" font-size="14" fill="#364152">
+            <text x="278" y="148">32 filtros</text><text x="488" y="148">64 filtros</text><text x="698" y="148">128 filtros</text><text x="908" y="148">256 filtros</text>
+          </g>
+          <g text-anchor="middle" font-size="13" fill="#7b8594">
+            <text x="275" y="262">saída: 16 × 48 × 48</text><text x="485" y="262">saída: 8 × 24 × 24</text><text x="695" y="262">saída: 4 × 12 × 12</text><text x="905" y="262">saída: 2 × 6 × 6</text>
+          </g>
+          <!-- média e saída -->
+          <rect x="1040" y="80" width="130" height="100" fill="#eaf1fb" stroke="#9db9ea"/>
+          <text x="1105" y="124" text-anchor="middle" font-size="16" font-weight="600" fill="#0a1f44">Média global</text><text x="1105" y="146" text-anchor="middle" font-size="13" fill="#364152">vetor de 256</text>
+          <rect x="1230" y="80" width="194" height="100" fill="#0a1f44"/>
+          <text x="1327" y="118" text-anchor="middle" font-size="16" font-weight="600" fill="#fff">Camada linear</text><text x="1327" y="142" text-anchor="middle" font-size="13" fill="#c9d6ea">36 notas, uma por classe</text>
+          <text x="1327" y="162" text-anchor="middle" font-size="13" fill="#c9d6ea">(softmax)</text>
+          <text x="1327" y="262" text-anchor="middle" font-size="13" fill="#7b8594">dropout de 0,3 antes da saída</text>
+          <g stroke="#0a1f44" stroke-width="2" fill="none">
+            <path d="M150 130 H192" marker-end="url(#setaArq)"/><path d="M350 130 H402" marker-end="url(#setaArq)"/><path d="M560 130 H612" marker-end="url(#setaArq)"/>
+            <path d="M770 130 H822" marker-end="url(#setaArq)"/><path d="M980 130 H1032" marker-end="url(#setaArq)"/><path d="M1170 130 H1222" marker-end="url(#setaArq)"/>
+          </g>
+          <text x="200" y="310" font-size="14" fill="#364152">A imagem encolhe e o número de filtros cresce: a rede troca detalhe de pixel por significado. O tempo só começa a ser reduzido no bloco 2, para não perder o movimento cedo.</text>
+        </g>
+      </svg>
+      <div class="grade" style="grid-template-columns:1fr 1fr;gap:30px;margin-top:22px">
+        <div class="caixa"><h3>Dentro de cada bloco</h3><p>Duas vezes: convolução 3×3×3 (altura, largura e tempo juntos), normalização do lote (BatchNorm) e ReLU. No fim, um max-pooling reduz a imagem à metade.</p></div>
+        <div class="caixa"><h3>Treino em duas etapas</h3><p>1 · Do zero no Jester inteiro: 27 gestos, 20 épocas, 92,6% no teste. 2 · Ajuste (fine-tuning) com as cinco bases e uma saída nova de 36 classes: 6 épocas, taxa de aprendizado menor, 84,0% no teste misto.</p></div>
       </div>
     </div>
   </section>
@@ -725,7 +784,7 @@
 
   <!-- A7 (segunda parte). O modelo usado ao vivo -->
   <section class="slide" data-titulo="A7 · Modelo usado ao vivo" data-fonte="Fonte: demo/player.py (laço ao vivo e combinação)">
-    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · O modelo usado ao vivo</h2><p class="sub">A CNN 3D e a contagem de dedos analisam cada instante; a contagem propõe o número e a CNN pode vetá-lo</p></div>
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · O modelo final, com os números exatos</h2><p class="sub">A CNN 3D e a contagem de dedos analisam cada instante; a contagem tem prioridade nos números e a CNN decide todo o resto</p></div>
     <div class="corpo an" style="--d:1">
       <svg viewBox="0 0 1430 510" width="1424" height="508" role="img" aria-label="Caminho de cada análise no modelo usado ao vivo">
         <defs><marker id="setaA7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
@@ -748,9 +807,8 @@
 
           <rect x="650" y="130" width="300" height="140" fill="#eaf1fb" stroke="#9db9ea"/>
           <text x="800" y="166" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">DECISÃO</text>
-          <text x="800" y="194" text-anchor="middle" font-size="17" font-weight="600" fill="#0a1f44">Mão parada, mesmo número</text>
-          <text x="800" y="218" text-anchor="middle" font-size="17" font-weight="600" fill="#0a1f44">(1 a 4) em 5 de 6 quadros</text>
-          <text x="800" y="244" text-anchor="middle" font-size="17" font-weight="600" fill="#0a1f44">e a CNN não veta?</text>
+          <text x="800" y="204" text-anchor="middle" font-size="17" font-weight="600" fill="#0a1f44">Mão parada e o mesmo número</text>
+          <text x="800" y="230" text-anchor="middle" font-size="17" font-weight="600" fill="#0a1f44">(1 a 4) em 5 de 6 quadros?</text>
 
           <rect x="1040" y="30" width="200" height="100" fill="#fff" stroke="#0a1f44" stroke-width="1.5"/>
           <text x="1140" y="70" text-anchor="middle" font-size="19" font-weight="600" fill="#0a1f44">Número</text>
@@ -765,7 +823,7 @@
 
           <rect x="1290" y="150" width="140" height="100" fill="#1e4fbf"/>
           <text x="1360" y="194" text-anchor="middle" font-size="20" font-weight="600" fill="#fff">Comando</text>
-          <text x="1360" y="220" text-anchor="middle" font-size="13.5" fill="#e3ecfa">pausa de 1,2 s</text>
+          <text x="1360" y="220" text-anchor="middle" font-size="13.5" fill="#e3ecfa">depois, pausa de 0,8 s</text>
 
           <path d="M160 200 H195 V85 H224" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
           <path d="M195 200 V315 H224" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
@@ -778,10 +836,54 @@
 
           <text x="0" y="424" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Mão parada:</tspan> presente em 5 dos últimos 6 quadros e o pulso andou no máximo 0,5 palma em 0,5 s (palma = pulso até a base do dedo médio).</text>
           <text x="0" y="452" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Dedo esticado:</tspan> distância base→ponta ÷ comprimento do dedo ≥ 0,85 e ângulo com a direção da palma ≤ 65°; o polegar tem regra própria.</text>
-          <text x="0" y="480" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Veto da CNN (testado, desligado):</tspan> a CNN derrubava o número se apontasse um gesto sem comando no carro ou um movimento. Melhorou os dados, mas na webcam barrava os números.</text>
+          <text x="0" y="480" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">CNN 3D:</tspan> 16 quadros de 96×96 em janelas de 1, 1,5 e 3 s; as classes de número são zeradas e as notas, renormalizadas. Sem veto: a CNN nunca cancela um número (A8).</text>
           <text x="0" y="508" font-size="16" fill="#364152"><tspan font-weight="600" fill="#0a1f44">Não é número:</tspan> cinco dedos, só o polegar ou punho. <tspan font-weight="600" fill="#0a1f44">Ativação:</tspan> o OK (mantido 0,4 s) abre 7 s; fora deles, nada dispara. A GRU não é usada ao vivo.</text>
         </g>
       </svg>
+    </div>
+  </section>
+
+  <!-- A7. Como contamos os dedos -->
+  <section class="slide" data-titulo="A7 · Como contamos os dedos" data-fonte="Fonte: src/pontos_mao.py (contar_dedos, LIMIARES) · demo/player.py (Pontos)">
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · Como contamos os dedos</h2><p class="sub">Uma regra de geometria sobre os 21 pontos da mão; nada aqui foi treinado por nós</p></div>
+    <div class="corpo">
+      <div class="duas" style="grid-template-columns:380px 1fr;gap:56px;align-items:center">
+        <div class="an" style="--d:1">
+          <svg viewBox="0 0 380 470" width="380" height="470" role="img" aria-label="Os 21 pontos da mão e a medida de dedo esticado">
+            <g font-family="Segoe UI, system-ui, sans-serif">
+              <g transform="translate(20,20) scale(2)" stroke="#9db9ea" stroke-width="1.6" fill="none">
+                <path d="M94 188 L64 173 L44 153 L32 133 L22 115 M94 188 L76 133 M94 188 L94 129 L94 95 L94 73 L94 53 M94 188 L111 133 L115 103 L117 83 L119 67 M94 188 L126 143 L134 121 L139 105 L143 91 M76 133 L94 129 L111 133 L126 143"/>
+              </g>
+              <!-- indicador em destaque -->
+              <g transform="translate(20,20) scale(2)" stroke="#1e4fbf" stroke-width="2.6" fill="none"><path d="M76 133 L72 103 L70 83 L68 65"/></g>
+              <g transform="translate(20,20) scale(2)" stroke="#0a1f44" stroke-width="1.2" stroke-dasharray="3 3" fill="none"><path d="M64 133 L56 65"/></g>
+              <g transform="translate(20,20) scale(2)" fill="#0a1f44">
+                <circle cx="94" cy="188" r="2.6"/><circle cx="64" cy="173" r="2"/><circle cx="44" cy="153" r="2"/><circle cx="32" cy="133" r="2"/><circle cx="22" cy="115" r="2"/>
+                <circle cx="76" cy="133" r="2.6"/><circle cx="72" cy="103" r="2"/><circle cx="70" cy="83" r="2"/><circle cx="68" cy="65" r="2.6"/>
+                <circle cx="94" cy="129" r="2"/><circle cx="94" cy="95" r="2"/><circle cx="94" cy="73" r="2"/><circle cx="94" cy="53" r="2"/>
+                <circle cx="111" cy="133" r="2"/><circle cx="115" cy="103" r="2"/><circle cx="117" cy="83" r="2"/><circle cx="119" cy="67" r="2"/>
+                <circle cx="126" cy="143" r="2"/><circle cx="134" cy="121" r="2"/><circle cx="139" cy="105" r="2"/><circle cx="143" cy="91" r="2"/>
+              </g>
+              <text x="16" y="218" font-size="13" fill="#0a1f44" font-weight="600">base → ponta</text>
+              <text x="16" y="236" font-size="13" fill="#7b8594">em linha reta</text>
+              <text x="190" y="440" text-anchor="middle" font-size="14" fill="#364152">Dedo esticado: a linha reta da base à ponta</text>
+              <text x="190" y="460" text-anchor="middle" font-size="14" fill="#364152">tem quase o comprimento do próprio dedo</text>
+            </g>
+          </svg>
+        </div>
+        <div class="an" style="--d:2">
+          <table class="tabela tabTexto tabDensa">
+            <tr><th>Passo</th><th>Regra</th></tr>
+            <tr><td>1 · Pontos</td><td>O MediaPipe Hand Landmarker (Google, pronto) devolve 21 pontos da mão em 3D, a cada quadro</td></tr>
+            <tr><td>2 · Dedo esticado</td><td>Distância da base à ponta ÷ comprimento do dedo ≥ 0,85, e ângulo entre o dedo e a direção da palma ≤ 65°</td></tr>
+            <tr><td>3 · Polegar</td><td>Regra própria: reto (≥ 0,95) e afastado, com a ponta a pelo menos 1,2 largura de palma do dedo mínimo</td></tr>
+            <tr><td>4 · Contagem</td><td>De 1 a 4 dedos esticados é número. Cinco dedos, só o polegar ou punho não são número: ficam com a CNN 3D</td></tr>
+            <tr><td>5 · Mão parada</td><td>Mão visível em 5 dos 6 últimos quadros, e o pulso andou no máximo meia palma em 0,5 s</td></tr>
+            <tr class="vencedora"><td>6 · Estabilidade</td><td>A mesma contagem em 5 de 6 quadros: o número vale na hora, sem porcentagem</td></tr>
+          </table>
+          <p class="nota">Os limiares (0,85 e 65°) foram ajustados com metade das pessoas do HaGRID; a outra metade ficou no teste. A regra não tem porcentagem porque não é um modelo: a confirmação é a estabilidade em 5 de 6 quadros.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -797,6 +899,24 @@
         </div>
       </div>
       <p class="nota an" style="--d:3">Confiança: quando passou “k dedos”, em quantos % das vezes eram k dedos. Mostrado e passou: das amostras de k dedos, em quantos % o número passou. O veto testado trocava alcance por confiança; na webcam, derrubava os números e ficou desligado. Simulação do laço ao vivo (mão parada, mesma contagem em 5 de 6 quadros) no teste misto completo (3.642 amostras), sem retreinar a CNN.</p>
+    </div>
+  </section>
+
+  <!-- A8 (primeira parte). Por que não o modelo de maior acerto -->
+  <section class="slide" data-titulo="A8 · Por que não o de maior acerto" data-fonte="Fonte: resultados/pontos/veto_outros.json · resultados/webcam_ao_vivo/teste_16-11_sem_veto.json (um usuário, sem anotação gesto a gesto)">
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A8 · Por que não usamos o modelo de maior acerto</h2><p class="sub">Três versões foram melhores nos dados. Na webcam, só a mais simples reconheceu os números</p></div>
+    <div class="corpo">
+      <table class="tabela tabTexto an" style="--d:1;font-size:17px">
+        <tr><th>Modelo</th><th>Nos dados (teste misto, 36 classes)</th><th>Na webcam</th><th>Decisão</th></tr>
+        <tr><td>GRU + CNN, média das notas</td><td>92,2%</td><td>Os números quase nunca chegavam à nota de 70%</td><td>Descartado</td></tr>
+        <tr><td>GRU + CNN, números pela GRU</td><td>92,0%</td><td>Nota baixa nos números; mão aberta lida como quatro dedos</td><td>Descartado</td></tr>
+        <tr><td>Contagem de dedos + veto da CNN</td><td>87,9%</td><td>O veto cancelaria 116 de 116 leituras de número em 2 min de teste</td><td>Veto desligado em 16/11</td></tr>
+        <tr class="vencedora"><td>Modelo final: CNN 3D + contagem de dedos</td><td>70,9% (87,7% nos gestos do carro)</td><td>Números reconhecidos: 22 comandos de número em 2 min</td><td>Usado</td></tr>
+      </table>
+      <div class="grade an" style="--d:2;grid-template-columns:1fr 1fr;gap:30px;margin-top:30px">
+        <div class="caixa"><h3>Por que os dados e a webcam divergem (causa provável)</h3><p>As bases têm outra câmera, outra distância e outro fundo. A GRU aprendeu os números sobretudo com fotos do HaGRID. E a CNN 3D lê o número parado da nossa webcam como “outro movimento”: 62 das 116 leituras do teste.</p></div>
+        <div class="caixa"><h3>O que aprendemos</h3><p>O teste com dados seleciona candidatos; quem decide é o uso real. O passo seguinte é gravar a nossa webcam, para treinar e medir no cenário certo (slide 13).</p></div>
+      </div>
     </div>
   </section>
 
@@ -828,6 +948,37 @@
 <tr class="vencedora"><td>Usada ao vivo: CNN 3D + contagem de dedos</td><td>70,9%</td><td>—</td><td>1,62 / min</td></tr>
 </table></div>
     <p class="nota an" style="--d:2;margin-top:6px;font-size:12.5px">— = não medido. * Quase não dispara os números (36/265 trechos de 1 dedo, 0/264 de 2). Cada bloco foi medido num conjunto diferente: compare dentro do bloco.</p>
+  </section>
+
+  <!-- A8 (terceira parte). Arquiteturas treinadas do zero -->
+  <section class="slide" data-titulo="A8 · Arquiteturas do zero" data-fonte="Fonte: resultados/jester/comparacao_arquiteturas.json · src/comparar_arquiteturas.py · src/modelos.py">
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A8 · As arquiteturas que treinamos do zero</h2><p class="sub">Entrega intermediária: seis redes no mesmo protocolo, para escolher a base do projeto</p></div>
+    <div class="corpo">
+      <div class="an" style="--d:1"><table class="tabela tabArq"><tr><th>Arquitetura</th><th>Como funciona</th><th>Parâmetros</th><th>Acerto<br>(validação)</th><th>Falsa<br>ativação</th><th>Tempo por<br>análise</th></tr><tr><td>CNN 3D larga</td><td>A mesma CNN 3D, com 50% mais filtros por bloco (48 a 384)</td><td>7,92 mi</td><td>84,2%</td><td>0,71%</td><td>3,9 ms</td></tr><tr><td>ResNet 3D</td><td>CNN 3D com atalhos: a entrada de cada bloco é somada à saída (blocos residuais)</td><td>3,57 mi</td><td>83,0%</td><td>1,14%</td><td>2,4 ms</td></tr><tr class="vencedora"><td>CNN 3D (escolhida)</td><td>Quatro blocos de convoluções 3×3×3 (32, 64, 128 e 256 filtros): cada filtro olha altura, largura e tempo juntos</td><td>3,52 mi</td><td>82,4%</td><td>0,43%</td><td>1,9 ms</td></tr><tr><td>CNN 3D leve</td><td>A mesma CNN 3D, com metade dos filtros por bloco (16 a 128)</td><td>0,88 mi</td><td>78,6%</td><td>1,42%</td><td>1,9 ms</td></tr><tr><td>CNN 2D + Transformer</td><td>A mesma CNN 2D por quadro; no lugar da GRU, 2 camadas de atenção comparam todos os quadros entre si</td><td>2,24 mi</td><td>65,3%</td><td>2,42%</td><td>3,9 ms</td></tr><tr><td>CNN 2D + GRU</td><td>Uma CNN 2D resume cada quadro num vetor; uma GRU lê os 16 vetores em ordem</td><td>1,57 mi</td><td>50,4%</td><td>0,28%</td><td>2,7 ms</td></tr></table></div>
+      <p class="nota an" style="--d:2">Protocolo: 20 mil vídeos de treino, 8 épocas, lote 48, seed 42, validação de 5 mil vídeos; sem aumento de dados. Falsa ativação: % dos vídeos sem gesto em que a rede apontou um gesto com nota ≥ 0,6. Tempo por análise: um clipe, na GPU do notebook. Ficou de fora a R(2+1)D (convolução separada em espaço e tempo): com lote de 48 passava dos 8 GB da GPU.</p>
+      <div class="grade an" style="--d:3;grid-template-columns:1fr 1fr;gap:30px;margin-top:20px">
+        <div class="caixa"><h3>Por que a CNN 3D</h3><p>Acerto próximo ao da versão larga, com menos da metade dos parâmetros, menos falsas ativações e análise mais rápida. Treinada depois no Jester inteiro, chegou a 92,6% no teste.</p></div>
+        <div class="caixa"><h3>Por que não CNN 2D + GRU ou Transformer</h3><p>No mesmo protocolo, ficaram em 65,3% e 50,4%. Explicação provável: a CNN 2D resume cada quadro sozinho, antes de olhar o tempo, e o movimento se perde nesse resumo. Na CNN 3D, o filtro já vê o movimento nos pixels.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- A8 (quarta parte). Linha do tempo dos modelos -->
+  <section class="slide" data-titulo="A8 · Do primeiro modelo ao final" data-fonte="Fonte: resultados do projeto (Jester, IPN Hand, teste misto)">
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A8 · Do primeiro modelo ao final</h2><p class="sub">Cada etapa resolveu um problema e mostrou o seguinte</p></div>
+    <div class="corpo">
+      <table class="tabela tabTexto tabDensa an" style="--d:1">
+        <tr><th>Etapa</th><th>O que treinamos</th><th>Resultado</th><th>O que levou ao passo seguinte</th></tr>
+        <tr><td>1 · Comparação de arquiteturas</td><td>Seis redes do zero, com 20 mil vídeos do Jester</td><td>CNN 3D: 82,4% · larga: 84,2%</td><td>CNN 3D escolhida pelo custo e benefício</td></tr>
+        <tr><td>2 · CNN 3D no Jester inteiro</td><td>118.562 vídeos, 27 gestos, 20 épocas</td><td>92,6% no teste</td><td>O Jester não tem os números (1, 2 e 4 dedos)</td></tr>
+        <tr><td>3 · Números com a CNN</td><td>Fotos do HaGRID viradas vídeo; depois, vídeos do IPN</td><td>6 e 485 disparos certos de 1 dedo; 0,79 e 0,32 falsos/min</td><td>A CNN aprendia o fundo, não a forma da mão</td></tr>
+        <tr><td>4 · Pontos da mão</td><td>MediaPipe + regras de geometria; depois, uma GRU sobre os pontos</td><td>GRU: 76,5% no teste misto</td><td>Sozinha, pior que a CNN nos movimentos</td></tr>
+        <tr><td>5 · CNN pré-treinada + ajuste</td><td>A CNN da etapa 2, ajustada nas cinco bases, 36 classes</td><td>84,0% no teste misto</td><td>Boa nos movimentos; nos números do carro, 58,4%</td></tr>
+        <tr><td>6 · Combinações</td><td>GRU + CNN; contagem de dedos + veto da CNN</td><td>92,0% e 87,9% no teste misto</td><td>Na webcam, os números não eram reconhecidos</td></tr>
+        <tr class="vencedora"><td>7 · Modelo final</td><td>CNN 3D nos movimentos + contagem de dedos nos números</td><td>87,7% nos gestos do carro</td><td>Escolhido pela demo na webcam</td></tr>
+      </table>
+      <p class="nota an" style="--d:2">Etapas 1 e 2: entrega intermediária. Detalhe da etapa 3 e 4: A10. Todos os números da etapa 6: A8 (todos os modelos) e A7 (combinações).</p>
+    </div>
   </section>
 
   <!-- A9. Gestos e comandos -->

@@ -60,6 +60,14 @@ O usuário testou o carro na webcam com o veto: **os números (1, 2, 4) não est
 - **Slide 13 "Se tivéssemos mais tempo":** pronto (GRU treinada com vídeos da webcam; placa FPGA Kria KV260 com câmera infravermelha, em ilustração SVG).
 - **Estilo exigido:** formal, só tons de azul, sem emojis, sem tabelas arredondadas. Nunca inventar números.
 
+## Apresentação refeita em 16/11 à noite (38 slides)
+- **Destaque do corpo:** só o modelo final. Acerto de 87,7% nos 11 gestos do carro (`src/medir_gestos_do_carro.py` → `resultados/pontos/gestos_do_carro.json`); 1,05 falsos/min só com os comandos do carro.
+- **Slides refeitos:** Como funciona (5), Os gestos (7), Resultados (9 e 10). As comparações entre modelos foram para o apêndice.
+- **Apêndice novo:** A4 arquitetura da CNN 3D; A7 como contamos os dedos; A8 por que não o de maior acerto, arquiteturas do zero e linha do tempo.
+- **Gráficos e tabelas novos:** `demo/graficos_finais.py`, chamado pelo gerador.
+- **Roteiro das falas:** `ROTEIRO_APRESENTACAO.md` (3 pessoas, tempos e perguntas prováveis).
+- **Falta:** ensaio completo pela `demo\abrir_apresentacao_final.bat`; os slides novos só foram vistos por um servidor de arquivos, sem a câmera.
+
 ## Regras do usuário
 - Decidir, avançar e reportar; respostas curtas e didáticas.
 - Registrar achados no `notebook.ipynb`.
