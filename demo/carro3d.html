@@ -756,14 +756,32 @@ function reta(p, a, d) {   // dedo esticado: distância base→ponta / comprimen
   const dist = (i, j) => Math.hypot(p[i].x - p[j].x, p[i].y - p[j].y, p[i].z - p[j].z);
   return dist(a, d) / Math.max(dist(a, a + 1) + dist(a + 1, a + 2) + dist(a + 2, d), 1e-6);
 }
-function eOk(w) {          // w: 21 pontos em metros (worldLandmarks)
-  const dist = (i, j) => Math.hypot(w[i].x - w[j].x, w[i].y - w[j].y, w[i].z - w[j].z);
-  const palma = dist(0, 9);
-  return dist(4, 8) < 0.35 * palma && reta(w, 9, 12) > 0.85 && reta(w, 13, 16) > 0.85 && reta(w, 17, 20) > 0.8;
+// Medidas do OK em cada mão. A profundidade dos pontos 3D tem ruído (as pontas do polegar e do indicador "se afastam"
+// na mão 3D), então a pinça usa a menor das duas medidas: nos pontos 3D (metros) e nos 2D da imagem (pixels), sempre
+// dividida pelo tamanho da palma (pulso → base do médio). Os dedos esticados usam a maior das duas.
+const OK_PINCA = 0.5, OK_RETA = 0.78;
+function medidasOk(w, l, W, H) {
+  const d3 = (i, j) => Math.hypot(w[i].x - w[j].x, w[i].y - w[j].y, w[i].z - w[j].z);
+  const d2 = (i, j) => Math.hypot((l[i].x - l[j].x) * W, (l[i].y - l[j].y) * H);
+  const reta2 = (a, d) => d2(a, d) / Math.max(d2(a, a + 1) + d2(a + 1, a + 2) + d2(a + 2, d), 1e-6);
+  const pinca = Math.min(d3(4, 8) / Math.max(d3(0, 9), 1e-6), d2(4, 8) / Math.max(d2(0, 9), 1e-6));
+  const dedos = [[9, 12], [13, 16], [17, 20]].map(([a, d]) => Math.max(reta(w, a, d), reta2(a, d)));
+  return { pinca, dedos, ok: pinca < OK_PINCA && dedos.every(r => r > OK_RETA) };
 }
+let ultimoOk = 0;
 function verificarOk(res) {
-  const agora = performance.now(), algum = res.worldLandmarks.some(eOk);
-  if (!algum) { okDesde = 0; okSolto = true; return; }
+  const agora = performance.now(), W = stream.naturalWidth, H = stream.naturalHeight;
+  const medidas = res.worldLandmarks.map((w, i) => medidasOk(w, res.landmarks[i], W, H));
+  const algum = medidas.some(m => m.ok);
+  // na tela: o quanto a mão está perto do OK (pinça < 0,5 e os três dedos > 0,78)
+  if (medidas.length && !janelaAberta()) {
+    const m = medidas.reduce((a, b) => (a.pinca < b.pinca ? a : b));
+    $("janelaSub").textContent = `OK: pinça ${m.pinca.toFixed(2)} (< ${OK_PINCA}) · dedos ${m.dedos.map(r => r.toFixed(2)).join(" ")} (> ${OK_RETA})`;
+  }
+  if (algum) ultimoOk = agora;
+  // tolera falhas curtas da leitura (até 0,25 s) sem perder a contagem
+  if (!algum && agora - ultimoOk > 250) { okDesde = 0; okSolto = true; return; }
+  if (!algum) return;
   if (!okDesde) okDesde = agora;
   // precisa soltar o OK entre uma ativação e outra; segurar o OK com a janela aberta não reabre
   if (okSolto && !janelaAberta() && agora - okDesde >= OK_SEGURAR * 1000) { okSolto = false; abrirJanela(); }
