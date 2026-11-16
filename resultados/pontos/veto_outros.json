@@ -1,0 +1,169 @@
+{
+ "o_que_e": "Testa o veto da CNN sobre a contagem de dedos, com os gestos não usados juntos em \"Outros gestos\".",
+ "outros_gestos": [
+  "Swiping Down",
+  "Swiping Up",
+  "Sliding Two Fingers Left",
+  "Sliding Two Fingers Right",
+  "Sliding Two Fingers Down",
+  "Sliding Two Fingers Up",
+  "Pushing Two Fingers Away",
+  "Pulling Two Fingers In",
+  "Rolling Hand Forward",
+  "Rolling Hand Backward",
+  "Turning Hand Clockwise",
+  "Turning Hand Counterclockwise",
+  "Zooming In With Full Hand",
+  "Zooming Out With Full Hand",
+  "Zooming In With Two Fingers",
+  "Zooming Out With Two Fingers",
+  "Shaking Hand",
+  "Doing other things",
+  "Volante: FlickDown",
+  "Volante: FlickUp",
+  "Volante: SwipeLeft",
+  "Volante: SwipeRight",
+  "Volante: Tap"
+ ],
+ "variantes": {
+  "sem veto": {
+   "acerto_36_classes_pct": 70.9,
+   "acerto_pct": 72.9,
+   "acerto_numeros_pct": 83.8,
+   "acerto_outros_pct": 70.7,
+   "sem_numero_passou_numero_pct": 24.3,
+   "por_numero": {
+    "1 dedo": {
+     "confianca_pct": 73.5,
+     "passou_quando_mostrado_pct": 75.0,
+     "vezes": 204
+    },
+    "2 dedos": {
+     "confianca_pct": 22.6,
+     "passou_quando_mostrado_pct": 81.5,
+     "vezes": 722
+    },
+    "3 dedos": {
+     "confianca_pct": 60.0,
+     "passou_quando_mostrado_pct": 93.0,
+     "vezes": 155
+    },
+    "4 dedos": {
+     "confianca_pct": 53.0,
+     "passou_quando_mostrado_pct": 97.0,
+     "vezes": 183
+    }
+   },
+   "falsos_vieram_de": {
+    "Doing other things": 96,
+    "Zooming Out With Two Fingers": 81,
+    "Pushing Two Fingers Away": 75,
+    "Zooming In With Two Fingers": 75,
+    "Sliding Two Fingers Up": 68,
+    "Sliding Two Fingers Down": 56
+   }
+  },
+  "veto A: CNN diz Outros gestos": {
+   "acerto_36_classes_pct": 87.1,
+   "acerto_pct": 90.1,
+   "acerto_numeros_pct": 75.2,
+   "acerto_outros_pct": 93.1,
+   "sem_numero_passou_numero_pct": 1.6,
+   "por_numero": {
+    "1 dedo": {
+     "confianca_pct": 95.5,
+     "passou_quando_mostrado_pct": 63.5,
+     "vezes": 133
+    },
+    "2 dedos": {
+     "confianca_pct": 80.4,
+     "passou_quando_mostrado_pct": 67.5,
+     "vezes": 168
+    },
+    "3 dedos": {
+     "confianca_pct": 93.0,
+     "passou_quando_mostrado_pct": 93.0,
+     "vezes": 100
+    },
+    "4 dedos": {
+     "confianca_pct": 82.1,
+     "passou_quando_mostrado_pct": 96.0,
+     "vezes": 117
+    }
+   },
+   "falsos_vieram_de": {
+    "No gesture": 14,
+    "Stop Sign": 8,
+    "Swiping Right": 7,
+    "Drumming Fingers": 7,
+    "Pulling Hand In": 4,
+    "Pushing Hand Away": 3
+   }
+  },
+  "veto B: CNN diz Outros gestos ou um movimento": {
+   "acerto_36_classes_pct": 87.9,
+   "acerto_pct": 91.0,
+   "acerto_numeros_pct": 75.2,
+   "acerto_outros_pct": 94.1,
+   "sem_numero_passou_numero_pct": 0.5,
+   "por_numero": {
+    "1 dedo": {
+     "confianca_pct": 97.7,
+     "passou_quando_mostrado_pct": 63.5,
+     "vezes": 130
+    },
+    "2 dedos": {
+     "confianca_pct": 84.4,
+     "passou_quando_mostrado_pct": 67.5,
+     "vezes": 160
+    },
+    "3 dedos": {
+     "confianca_pct": 100.0,
+     "passou_quando_mostrado_pct": 93.0,
+     "vezes": 93
+    },
+    "4 dedos": {
+     "confianca_pct": 94.1,
+     "passou_quando_mostrado_pct": 96.0,
+     "vezes": 102
+    }
+   },
+   "falsos_vieram_de": {
+    "No gesture": 14,
+    "Volante: SwipeLeft": 2
+   }
+  },
+  "veto C (ao vivo): Outros gestos, um movimento ou Sem gesto": {
+   "acerto_36_classes_pct": 88.3,
+   "acerto_pct": 91.4,
+   "acerto_numeros_pct": 75.2,
+   "acerto_outros_pct": 94.5,
+   "sem_numero_passou_numero_pct": 0.0,
+   "por_numero": {
+    "1 dedo": {
+     "confianca_pct": 100.0,
+     "passou_quando_mostrado_pct": 63.5,
+     "vezes": 127
+    },
+    "2 dedos": {
+     "confianca_pct": 89.4,
+     "passou_quando_mostrado_pct": 67.5,
+     "vezes": 151
+    },
+    "3 dedos": {
+     "confianca_pct": 100.0,
+     "passou_quando_mostrado_pct": 93.0,
+     "vezes": 93
+    },
+    "4 dedos": {
+     "confianca_pct": 97.0,
+     "passou_quando_mostrado_pct": 96.0,
+     "vezes": 99
+    }
+   },
+   "falsos_vieram_de": {
+    "No gesture": 1
+   }
+  }
+ }
+}

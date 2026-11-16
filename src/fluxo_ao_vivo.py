@@ -90,8 +90,29 @@ def numeros_da_regra(pontos, tempos):
     return saida
 
 
-def simular(tempos, por, pc, regra, nomes, gestos, numeros, comandos, confirmar, usar_regra=True):
+# Veto da CNN (src/medir_veto_outros.py): gestos que não são comando no carro somados em "Outros gestos"; se a CNN
+# apontar "Outros gestos" ou um movimento do carro, o número da contagem é ignorado.
+MOVIMENTOS = {"Swiping Left", "Swiping Right", "Thumb Up", "Thumb Down", "Drumming Fingers", "Stop Sign", "Pushing Hand Away", "Pulling Hand In"}
+FICAM = MOVIMENTOS | set(MC.NUMEROS) | {"No gesture"}
+
+
+def vetada(q, nomes, sem_gesto=False):
+    """q: notas da CNN (36 classes) numa janela. True se a CNN aponta 'Outros gestos' ou um movimento
+    (e, com sem_gesto, também 'No gesture')."""
+    outros = sum(q[i] for i, n in enumerate(nomes) if n not in FICAM)
+    resto = [(q[i], n) for i, n in enumerate(nomes) if n in FICAM]
+    melhor, nome = max(resto)
+    return outros > melhor or nome in MOVIMENTOS or (sem_gesto and nome == "No gesture")
+
+
+def simular(tempos, por, pc, regra, nomes, gestos, numeros, comandos, confirmar, usar_regra=True, veto=None, sem_gesto=False):
     g, hist, saida = Gatilho(comandos), collections.deque(maxlen=2), []
+    if veto:   # janela usada no veto: a mais curta (1 s) ou a mais longa disponível
+        blocos, k = [], 0
+        for n in por:
+            blocos.append(pc[k] if veto == "curta" else pc[k + n - 1])
+            k += n
+        regra = [None if (r is not None and vetada(b, nomes, sem_gesto)) else r for r, b in zip(regra, blocos)]
     p = pc.copy()
     if usar_regra:
         p[:, numeros] = 0
@@ -124,8 +145,10 @@ def main():
     numeros = [nomes.index(n) for n in MC.NUMEROS]
     todos = {n for n in nomes if n not in T.SEM_GESTO}
     variantes = {"CNN pré-treinada sozinha": dict(usar_regra=False, confirmar=1)}
-    for c in (1, 3, 5):
-        variantes[f"CNN 3D + contagem de dedos (confirmada em {c} análise{'s' if c > 1 else ''})"] = dict(usar_regra=True, confirmar=c)
+    variantes["CNN 3D + contagem de dedos (confirmada em 1 análise)"] = dict(usar_regra=True, confirmar=1)
+    variantes["CNN 3D + contagem de dedos + veto da CNN (janela mais longa)"] = dict(usar_regra=True, confirmar=1, veto="longa")
+    variantes["CNN 3D + contagem de dedos + veto da CNN com Sem gesto (janela mais longa)"] = dict(usar_regra=True, confirmar=1, veto="longa", sem_gesto=True)
+    variantes["CNN 3D + contagem de dedos + veto da CNN com Sem gesto (janela de 1 s)"] = dict(usar_regra=True, confirmar=1, veto="curta", sem_gesto=True)
     conjuntos = {"todos os gestos": todos, "só comandos do carro": CARRO}
 
     ipn = pickle.load(open(RAIZ / "data/pontos/ipn.pkl", "rb"))
@@ -183,7 +206,7 @@ def main():
                 "ipn_um_dedo_trechos_certos": f"{r['certos']['B0A']}/{n_apontar['B0A']}",
                 "ipn_dois_dedos_trechos_certos": f"{r['certos']['B0B']}/{n_apontar['B0B']}",
                 "slovo_falsos_por_minuto": round(sum(s.values()) / max(min_slovo, 1e-9), 3), "slovo_falsos_por_classe": dict(s.most_common())}
-    destino = RAIZ / "resultados/pontos/fluxo_ao_vivo.json"
+    destino = RAIZ / "resultados/pontos/fluxo_ao_vivo_veto2.json"
     destino.write_text(json.dumps(saida, ensure_ascii=False, indent=1), encoding="utf-8")
     for nv, por_c in saida["variantes"].items():
         for nc, x in por_c.items():

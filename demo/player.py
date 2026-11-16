@@ -204,6 +204,10 @@ class Pontos:
       - números (1 a 4 dedos): decide SÓ a regra geométrica. Se a mão está parada (mao_parada) e a contagem dos dedos é
         a mesma em 5 dos 6 últimos quadros (contagem_estavel), o número está detectado. Não há porcentagem: a
         estabilidade em 5 de 6 quadros é a própria confirmação (o Gatilho dispara sem limiar, ver Gatilho._pela_regra);
+      - veto da CNN (16/11): os gestos que não são comando no carro (zoom, deslizar com dois dedos, girar a mão...) têm as
+        notas somadas em "Outros gestos"; se a CNN aponta "Outros gestos", um movimento do carro ou "Sem gesto" (na janela mais longa), o número da regra é
+        ignorado. Em vídeo contínuo (IPN, sem a janela do OK), os falsos caíram de 1,62 para 0,35 por minuto
+        (src/medir_veto_outros.py; em vídeo contínuo, src/fluxo_ao_vivo.py);
       - todo o resto: decide a CNN, com as classes de número zeradas e as notas renormalizadas (ver combinar).
     A GRU de --pontos não entra em nenhuma decisão e não é mais rodada ao vivo (menos carga na placa de vídeo). O arquivo
     continua sendo exigido por --pontos, que é o que liga este caminho: dele só se confere que as classes batem com as da CNN.
@@ -218,8 +222,16 @@ class Pontos:
         del e  # a GRU em si não é usada (ver a docstring da classe)
         self.nomes = list(nomes)
         self.numeros = np.array([nomes.index(n) for n in ("One Finger", "Two Fingers", "Three Fingers", "Four Fingers") if n in nomes])
+        # veto da CNN: classes que ficam como estão; o resto (não usado no carro) é somado em "Outros gestos"
+        movimentos = ("Swiping Left", "Swiping Right", "Thumb Up", "Thumb Down", "Drumming Fingers", "Stop Sign",
+                      "Pushing Hand Away", "Pulling Hand In")
+        ficam = set(movimentos) | {"One Finger", "Two Fingers", "Three Fingers", "Four Fingers", "No gesture"}
+        self.idx_outros = np.array([i for i, n in enumerate(nomes) if n not in ficam])
+        self.idx_ficam = np.array([i for i, n in enumerate(nomes) if n in ficam])
+        self.idx_movimentos = {nomes.index(n) for n in movimentos if n in nomes}
+        self.idx_sem_gesto = nomes.index("No gesture") if "No gesture" in nomes else -1
         self.detector = P.DetectorMao(video=True)
-        self.ultimo = {"mao": False, "numero": None, "nota": None, "parada": False, "regra": None}
+        self.ultimo = {"mao": False, "numero": None, "nota": None, "parada": False, "regra": None, "veto": False}
         print("Pontos da mão ligados: números (1 a 4 dedos) pela contagem dos dedos com a mão parada, o resto pela CNN"
               f" (a GRU de {Path(args.pontos).name} não é usada)", flush=True)
 
@@ -275,11 +287,20 @@ class Pontos:
         regra = self.contagem_estavel(lista) if parada else None
         num = self.numeros
         numero = regra if regra in self.nomes and self.nomes.index(regra) in num else None
+        veto = False
+        if numero is not None:
+            # veto da CNN, na janela mais longa disponível: "Outros gestos", um movimento ou "Sem gesto" derruba o número
+            q = notas_cnn[-1]
+            outros_soma = float(q[self.idx_outros].sum())
+            k = int(self.idx_ficam[int(q[self.idx_ficam].argmax())])
+            veto = outros_soma > float(q[k]) or k in self.idx_movimentos or k == self.idx_sem_gesto
+            if veto:
+                numero = None
         outros = notas_cnn.copy()
         outros[:, num] = 0
         outros /= np.maximum(outros.sum(1, keepdims=True), 1e-9)
         # "numero" e "nota" ficam no evento de estado para as páginas não quebrarem: número da regra (ou None), sem nota.
-        self.ultimo = {"mao": bool(lista[-1][2][0]), "parada": parada, "numero": numero, "nota": None, "regra": regra}
+        self.ultimo = {"mao": bool(lista[-1][2][0]), "parada": parada, "numero": numero, "nota": None, "regra": regra, "veto": veto}
         return outros, numero
 
 

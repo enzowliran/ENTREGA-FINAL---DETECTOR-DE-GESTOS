@@ -1,0 +1,163 @@
+{
+ "o_que_e": "Falsos disparos por minuto da configuração usada ao vivo (CNN 3D pré-treinada + contagem de dedos), em vídeo contínuo.",
+ "ipn_minutos_sem_gesto": 31.5,
+ "slovo_minutos": 2.9,
+ "ipn_trechos_apontar": {
+  "B0A": 265,
+  "B0B": 264
+ },
+ "variantes": {
+  "CNN pré-treinada sozinha": {
+   "todos os gestos": {
+    "ipn_falsos_por_minuto": 0.19,
+    "ipn_falsos": 6,
+    "ipn_falsos_por_classe": {
+     "Zooming Out With Two Fingers": 3,
+     "Sliding Two Fingers Down": 2,
+     "Pushing Two Fingers Away": 1
+    },
+    "ipn_um_dedo_trechos_certos": "5/265",
+    "ipn_dois_dedos_trechos_certos": "0/264",
+    "slovo_falsos_por_minuto": 0.0,
+    "slovo_falsos_por_classe": {}
+   },
+   "só comandos do carro": {
+    "ipn_falsos_por_minuto": 0.0,
+    "ipn_falsos": 0,
+    "ipn_falsos_por_classe": {},
+    "ipn_um_dedo_trechos_certos": "5/265",
+    "ipn_dois_dedos_trechos_certos": "0/264",
+    "slovo_falsos_por_minuto": 0.0,
+    "slovo_falsos_por_classe": {}
+   }
+  },
+  "CNN 3D + contagem de dedos (confirmada em 1 análise)": {
+   "todos os gestos": {
+    "ipn_falsos_por_minuto": 1.619,
+    "ipn_falsos": 51,
+    "ipn_falsos_por_classe": {
+     "Two Fingers": 18,
+     "Three Fingers": 9,
+     "Four Fingers": 8,
+     "One Finger": 7,
+     "Zooming Out With Two Fingers": 4,
+     "Sliding Two Fingers Down": 3,
+     "Sliding Two Fingers Left": 1,
+     "Sliding Two Fingers Up": 1
+    },
+    "ipn_um_dedo_trechos_certos": "228/265",
+    "ipn_dois_dedos_trechos_certos": "242/264",
+    "slovo_falsos_por_minuto": 3.073,
+    "slovo_falsos_por_classe": {
+     "Four Fingers": 3,
+     "One Finger": 3,
+     "Two Fingers": 2,
+     "Three Fingers": 1
+    }
+   },
+   "só comandos do carro": {
+    "ipn_falsos_por_minuto": 1.047,
+    "ipn_falsos": 33,
+    "ipn_falsos_por_classe": {
+     "Two Fingers": 18,
+     "Four Fingers": 8,
+     "One Finger": 7
+    },
+    "ipn_um_dedo_trechos_certos": "231/265",
+    "ipn_dois_dedos_trechos_certos": "246/264",
+    "slovo_falsos_por_minuto": 2.731,
+    "slovo_falsos_por_classe": {
+     "Four Fingers": 3,
+     "One Finger": 3,
+     "Two Fingers": 2
+    }
+   }
+  },
+  "CNN 3D + contagem de dedos + veto da CNN (janela de 1 s)": {
+   "todos os gestos": {
+    "ipn_falsos_por_minuto": 1.301,
+    "ipn_falsos": 41,
+    "ipn_falsos_por_classe": {
+     "Two Fingers": 14,
+     "Four Fingers": 7,
+     "Three Fingers": 5,
+     "Zooming Out With Two Fingers": 4,
+     "One Finger": 4,
+     "Sliding Two Fingers Down": 3,
+     "Zooming In With Two Fingers": 1,
+     "Sliding Two Fingers Left": 1,
+     "Sliding Two Fingers Up": 1,
+     "Pushing Two Fingers Away": 1
+    },
+    "ipn_um_dedo_trechos_certos": "116/265",
+    "ipn_dois_dedos_trechos_certos": "107/264",
+    "slovo_falsos_por_minuto": 3.073,
+    "slovo_falsos_por_classe": {
+     "Four Fingers": 3,
+     "One Finger": 3,
+     "Two Fingers": 2,
+     "Three Fingers": 1
+    }
+   },
+   "só comandos do carro": {
+    "ipn_falsos_por_minuto": 0.794,
+    "ipn_falsos": 25,
+    "ipn_falsos_por_classe": {
+     "Two Fingers": 14,
+     "Four Fingers": 7,
+     "One Finger": 4
+    },
+    "ipn_um_dedo_trechos_certos": "120/265",
+    "ipn_dois_dedos_trechos_certos": "117/264",
+    "slovo_falsos_por_minuto": 2.731,
+    "slovo_falsos_por_classe": {
+     "Four Fingers": 3,
+     "One Finger": 3,
+     "Two Fingers": 2
+    }
+   }
+  },
+  "CNN 3D + contagem de dedos + veto da CNN (janela mais longa)": {
+   "todos os gestos": {
+    "ipn_falsos_por_minuto": 1.238,
+    "ipn_falsos": 39,
+    "ipn_falsos_por_classe": {
+     "Two Fingers": 11,
+     "Four Fingers": 7,
+     "One Finger": 6,
+     "Three Fingers": 6,
+     "Zooming Out With Two Fingers": 4,
+     "Sliding Two Fingers Down": 3,
+     "Sliding Two Fingers Left": 1,
+     "Sliding Two Fingers Up": 1
+    },
+    "ipn_um_dedo_trechos_certos": "182/265",
+    "ipn_dois_dedos_trechos_certos": "180/264",
+    "slovo_falsos_por_minuto": 3.073,
+    "slovo_falsos_por_classe": {
+     "Four Fingers": 3,
+     "One Finger": 3,
+     "Two Fingers": 2,
+     "Three Fingers": 1
+    }
+   },
+   "só comandos do carro": {
+    "ipn_falsos_por_minuto": 0.762,
+    "ipn_falsos": 24,
+    "ipn_falsos_por_classe": {
+     "Two Fingers": 11,
+     "Four Fingers": 7,
+     "One Finger": 6
+    },
+    "ipn_um_dedo_trechos_certos": "185/265",
+    "ipn_dois_dedos_trechos_certos": "190/264",
+    "slovo_falsos_por_minuto": 2.731,
+    "slovo_falsos_por_classe": {
+     "Four Fingers": 3,
+     "One Finger": 3,
+     "Two Fingers": 2
+    }
+   }
+  }
+ }
+}
