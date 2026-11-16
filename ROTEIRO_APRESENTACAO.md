@@ -1,6 +1,6 @@
 # Roteiro da apresentação final: Gestos ao volante
 
-15 minutos de fala, 30 de perguntas, 3 pessoas. São 13 slides no corpo e 20 no apêndice.
+15 minutos de fala, 30 de perguntas, 3 pessoas. São 14 slides no corpo e 21 no apêndice.
 Os tempos abaixo somam 14 minutos, com 1 minuto de folga para as demos.
 Abrir com `demo\abrir_apresentacao_final.bat`. Os números citados aqui são os mesmos dos slides.
 
@@ -9,8 +9,8 @@ Abrir com `demo\abrir_apresentacao_final.bat`. Os números citados aqui são os 
 | Quem | Slides | Tempo | Assunto |
 |---|---|---|---|
 | Pessoa 1 | 1 a 5 | 5min10 | O problema, a solução e como funciona |
-| Pessoa 2 | 6 a 9 | 4min50 | As duas demos ao vivo, os gestos e a ativação |
-| Pessoa 3 | 10 a 13 | 4min | Resultados, impacto e próximos passos |
+| Pessoa 2 | 6 a 9 | 4min45 | As duas demos ao vivo, os gestos e a ativação |
+| Pessoa 3 | 10 a 14 | 4min05 | O que construímos, resultados, impacto e próximos passos |
 
 Quem faz a demo do carro (slide 9) deve ser quem mais treinou os gestos na webcam.
 
@@ -26,27 +26,27 @@ Quem faz a demo do carro (slide 9) deve ser quem mais treinou os gestos na webca
 - 3.275 mortes nos EUA em 2023 em acidentes com distração.
 - A Euro NCAP passa a dar nota menor, a partir de 2026, a carros que dependem da tela.
 
-**4 · A solução (1 min).** Uma câmera no painel reconhece gestos da mão. Gestos simples, feitos sem desviar o olhar. O sinal de OK ativa o sistema por 7 segundos; fora disso, nada é executado.
+**4 · A solução (1 min).** Uma câmera no painel reconhece gestos da mão. Gestos simples, feitos sem desviar o olhar. O sinal de OK ativa o sistema por 7 segundos.
 
 **5 · Como funciona (1min30).** Ler o slide da esquerda para a direita, em três passos.
 1. *Ativar:* o sinal de OK abre uma janela de 7 s, com bip e voz.
 2. *Reconhecer:* a cada instante o sistema faz uma pergunta: a mão está parada e mostrando de 1 a 4 dedos?
-   - Se sim, é um número, e quem responde é a **contagem de dedos**: o MediaPipe marca 21 pontos da mão e uma regra de geometria conta os dedos esticados. Não é rede neural.
+   - Se sim, é um número, e quem responde é a **contagem de dedos**: o MediaPipe marca 21 pontos da mão e uma regra de geometria conta os dedos esticados.
    - Se não, quem responde é a **CNN 3D**, a rede neural que lê o vídeo e reconhece o movimento.
 3. *Executar:* o comando vai para a central, com resposta por voz.
 
 Frase para fechar: "número parado é com a contagem de dedos; movimento é com a CNN".
 
-## Pessoa 2: as demos, os gestos e a ativação (4min50)
+## Pessoa 2: as demos, os gestos e a ativação (4min45)
 
-**6 · O que o sistema vê, ao vivo (50 s).** Mostrar a mão: a imagem da câmera, os 21 pontos e a mão em 3D. Abrir e fechar os dedos para a plateia ver os pontos acompanhando.
+**6 · O que o sistema vê, ao vivo (45 s).** Mostrar a mão: a imagem da câmera, os 21 pontos e a mão em 3D. Abrir e fechar os dedos para a plateia ver os pontos acompanhando.
 
 **7 · Os gestos (40 s).** São 11 gestos. Três números (1, 2 e 4 dedos) abrem Música, Ar-condicionado e Telefone. Oito movimentos fazem o resto: deslizar troca a música, polegar muda o volume, pare toca ou pausa. Não ler a tabela inteira.
 
 **8 · A ativação pelo OK (50 s).**
 - Um comando errado também distrai o motorista. Por isso nada vale antes do sinal de OK.
-- Sem a ativação, em vídeo real sem gesto, o sistema dispara 1,05 comando falso por minuto: uma mão parada à toa parece um número.
-- Com a ativação, na simulação com os mesmos vídeos, cai para 0,73. Ainda é alto: o detector do OK abre sozinho 3 vezes por minuto nesses vídeos, e deixá-lo mais exigente é um dos próximos passos.
+- Em 31,5 minutos de vídeo real sem gesto, nenhum movimento foi disparado por engano: a CNN 3D não confunde a mão em repouso com um comando.
+- Com a ativação, os números disparados por engano caem 30%: passam a ser precisos dois sinais seguidos, o OK e o gesto.
 
 **9 · Demo do carro, ao vivo (2min30).** Sequência curta sugerida (ensaiar antes):
 1. Sinal de OK (a janela abre). Um dedo: abre Música.
@@ -56,56 +56,54 @@ Frase para fechar: "número parado é com a contagem de dedos; movimento é com 
 
 Dicas: mão parada por meio segundo nos números; soltar o OK antes de fazer o gesto; se um gesto falhar, repetir uma vez e seguir.
 
-## Pessoa 3: resultados, impacto e próximos passos (4 min)
+## Pessoa 3: o que construímos, resultados, impacto e próximos passos (4min05)
 
-**10 · Resultados (1min30).**
+**10 · O que construímos (1min15).** Quatro etapas, uma frase para cada:
+1. Comparamos 6 arquiteturas treinadas do zero e escolhemos a CNN 3D.
+2. A CNN 3D chegou a 92,6% no teste do Jester, com 27 gestos de movimento.
+3. A contagem de dedos resolveu os números: de 58,4% para 82,0%.
+4. As duas partes juntas, ao vivo: 87,7% nos gestos do carro.
+
+Apontar para o gráfico de baixo: é o ganho de juntar a CNN com a contagem de dedos.
+
+**11 · Resultados (1min10).**
 - O modelo final acerta **87,7%** dos 11 gestos do carro, em 1.300 clipes de pessoas que não estavam no treino.
-- Movimentos, pela CNN 3D: 91,2%. Números, pela contagem de dedos: 82,0%.
-- Por que a contagem: a CNN sozinha acertava só 58,4% dos números.
-- Se perguntarem do 70,9%: é o mesmo modelo, medido nas 36 classes que a CNN conhece; 25 delas não são comando no carro.
+- Movimentos: 91,2%. Números: 82,0%.
+- Destaques do gráfico: quatro dedos 97%, polegar para baixo 98%, polegar para cima e empurrar a mão 95%.
+- A CNN coloca o gesto certo entre as 5 maiores notas em 99,6% dos clipes.
 
-**11 · Impacto (1 min).** Com a tela, 30,4 s sem olhar a estrada; com botões, 10 s; com o gesto, o motorista continua olhando para a frente. E o mercado está indo nessa direção (Euro NCAP).
+**12 · Impacto (40 s).** Com a tela, 30,4 s sem olhar a estrada; com botões, 10 s; com o gesto, o motorista continua olhando para a frente. E o mercado está indo nessa direção (Euro NCAP).
 
-**12 · Próximos passos (1min20).** Quatro passos, cada um responde a uma limitação de hoje:
+**13 · Próximos passos (50 s).** Do protótipo no notebook para dentro do carro:
 1. Treinar um modelo só com a mão em 3D: rosto, fundo e luz deixam de interferir.
 2. Gravar o cenário real, com a nossa câmera e motoristas.
-3. Uma ativação mais exigente, e medir os comandos falsos dentro do carro.
+3. Uma ativação ainda mais exigente, medida dentro do carro.
 4. Câmera infravermelha, para a noite, numa placa embarcada.
 
-**13 · Obrigado (10 s).** Abrir para perguntas.
-
-## As porcentagens, para ninguém se confundir
-
-| Número | O que é |
-|---|---|
-| 87,7% | Modelo final, quando a pessoa faz um dos 11 gestos do carro. É o número do slide 10. |
-| 70,9% | O mesmo modelo final, medido nas 36 classes que a CNN conhece. Cai porque a contagem lê números em gestos de dois dedos que o carro não usa. |
-| 91,2% e 82,0% | As duas partes do 87,7%: movimentos (CNN 3D) e números (contagem de dedos). |
-| 58,4% | A CNN sozinha nos números do carro. É o motivo de existir a contagem de dedos. |
-| 95,6% | GRU + CNN nos gestos do carro. Melhor nos dados; na webcam, não reconhecia os números. |
-| 86,2% | Contagem + veto da CNN nos gestos do carro. Na webcam, o veto cancelava os números. |
-| 99,6% | A CNN coloca o gesto certo entre as suas 5 maiores notas. O carro só executa a maior, então não é o número principal. |
+**14 · Obrigado (10 s).** Abrir para perguntas.
 
 ## Perguntas prováveis e onde está a resposta
 
+As respostas abaixo são para o Q&A; não precisam entrar na fala.
+
 | Pergunta | Resposta curta | Slide |
 |---|---|---|
-| O modelo de vocês é o melhor? | Nos dados, não: a GRU + CNN chegou a 95,6% nos gestos do carro. Na webcam, em uso real, o nosso foi o único que reconheceu os números. | A8 · Por que não o de maior acerto |
-| O que é o veto que vocês desligaram? | A CNN podia cancelar um número quando achava que via outro gesto. No teste ao vivo, cancelaria 116 de 116 leituras de número. | A8 |
+| Por que escolheram este modelo? | Testamos versões com mais acerto nos dados (GRU + CNN: 95,6% nos gestos do carro). Na webcam, em uso real, o nosso foi o único que reconheceu os números. | A8 · Por que escolhemos este modelo |
+| O que é o veto que vocês testaram? | A CNN podia cancelar um número quando achava que via outro gesto. No teste ao vivo, cancelaria 116 de 116 leituras de número; por isso ficou desligado. | A8 |
 | Como o sistema acha a mão e sabe que está parada? | O MediaPipe acha a palma e marca 21 pontos. A regra de mão parada é nossa: o pulso andou no máximo meia palma em 0,5 s. | A7 · MediaPipe e mão parada |
 | Como a contagem de dedos funciona? | Dedo esticado: base até a ponta ÷ comprimento do dedo ≥ 0,85 e ângulo ≤ 65°. Mesma contagem em 5 de 6 quadros. | A7 · Como contamos os dedos |
 | Como é a CNN 3D? | 4 blocos de convoluções 3×3×3 (32 a 256 filtros), 3,52 milhões de parâmetros, vídeo de 16 quadros de 96×96. | A4 e A8 · Arquiteturas do zero |
-| Como ela foi treinada? | Do zero no Jester (92,6% no teste); depois ajustada nas cinco bases, com 36 classes (84,0% no teste misto). | A8 · Do primeiro modelo ao final |
+| Como ela foi treinada? | Do zero no Jester (92,6% no teste); depois ajustada nas cinco bases. | A8 · Do primeiro modelo ao final |
 | Que outras arquiteturas testaram? | Seis, no mesmo protocolo: CNN 3D, larga, leve, ResNet 3D, CNN 2D + GRU e CNN 2D + Transformer. | A8 · Arquiteturas do zero |
-| E a GRU? | Rede pequena sobre os 21 pontos. Boa nos dados; ao vivo, nota baixa nos números. Não é usada. | A6 |
-| Por que tantos disparos falsos? | São números lidos com a mão parada à toa. A ativação pelo OK reduz, mas o OK ainda abre sozinho; é um próximo passo. | Slide 8 e A10 |
-| Como mediram os falsos disparos? | Vídeo contínuo do IPN, 13 pessoas fora do treino, mesmo laço das demos. | A11 |
+| E a GRU? | Rede pequena sobre os 21 pontos. Boa nos dados; ao vivo, nota baixa nos números. É um dos próximos passos, com vídeos da nossa câmera. | A6 |
+| Quantos comandos saem por engano? | Sem a ativação, 1,05 por minuto, todos números; com ela, 0,73 na simulação. Nenhum movimento por engano. Uma ativação mais exigente é o próximo passo. | A11 |
+| Como mediram isso? | Vídeo contínuo do IPN, 13 pessoas fora do treino, mesmo laço das demos. | A11 |
 | Que dados usaram? | Cinco bases, sempre separando as pessoas de treino e de teste. Jester: 148.092 vídeos. | A1 |
 | Por que não só a voz? | A voz também atrasa a reação e falha com ruído, conversa e ligação. | A2 |
 | Como iria para um carro? | Contagem de dedos na CPU; CNN no acelerador de IA; câmera infravermelha. | A12 |
 
-## O que não dizer
+## Cuidados
 
-- Não dizer que o modelo final tem 92% ou 95%: esses números são de versões que não funcionaram na webcam.
-- Não dizer que a ativação resolve os falsos: na simulação, reduz de 1,05 para 0,73 por minuto.
-- O teste ao vivo de 16/11 foi com um usuário, por 2 minutos, sem anotar gesto a gesto: serve para mostrar o efeito do veto, não é uma taxa de acerto.
+- O número do modelo final é 87,7%. Os 92% e 95% são de versões que não funcionaram na webcam.
+- "30% menos números por engano" vem de uma simulação nos vídeos do IPN, não de teste no carro.
+- O teste ao vivo de 16/11 foi com um usuário, por 2 minutos: mostra o efeito do veto, não é taxa de acerto.

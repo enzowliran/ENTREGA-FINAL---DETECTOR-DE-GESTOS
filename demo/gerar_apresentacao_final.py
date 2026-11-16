@@ -121,8 +121,11 @@ def tabela_modelos(d, f):
         ("GRU + CNN (média 0,3 / 0,7)", f"{br(f['acc_media'])}%", "—", f"{br(f['fl_media'], 2)} / min*"),
         ("GRU + CNN, números pela GRU", f"{br(f['acc_pesos'])}%", "—", f"{br(f['fl_final'], 2)} / min"),
         ("GRU + CNN, portão da GRU (mão parada)", f"{br(f['acc_mistura'])}%", "—", "—"),
-        ("CNN 3D + contagem de dedos + veto da CNN (testada)", f"{br(f.get('acc_veto'))}%", "—", f"{br(f.get('fl_veto'), 2)} / min"),
-        ("Usada ao vivo: CNN 3D + contagem de dedos", f"{br(f.get('acc_vivo'))}%", "—", f"{br(f.get('fl_vivo'), 2)} / min"),
+        (f"Os {f.get('n_comandos')} gestos do carro · {br(f.get('car_n'), 0)} amostras do teste misto · falsos por minuto no IPN, só comandos do carro", None),
+        ("CNN 3D pré-treinada + ajuste", f"{br(f.get('car_cnn'))}%", "—", f"{br(f.get('fl_cnn_carro'), 2)} / min"),
+        ("GRU + CNN, números pela GRU (testada)", f"{br(f.get('car_gru'))}%", "—", "—"),
+        ("CNN 3D + contagem de dedos + veto da CNN (testada)", f"{br(f.get('car_veto'))}%", "—", f"{br(f.get('fl_veto_carro'), 2)} / min"),
+        ("Usada ao vivo: CNN 3D + contagem de dedos", f"{br(f.get('car_acc'))}%", "—", f"{br(f.get('fl_vivo_carro'), 2)} / min"),
     ]
     out = ['<table class="tabela tabModelos"><tr><th>Modelo</th><th>Acerto</th><th>Falsa ativação (Jester)</th><th>Falsos disparos (IPN, vídeo real)</th></tr>']
     for l in linhas:
@@ -390,6 +393,16 @@ def main():
         "mix_hagrid": por_fonte.get("HaGRID", {}).get("n"), "mix_slovo": por_fonte.get("Slovo", {}).get("n"),
         "mix_driver": por_fonte.get("DriverMHG", {}).get("n"), "um_total": total_1, "dois_total": total_2,
     })
+    # o que deu certo, na régua dos gestos do carro
+    so_carro = "só comandos do carro"
+    cnn_carro = fvar.get("CNN pré-treinada sozinha", {}).get(so_carro, {})
+    f_sem, f_com = jok.get("sem_janela", {}).get("falsos"), jok.get("com_janela_do_ok", {}).get("falsos")
+    f.update({
+        "arq_n": len(arq.get("resultados", [])) or None, "car_gru_so": gru_carro.get("GRU sobre os pontos", {}).get("gestos_do_carro_pct"),
+        "mov_falsos": cnn_carro.get("ipn_falsos"), "fl_cnn_carro": cnn_carro.get("ipn_falsos_por_minuto"),
+        "fl_veto_carro": fvar.get("CNN 3D + contagem de dedos + veto da CNN (janela mais longa)", {}).get(so_carro, {}).get("ipn_falsos_por_minuto"),
+        "ok_menos_pct": round(100 * (1 - f_com / f_sem)) if f_sem else None,
+    })
     tab_contagem, campos_contagem = confianca_contagem()
     f.update(campos_contagem)
     # um falso disparo a cada N minutos, na regra medida
@@ -401,6 +414,7 @@ def main():
         "<!--F:GRAFICO_GESTOS-->": GF.grafico_gestos(gc, V.TRADUCAO),
         "<!--F:GESTOS_NUMEROS-->": tab_numeros, "<!--F:GESTOS_MOVIMENTOS-->": tab_movimentos,
         "<!--F:TABELA_ARQUITETURAS-->": GF.tabela_arquiteturas(arq),
+        "<!--F:GRAFICO_GANHO-->": GF.grafico_ganho(gc),
     }
     modelo = (RAIZ / "demo/apresentacao_final_modelo.html").read_text(encoding="utf-8")
     for k, v in trocas.items():

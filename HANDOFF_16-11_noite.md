@@ -75,6 +75,12 @@ O usuário testou o carro na webcam com o veto: **os números (1, 2, 4) não est
 - **Janela do OK (simulação, `src/fluxo_janela_ok.py`):** 1,05 → 0,73 comando falso por minuto; o OK abre sozinho 3,08 vezes por minuto no IPN. Proposta não aplicada: pinça < 0,3 e 0,6 s (0,19 falso por minuto). Precisa de teste ao vivo.
 - **Pendente:** foto da câmera para o A12 (o grupo ficou de mandar o arquivo); decidir se aperta o OK.
 
+## Ênfase no que deu certo (16/11, fim da noite; 35 slides)
+- **Regra do grupo para os slides:** destacar os bons resultados; usar sempre o acerto nos 11 gestos do carro (87,7%); não repetir o que deu errado. Os detalhes negativos ficam no apêndice, para o Q&A.
+- **Corpo (14):** 10 é novo, "O que construímos" (4 etapas + gráfico do ganho da contagem de dedos); 8 mostra 0 movimentos por engano e 30% menos números por engano; 11 é o acerto por gesto; 13 são os próximos passos.
+- **Fora dos slides, de propósito:** o 70,9% nas 36 classes. A simulação completa do OK (1,05 → 0,73; OK abre sozinho 3,08/min) está só no A11.
+- **Pendente:** foto da câmera para o A12; decidir se aperta o OK (pinça < 0,3 e 0,6 s); ensaio completo com a câmera.
+
 ## Regras do usuário
 - Decidir, avançar e reportar; respostas curtas e didáticas.
 - Registrar achados no `notebook.ipynb`.

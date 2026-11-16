@@ -127,3 +127,25 @@ def campos(gc, vivo):
         "vivo_min": round((vivo or {}).get("duracao_s", 0) / 60) or None,
         "vivo_um": porg.get("Um dedo"), "vivo_dois": porg.get("Dois dedos"), "vivo_quatro": porg.get("Quatro dedos"),
     }
+
+
+def grafico_ganho(gc):
+    """Barras: o que a contagem de dedos acrescentou à CNN 3D, nos números e nos 11 gestos do carro."""
+    n, g = gc.get("numeros", {}), gc.get("gestos_do_carro", {})
+    grupos = [("Números (1, 2 e 4 dedos)", n.get("cnn_sozinha_pct"), n.get("acerto_pct")),
+              ("Os 11 gestos do carro", g.get("cnn_sozinha_pct"), g.get("acerto_pct"))]
+    W, x0, larg = 1424, 470, 760
+    out, y = [], 0
+    for titulo, antes, depois in grupos:
+        out.append(f'<text x="0" y="{y + 34}" font-size="19" font-weight="600" fill="#0a1f44">{html.escape(titulo)}</text>')
+        for rotulo, v, cor, peso in (("CNN 3D sozinha", antes, "#9db9ea", "400"), ("Modelo final", depois, "#0a1f44", "600")):
+            if v is None:
+                continue
+            out.append(f'<text x="{x0 - 16}" y="{y + 17}" text-anchor="end" font-size="15" fill="#7b8594">{rotulo}</text>'
+                       f'<rect class="barraH" x="{x0}" y="{y}" width="{larg * v / 100:.1f}" height="24" fill="{cor}"/>'
+                       f'<text x="{x0 + larg * v / 100 + 14:.1f}" y="{y + 19}" font-size="19" font-weight="{peso}" fill="#0a1f44">{br(v)}%</text>')
+            y += 32
+        y += 22
+    y -= 22
+    out.append(f'<line x1="{x0}" x2="{x0}" y1="0" y2="{y}" stroke="#d6dce4"/>')
+    return f'<svg viewBox="0 0 {W} {y}" width="{W}" height="{y}" role="img" aria-label="Ganho da contagem de dedos">' + "".join(out) + "</svg>"
