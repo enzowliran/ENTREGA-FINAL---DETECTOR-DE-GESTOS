@@ -287,7 +287,13 @@
     </div>
   </section>
 
-  <!-- 5. Como funciona -->
+  <!-- 5. O que o sistema vê: câmera | pontos | 3D, ao vivo -->
+  <section class="slide demo" data-titulo="O que o sistema vê" data-demo="mao3d" data-param="tres=1">
+    <div class="cab"><h2>O que o sistema vê<span class="aoVivo">AO VIVO</span></h2><p class="sub">A mesma imagem em três etapas: a câmera, os 21 pontos da mão e a mão em 3D</p></div>
+    <div class="quadro"></div>
+  </section>
+
+  <!-- 6. Como funciona -->
   <section class="slide" data-titulo="Como funciona">
     <div class="cab an"><h2>Como funciona</h2><p class="sub">Três passos: ativar, reconhecer e executar. Uma pergunta decide quem reconhece o gesto</p></div>
     <div class="corpo an" style="--d:1">
@@ -339,12 +345,6 @@
         <div class="fx fxBase" style="left:0;top:522px;width:1250px"><b>Quem decide.</b> As duas partes analisam a câmera ao mesmo tempo. Com a mão parada e um número à mostra, vale a contagem de dedos; em todo o resto, a CNN 3D.</div>
       </div>
     </div>
-  </section>
-
-  <!-- 6. O que o sistema vê: câmera | pontos | 3D, ao vivo -->
-  <section class="slide demo" data-titulo="O que o sistema vê" data-demo="mao3d" data-param="tres=1">
-    <div class="cab"><h2>O que o sistema vê<span class="aoVivo">AO VIVO</span></h2><p class="sub">A mesma imagem em três etapas: a câmera, os pontos do MediaPipe e a mão em 3D</p></div>
-    <div class="quadro"></div>
   </section>
 
   <!-- 7. Os gestos -->
@@ -467,8 +467,8 @@
           <p>Um modelo que recebe só a mão reconstruída em 3D. Rosto, fundo e luz deixam de interferir: tudo fica padronizado.</p></div>
         <div class="col an" style="--d:2"><div class="n">02</div><h3>Gravar o cenário real</h3>
           <p>Vídeos da nossa câmera e de motoristas, para treinar e validar onde o sistema vai ser usado.</p></div>
-        <div class="col an" style="--d:3"><div class="n">03</div><h3>Ativação mais exigente</h3>
-          <p>Um sinal de OK ainda mais difícil de acontecer por acaso, medido dentro do carro.</p></div>
+        <div class="col an" style="--d:3"><div class="n">03</div><h3>Gestos sem soltar o volante</h3>
+          <p>Micro-gestos dos dedos, com as mãos no volante. A rede já conhece cinco deles; falta treinar com mais motoristas.</p></div>
         <div class="col an" style="--d:4"><div class="n">04</div><h3>Câmera infravermelha</h3>
           <p>Para funcionar à noite e com sol forte, numa placa embarcada no lugar do notebook.</p></div>
       </div>

@@ -8,13 +8,13 @@ Abrir com `demo\abrir_apresentacao_final.bat`. Os números citados aqui são os 
 
 | Quem | Slides | Tempo | Assunto |
 |---|---|---|---|
-| Pessoa 1 | 1 a 5 | 5min10 | O problema, a solução e como funciona |
-| Pessoa 2 | 6 a 9 | 4min45 | As duas demos ao vivo, os gestos e a ativação |
+| Pessoa 1 | 1 a 5 | 4min25 | O problema, a solução e a demo da mão |
+| Pessoa 2 | 6 a 9 | 5min30 | Como funciona, os gestos, a ativação e a demo do carro |
 | Pessoa 3 | 10 a 14 | 4min05 | O que construímos, resultados, impacto e próximos passos |
 
-Quem faz a demo do carro (slide 9) deve ser quem mais treinou os gestos na webcam.
+Quem faz a demo do carro (slide 9) deve ser quem mais treinou os gestos na webcam. A demo da mão (slide 5) é simples: basta mostrar a mão para a câmera.
 
-## Pessoa 1: o problema, a solução e como funciona (5min10)
+## Pessoa 1: o problema, a solução e a demo da mão (4min25)
 
 **1 · Capa (20 s).** Nome do projeto e do grupo. Uma frase: "comandar a central do carro sem tirar os olhos da estrada".
 
@@ -29,7 +29,11 @@ Guardar a Euro NCAP para o slide de impacto.
 
 **4 · A solução (1 min).** Uma câmera no painel reconhece gestos da mão. Gestos simples, feitos sem desviar o olhar. Um sinal com a mão liga o sistema; sem ele, nenhum gesto é executado.
 
-**5 · Como funciona (1min30).** Ler o slide da esquerda para a direita, em três passos.
+**5 · O que o sistema vê, ao vivo (45 s).** Passar a palavra com a demo: "antes de explicar, vejam o que a câmera enxerga". Mostrar a mão: a imagem da câmera, os 21 pontos e a mão em 3D. Abrir e fechar os dedos para a plateia ver os pontos acompanhando.
+
+## Pessoa 2: como funciona, os gestos, a ativação e a demo do carro (5min30)
+
+**6 · Como funciona (1min30).** Ler o slide da esquerda para a direita, em três passos.
 1. *Ativar:* o sinal de OK abre a janela em que os gestos valem. O detalhe vem no slide 8.
 2. *Reconhecer:* a cada instante o sistema faz uma pergunta: a mão está parada e mostrando de 1 a 4 dedos?
    - Se sim, é um número, e quem responde é a **contagem de dedos**: o MediaPipe marca 21 pontos da mão e uma regra de geometria conta os dedos esticados.
@@ -37,10 +41,6 @@ Guardar a Euro NCAP para o slide de impacto.
 3. *Executar:* o comando vai para a central, com resposta por voz.
 
 Frase para fechar: "número parado é com a contagem de dedos; movimento é com a CNN".
-
-## Pessoa 2: as demos, os gestos e a ativação (4min45)
-
-**6 · O que o sistema vê, ao vivo (45 s).** Mostrar a mão: a imagem da câmera, os 21 pontos e a mão em 3D. Abrir e fechar os dedos para a plateia ver os pontos acompanhando.
 
 **7 · Os gestos (40 s).** São 11 gestos, mais o OK, que ativa. Três números (1, 2 e 4 dedos) abrem Música, Ar-condicionado e Telefone. Oito movimentos fazem o resto: deslizar troca a música, polegar muda o volume, pare toca ou pausa. Não ler a tabela inteira.
 
@@ -78,7 +78,7 @@ Não falar o 87,7% aqui: ele é a abertura do slide seguinte.
 **13 · Próximos passos (50 s).** Do protótipo no notebook para dentro do carro:
 1. Treinar um modelo só com a mão em 3D: rosto, fundo e luz deixam de interferir.
 2. Gravar o cenário real, com a nossa câmera e motoristas.
-3. Uma ativação ainda mais exigente, medida dentro do carro.
+3. Gestos sem soltar o volante: micro-gestos dos dedos. A rede já conhece cinco deles; falta treinar com mais motoristas.
 4. Câmera infravermelha, para a noite, numa placa embarcada.
 
 **14 · Obrigado (10 s).** Abrir para perguntas.
