@@ -1654,7 +1654,7 @@ const MAPAS = {
   mao3d: {},  // só mostra as mãos; rolar a mão continua trocando o slide
 };
 MAPAS.carro3d = { "Swiping Left": "anterior", "Swiping Right": "proxima", "Thumb Up": "volume_mais", "Thumb Down": "volume_menos",
-  "Drumming Fingers": "tamborilar", "Pushing Hand Away": "alternar", "Pulling Hand In": "ajuda",
+  "Drumming Fingers": "tamborilar", "Stop Sign": "alternar", "Pushing Hand Away": "alternar", "Pulling Hand In": "ajuda",
   "One Finger": "pagina_1", "Two Fingers": "pagina_2", "Four Fingers": "pagina_4" };  // mesmo mapa do player.py (COMANDOS_CARRO3D)
 let tempoAviso;
 function aviso(texto) { const a = $("aviso"); a.textContent = texto; a.classList.add("ver"); clearTimeout(tempoAviso); tempoAviso = setTimeout(() => a.classList.remove("ver"), 1100); }

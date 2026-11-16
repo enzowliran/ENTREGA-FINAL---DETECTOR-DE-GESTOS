@@ -132,7 +132,7 @@ def tabela_modelos(d, f):
 
 # Comandos do carro 3D na apresentação final (o mesmo mapa de MAPAS.carro3d no modelo da apresentação e de demo/carro3d.html).
 MAPA_CARRO3D = {"Swiping Left": "anterior", "Swiping Right": "proxima", "Thumb Up": "volume_mais", "Thumb Down": "volume_menos",
-                "Drumming Fingers": "tamborilar", "Pushing Hand Away": "alternar", "Pulling Hand In": "ajuda",
+                "Drumming Fingers": "tamborilar", "Stop Sign": "alternar", "Pushing Hand Away": "alternar", "Pulling Hand In": "ajuda",
                 "One Finger": "pagina_1", "Two Fingers": "pagina_2", "Four Fingers": "pagina_4"}
 ACAO_CARRO3D = {"anterior": "música anterior", "proxima": "próxima música",
                 "volume_mais": "volume + (no ar, sobe o valor; mantido, atende a chamada)",
@@ -163,10 +163,10 @@ def tabela_gestos():
     comandos = MAPA_CARRO3D
     acao = ACAO_CARRO3D
     ordem = ["One Finger", "Two Fingers", "Four Fingers", "Swiping Right", "Swiping Left", "Thumb Up", "Thumb Down",
-             "Pushing Hand Away", "Drumming Fingers", "Pulling Hand In"]
+             "Stop Sign", "Pushing Hand Away", "Drumming Fingers", "Pulling Hand In"]
     com = [n for n in ordem if n in comandos and n in nomes]
     linhas = ['<tr class="vencedora"><td><b>OK 👌</b> (polegar tocando o indicador)</td><td>pontos da mão</td>'
-              '<td>ativa: bip e 4 s para dar um comando</td></tr>']
+              '<td>ativa: bip, voz e 7 s para dar um comando</td></tr>']
     for n in com:
         quem = "pontos + GRU" if n in NUMEROS else "CNN 3D"
         linhas.append(f'<tr><td><b>{html.escape(V.TRADUCAO.get(n, n))}</b></td><td>{quem}</td><td>{html.escape(acao.get(comandos[n], comandos[n]))}</td></tr>')

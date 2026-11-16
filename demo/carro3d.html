@@ -453,8 +453,8 @@ function analisarMaos() {
 // ======================================================================
 const PAGINAS = ["musica", "clima", "telefone"];
 const NOMES_PAGINA = { musica: "Música", clima: "Ar-condicionado", telefone: "Telefone" };
-// Números (pela GRU): 1 dedo = Música, 2 = Ar-condicionado, 4 = Telefone. Três dedos e o sinal de pare (cinco dedos)
-// ficam de fora para não se confundirem com o OK, que é o gesto de ativação.
+// Números (pela GRU): 1 dedo = Música, 2 = Ar-condicionado, 4 = Telefone. Três dedos fica de fora para não se confundir
+// com o OK, que é o gesto de ativação. O sinal de pare e empurrar a mão tocam/pausam, ligam/desligam e confirmam.
 const PAGINA_DO_NUMERO = { pagina_1: "musica", pagina_2: "clima", pagina_4: "telefone" };
 const CAMPOS = ["Temperatura", "Ventilação", "Direção do ar"], DIRECOES = ["Rosto", "Pés", "Rosto e pés", "Para-brisa"];
 const CONTATOS = ["Casa", "Trabalho", "Oficina"];
@@ -547,12 +547,12 @@ function anunciar(txt, fala = txt) { avisar(txt); falar([fala]); }
 function comandosAtuais() {
   const c = st.chamada, p = st.pagina;
   if (c && c.estado === "tocando") return [["Manter polegar para cima", "atende"], ["Manter polegar para baixo", "recusa"]];
-  if (st.menu) return [["Polegar para cima ou baixo", "navega"], ["Empurrar a mão", "toca a escolhida"], ["Tamborilar", "fecha o menu"]];
-  if (c) return [["Empurrar a mão", "encerra"]];
+  if (st.menu) return [["Polegar para cima ou baixo", "navega"], ["Pare ou empurrar a mão", "toca a escolhida"], ["Tamborilar", "fecha o menu"]];
+  if (c) return [["Pare ou empurrar a mão", "encerra"]];
   const paginas = ["1 · 2 · 4 dedos", "Música · Ar · Telefone"];
-  if (p === "clima") return [["Deslizar para os lados", "troca o ajuste"], ["Polegar", "muda o valor"], ["Empurrar a mão", st.clima.ligado ? "desliga" : "liga"], paginas];
-  if (p === "telefone") return [["Empurrar a mão", "simula uma chamada"], paginas];
-  return [["Deslizar à direita", "próxima música"], ["Deslizar à esquerda", "música anterior"], ["Empurrar a mão", st.tocando ? "pausa" : "toca"], ["Polegar", "volume"], ["Tamborilar os dedos", "menu de músicas"], paginas];
+  if (p === "clima") return [["Deslizar para os lados", "troca o ajuste"], ["Polegar", "muda o valor"], ["Pare ou empurrar a mão", st.clima.ligado ? "desliga" : "liga"], paginas];
+  if (p === "telefone") return [["Pare ou empurrar a mão", "simula uma chamada"], paginas];
+  return [["Deslizar à direita", "próxima música"], ["Deslizar à esquerda", "música anterior"], ["Pare ou empurrar a mão", st.tocando ? "pausa" : "toca"], ["Polegar", "volume"], ["Tamborilar os dedos", "menu de músicas"], paginas];
 }
 function atualizarLegenda() {
   $("legenda").innerHTML = `<h4>${NOMES_PAGINA[st.pagina]}${st.chamada ? " · chamada" : ""}</h4><b>👌 OK:</b> abre a janela de comandos (${JANELA_S} s)<br>` +
@@ -665,7 +665,7 @@ function desenharCentral() {
     g.fillStyle = "#fff"; g.font = "700 64px system-ui"; g.fillText("📞 " + st.chamada.nome, 110, y0 + 140);
     g.font = "500 34px system-ui"; g.fillStyle = "#b7e4c7";
     g.fillText(st.chamada.estado === "tocando" ? "Chamada recebida (simulada)" : "Em chamada · " + formatar((performance.now() - st.chamada.inicio) / 1000), 110, y0 + 200);
-    g.fillText(st.chamada.estado === "tocando" ? "Manter 👍 atende · manter 👎 recusa" : "Empurrar a mão encerra", 110, y0 + 260);
+    g.fillText(st.chamada.estado === "tocando" ? "Manter 👍 atende · manter 👎 recusa" : "Pare ou empurrar a mão encerra", 110, y0 + 260);
   } else if (st.menu && faixas.length) {
     g.fillStyle = "#9aa7b4"; g.font = "500 32px system-ui"; g.fillText("Menu de músicas", 60, y0 + 40);
     const inicio = Math.max(0, Math.min(st.selecionada - 2, faixas.length - 5));
@@ -821,7 +821,10 @@ function receber(e) {
   if (e.tipo === "erro") { $("conexao").textContent = e.mensagem; $("ponto").className = ""; }
   if (e.tipo === "comando" && e.comando) {
     const nome = e.gesto || e.classe || e.comando;
-    if (janelaAberta()) {
+    if (janelaAberta() && !okSolto && performance.now() - ultimoOk < 300) {
+      // o OK ainda está na mão: um "pare" aqui seria o próprio OK lido pela CNN
+      if (!e.repeticao) $("registro").innerHTML = `último comando do servidor: ${nome} → <b class="nao">ignorado (solte o OK primeiro)</b>`;
+    } else if (janelaAberta()) {
       const feito = executar(e.comando, !!e.repeticao);
       if (!e.repeticao) $("registro").innerHTML = `último comando do servidor: ${nome} → ${feito ? '<b class="sim">executado</b>' : '<b class="nao">sem efeito nesta tela</b>'}`;
     } else if (!e.repeticao) {
