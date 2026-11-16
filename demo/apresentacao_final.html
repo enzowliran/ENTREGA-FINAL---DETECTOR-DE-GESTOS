@@ -220,6 +220,11 @@
   .colunas.grande .col .n { font-size: 16px; }
   .textoApoio { font-size: 18px; line-height: 1.5; color: var(--texto); margin: 0 0 8px; } .textoApoio b { color: var(--marinho); }
 
+  .faixaOk { display: flex; align-items: center; gap: 28px; background: var(--gelo); border-bottom: 1px solid var(--linha); padding: 12px 28px; margin: 0 0 34px; }
+  .faixaOk svg { flex: none; }
+  .faixaOk b { font-size: 34px; font-weight: 800; color: var(--marinho); min-width: 330px; }
+  .faixaOk span { font-size: 30px; font-weight: 700; color: var(--marinho); }
+
 </style>
 <script src="/vendor/three.min.js"></script>
 </head>
@@ -360,8 +365,8 @@
     <div class="corpo">
       <div class="duas" style="grid-template-columns:1fr 1.25fr;gap:56px;align-items:start">
         <div class="an" style="--d:1">
-          <p class="tituloBloco">Ativação · geometria dos pontos da mão</p>
-          <table class="tabela tabGestos tabPrincipal"><tr><th></th><th>Gesto</th><th>O que faz</th></tr><tr class="vencedora"><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L44 136 M76 128 Q58 96 42 132 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Sinal de OK</b></td><td>ativa o sistema</td></tr></table>
+          <div id="blocoOk"><p class="tituloBloco">Ativação · geometria dos pontos da mão</p>
+          <table class="tabela tabGestos tabPrincipal"><tr><th></th><th>Gesto</th><th>O que faz</th></tr><tr class="vencedora"><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L44 136 M76 128 Q58 96 42 132 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Sinal de OK</b></td><td>ativa o sistema</td></tr></table></div>
           <p class="tituloBloco" style="margin-top:30px">Números · contagem de dedos</p>
           <table class="tabela tabGestos tabPrincipal"><tr><th></th><th>Gesto</th><th>Comando no carro</th></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L52 146 M76 128 L68 60 M94 126 L94 110 M112 128 L113 112 M127 140 L131 126" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Um dedo</b></td><td>abre Música</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L52 146 M76 128 L68 60 M94 126 L94 48 M112 128 L113 112 M127 140 L131 126" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Dois dedos</b></td><td>abre Ar-condicionado</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L52 146 M76 128 L68 60 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Quatro dedos</b></td><td>abre Telefone</td></tr></table>
           <p class="nota" style="margin-top:14px;font-size:16px">Os comandos atuam em três telas: Música, Ar-condicionado e Telefone.</p>
@@ -378,6 +383,7 @@
   <section class="slide" data-titulo="A ativação" data-fonte="Fonte: resultados do projeto · IPN Hand, 13 pessoas fora do treino, vídeo contínuo · src/fluxo_janela_ok.py (simulação)">
     <div class="cab an"><h2>A ativação pelo OK</h2><p class="sub">Um comando errado também distrai. Por isso nenhum gesto vale antes do sinal de OK</p></div>
     <div class="corpo">
+      <div class="faixaOk"><svg viewBox="0 12 196 190" width="84" height="84" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L44 136 M76 128 Q58 96 42 132 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg><b>Sinal de OK</b><span>ativa o sistema</span></div>
       <div class="duas" style="grid-template-columns:1fr 1fr;gap:80px;align-items:start">
         <div class="an" style="--d:1">
           <p class="tituloBloco">Como funciona</p>
@@ -2332,7 +2338,29 @@ function mostrar(n) {
   $("fonteRodape").textContent = s.dataset.fonte || "";
   $("rodape").classList.toggle("escuro", s.classList.contains("escuro"));
 }
-function ir(passo) { if (atual + passo >= 0 && atual + passo < slides.length) mostrar(atual + passo); }
+let animandoZoom = false;
+function zoomNoOk(depois) {
+  // Amplia o slide em torno do bloco do OK até ele ocupar a tela; aí entra o slide seguinte, que começa com a mesma linha.
+  const s = slides[atual], bloco = $("blocoOk"), rs = s.getBoundingClientRect(), rb = bloco.getBoundingClientRect();
+  if (!rb.width || !rs.width) return depois();
+  animandoZoom = true;
+  const e = rs.width / 1600, k = (rs.width / rb.width) * 0.86;
+  const cx = rb.left + rb.width / 2, cy = rb.top + rb.height / 2;
+  s.style.transformOrigin = `${(cx - rs.left) / e}px ${(cy - rs.top) / e}px`;
+  s.style.transition = "transform .95s cubic-bezier(.6,0,.2,1), opacity .35s ease, visibility .35s";
+  s.style.transform = `translate(${(rs.left + rs.width / 2 - cx) / e}px, ${(rs.top + rs.height * 0.42 - cy) / e}px) scale(${k})`;
+  setTimeout(() => {
+    depois();
+    setTimeout(() => { s.style.transition = ""; s.style.transform = ""; s.style.transformOrigin = ""; animandoZoom = false; }, 450);
+  }, 960);
+}
+function ir(passo) {
+  if (animandoZoom || atual + passo < 0 || atual + passo >= slides.length) return;
+  const destino = atual + passo;
+  if (passo === 1 && slides[atual].dataset.titulo === "Os gestos" && slides[destino].dataset.titulo === "A ativação" && $("blocoOk"))
+    return zoomNoOk(() => mostrar(destino));
+  mostrar(destino);
+}
 function mostrarTrava() {
   $("trava").className = "pilula" + (travada ? " travada" : "");
   $("trava").textContent = travada ? `Travada · pare destrava${bloqueados ? " · " + bloqueados + " bloqueados" : ""}` : "Livre · pare trava";

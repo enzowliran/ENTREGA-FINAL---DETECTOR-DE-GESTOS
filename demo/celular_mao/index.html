@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0a1f44">
+<title>Gestos ao volante · a sua mão em 3D</title>
+<!--
+  Página independente para abrir no celular (ou em qualquer navegador): a câmera do próprio aparelho, os 21 pontos da mão
+  pelo MediaPipe Hand Landmarker e a mão montada em 3D. Tudo roda no navegador: nenhuma imagem sai do aparelho.
+  Veio de demo/hand3d.html (modo de três telas), sem o servidor do projeto. A câmera só abre em endereço https (ou localhost).
+  Teste sem câmera: index.html?maoteste=1 (poses de exemplo).
+-->
+<style>
+  :root { --marinho: #0a1f44; --fundo: #06101f; --azul: #1e4fbf; --azul3: #9db9ea; --linha: #1f3a66; --texto: #c9d6ea; --fraco: #7f95b8; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--marinho); color: #fff; font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+               overflow: hidden; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+  body { display: flex; flex-direction: column; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  header { display: flex; align-items: baseline; gap: 14px; padding: 8px 14px 6px; border-bottom: 1px solid var(--linha); }
+  header .marca { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--azul3); white-space: nowrap; }
+  header h1 { margin: 0; font-size: 17px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
+  header #status { margin-left: auto; font-size: 12px; color: var(--fraco); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px 12px 8px; }
+  figure { margin: 0; min-width: 0; min-height: 0; display: flex; flex-direction: column; }
+  .tela { flex: 1; min-height: 0; position: relative; overflow: hidden; background: var(--fundo); border: 1px solid var(--linha); }
+  .tela canvas.quadro { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  #cena { position: absolute; inset: 0; touch-action: none; }
+  #cena canvas { display: block; }
+  figcaption { display: flex; align-items: baseline; gap: 8px; padding: 6px 2px 0; font-size: 13px; font-weight: 600; color: var(--texto); letter-spacing: .02em; }
+  figcaption span { color: var(--fraco); font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #recentrar { position: absolute; right: 8px; top: 8px; border: 1px solid rgba(157,185,234,.45); background: rgba(6,16,31,.8); color: #e3ecfa;
+               font: 600 12px "Segoe UI", system-ui, sans-serif; padding: 7px 10px; }
+  video { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+  .cobre { position: fixed; inset: 0; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+           padding: 20px 26px; background: var(--marinho); }
+  .cobre .topo { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--azul3); }
+  .cobre h2 { margin: 10px 0 0; font-size: clamp(26px, 6vw, 44px); font-weight: 600; letter-spacing: -.02em; }
+  .cobre .linha { width: 150px; height: 2px; background: #fff; margin: 16px 0 14px; }
+  .cobre p { margin: 0; max-width: 520px; font-size: 15px; line-height: 1.5; color: var(--texto); }
+  .cobre p.peq { margin-top: 12px; font-size: 12.5px; color: var(--fraco); }
+  .cobre button { margin-top: 20px; border: 0; background: var(--azul); color: #fff; font: 600 17px "Segoe UI", system-ui, sans-serif; padding: 14px 34px; }
+  .cobre button:disabled { opacity: .6; }
+  #erro { color: #ffd9d2; margin-top: 14px; display: none; }
+  .oculto { display: none !important; }
+  /* celular em pé: as duas telas ficam uma sobre a outra, com um lembrete de que deitado é melhor */
+  #dica { display: none; }
+  @media (orientation: portrait) {
+    main { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+    #dica { display: block; text-align: center; font-size: 12px; color: var(--fraco); padding: 0 12px 8px; }
+  }
+  @media (max-height: 430px) { header { padding: 5px 14px 4px; } header h1 { font-size: 15px; } figcaption { font-size: 12px; padding-top: 4px; } main { padding: 8px 12px 6px; } }
+</style>
+<script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<header><div class="marca">Gestos ao volante</div><h1>A sua mão em 3D</h1><div id="status"></div></header>
+<main>
+  <figure><div class="tela"><canvas class="quadro" id="quadro"></canvas></div>
+    <figcaption>1 · O que a câmera vê<span>21 pontos em cada mão</span></figcaption></figure>
+  <figure><div class="tela"><div id="cena"></div><button id="recentrar" type="button">Recentrar</button></div>
+    <figcaption>2 · A mão em 3D<span>arraste para girar</span></figcaption></figure>
+</main>
+<div id="dica">Fica melhor com o celular deitado.</div>
+<video id="video" playsinline muted autoplay></video>
+
+<div class="cobre" id="inicio">
+  <div class="topo">Deep Learning · Insper · 2026</div>
+  <h2>A sua mão em 3D</h2>
+  <div class="linha"></div>
+  <p>A câmera encontra 21 pontos da sua mão e monta a mão em 3D, ao vivo. É o primeiro passo do nosso sistema de gestos para o carro.</p>
+  <button id="ligar" type="button">Ligar a câmera</button>
+  <p class="peq">Tudo roda no seu aparelho: nenhuma imagem é enviada ou gravada.</p>
+  <p id="erro"></p>
+</div>
+
+<script>
+  // Se o código principal não carregar (sem internet, navegador antigo), avisa em vez de deixar o botão sem resposta.
+  setTimeout(function () {
+    if (window.__maoPronta) return;
+    var e = document.getElementById("erro");
+    e.style.display = "block";
+    e.textContent = "Não foi possível carregar a página. Confira a internet e recarregue; em celulares antigos, atualize o navegador.";
+  }, 15000);
+</script>
+<script type="module">
+import * as THREE from "three";
+import { criarMao, atualizarMao } from "./mao_modelo.js";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { FilesetResolver, HandLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+
+const $ = id => document.getElementById(id);
+const statusEl = $("status"), video = $("video"), quadro = $("quadro"), cena = $("cena"), erroEl = $("erro"), ligar = $("ligar");
+const PARAMS = new URLSearchParams(location.search);
+const MAOTESTE = PARAMS.get("maoteste");   // ?maoteste=1: poses de exemplo, sem câmera (para conferir a página)
+let HFOV = 66;                             // campo de visão horizontal estimado da câmera (graus)
+
+// ---------- cena 3D (metros; a câmera virtual fica no lugar da câmera do aparelho) ----------
+function tamanhoCena() { return [cena.clientWidth || 300, cena.clientHeight || 300]; }
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+renderer.setSize(...tamanhoCena());
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+cena.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x06101f);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 20);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.enablePan = false;
+function recentrar() { camera.position.set(0, 0, 0.3); controls.target.set(0, 0, -0.5); controls.update(); }
+function ajustarCamera() {
+  const vw = video.videoWidth || 1280, vh = video.videoHeight || 720;
+  camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(HFOV) / 2) * vh / vw));
+  const [cw, ch] = tamanhoCena();
+  camera.aspect = cw / ch;
+  camera.updateProjectionMatrix();
+}
+recentrar(); ajustarCamera();
+$("recentrar").addEventListener("click", recentrar);
+
+const sol = new THREE.DirectionalLight(0xffffff, 2.2);
+sol.position.set(0.4, 1.2, 0.3);
+sol.target.position.set(0, -0.3, -0.5);
+sol.castShadow = true;
+sol.shadow.mapSize.set(1024, 1024);
+Object.assign(sol.shadow.camera, { left: -0.6, right: 0.6, top: 0.6, bottom: -0.6, near: 0.1, far: 3 });
+sol.shadow.radius = 6;
+scene.add(sol, sol.target, new THREE.HemisphereLight(0xfff4ea, 0x202830, 0.6));
+const CHAO = -0.32;
+const chao = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), new THREE.ShadowMaterial({ opacity: 0.35 }));
+chao.rotation.x = -Math.PI / 2; chao.position.set(0, CHAO, -0.6); chao.receiveShadow = true;
+const grade = new THREE.GridHelper(2, 40, 0x2c4a7c, 0x16294d);
+grade.position.set(0, CHAO + 0.001, -0.6);
+scene.add(chao, grade);
+
+function redimensionar() { renderer.setSize(...tamanhoCena()); ajustarCamera(); }
+if ("ResizeObserver" in window) new ResizeObserver(redimensionar).observe(cena);
+addEventListener("resize", redimensionar);
+addEventListener("orientationchange", () => setTimeout(redimensionar, 300));
+
+// ---------- as duas mãos (modelo com malha e ossos: mao_modelo.js) ----------
+const ESPELHO = -1;   // a imagem da câmera chega sem espelhar
+const a1 = new THREE.Vector3(), a2 = new THREE.Vector3(), a3 = new THREE.Vector3(), nP = new THREE.Vector3(), tmp = new THREE.Vector3();
+function novaMao(cor) {
+  const grupo = new THREE.Group();
+  grupo.visible = false;
+  scene.add(grupo);
+  return { grupo, real: criarMao(cor, grupo), lado: 1, rotulo: null, pts: Array.from({ length: 21 }, () => new THREE.Vector3()), T: new THREE.Vector3(), nova: true };
+}
+const maos = [novaMao(0xe2a07c), novaMao(0xd8956f)];
+
+// De que lado fica a palma: vem do rótulo Left/Right do MediaPipe e, com os dedos dobrados, da direção em que dobram.
+let votoEspelho = 0;
+function ladoDaPalma(h, p, nc) {
+  let e = 0;
+  for (const [m, t] of [[5, 8], [9, 12], [13, 16], [17, 20]]) e += a3.subVectors(p[t], p[m]).dot(nc);
+  const doRotulo = h.rotulo === "Left" ? ESPELHO : h.rotulo === "Right" ? -ESPELHO : 0;
+  if (Math.abs(e) > 0.06) {
+    const curva = Math.sign(e);
+    if (doRotulo) votoEspelho = Math.max(-10, Math.min(10, votoEspelho + (curva === doRotulo ? 1 : -1)));
+    h.lado = curva;
+  } else if (doRotulo) h.lado = votoEspelho <= -4 ? -doRotulo : doRotulo;
+  return h.lado || 1;
+}
+
+// Posição da mão no espaço: a translação que faz os pontos 3D (em metros), vistos por uma câmera com o campo de visão
+// estimado, caírem sobre os pontos 2D detectados. Mínimos quadrados em (Tx, Ty, Tz).
+function translacao(world, img, W, H) {
+  const f = (W / 2) / Math.tan(THREE.MathUtils.degToRad(HFOV) / 2), cx = W / 2, cy = H / 2;
+  const A = [0, 0, 0, 0, 0, 0, 0, 0, 0], b = [0, 0, 0];
+  const linha = (r, y) => { for (let i = 0; i < 3; i++) { b[i] += r[i] * y; for (let j = 0; j < 3; j++) A[i * 3 + j] += r[i] * r[j]; } };
+  for (let i = 0; i < 21; i++) {
+    const P = world[i], u = img[i].x * W - cx, v = img[i].y * H - cy;
+    linha([f, 0, -u], u * P.z - f * P.x);
+    linha([0, f, -v], v * P.z - f * P.y);
+  }
+  const det = m => m[0] * (m[4] * m[8] - m[5] * m[7]) - m[1] * (m[3] * m[8] - m[5] * m[6]) + m[2] * (m[3] * m[7] - m[4] * m[6]);
+  const D = det(A);
+  if (Math.abs(D) < 1e-9) return null;
+  const col = c => { const m = A.slice(); for (let r = 0; r < 3; r++) m[r * 3 + c] = b[r]; return det(m) / D; };
+  return new THREE.Vector3(col(0), col(1), col(2));
+}
+function atualizar(h, world, img, W, H) {
+  const T = translacao(world, img, W, H);
+  if (!T || T.z < 0.08 || T.z > 3) return;
+  if (h.nova) h.T.copy(T); else h.T.lerp(T, 0.35);
+  for (let i = 0; i < 21; i++) {
+    const w = world[i];
+    tmp.set(-(w.x + h.T.x), -(w.y + h.T.y), -(w.z + h.T.z));   // câmera -> three, espelhado como um espelho
+    if (h.nova) h.pts[i].copy(tmp); else h.pts[i].lerp(tmp, 0.55);
+  }
+  h.nova = false;
+  nP.crossVectors(a1.subVectors(h.pts[5], h.pts[0]), a2.subVectors(h.pts[17], h.pts[0])).normalize();
+  atualizarMao(h.real, h.pts, ladoDaPalma(h, h.pts, nP));
+  h.grupo.visible = true;
+}
+
+// ---------- tela 1: a imagem espelhada com os 21 pontos ----------
+const OSSOS = [[0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 6], [6, 7], [7, 8], [5, 9], [9, 10], [10, 11], [11, 12],
+               [9, 13], [13, 14], [14, 15], [15, 16], [13, 17], [17, 18], [18, 19], [19, 20], [0, 17]];
+function desenharQuadro(fonte, pontos, W, H) {
+  if (quadro.width !== W || quadro.height !== H) { quadro.width = W; quadro.height = H; }
+  const g = quadro.getContext("2d");
+  if (fonte) { g.setTransform(-1, 0, 0, 1, W, 0); g.drawImage(fonte, 0, 0, W, H); g.setTransform(1, 0, 0, 1, 0, 0); }
+  else { g.fillStyle = "#06101f"; g.fillRect(0, 0, W, H); }
+  const px = p => [(1 - p.x) * W, p.y * H];
+  for (const lm of pontos) {
+    g.strokeStyle = "#5aa2ff"; g.lineWidth = Math.max(3, W / 240); g.lineCap = "round";
+    for (const [a, b] of OSSOS) { g.beginPath(); g.moveTo(...px(lm[a])); g.lineTo(...px(lm[b])); g.stroke(); }
+    g.fillStyle = "#ffffff";
+    for (const p of lm) { const [x, y] = px(p); g.beginPath(); g.arc(x, y, Math.max(3.5, W / 190), 0, Math.PI * 2); g.fill(); }
+  }
+}
+
+// ---------- poses de exemplo (?maoteste=1), para conferir a página sem câmera ----------
+function poseTeste(nome, espelhar) {
+  const fecha = [1.45, 1.6, 0.75], ab = [0.08, 0.1, 0.05];
+  const ANG = { aberta: [ab, [0.05, 0.08, 0.04], ab, [0.12, 0.12, 0.06]], punho: [fecha, fecha, fecha, fecha],
+    um: [[0.05, 0.06, 0.03], fecha, fecha, fecha], ok: [[0.62, 0.8, 0.5], [0.15, 0.2, 0.1], [0.2, 0.25, 0.12], [0.25, 0.28, 0.14]] }[nome] || [ab, ab, ab, ab];
+  const BASE = [[0.022, 0.035], [0.002, 0.040], [-0.017, 0.036], [-0.033, 0.026]];
+  const COMP = [[0.040, 0.024, 0.020], [0.045, 0.027, 0.021], [0.042, 0.026, 0.020], [0.032, 0.019, 0.018]];
+  const ABRE = [0.1, 0, -0.08, -0.18];
+  const c = Array.from({ length: 21 }, () => [0, 0, 0]);
+  c[0] = [0, -0.045, 0.004];
+  for (let f = 0; f < 4; f++) {
+    const m = 5 + 4 * f; let x = BASE[f][0], u = BASE[f][1], z = 0, th = 0;
+    c[m] = [x, u, z];
+    for (let j = 0; j < 3; j++) {
+      th += ANG[f][j];
+      x += Math.sin(ABRE[f]) * Math.cos(th) * COMP[f][j]; u += Math.cos(ABRE[f]) * Math.cos(th) * COMP[f][j]; z += Math.sin(th) * COMP[f][j];
+      c[m + 1 + j] = [x, u, z];
+    }
+  }
+  const soma = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
+  c[1] = [0.019, -0.03, 0.006]; c[2] = [0.038, -0.01, 0.014];
+  if (nome === "ok") { c[4] = soma(c[8], [0.005, -0.004, 0.003]); c[3] = soma(c[2].map((v, i) => (v + c[4][i]) / 2), [0.013, -0.005, 0.001]); }
+  else if (nome === "punho" || nome === "um") { c[3] = soma(c[2], [-0.004, 0.018, 0.026]); c[4] = soma(c[3], [-0.022, 0.006, 0.006]); }
+  else { c[3] = soma(c[2], [0.019, 0.022, 0.009]); c[4] = soma(c[3], [0.012, 0.022, 0.006]); }
+  const ry = espelhar ? -0.45 : 0.45, rx = -0.25, cy = Math.cos(ry), sy = Math.sin(ry), cx = Math.cos(rx), sx = Math.sin(rx);
+  const w = c.map(([X, U, Pz]) => {
+    const x = espelhar ? -X : X, y = -U, z = -Pz, x1 = x * cy + z * sy, z1 = -x * sy + z * cy;
+    return { x: x1, y: y * cx - z1 * sx, z: y * sx + z1 * cx };
+  });
+  const m = w.reduce((s, q) => ({ x: s.x + q.x / 21, y: s.y + q.y / 21, z: s.z + q.z / 21 }), { x: 0, y: 0, z: 0 });
+  return w.map(q => ({ x: q.x - m.x, y: q.y - m.y, z: q.z - m.z }));
+}
+function aplicarTeste() {
+  const poses = ["aberta", "punho", "um", "ok"];
+  const nome = poses.includes(MAOTESTE) ? MAOTESTE : poses[Math.floor(performance.now() / 2500) % poses.length];
+  const W = 1280, H = 720, f = (W / 2) / Math.tan(HFOV * Math.PI / 360), img = [];
+  [[0, false, -0.075], [1, true, 0.075]].forEach(([k, espelhar, tx]) => {
+    const w = poseTeste(nome, espelhar), T = { x: tx, y: 0, z: 0.42 };
+    const p = w.map(q => ({ x: (f * (q.x + T.x) / (q.z + T.z) + W / 2) / W, y: (f * (q.y + T.y) / (q.z + T.z) + H / 2) / H }));
+    maos[k].rotulo = espelhar ? "Right" : "Left";
+    atualizar(maos[k], w, p, W, H);
+    img.push(p);
+  });
+  desenharQuadro(null, img, W, H);
+  statusEl.textContent = "teste · " + nome;
+}
+
+// ---------- MediaPipe ----------
+let landmarker = null, delegado = "GPU";
+async function criarLandmarker(delegate) {
+  const fileset = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+  return HandLandmarker.createFromOptions(fileset, {
+    baseOptions: { modelAssetPath: "./hand_landmarker.task", delegate },
+    runningMode: "VIDEO", numHands: 2, minHandDetectionConfidence: 0.5, minTrackingConfidence: 0.5,
+  });
+}
+async function prepararLandmarker() {
+  try { landmarker = await criarLandmarker("GPU"); delegado = "GPU"; }
+  catch (e) { console.warn("GPU indisponível, usando CPU", e); landmarker = await criarLandmarker("CPU"); delegado = "CPU"; }
+}
+let trocando = false;
+async function trocarParaCPU(e) {   // alguns celulares criam o modelo na GPU e falham na primeira análise
+  if (trocando || delegado === "CPU") return;
+  trocando = true; console.warn("falha na GPU, trocando para CPU", e);
+  const velho = landmarker; landmarker = null;
+  try { velho.close(); } catch (x) {}
+  try { landmarker = await criarLandmarker("CPU"); delegado = "CPU"; } catch (x) { statusEl.textContent = "Este aparelho não conseguiu rodar o modelo."; }
+  trocando = false;
+}
+
+// ---------- laço ----------
+let ultimoTempo = -1, fps = 0, antes = performance.now();
+function laco() {
+  requestAnimationFrame(laco);
+  if (MAOTESTE) aplicarTeste();
+  else if (landmarker && video.readyState >= 2 && video.currentTime !== ultimoTempo) {
+    ultimoTempo = video.currentTime;
+    const W = video.videoWidth, H = video.videoHeight;
+    let res = null;
+    try { res = landmarker.detectForVideo(video, performance.now()); } catch (e) { trocarParaCPU(e); }
+    if (res) {
+      // da esquerda para a direita na visão espelhada, para cada mão manter a sua cor
+      const ordem = res.landmarks.map((_, i) => i).sort((a, b) => res.landmarks[b][0].x - res.landmarks[a][0].x);
+      maos.forEach((h, vaga) => {
+        const i = ordem[vaga];
+        if (i === undefined) { h.grupo.visible = false; h.nova = true; return; }
+        h.rotulo = res.handedness[i]?.[0]?.categoryName || null;
+        atualizar(h, res.worldLandmarks[i], res.landmarks[i], W, H);
+      });
+      desenharQuadro(video, res.landmarks, W, H);
+      const agora = performance.now();
+      fps = 0.9 * fps + 0.1 * (1000 / Math.max(agora - antes, 1)); antes = agora;
+      const n = res.landmarks.length, dist = maos.filter(h => h.grupo.visible).map(h => `${(h.T.z * 100).toFixed(0)} cm`).join(" e ");
+      statusEl.textContent = n ? `${n} ${n > 1 ? "mãos" : "mão"} · a ${dist} da câmera · ${fps.toFixed(0)} quadros/s` : "Mostre a mão para a câmera";
+    }
+  }
+  controls.update();
+  renderer.render(scene, camera);
+}
+laco();
+
+// ---------- ligar a câmera ----------
+function mostrarErro(texto) { erroEl.style.display = "block"; erroEl.textContent = texto; ligar.disabled = false; ligar.textContent = "Tentar de novo"; }
+ligar.addEventListener("click", async () => {
+  erroEl.style.display = "none"; ligar.disabled = true;
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia)
+    return mostrarErro("Este navegador não liberou a câmera. Abra o endereço com https no Chrome ou no Safari.");
+  try {
+    ligar.textContent = "Abrindo a câmera…";
+    const fluxo = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: "user", width: { ideal: 1280 }, height: { ideal: 720 } } });
+    video.srcObject = fluxo;
+    await video.play();
+    ligar.textContent = "Carregando o modelo…";
+    if (!landmarker) await prepararLandmarker();
+    ajustarCamera();
+    $("inicio").classList.add("oculto");
+    redimensionar();
+    statusEl.textContent = "Mostre a mão para a câmera";
+    try { if (navigator.wakeLock) await navigator.wakeLock.request("screen"); } catch (e) {}
+  } catch (e) {
+    console.error(e);
+    if (video.srcObject) { video.srcObject.getTracks().forEach(t => t.stop()); video.srcObject = null; }
+    mostrarErro(e.name === "NotAllowedError" ? "A câmera foi bloqueada. Libere a câmera para este site nas permissões do navegador e toque de novo."
+      : e.name === "NotFoundError" ? "Não encontrei uma câmera neste aparelho."
+      : e.name === "NotReadableError" ? "A câmera está em uso por outro aplicativo. Feche-o e tente de novo."
+      : "Não deu certo: " + (e.message || e.name));
+  }
+});
+addEventListener("pagehide", () => { if (video.srcObject) video.srcObject.getTracks().forEach(t => t.stop()); });
+if (MAOTESTE) $("inicio").classList.add("oculto");
+window.__maoPronta = true;
+</script>
+</body>
+</html>

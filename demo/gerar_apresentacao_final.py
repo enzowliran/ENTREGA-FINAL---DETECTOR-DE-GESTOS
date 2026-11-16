@@ -411,6 +411,7 @@ def main():
         "<!--F:GRAFICO_GESTOS-->": GF.grafico_gestos(gc, V.TRADUCAO),
         "<!--F:GESTOS_NUMEROS-->": tab_numeros, "<!--F:GESTOS_MOVIMENTOS-->": tab_movimentos, "<!--F:GESTOS_OK-->": tab_ok,
         "<!--F:IC_CAMERA-->": GF.icone_camera(), "<!--F:IC_GESTO-->": GF.icone_mao("Swiping Right", 92), "<!--F:IC_OK-->": GF.icone_mao("OK", 92),
+        "<!--F:IC_OK_GRANDE-->": GF.icone_mao("OK", 84),
         "<!--F:TABELA_ARQUITETURAS-->": GF.tabela_arquiteturas(arq),
     }
     modelo = (RAIZ / "demo/apresentacao_final_modelo.html").read_text(encoding="utf-8")
