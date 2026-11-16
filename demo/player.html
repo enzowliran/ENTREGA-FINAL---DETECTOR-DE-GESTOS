@@ -188,7 +188,7 @@ fonte.onmessage = ev => {
     const d = document.getElementById("detectado");
     d.textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
     d.className = e.e_comando ? "comando" : "";
-    document.getElementById("confianca").style.width = (e.confianca * 100) + "%";
+    document.getElementById("confianca").style.width = (e.confianca == null ? 100 : e.confianca * 100) + "%";  // null = número pela contagem de dedos
     document.getElementById("nDisparos").textContent = e.disparos;
     document.getElementById("nTaxa").textContent = e.por_minuto.toFixed(1).replace(".", ",");
     document.getElementById("nFps").textContent = Math.round(e.fps);

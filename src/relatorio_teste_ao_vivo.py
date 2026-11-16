@@ -9,6 +9,9 @@ sessão tiver também os gestos parecidos e o bloco sem gesto; sem eles, quase n
 
 Veredito por gesto: "90% comprovado" quando o limite inferior do intervalo de 95% da precisão é >= 90%.
 
+Os números (1 a 4 dedos) são decididos pela contagem dos dedos (fonte "regra"), sem porcentagem: nesses disparos a
+confiança gravada é null. A confiança média só usa os disparos da CNN, e o relatório conta quantos vieram de cada fonte.
+Sessões antigas (antes da regra sem porcentagem) não têm "fonte": contam como "cnn".
 Uso:
     demo\\python.bat src\\relatorio_teste_ao_vivo.py
 """
@@ -28,6 +31,17 @@ def wilson(certos, total, z=1.96):
     c = (p + z * z / (2 * total)) / (1 + z * z / total)
     m = z * math.sqrt(p * (1 - p) / total + z * z / (4 * total * total)) / (1 + z * z / total)
     return round(100 * (c - m), 1), round(100 * (c + m), 1)
+
+
+def fonte(d):
+    """"regra" (número pela contagem dos dedos, sem porcentagem) ou "cnn". Sessões antigas não gravavam a fonte."""
+    return d.get("fonte") or ("regra" if d.get("confianca") is None else "cnn")
+
+
+def media_confianca(ds):
+    """Média da confiança mostrada, só nos disparos que têm porcentagem (os da regra não têm)."""
+    cs = [d["confianca"] for d in ds if d.get("confianca") is not None]
+    return round(100 * sum(cs) / len(cs), 1) if cs else None
 
 
 def main():
@@ -57,7 +71,8 @@ def main():
             "pedido_vezes": len(ts), "acerto_quando_pedido_pct": round(100 * ac / len(ts), 1) if ts else None,
             "acerto_ic95": wilson(ac, len(ts)),
             "disparou_vezes": len(ds), "precisao_pct": round(100 * dc / len(ds), 1) if ds else None, "precisao_ic95": [lo, hi],
-            "confianca_media_mostrada_pct": round(100 * sum(d["confianca"] for d in ds) / len(ds), 1) if ds else None,
+            "confianca_media_mostrada_pct": media_confianca(ds),
+            "disparos_por_fonte": dict(collections.Counter(fonte(d) for d in ds)),
             "tempo_medio_s": round(sum(t["tempo_s"] for t in ts if t["resultado"] == "acerto") / max(ac, 1), 2) if ac else None,
             "errou_para": dict(collections.Counter(t["reconhecido"] for t in ts if t["resultado"] == "erro")),
             "disparos_errados_vieram_de": dict(collections.Counter(f'{d["fase"]}: {d["alvo"] or "sem gesto"}' for d in ds if not certo(d))),
@@ -69,6 +84,7 @@ def main():
                    "gesto, % em que era ele; intervalo de 95% de Wilson. '90% comprovado' = limite inferior >= 90%.",
         "sessoes": len(sessoes), "pessoas": sorted({s["pessoa"] for s in sessoes}),
         "tentativas": len(tentativas), "disparos": len(disparos),
+        "disparos_por_fonte": dict(collections.Counter(fonte(d) for d in disparos)),
         "acerto_geral_pct": round(100 * sum(t["resultado"] == "acerto" for t in tentativas if not t.get("parecido")) / max(1, sum(not t.get("parecido") for t in tentativas)), 1),
         "por_gesto": por_gesto,
         "gestos_parecidos": {"tentativas": len(ps), "dispararam_algo": sum(t["resultado"] == "erro" for t in ps),

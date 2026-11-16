@@ -356,7 +356,7 @@ function receber(e) {
   if (e.tipo === "estado") {
     el("gesto").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
     el("gesto").className = e.e_comando ? "golpe" : "";
-    el("confianca").style.width = (e.confianca * 100) + "%";
+    el("confianca").style.width = (e.confianca == null ? 100 : e.confianca * 100) + "%";  // null = número pela contagem de dedos
   }
   if (e.tipo === "comando") {
     if (GOLPE_DO_COMANDO[e.comando]) golpear(GOLPE_DO_COMANDO[e.comando], "gesto");

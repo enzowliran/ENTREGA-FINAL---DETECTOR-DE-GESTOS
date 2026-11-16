@@ -1055,7 +1055,8 @@ function desenharQuadro() {
   g.globalAlpha = 1;
   g.fillStyle = "#9aa7b4"; g.font = "500 30px system-ui"; g.fillText(st.tocando && faixas.length ? "♪ " + faixas[st.faixa].titulo.slice(0, 22) : "", 50, 300);
   g.textAlign = "right"; g.fillText("Gesto: " + st.gesto, W - 50, 90);
-  g.fillStyle = "#2d7ff9"; g.fillRect(W - 50 - 260 * st.conf, 110, 260 * st.conf, 8);
+  if (st.regra) { g.font = "500 24px system-ui"; g.fillText("contagem de dedos", W - 50, 128); g.font = "500 30px system-ui"; }
+  else { g.fillStyle = "#2d7ff9"; g.fillRect(W - 50 - 260 * st.conf, 110, 260 * st.conf, 8); }
   g.fillStyle = "#9aa7b4"; g.fillText(new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), W - 50, 300);
   g.textAlign = "left";
   g.restore();
@@ -1170,13 +1171,16 @@ function receber(e) {
     }
   }
   if (e.tipo === "estado") {
-    st.gesto = e.aquecendo ? "aquecendo…" : e.gesto; st.conf = e.confianca || 0;
-    $("gesto").textContent = st.gesto; $("gesto").className = e.e_comando ? "comando" : "";
+    // fonte "regra": número pela contagem dos dedos, sem porcentagem (confianca vem null); a barra fica cheia.
+    st.regra = e.fonte === "regra" && !e.aquecendo;
+    st.gesto = e.aquecendo ? "aquecendo…" : e.gesto;
+    st.conf = st.regra ? 1 : (e.confianca || 0);
+    $("gesto").textContent = st.regra ? `${st.gesto} · contagem de dedos` : st.gesto; $("gesto").className = e.e_comando ? "comando" : "";
     $("confianca").style.width = (st.conf * 100) + "%"; $("nMs").textContent = Math.round(e.ms || 0);
     if (e.pontos) {
       const q = e.pontos;
       $("pontosInfo").innerHTML = !q.mao ? "pontos da mão: <b>sem mão</b>"
-        : `pontos da mão: <b>${q.parada ? "parada" : "em movimento"}</b> · dedos: ${q.regra || "—"} · número: ${q.numero} ${Math.round(q.nota * 100)}%`;
+        : `pontos da mão: <b>${q.parada ? "parada" : "em movimento"}</b> · dedos: ${q.regra || "—"} · número: ${q.numero || "—"}`;
     } else $("pontosInfo").textContent = "pontos da mão: desligados (servidor sem --pontos)";
   }
 }

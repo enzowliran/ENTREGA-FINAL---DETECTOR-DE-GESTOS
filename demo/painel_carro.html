@@ -896,7 +896,7 @@ function receber(e) {
   if (e.tipo === "estado") {
     $("gesto").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
     $("gesto").className = e.e_comando ? "comando" : "";
-    $("confianca").style.width = (e.confianca * 100) + "%";
+    $("confianca").style.width = (e.confianca == null ? 100 : e.confianca * 100) + "%";  // null = número pela contagem de dedos
     $("nMs").textContent = Math.round(e.ms);
   }
 }

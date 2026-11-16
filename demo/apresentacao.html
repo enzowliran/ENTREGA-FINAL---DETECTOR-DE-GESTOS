@@ -1730,18 +1730,18 @@ function receberComando(e) {
 function registrarDisparo(e) {
   disparosTeste++; $("contaDisparos").textContent = disparosTeste;
   const li = document.createElement("li"), hora = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-  li.innerHTML = `<b></b><span>${hora} · ${Math.round((e.confianca || 0) * 100)}%</span>`; li.firstChild.textContent = e.gesto || e.classe;
+  li.innerHTML = `<b></b><span>${hora} · ${e.confianca == null ? "contagem de dedos" : Math.round(e.confianca * 100) + "%"}</span>`; li.firstChild.textContent = e.gesto || e.classe;
   $("listaDisparos").prepend(li);
   while ($("listaDisparos").children.length > 7) $("listaDisparos").lastChild.remove();
 }
 function receberEstado(e) {
-  $("miniGesto").textContent = e.aquecendo ? "aquecendo..." : `${e.gesto} · ${Math.round(e.confianca * 100)}%`;
+  $("miniGesto").textContent = e.aquecendo ? "aquecendo..." : `${e.gesto} · ${e.confianca == null ? "contagem de dedos" : Math.round(e.confianca * 100) + "%"}`;
   $("miniGesto").className = e.e_comando ? "comando" : "";
   if (slides[atual].dataset.demo === "teste") {
     $("gestoGrande").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
     $("gestoGrande").className = e.e_comando ? "comando" : "";
-    $("confTeste").style.width = (e.confianca * 100) + "%";
-    $("estadoTeste").textContent = `confiança ${Math.round(e.confianca * 100)}% · ${e.fps.toFixed(0)} fps · ${e.ms.toFixed(0)} ms por análise`;
+    $("confTeste").style.width = (e.confianca == null ? 100 : e.confianca * 100) + "%";
+    $("estadoTeste").textContent = `${e.confianca == null ? "pela contagem de dedos" : "confiança " + Math.round(e.confianca * 100) + "%"} · ${e.fps.toFixed(0)} fps · ${e.ms.toFixed(0)} ms por análise`;
   }
   if (slides[atual].dataset.demo && slides[atual].dataset.demo !== "teste") repassar(e);
 }

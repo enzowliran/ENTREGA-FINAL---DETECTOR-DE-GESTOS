@@ -88,15 +88,28 @@ class Gatilho:
     Os gestos de `repetiveis` são a exceção: mantidos, voltam a disparar a cada `repetir` segundos.
     A repetição exige o gesto na janela mais curta (`presente`): as janelas longas ainda enxergam um
     gesto rápido alguns segundos depois de a mão sair, o que contaria como se ele continuasse.
+
+    Com `pela_regra=True` (números de 1 a 4 dedos decididos pela contagem geométrica dos dedos, ver Pontos), não há
+    porcentagem: o gesto vale como detectado sem o limiar e sem as N análises seguidas, porque a própria regra já exige
+    a mesma contagem em 5 dos 6 últimos quadros com a mão parada. Continuam valendo a pausa depois de um disparo e a
+    exigência de soltar o gesto para repetir. Para não contar uma falha de leitura de um instante como "soltou", o
+    mesmo número só volta a disparar se a regra deixou de vê-lo por pelo menos `SOLTAR_REGRA` segundos.
     """
+
+    SOLTAR_REGRA = 0.5  # segundos sem o número para valer como "soltou" (a própria regra leva 0,5 s para confirmar)
 
     def __init__(self, limiar, seguidas, pausa, repetiveis=(), repetir=2.0):
         self.limiar, self.seguidas, self.pausa = limiar, seguidas, pausa
         self.repetiveis, self.repetir = set(repetiveis), repetir
         self.atual, self.contagem, self.fim_pausa, self.armado = None, 0, 0.0, True
         self.proxima_repeticao, self.foi_repeticao = 0.0, False
+        self.regra_nome, self.regra_visto = None, -1e9  # último número visto pela regra e quando
+        self.regra_disparou = None  # número que já disparou e continua mantido
 
-    def atualizar(self, nome, confianca, agora, presente=True):
+    def atualizar(self, nome, confianca, agora, presente=True, pela_regra=False):
+        """Devolve o nome do gesto se ele deve disparar agora, senão None. `confianca` é ignorada com `pela_regra`."""
+        if pela_regra:
+            return self._pela_regra(nome, agora)
         if nome not in COMANDOS or confianca < self.limiar:
             self.atual, self.contagem, self.armado = None, 0, True
             return None
@@ -113,6 +126,21 @@ class Gatilho:
             self.foi_repeticao = True
             return nome
         return None
+
+    def _pela_regra(self, nome, agora):
+        """Número decidido pela contagem dos dedos: dispara uma vez, sem limiar nem análises seguidas."""
+        mantido = nome == self.regra_nome and agora - self.regra_visto < self.SOLTAR_REGRA
+        self.regra_nome, self.regra_visto = nome, agora
+        if not mantido:
+            self.regra_disparou = None  # soltou (ou é outro número): pode disparar de novo
+        # Interrompe a contagem de análises seguidas da CNN: o gesto atual passa a ser este número.
+        self.atual, self.contagem, self.foi_repeticao = nome, 1, False
+        if nome not in COMANDOS or self.regra_disparou == nome or agora < self.fim_pausa:
+            self.armado = self.regra_disparou != nome
+            return None
+        self.regra_disparou, self.armado = nome, False
+        self.fim_pausa, self.proxima_repeticao = agora + self.pausa, agora + self.repetir
+        return nome
 
 
 def abrir_tela_cheia(endereco):
@@ -170,31 +198,33 @@ def esperar_camera(args, estado, parar, captura):
 
 
 class Pontos:
-    """Pontos da mão (MediaPipe) + GRU, combinados com a CNN como em src/fluxo_combinado.py.
+    """Pontos da mão (MediaPipe) e a regra de contagem dos dedos, ao lado da CNN.
 
-    A cada quadro do buffer da CNN (12 por segundo), o MediaPipe acha a mão no quadro inteiro. Em cada análise, a GRU
-    lê os pontos das mesmas janelas da CNN. Nos números (1 a 4 dedos) decide a
-    GRU, com a mão parada; nos outros, a CNN (ver combinar).
+    A cada quadro do buffer da CNN (12 por segundo), o MediaPipe acha a mão no quadro inteiro. Em cada análise:
+      - números (1 a 4 dedos): decide SÓ a regra geométrica. Se a mão está parada (mao_parada) e a contagem dos dedos é
+        a mesma em 5 dos 6 últimos quadros (contagem_estavel), o número está detectado. Não há porcentagem: a
+        estabilidade em 5 de 6 quadros é a própria confirmação (o Gatilho dispara sem limiar, ver Gatilho._pela_regra);
+      - todo o resto: decide a CNN, com as classes de número zeradas e as notas renormalizadas (ver combinar).
+    A GRU de --pontos não entra em nenhuma decisão e não é mais rodada ao vivo (menos carga na placa de vídeo). O arquivo
+    continua sendo exigido por --pontos, que é o que liga este caminho: dele só se confere que as classes batem com as da CNN.
     """
 
     def __init__(self, args, nomes, dispositivo):
         import pontos_mao as P
-        import treinar_pontos_jester as TP
-        self.P, self.TP, self.dispositivo = P, TP, dispositivo
-        e = torch.load(args.pontos, map_location=dispositivo, weights_only=False)
+        self.P, self.dispositivo = P, dispositivo
+        e = torch.load(args.pontos, map_location="cpu", weights_only=False)
         if list(e["nomes"]) != list(nomes):
             raise SystemExit("A GRU e a CNN precisam ter as mesmas classes, na mesma ordem.")
-        self.gru = TP.Rede(e["entrada"], len(nomes)).to(dispositivo).eval()
-        self.gru.load_state_dict(e["modelo"])
-        self.media, self.desvio = e["media"], e["desvio"]
+        del e  # a GRU em si não é usada (ver a docstring da classe)
         self.nomes = list(nomes)
         self.numeros = np.array([nomes.index(n) for n in ("One Finger", "Two Fingers", "Three Fingers", "Four Fingers") if n in nomes])
         self.detector = P.DetectorMao(video=True)
-        self.ultimo = {"mao": False, "numero": None, "nota": 0.0, "parada": False, "regra": None}
-        print(f"Pontos da mão + GRU ligados ({Path(args.pontos).name}): números pela GRU (com a mão parada), o resto pela CNN", flush=True)
+        self.ultimo = {"mao": False, "numero": None, "nota": None, "parada": False, "regra": None}
+        print("Pontos da mão ligados: números (1 a 4 dedos) pela contagem dos dedos com a mão parada, o resto pela CNN"
+              f" (a GRU de {Path(args.pontos).name} não é usada)", flush=True)
 
     def quadro(self, quadro, agora):
-        """Pontos da mão principal de um quadro, no formato da GRU."""
+        """Pontos da mão principal de um quadro: (imagem, mundo, presença, nota do MediaPipe, altura e largura)."""
         mao = self.detector.detectar(quadro, agora)
         img, world = np.zeros((2, 21, 3), np.float32), np.zeros((2, 21, 3), np.float32)
         pres, score = np.zeros(2, bool), np.zeros(2, np.float32)
@@ -230,53 +260,27 @@ class Pontos:
         mais, vezes = max(((q, validas.count(q)) for q in set(validas)), key=lambda t: t[1])
         return mais if vezes >= minimo else None
 
-    @torch.no_grad()
-    def combinar(self, notas_cnn, lista, janelas):
-        """notas_cnn: [janelas, classes], na ordem de `janelas` (em quadros). Devolve as notas combinadas.
+    def combinar(self, notas_cnn, lista):
+        """notas_cnn: [janelas, classes]; lista: pontos dos últimos quadros. Devolve (notas, numero).
 
-        A GRU diz se é um número (a soma das notas dela nos números) e qual é. Se for, a nota de cada número é a da GRU;
-        o resto (1 - essa soma) fica com a CNN, sem as classes de número. Com a mão em movimento, número não vale.
-        No teste misto: 91,2% de acerto (Jester 93,1%, números 95,7%) e 97% dos números certos com nota >= 0,7.
+        `numero` é o nome do número (One/Two/Three/Four Fingers) detectado pela regra, ou None. A contagem geométrica
+        dos dedos é o juiz dos números (ao vivo, a GRU lia a mão aberta como "quatro dedos" e ficava com nota baixa nos
+        números, por isso saiu):
+          - mão parada e 1 a 4 dedos estáveis em 5 de 6 quadros: é esse número, sem nota inventada;
+          - 5 dedos, só o polegar ou punho, mão em movimento ou leitura instável: não é número; decide a CNN.
+        `notas` é sempre a resposta da CNN sem as classes de número (zeradas e renormalizadas): é o que vale quando
+        `numero` é None. Quando há número, quem chama não deve usar `notas` para decidir (nem para suavizar).
         """
-        xs, ms = [], []
-        for n in janelas:
-            q = lista[-n:]
-            c = {"img": np.stack([x[0] for x in q]), "world": np.stack([x[1] for x in q]), "present": np.stack([x[2] for x in q]),
-                 "score": np.stack([x[3] for x in q]), "altura_largura": q[-1][4]}
-            x = self.TP.atributos(c)[0]
-            x = np.where(x[:, -2:-1] > 0, (x - self.media) / self.desvio, 0).astype(np.float32)
-            a, m = self.TP.fixar(x)
-            xs.append(a)
-            ms.append(m)
-        notas_gru = self.gru(torch.from_numpy(np.stack(xs)).to(self.dispositivo),
-                             torch.from_numpy(np.stack(ms)).to(self.dispositivo)).float().softmax(1).cpu().numpy()
         parada = self.mao_parada(lista)
         regra = self.contagem_estavel(lista) if parada else None
         num = self.numeros
-        # A contagem geométrica dos dedos é o juiz (ao vivo, a GRU ficava com nota baixa nos números — treinou quase só
-        # com fotos em que a mão ocupa a imagem — e lia a mão aberta como "quatro dedos", roubando a nota do pare):
-        #  - 1 a 4 dedos estáveis com a mão parada: é número; a nota dele é a maior entre a GRU e 0,9;
-        #  - 5 dedos, só o polegar ou punho: não é número; decide a CNN (pare, polegares);
-        #  - mão em movimento ou leitura instável: decide a CNN.
-        notas_num = notas_gru[:, num].copy()
-        if parada and regra in self.nomes and self.nomes.index(regra) in num:
-            k = list(num).index(self.nomes.index(regra))
-            notas_num[:, k] = np.maximum(notas_num[:, k], 0.9)
-            excesso = notas_num.sum(1, keepdims=True)
-            notas_num = np.where(excesso > 0.98, notas_num * (0.98 / excesso), notas_num)
-            pn = notas_num.sum(1, keepdims=True)
-        else:
-            pn = np.zeros((len(notas_gru), 1), np.float32)
+        numero = regra if regra in self.nomes and self.nomes.index(regra) in num else None
         outros = notas_cnn.copy()
         outros[:, num] = 0
         outros /= np.maximum(outros.sum(1, keepdims=True), 1e-9)
-        p = (1 - pn) * outros
-        if pn.any():
-            p[:, num] = notas_num
-        k = int(notas_num[0].argmax())  # janela mais curta
-        self.ultimo = {"mao": bool(lista[-1][2][0]), "parada": parada, "numero": self.nomes[num[k]], "nota": float(notas_num[0, k] if pn.any() else notas_gru[0, num[k]]),
-                       "regra": regra}
-        return p
+        # "numero" e "nota" ficam no evento de estado para as páginas não quebrarem: número da regra (ou None), sem nota.
+        self.ultimo = {"mao": bool(lista[-1][2][0]), "parada": parada, "numero": numero, "nota": None, "regra": regra}
+        return outros, numero
 
 
 def laco_modelo(args, estado, parar):
@@ -319,7 +323,6 @@ def laco_modelo(args, estado, parar):
     maximo = int(round(max(args.janelas) * V.QUADROS_POR_SEGUNDO))
     minimo = int(round(min(args.janelas) * V.QUADROS_POR_SEGUNDO))
     buffer, historico = collections.deque(maxlen=maximo), collections.deque(maxlen=args.suavizar)
-    buffer_pontos = collections.deque(maxlen=maximo)  # pontos da mão de cada quadro do buffer (com --pontos)
     gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if (args.painel or args.apresentacao) else (), args.repetir)
     ultimo_quadro, ultima_inferencia, ultimo_video, ultimo_estado = 0.0, 0.0, 0.0, 0.0
     tempos = collections.deque(maxlen=30)
@@ -328,7 +331,7 @@ def laco_modelo(args, estado, parar):
     while not parar.is_set():
         if captura is not None and estado.soltar_camera.is_set():
             captura = esperar_camera(args, estado, parar, captura)
-            buffer.clear(); historico.clear(); buffer_pontos.clear()
+            buffer.clear(); historico.clear()
             if captura is None:
                 break
             continue
@@ -344,8 +347,6 @@ def laco_modelo(args, estado, parar):
         tempos.append(agora)
         if agora - ultimo_quadro >= 1 / V.QUADROS_POR_SEGUNDO:
             buffer.append(V.preparar_quadro(quadro))
-            if pontos is not None:
-                buffer_pontos.append(pontos.quadro(quadro, agora))
             ultimo_quadro = agora
         if len(buffer) >= minimo and agora - ultima_inferencia >= args.intervalo:
             t0 = time.perf_counter()
@@ -358,9 +359,6 @@ def laco_modelo(args, estado, parar):
             with torch.no_grad(), torch.autocast(dispositivo, dtype=torch.bfloat16):
                 x = (torch.from_numpy(np.stack(lotes)).to(dispositivo) - 127.5) / 127.5
                 todas = modelo(x).float().softmax(1).cpu().numpy()
-            if pontos is not None:
-                usadas = [int(round(d * V.QUADROS_POR_SEGUNDO)) for d in args.janelas if len(lista) >= int(round(d * V.QUADROS_POR_SEGUNDO))]
-                todas = pontos.combinar(todas, list(buffer_pontos), usadas)
             escolhida = int(np.argmax([q[indices_gesto].max() for q in todas]))
             historico.append(todas[escolhida])
             media = np.mean(historico, axis=0)
@@ -374,14 +372,14 @@ def laco_modelo(args, estado, parar):
             if disparo and disparo in COMANDOS:
                 estado.disparos += 1
                 estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "classe": disparo, "gesto": V.TRADUCAO.get(disparo, disparo),
-                                 "confianca": confianca, "repeticao": gatilho.foi_repeticao})
+                                 "confianca": confianca, "fonte": "cnn", "repeticao": gatilho.foi_repeticao})
         if agora - ultimo_video >= 0.05:
             publicar_quadros(estado, quadro, agora)
             ultimo_video = agora
         if agora - ultimo_estado >= 0.2:
             fps = (len(tempos) - 1) / max(tempos[-1] - tempos[0], 1e-3)
             minutos = max((agora - estado.inicio) / 60, 1e-3)
-            estado.publicar({"tipo": "estado", "gesto": V.TRADUCAO.get(nome_atual, nome_atual),
+            estado.publicar({"tipo": "estado", "gesto": V.TRADUCAO.get(nome_atual, nome_atual), "fonte": "cnn",
                              "e_comando": nome_atual in COMANDOS, "confianca": confianca, "disparos": estado.disparos,
                              "por_minuto": estado.disparos / minutos, "fps": fps, "ms": ms,
                              "aquecendo": len(buffer) < minimo})
@@ -391,11 +389,25 @@ def laco_modelo(args, estado, parar):
 
 
 def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pontos, dispositivo):
-    """Laço do modelo final (CNN + pontos da mão + GRU), com NVIDIA.
+    """Laço do modelo final (CNN + contagem dos dedos pelos pontos da mão), com NVIDIA.
 
     A câmera lê numa thread própria e guarda só o quadro mais recente; este laço pega um quadro a cada 1/12 s, roda o
-    MediaPipe nele e, a cada --intervalo, a CNN e a GRU. Assim a câmera fica a ~30 quadros/s e o modelo recebe 12
-    quadros por segundo de verdade, como no treino.
+    MediaPipe nele e, a cada --intervalo, a CNN e a regra dos dedos. Assim a câmera fica a ~30 quadros/s e o modelo
+    recebe 12 quadros por segundo de verdade, como no treino.
+
+    Decisão em cada análise:
+      - se a regra dá um número (mão parada e mesma contagem de 1 a 4 dedos em 5 dos 6 últimos quadros), o gesto é esse
+        número, sem porcentagem; vai ao Gatilho com pela_regra=True (sem limiar e sem análises seguidas, mas com a
+        pausa e a exigência de soltar). O histórico de suavização é zerado, para a CNN recomeçar limpa depois;
+      - senão, o caminho da CNN de sempre: números zerados, escolha da janela, média das últimas --suavizar análises e
+        gatilho com --limiar em --seguidas análises.
+
+    Contrato dos eventos (as páginas dependem dele):
+      "estado":  gesto (traduzido), confianca (0 a 1, ou null quando fonte == "regra"), fonte ("regra" ou "cnn"),
+                 e_comando, disparos, por_minuto, fps, ms, aquecendo,
+                 pontos {mao, parada, numero (número da regra ou null), nota (sempre null), regra},
+                 cnn {gesto, confianca} (o que a CNN sozinha dizia, inclusive nos números).
+      "comando": comando, classe, gesto, confianca (null quando fonte == "regra"), fonte, repeticao.
     """
     maximo = int(round(max(args.janelas) * V.QUADROS_POR_SEGUNDO))
     minimo = int(round(min(args.janelas) * V.QUADROS_POR_SEGUNDO))
@@ -439,7 +451,7 @@ def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pont
     leitor.start()
     gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if (args.painel or args.apresentacao) else (), args.repetir)
     proximo_quadro, ultima_inferencia, ultimo_estado = time.time(), 0.0, 0.0
-    nome_atual, confianca, ms = "Aquecendo", 0.0, 0.0
+    nome_atual, confianca, fonte, ms = "Aquecendo", 0.0, "cnn", 0.0
     cnn_sozinha = None  # o que a CNN dizia antes de juntar com os pontos (mostrado no teste ao vivo)
     passo = 1 / V.QUADROS_POR_SEGUNDO
     while not parar.is_set() and not camera["parou"]:
@@ -458,38 +470,42 @@ def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pont
             lista, lista_pontos = list(buffer), list(buffer_pontos)
         if len(lista) >= minimo and agora - ultima_inferencia >= args.intervalo:
             t0 = time.perf_counter()
-            lotes, usadas = [], []
+            lotes = []
             for duracao in args.janelas:
                 n = int(round(duracao * V.QUADROS_POR_SEGUNDO))
                 if len(lista) >= n:
                     indices = np.round(np.linspace(len(lista) - n, len(lista) - 1, V.N_FRAMES)).astype(int)
                     lotes.append(np.stack([lista[i] for i in indices]))
-                    usadas.append(n)
             with torch.no_grad(), torch.autocast(dispositivo, dtype=torch.bfloat16):
                 x = (torch.from_numpy(np.stack(lotes)).to(dispositivo) - 127.5) / 127.5
-                todas = modelo(x).float().softmax(1).cpu().numpy()
-            so_cnn = todas.copy()
-            todas = pontos.combinar(todas, lista_pontos, usadas)
+                so_cnn = modelo(x).float().softmax(1).cpu().numpy()
+            todas, numero = pontos.combinar(so_cnn, lista_pontos)  # todas: CNN sem as classes de número
             escolhida = int(np.argmax([q[indices_gesto].max() for q in todas]))
             k = int(so_cnn[escolhida].argmax())
             cnn_sozinha = {"gesto": V.TRADUCAO.get(nomes[k], nomes[k]), "confianca": float(so_cnn[escolhida][k])}
-            historico.append(todas[escolhida])
-            media = np.mean(historico, axis=0)
-            melhor = int(media.argmax())
-            nome_atual, confianca = nomes[melhor], float(media[melhor])
+            if numero is not None:
+                # Número pela contagem dos dedos: detectado, sem porcentagem. A média da CNN recomeça do zero depois.
+                historico.clear()
+                nome_atual, confianca, fonte = numero, None, "regra"
+                disparo = gatilho.atualizar(numero, None, agora, pela_regra=True)
+            else:
+                historico.append(todas[escolhida])
+                media = np.mean(historico, axis=0)
+                melhor = int(media.argmax())
+                nome_atual, confianca, fonte = nomes[melhor], float(media[melhor]), "cnn"
+                curta = todas[0]
+                presente = nomes[int(curta.argmax())] == nome_atual and float(curta.max()) >= args.limiar
+                disparo = gatilho.atualizar(nome_atual, confianca, agora, presente)
             ms = (time.perf_counter() - t0) * 1000
             ultima_inferencia = agora
-            curta = todas[0]
-            presente = nomes[int(curta.argmax())] == nome_atual and float(curta.max()) >= args.limiar
-            disparo = gatilho.atualizar(nome_atual, confianca, agora, presente)
             if disparo and disparo in COMANDOS:
                 estado.disparos += 1
                 estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "classe": disparo, "gesto": V.TRADUCAO.get(disparo, disparo),
-                                 "confianca": confianca, "repeticao": gatilho.foi_repeticao})
+                                 "confianca": confianca, "fonte": fonte, "repeticao": gatilho.foi_repeticao})
         if agora - ultimo_estado >= 0.2:
             minutos = max((agora - estado.inicio) / 60, 1e-3)
             u = pontos.ultimo
-            estado.publicar({"tipo": "estado", "gesto": V.TRADUCAO.get(nome_atual, nome_atual),
+            estado.publicar({"tipo": "estado", "gesto": V.TRADUCAO.get(nome_atual, nome_atual), "fonte": fonte,
                              "e_comando": nome_atual in COMANDOS, "confianca": confianca, "disparos": estado.disparos,
                              "por_minuto": estado.disparos / minutos, "fps": camera["fps"], "ms": ms,
                              "aquecendo": len(lista) < minimo,
@@ -589,12 +605,12 @@ def laco_separado(args, estado, parar, captura, modelo, nomes, indices_gesto):
             if disparo:
                 estado.disparos += 1
                 estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "classe": disparo, "gesto": V.TRADUCAO[disparo],
-                                 "confianca": confianca, "repeticao": gatilho.foi_repeticao})
+                                 "confianca": confianca, "fonte": "cnn", "repeticao": gatilho.foi_repeticao})
         else:
             time.sleep(0.01)
         if agora - ultimo_estado >= 0.2:
             minutos = max((agora - estado.inicio) / 60, 1e-3)
-            estado.publicar({"tipo": "estado", "gesto": V.TRADUCAO.get(nome_atual, nome_atual),
+            estado.publicar({"tipo": "estado", "gesto": V.TRADUCAO.get(nome_atual, nome_atual), "fonte": "cnn",
                              "e_comando": nome_atual in COMANDOS, "confianca": confianca, "disparos": estado.disparos,
                              "por_minuto": estado.disparos / minutos, "fps": camera["fps"], "ms": ms,
                              "aquecendo": len(lista) < minimo})
@@ -795,7 +811,7 @@ def criar_servidor(args, estado, parar):
                         estado.quer_cru -= 1
             elif url.path == "/testar" and args.simular:
                 comando = parse_qs(url.query).get("c", ["proxima"])[0]
-                estado.publicar({"tipo": "comando", "comando": comando, "classe": comando, "gesto": "Teste", "confianca": 1.0,
+                estado.publicar({"tipo": "comando", "comando": comando, "classe": comando, "gesto": "Teste", "confianca": 1.0, "fonte": "teste",
                                  "repeticao": "repeticao" in parse_qs(url.query)})
                 self.send_response(204)
                 self.end_headers()
@@ -830,7 +846,8 @@ def main():
     a.add_argument("--tela-cheia", action="store_true", help="Abre a página no Chrome ou no Edge em tela cheia")
     a.add_argument("--apresentacao", action="store_true", help="Dispara os gestos de todas as demos; a página repassa cada um ao slide aberto")
     a.add_argument("--carro3d", action="store_true", help="Comandos do carro 3D: os números (1 a 4 dedos) abrem uma página da central")
-    a.add_argument("--pontos", default=None, help="GRU sobre os pontos da mão (resultados/pontos/modelo_final/gru.pt), combinada com a CNN")
+    a.add_argument("--pontos", default=None, help="Liga os pontos da mão (resultados/pontos/modelo_final/gru.pt): números pela contagem dos dedos, "
+                                                         "o resto pela CNN. A GRU do arquivo não é usada; dele só se conferem as classes")
     args = a.parse_args()
     if args.apresentacao:
         COMANDOS.clear()

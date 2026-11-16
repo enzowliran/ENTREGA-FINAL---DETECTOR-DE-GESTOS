@@ -744,7 +744,7 @@ function receber(e) {
   if (e.tipo === "estado") {
     el("gestoNome").textContent = e.aquecendo ? "Aquecendo..." : e.gesto;
     el("gesto").className = e.e_comando ? "comando" : "";
-    el("confianca").style.width = (e.confianca * 100) + "%";
+    el("confianca").style.width = (e.confianca == null ? 100 : e.confianca * 100) + "%";  // null = número pela contagem de dedos
     el("disparos").textContent = e.disparos;
     el("estado").textContent = e.fps.toFixed(0) + " fps · " + e.ms.toFixed(0) + " ms";
   }

@@ -119,6 +119,11 @@ function falar(texto, cortar = false) {
   speechSynthesis.speak(u);
 }
 const pct = x => Math.round(x * 100);
+// Números (1 a 4 dedos) vêm da contagem dos dedos (fonte "regra"), sem porcentagem: o servidor manda confianca null.
+const porRegra = e => e.fonte === "regra" || e.confianca == null;
+const confTexto = e => porRegra(e) ? "pela contagem de dedos" : `confiança ${pct(e.confianca)}%`;
+const confFala = e => porRegra(e) ? "pela contagem de dedos" : `${pct(e.confianca)} por cento`;
+const conf3 = x => x != null ? +(+x).toFixed(3) : null;
 
 // ---- sessão ----
 const sessao = { inicio: new Date().toISOString(), pessoa: "", config: {}, tentativas: [], disparos: [], linha_do_tempo: [], sem_gesto: null };
@@ -132,29 +137,31 @@ ev.onmessage = m => {
   if (e.tipo === "estado") {
     ultimoEstado = e;
     $("agoraGesto").textContent = e.gesto || "—";
-    $("agoraConf").textContent = e.confianca != null ? `confiança ${pct(e.confianca)}%` : "";
+    $("agoraConf").textContent = e.aquecendo ? "" : confTexto(e);
     const q = e.pontos || {}, c = e.cnn;
     $("agoraCnn").textContent = c ? `CNN sozinha: ${c.gesto} ${pct(c.confianca)}%` : "CNN sozinha: —";
     $("agoraDedos").textContent = !q.mao ? "pontos: sem mão" : `mão ${q.parada ? "parada" : "em movimento"} · dedos: ${q.regra || "—"}`;
-    if (fase !== "parado") sessao.linha_do_tempo.push({ t: +t.toFixed(2), fase, alvo, gesto: e.gesto, confianca: +(+e.confianca).toFixed(3),
-      cnn: c ? c.gesto : null, cnn_conf: c ? +c.confianca.toFixed(3) : null, mao: !!q.mao, parada: !!q.parada, dedos: q.regra || null,
-      gru_numero: q.numero || null, gru_nota: q.nota != null ? +q.nota.toFixed(3) : null });
+    if (fase !== "parado") sessao.linha_do_tempo.push({ t: +t.toFixed(2), fase, alvo, gesto: e.gesto, confianca: conf3(e.confianca),
+      fonte: e.fonte || null, cnn: c ? c.gesto : null, cnn_conf: c ? conf3(c.confianca) : null, mao: !!q.mao, parada: !!q.parada,
+      dedos: q.regra || null, numero_regra: q.numero || null });
   } else if (e.tipo === "comando") {
     if (e.repeticao) return;   // polegar mantido repetindo: não conta como novo reconhecimento
-    const d = { t: +t.toFixed(2), fase, alvo, gesto: e.gesto, confianca: +e.confianca.toFixed(3) };
+    const fonte = e.fonte || (e.confianca == null ? "regra" : "cnn");
+    const d = { t: +t.toFixed(2), fase, alvo, gesto: e.gesto, confianca: conf3(e.confianca), fonte };
     sessao.disparos.push(d);
     if (fase === "gesto" && tentativaAtual && !tentativaAtual.reconhecido) {
-      tentativaAtual.reconhecido = e.gesto; tentativaAtual.confianca = e.confianca; tentativaAtual.tempo_s = +(t - faseInicio).toFixed(2);
+      tentativaAtual.reconhecido = e.gesto; tentativaAtual.confianca = conf3(e.confianca); tentativaAtual.fonte = fonte;
+      tentativaAtual.tempo_s = +(t - faseInicio).toFixed(2);
       const certo = !tentativaAtual.parecido && e.gesto === alvo;
-      falar(`${e.gesto}, ${pct(e.confianca)} por cento. ${certo ? "Certo" : tentativaAtual.parecido ? "Disparo falso" : "Errado"}`, true);
+      falar(`${e.gesto}, ${confFala(e)}. ${certo ? "Certo" : tentativaAtual.parecido ? "Disparo falso" : "Errado"}`, true);
       fecharTentativa(certo ? "acerto" : "erro");
     } else if (fase === "gesto") {
-      falar(`${e.gesto}, ${pct(e.confianca)} por cento`, true);
+      falar(`${e.gesto}, ${confFala(e)}`, true);
     } else if (fase === "sem_gesto") {
-      falar(`${e.gesto}, ${pct(e.confianca)} por cento. Disparo falso`, true);
+      falar(`${e.gesto}, ${confFala(e)}. Disparo falso`, true);
       $("instrucao").textContent = `Disparos falsos até agora: ${sessao.disparos.filter(x => x.fase === "sem_gesto").length}`;
     } else if (fase === "preparo") {
-      falar(`${e.gesto}, ${pct(e.confianca)} por cento, com a mão abaixada`, true);
+      falar(`${e.gesto}, ${confFala(e)}, com a mão abaixada`, true);
     }
   }
 };
@@ -176,7 +183,7 @@ function proxima() {
   if (encerrado) return;
   if (!fila.length) return semGesto();
   const p = fila.shift();
-  tentativaAtual = { n: sessao.tentativas.length + 1, pedido: p.gesto, rodada: p.rodada, parecido: PARECIDOS.includes(p.gesto), resultado: null, reconhecido: null, confianca: null, tempo_s: null };
+  tentativaAtual = { n: sessao.tentativas.length + 1, pedido: p.gesto, rodada: p.rodada, parecido: PARECIDOS.includes(p.gesto), resultado: null, reconhecido: null, confianca: null, fonte: null, tempo_s: null };
   alvo = p.gesto; fase = "preparo"; faseInicio = performance.now() / 1000;
   $("fase").textContent = `Prepare-se · ${tentativaAtual.n} de ${tentativaAtual.n + fila.length}`;
   $("pedido").textContent = p.gesto; $("instrucao").textContent = (PARECIDOS.includes(p.gesto) ? "Não deve disparar nada. " : "") + "Mão abaixada. " + (DICA[p.gesto] || "");
@@ -240,7 +247,7 @@ function desenharLinha(x) {
   const rec = x.resultado === "nao_disparou" ? '<span class="nada">não disparou</span>'
     : x.parecido && x.resultado === "acerto" ? '<span class="certo">nenhum comando</span>'
     : `<span class="${x.resultado === "acerto" ? "certo" : "erro"}">${x.reconhecido || x.resultado}</span>`;
-  tr.innerHTML = `<td>${x.n}</td><td>${x.pedido}</td><td>${rec}</td><td>${x.confianca != null ? pct(x.confianca) + "%" : "—"}</td><td>${x.tempo_s != null ? x.tempo_s.toFixed(1) + " s" : "—"}</td>`;
+  tr.innerHTML = `<td>${x.n}</td><td>${x.pedido}</td><td>${rec}</td><td>${x.fonte === "regra" ? "contagem de dedos" : x.confianca != null ? pct(x.confianca) + "%" : "—"}</td><td>${x.tempo_s != null ? x.tempo_s.toFixed(1) + " s" : "—"}</td>`;
   $("linhas").prepend(tr);
   const ac = sessao.tentativas.filter(y => y.resultado === "acerto").length;
   $("placar").innerHTML = `Acertos: <b>${ac} de ${sessao.tentativas.length}</b>`;
