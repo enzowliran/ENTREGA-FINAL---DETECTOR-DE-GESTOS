@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mão 3D ao vivo</title>
-<!-- Veio do HANDOFF_mao3d.md (15/11/2026). Mudanças: modelo em ../modelos_externos/ e o modo ?embutido=1 da apresentação. -->
+<!-- Veio do HANDOFF_mao3d.md (15/11/2026). Mudanças: modelo em ../modelos_externos/ e, na apresentação (?embutido=1), as imagens vêm do servidor (/video_cru). -->
 <style>
   html, body { margin: 0; height: 100%; background: #101418; color: #e8eef2; font: 14px system-ui, sans-serif; overflow: hidden; }
   #scene { position: fixed; inset: 0; }
@@ -24,7 +24,7 @@
 </head>
 <body>
 <div id="scene"></div>
-<div id="cam"><video id="video" playsinline muted></video><canvas id="overlay"></canvas></div>
+<div id="cam"><video id="video" playsinline muted></video><img id="stream" alt="" style="display:none;width:100%;transform:scaleX(-1)"><canvas id="overlay"></canvas></div>
 <div id="hud">
   <b>Mão 3D ao vivo</b> (MediaPipe Hand Landmarker)<br>
   <span id="status">Clique em “Ligar câmera”.</span><br>
@@ -46,6 +46,16 @@ const fovEl = document.getElementById("fovv");
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
 const octx = overlay.getContext("2d");
+
+// Fonte das imagens: a webcam (sozinha) ou o servidor do projeto (na apresentação). Ver "de onde vêm as imagens".
+const PARAMS = new URLSearchParams(location.search);
+const EMBUTIDO = PARAMS.has("embutido");
+const DO_SERVIDOR = EMBUTIDO || PARAMS.has("servidor");
+const stream = document.getElementById("stream");
+const quadroCanvas = document.createElement("canvas"), qctx = quadroCanvas.getContext("2d");
+function tamanhoFonte() {
+  return DO_SERVIDOR ? [stream.naturalWidth || 0, stream.naturalHeight || 0] : [video.videoWidth || 0, video.videoHeight || 0];
+}
 
 // Campo de visão horizontal estimado da webcam (graus). Ajustável com [ e ].
 let HFOV = 62;
@@ -74,7 +84,8 @@ function resetView() {
   controls.update();
 }
 function updateCameraFov() {
-  const aspect = video.videoWidth && video.videoHeight ? video.videoHeight / video.videoWidth : 9 / 16;
+  const [vw, vh] = tamanhoFonte();
+  const aspect = vw && vh ? vh / vw : 9 / 16;
   camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(HFOV) / 2) * aspect));
   camera.aspect = innerWidth / innerHeight;
   camera.updateProjectionMatrix();
@@ -247,7 +258,7 @@ async function createLandmarker() {
 }
 
 function drawOverlay(res) {
-  overlay.width = video.videoWidth; overlay.height = video.videoHeight;
+  [overlay.width, overlay.height] = tamanhoFonte();
   octx.clearRect(0, 0, overlay.width, overlay.height);
   res.landmarks.forEach(lm => {
     octx.strokeStyle = "#7fd1ff"; octx.lineWidth = 3;
@@ -260,13 +271,31 @@ function drawOverlay(res) {
   });
 }
 
-let lastVideoTime = -1, fps = 0, lastT = performance.now();
+// ---------- de onde vêm as imagens ----------
+// Sozinha: a página abre a webcam. Na apresentação (?embutido=1) ou com ?servidor=1, a webcam é do servidor do projeto
+// (demo/player.py, que a usa para os gestos) e a página lê o quadro sem espelhar que ele publica em /video_cru.
+// Assim os gestos continuam funcionando enquanto a mão 3D aparece.
+let lastVideoTime = -1, fps = 0, lastT = performance.now(), ultimaAnalise = 0;
+function proximaImagem() {
+  if (DO_SERVIDOR) {
+    // o <img> do fluxo MJPEG sempre mostra o quadro mais recente; analisa a cada ~40 ms
+    const [W, H] = tamanhoFonte();
+    if (!W || performance.now() - ultimaAnalise < 40) return null;
+    ultimaAnalise = performance.now();
+    if (quadroCanvas.width !== W) { quadroCanvas.width = W; quadroCanvas.height = H; updateCameraFov(); }
+    try { qctx.drawImage(stream, 0, 0); } catch (e) { return null; }
+    return quadroCanvas;
+  }
+  if (video.readyState < 2 || video.currentTime === lastVideoTime) return null;
+  lastVideoTime = video.currentTime;
+  return video;
+}
 function loop() {
   requestAnimationFrame(loop);
-  if (landmarker && video.readyState >= 2 && video.currentTime !== lastVideoTime) {
-    lastVideoTime = video.currentTime;
-    const W = video.videoWidth, H = video.videoHeight;
-    const res = landmarker.detectForVideo(video, performance.now());
+  const imagem = landmarker ? proximaImagem() : null;
+  if (imagem) {
+    const [W, H] = tamanhoFonte();
+    const res = landmarker.detectForVideo(imagem, performance.now());
     // ordena da esquerda para a direita (na visão espelhada) para cada cor ficar na mesma mão
     const order = res.landmarks.map((_, i) => i).sort((a, b) => res.landmarks[b][0].x - res.landmarks[a][0].x);
     hands.forEach((h, slot) => {
@@ -288,34 +317,23 @@ function loop() {
 loop();
 
 const startBtn = document.getElementById("start");
-// Dentro da apresentação (?embutido=1), o servidor do projeto (demo/player.py) está usando a webcam para os gestos.
-// A página pede para ele soltar a câmera, liga a dela e, ao sair do slide, desliga e devolve a câmera ao servidor.
-const EMBUTIDO = new URLSearchParams(location.search).has("embutido");
-const espera = ms => new Promise(r => setTimeout(r, ms));
-async function abrirCamera() {
-  for (let tentativa = 0; ; tentativa++) {
-    try { return await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } }); }
-    catch (err) {
-      // o servidor leva um instante para soltar a câmera: tenta de novo por alguns segundos
-      if (!EMBUTIDO || err.name !== "NotReadableError" || tentativa >= 15) throw err;
-      statusEl.textContent = "Esperando a câmera ser liberada…";
-      await espera(400);
-    }
-  }
-}
-function devolverCamera() {
-  if (video.srcObject) { video.srcObject.getTracks().forEach(t => t.stop()); video.srcObject = null; }
-  if (EMBUTIDO) fetch("/camera/retomar", { keepalive: true }).catch(() => {});
-}
-addEventListener("pagehide", devolverCamera);
+if (EMBUTIDO) addEventListener("keydown", ev => {
+  // na apresentação, PageDown/PageUp trocam o slide mesmo com o foco aqui dentro
+  if (ev.key === "PageDown" || ev.key === "PageUp") parent.postMessage({ navegar: ev.key === "PageDown" ? 1 : -1 }, location.origin);
+});
 startBtn.addEventListener("click", async () => {
   startBtn.style.display = "none";
   try {
     statusEl.textContent = "Carregando modelo…";
     landmarker ??= await createLandmarker();
-    if (EMBUTIDO) { statusEl.textContent = "Pedindo a câmera ao servidor…"; await fetch("/camera/soltar").catch(() => {}); }
+    if (DO_SERVIDOR) {
+      video.style.display = "none"; stream.style.display = "block";
+      stream.src = "/video_cru";
+      statusEl.textContent = "Mostre a mão para a câmera.";
+      return;
+    }
     statusEl.textContent = "Abrindo câmera…";
-    video.srcObject = await abrirCamera();
+    video.srcObject = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } });
     await video.play();
     updateCameraFov();
     statusEl.textContent = "Mostre a mão para a câmera.";
@@ -328,7 +346,8 @@ startBtn.addEventListener("click", async () => {
     startBtn.style.display = "";
   }
 });
-if (EMBUTIDO) startBtn.click();  // no slide, a câmera liga sozinha
+addEventListener("pagehide", () => { stream.removeAttribute("src"); if (video.srcObject) video.srcObject.getTracks().forEach(t => t.stop()); });
+if (DO_SERVIDOR) startBtn.click();  // a imagem vem do servidor: liga sozinha
 </script>
 </body>
 </html>

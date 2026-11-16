@@ -704,9 +704,16 @@
     </div>
   </section>
 
-  <!-- 18. Carro -->
-  <section class="slide demo" data-titulo="Carro" data-demo="painel">
-    <div class="topo"><span class="vivo">AO VIVO</span><h2>Painel do carro</h2><span class="espaco"></span>
+  <!-- 18a. O que o sistema vê: as mãos em 3D (demo/hand3d.html), com a imagem do servidor -->
+  <section class="slide demo" data-titulo="O que o sistema vê" data-demo="mao3d">
+    <div class="topo"><span class="vivo">AO VIVO</span><h2>O que o sistema vê: 21 pontos por mão, em 3D</h2><span class="espaco"></span>
+      <span class="chip">Arraste: <b>girar</b></span><span class="chip">Rolar a mão: <b>troca o slide</b></span></div>
+    <div class="quadro"></div>
+  </section>
+
+  <!-- 18b. Carro em 3D (demo/carro3d.html): visão do motorista, com as mãos 3D dentro do carro -->
+  <section class="slide demo" data-titulo="Carro" data-demo="carro3d">
+    <div class="topo"><span class="vivo">AO VIVO</span><h2>No carro, pela visão do motorista</h2><span class="espaco"></span>
       <span class="chip">Um dedo: <b>próxima função</b></span><span class="chip">Empurrar a mão: <b>explica</b></span><span class="chip">Rolar a mão: <b>troca o slide</b></span></div>
     <div class="quadro"></div>
   </section>
@@ -778,12 +785,41 @@
     <p class="lead an" style="--d:2">Detalhes técnicos para as perguntas.</p>
   </section>
 
-  <!-- A4. Mão 3D ao vivo (demo/hand3d.html): a página pede a webcam ao servidor ao abrir e a devolve ao sair. -->
+  <!-- A4. Mão 3D ao vivo (demo/hand3d.html): a imagem vem do servidor (/video_cru), os gestos seguem ligados. -->
   <section class="slide demo" data-titulo="A4 · Os 21 pontos da mão em 3D" data-demo="mao3d">
     <div class="topo"><span class="vivo">AO VIVO</span><h2>A4 · O que o MediaPipe vê: 21 pontos da mão em 3D</h2><span class="espaco"></span>
       <span class="chip">Arraste: <b>girar</b></span><span class="chip">Scroll: <b>zoom</b></span><span class="chip">R: <b>visão da câmera</b></span>
-      <span class="chip">Gestos <b>pausados</b> neste slide: use o teclado</span></div>
+      <span class="chip">Rolar a mão: <b>troca o slide</b></span></div>
     <div class="quadro"></div>
+  </section>
+
+  <!-- A7. Todos os modelos testados: acerto e falsa ativação, quando existem (números de resultados/) -->
+  <section class="slide" data-titulo="A7 · Todos os modelos testados">
+    <p class="kicker an">Apêndice · modelos</p>
+    <h2 class="an" style="--d:1;margin-bottom:12px">Todos os modelos que testamos</h2>
+    <table class="tabela an" style="--d:2;font-size:14px">
+      <tr><th>Modelo</th><th>Acerto</th><th>Falsa ativação (Jester)</th><th>Falsos disparos (IPN, vídeo real)</th></tr>
+      <tr><td colspan="4" style="text-align:left;background:var(--acento-claro);font-size:12px;letter-spacing:.04em;color:var(--suave)">Comparação de arquiteturas · Jester, treino curto (20 mil vídeos, 8 épocas) · falsa ativação = % dos vídeos sem gesto que passam de 0,6</td></tr>
+      <tr><td>CNN 3D larga</td><td>84,2% (validação)</td><td>0,71% dos vídeos</td><td>—</td></tr>
+      <tr><td>ResNet 3D</td><td>83,0% (validação)</td><td>1,14% dos vídeos</td><td>—</td></tr>
+      <tr><td>CNN 3D (a escolhida)</td><td>82,4% (validação)</td><td>0,43% dos vídeos</td><td>—</td></tr>
+      <tr><td>CNN 3D leve</td><td>78,6% (validação)</td><td>1,42% dos vídeos</td><td>—</td></tr>
+      <tr><td>CNN 2D + Transformer</td><td>65,3% (validação)</td><td>2,42% dos vídeos</td><td>—</td></tr>
+      <tr><td>CNN 2D + GRU</td><td>50,4% (validação)</td><td>0,28% dos vídeos</td><td>—</td></tr>
+      <tr><td colspan="4" style="text-align:left;background:var(--acento-claro);font-size:12px;letter-spacing:.04em;color:var(--suave)">Modelos completos · Jester inteiro · falsos por minuto em fluxo contínuo (Jester simulado e IPN, 13 pessoas)</td></tr>
+      <tr><td>CNN 3D (Jester)</td><td>92,6% (teste Jester)</td><td>0,03 / min</td><td>0,76 / min</td></tr>
+      <tr><td>CNN 3D + números (fotos HaGRID)</td><td>92,7% (validação Jester)</td><td>0,06 / min</td><td>0,79 / min</td></tr>
+      <tr><td>CNN 3D + números (vídeo real)</td><td>90,3% (validação Jester)</td><td>0,05 / min</td><td>0,32 / min</td></tr>
+      <tr><td>Pontos da mão + regras (com punho)</td><td>88,3% (números, fotos HaGRID)</td><td>—</td><td>2,67 / min</td></tr>
+      <tr><td>GRU sobre os pontos (só Jester)</td><td>67,7% (amostra Jester)</td><td>—</td><td>—</td></tr>
+      <tr><td colspan="4" style="text-align:left;background:var(--acento-claro);font-size:12px;letter-spacing:.04em;color:var(--suave)">Teste misto · 5 bases, 36 classes, 3.642 amostras · falsos por minuto no IPN</td></tr>
+      <tr><td>GRU sobre os pontos</td><td>76,5%</td><td>—</td><td>1,46 / min</td></tr>
+      <tr><td>CNN 3D do zero</td><td>66,9%</td><td>—</td><td>—</td></tr>
+      <tr><td>CNN 3D pré-treinada + ajuste</td><td>84,0%</td><td>—</td><td>0,19 / min</td></tr>
+      <tr><td>GRU + CNN (média 0,3 / 0,7)</td><td>92,2%</td><td>—</td><td>0,10 / min*</td></tr>
+      <tr class="vencedora"><td>GRU + CNN, números pela GRU (final)</td><td>92,0%</td><td>—</td><td>0,25 / min</td></tr>
+    </table>
+    <p class="nota an" style="--d:3;margin-top:8px;font-size:13px">— = não medido. * Quase não dispara os números: só 36 de 265 trechos de um dedo e 0 de 264 de dois; com os números pela GRU, 251 e 240. Cada bloco foi medido num conjunto diferente: compare dentro do bloco.</p>
   </section>
 
   <div id="rodape">
@@ -1608,15 +1644,16 @@ const NOMES_PARTES = {};
 })();
 let atual = Math.min(slides.length - 1, Math.max(0, parseInt(location.hash.slice(1)) - 1 || 0));
 let travada = false, bloqueados = 0, disparosTeste = 0;
-const DEMOS = { painel: "painel_carro.html", hospital: "hospital.html", mao3d: "hand3d.html" };
+const DEMOS = { painel: "painel_carro.html", carro3d: "carro3d.html", hospital: "hospital.html", mao3d: "hand3d.html" };
 const BASE = { "Swiping Left": "anterior", "Swiping Right": "proxima", "Stop Sign": "alternar" };
 const MAPAS = {
   painel: { ...BASE, "Thumb Up": "volume_mais", "Thumb Down": "volume_menos", "Drumming Fingers": "tamborilar", "Pushing Hand Away": "ajuda",
             "One Finger": "funcao", "Pulling Hand In": "funcao_anterior", "Two Fingers": "tamborilar" },
   hospital: { ...BASE, "Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking Hand": "normal", "Zooming In With Full Hand": "zoom_mais",
               "Zooming Out With Full Hand": "zoom_menos", "One Finger": "proximo_corte", "Two Fingers": "janela" },
-  mao3d: {},  // a webcam fica com a página da mão 3D: não chegam gestos enquanto o slide está aberto
+  mao3d: {},  // só mostra as mãos; rolar a mão continua trocando o slide
 };
+MAPAS.carro3d = MAPAS.painel;  // o carro 3D usa os mesmos comandos do painel
 let tempoAviso;
 function aviso(texto) { const a = $("aviso"); a.textContent = texto; a.classList.add("ver"); clearTimeout(tempoAviso); tempoAviso = setTimeout(() => a.classList.remove("ver"), 1100); }
 function quadroDemo() { return slides[atual].querySelector("iframe"); }
@@ -1632,7 +1669,6 @@ function fecharDemo(slide) {
   if (slide.dataset.demo === "teste") { $("videoTeste").removeAttribute("src"); return; }
   const f = slide.querySelector("iframe");
   if (f) { f.src = "about:blank"; f.remove(); }  // fecha o som e a câmera da demo
-  if (slide.dataset.demo === "mao3d") setTimeout(() => fetch("/camera/retomar").catch(() => {}), 300);
 }
 function mostrar(n) {
   n = Math.max(0, Math.min(slides.length - 1, n));

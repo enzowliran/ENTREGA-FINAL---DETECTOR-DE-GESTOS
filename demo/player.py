@@ -47,7 +47,7 @@ COMANDOS_HOSPITAL = {"Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking
 # lista e manda o nome da classe; quem traduz para o comando de cada demo é a própria apresentação.
 GESTOS_APRESENTACAO = sorted({*COMANDOS, *COMANDOS_PAINEL, *COMANDOS_HOSPITAL, "Rolling Hand Forward", "Rolling Hand Backward"})
 # Páginas que a apresentação pode abrir dentro de um slide.
-DEMOS_EMBUTIDAS = {"tenis.html", "painel_carro.html", "hospital.html", "hand3d.html"}
+DEMOS_EMBUTIDAS = {"tenis.html", "painel_carro.html", "hospital.html", "hand3d.html", "carro3d.html"}
 # Modelo do MediaPipe usado pela mão 3D (demo/hand3d.html), servido de modelos_externos/.
 MODELO_MAO = RAIZ.parent / "modelos_externos" / "hand_landmarker.task"
 TIPOS_AUDIO = {".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".wav": "audio/wav", ".ogg": "audio/ogg"}
@@ -57,6 +57,8 @@ class Estado:
     def __init__(self):
         self.trava = threading.Lock()
         self.jpeg = None
+        self.jpeg_cru = None  # quadro maior e sem espelhar, para o MediaPipe do navegador (mãos 3D)
+        self.quer_cru = 0     # quantas páginas estão lendo /video_cru
         self.assinantes = []
         self.inicio = time.time()
         self.disparos = 0
@@ -119,6 +121,22 @@ def abrir_tela_cheia(endereco):
     perfil = Path(tempfile.gettempdir()) / "gestos_apresentacao"
     subprocess.Popen([str(navegador), "--start-fullscreen", f"--app={endereco}", f"--user-data-dir={perfil}",
                       "--no-first-run", "--autoplay-policy=no-user-gesture-required"])
+
+
+def publicar_quadros(estado, quadro, agora):
+    """Miniatura espelhada (/video, a cada ~0,1 s) e quadro maior sem espelhar (/video_cru, a cada 0,05 s)."""
+    if agora - getattr(estado, "_ultima_mini", 0) >= 0.08:
+        pequena = cv2.resize(cv2.flip(quadro, 1), (480, 270), interpolation=cv2.INTER_AREA)
+        ok, codificado = cv2.imencode(".jpg", pequena, [cv2.IMWRITE_JPEG_QUALITY, 70])
+        if ok:
+            estado.jpeg = codificado.tobytes()
+        estado._ultima_mini = agora
+    if estado.quer_cru > 0:  # só codifica o quadro grande enquanto alguma página o usa
+        a, l = quadro.shape[:2]
+        grande = cv2.resize(quadro, (960, round(a * 960 / l)), interpolation=cv2.INTER_AREA) if l > 960 else quadro
+        ok, codificado = cv2.imencode(".jpg", grande, [cv2.IMWRITE_JPEG_QUALITY, 80])
+        if ok:
+            estado.jpeg_cru = codificado.tobytes()
 
 
 def abrir_camera(args):
@@ -227,11 +245,8 @@ def laco_modelo(args, estado, parar):
                 estado.disparos += 1
                 estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "classe": disparo, "gesto": V.TRADUCAO[disparo],
                                  "confianca": confianca, "repeticao": gatilho.foi_repeticao})
-        if agora - ultimo_video >= 0.08:
-            pequena = cv2.resize(cv2.flip(quadro, 1), (480, 270), interpolation=cv2.INTER_AREA)
-            ok, codificado = cv2.imencode(".jpg", pequena, [cv2.IMWRITE_JPEG_QUALITY, 70])
-            if ok:
-                estado.jpeg = codificado.tobytes()
+        if agora - ultimo_video >= 0.05:
+            publicar_quadros(estado, quadro, agora)
             ultimo_video = agora
         if agora - ultimo_estado >= 0.2:
             fps = (len(tempos) - 1) / max(tempos[-1] - tempos[0], 1e-3)
@@ -292,11 +307,8 @@ def laco_separado(args, estado, parar, captura, modelo, nomes, indices_gesto):
                 with trava_buffer:
                     buffer.append(preparado)
                 ultimo_quadro = agora
-            if agora - ultimo_video >= 0.08:
-                pequena = cv2.resize(cv2.flip(quadro, 1), (480, 270), interpolation=cv2.INTER_AREA)
-                ok, codificado = cv2.imencode(".jpg", pequena, [cv2.IMWRITE_JPEG_QUALITY, 70])
-                if ok:
-                    estado.jpeg = codificado.tobytes()
+            if agora - ultimo_video >= 0.05:
+                publicar_quadros(estado, quadro, agora)
                 ultimo_video = agora
 
     leitor = threading.Thread(target=ler_camera, daemon=True)
@@ -482,6 +494,28 @@ def criar_servidor(args, estado, parar):
                         time.sleep(0.08)
                 except OSError:
                     pass
+            elif url.path == "/video_cru":
+                # Quadro sem espelhar, em até 960 px de largura, para as mãos 3D (demo/hand3d.html e demo/carro3d.html).
+                self.send_response(200)
+                self.send_header("Content-Type", "multipart/x-mixed-replace; boundary=quadro")
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                with estado.trava:
+                    estado.quer_cru += 1
+                try:
+                    enviado = None
+                    while not parar.is_set():
+                        jpeg = estado.jpeg_cru
+                        if jpeg and jpeg is not enviado:
+                            self.wfile.write(b"--quadro\r\nContent-Type: image/jpeg\r\n\r\n" + jpeg + b"\r\n")
+                            self.wfile.flush()
+                            enviado = jpeg
+                        time.sleep(0.02)
+                except OSError:
+                    pass
+                finally:
+                    with estado.trava:
+                        estado.quer_cru -= 1
             elif url.path == "/testar" and args.simular:
                 comando = parse_qs(url.query).get("c", ["proxima"])[0]
                 estado.publicar({"tipo": "comando", "comando": comando, "classe": comando, "gesto": "Teste", "confianca": 1.0,

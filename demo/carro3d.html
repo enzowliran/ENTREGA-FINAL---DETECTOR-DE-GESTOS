@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carro 3D · gestos</title>
+<!--
+  Demo do carro em 3D: visão do motorista em primeira pessoa, com as duas mãos da pessoa (MediaPipe) desenhadas
+  dentro do carro e a central multimídia comandada pelos gestos do modelo (demo/player.py).
+  - Os gestos chegam como no painel antigo (painel_carro.html): /eventos, ou pela apresentação (?embutido=1).
+  - As mãos 3D vêm do quadro sem espelhar que o servidor publica em /video_cru (a webcam é dele).
+  - O desenho das mãos e as convenções do MediaPipe são os de demo/hand3d.html (não "consertar").
+-->
+<style>
+  :root { --acento: #4fb3ff; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0f14; color: #e8eef2; font: 15px system-ui, "Segoe UI", sans-serif; }
+  #cena { position: fixed; inset: 0; cursor: grab; }
+  #cena:active { cursor: grabbing; }
+  .caixa { position: fixed; background: rgba(10, 14, 19, .72); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; backdrop-filter: blur(6px); }
+  #estado { left: 14px; top: 14px; padding: 10px 14px; min-width: 250px; }
+  #estado .linha { display: flex; align-items: center; gap: 8px; }
+  #ponto { width: 9px; height: 9px; border-radius: 50%; background: #e05555; }
+  #ponto.ok { background: #3ad07a; box-shadow: 0 0 8px #3ad07a; }
+  #gesto { font-size: 20px; font-weight: 700; margin-top: 6px; }
+  #gesto.comando { color: var(--acento); }
+  #barra { height: 5px; border-radius: 3px; background: rgba(255,255,255,.12); margin-top: 6px; overflow: hidden; }
+  #barra i { display: block; height: 100%; width: 0; background: var(--acento); transition: width .15s; }
+  #info { font-size: 12px; opacity: .7; margin-top: 6px; }
+  #mini { right: 14px; top: 14px; width: 240px; overflow: hidden; padding: 0; }
+  #mini img, #mini canvas { display: block; width: 100%; transform: scaleX(-1); }
+  #mini canvas { position: absolute; inset: 0; height: 100%; }
+  #mini .rot { position: absolute; left: 8px; bottom: 6px; font-size: 11px; opacity: .8; transform: none; }
+  #legenda { left: 14px; bottom: 14px; padding: 10px 14px; font-size: 13px; line-height: 1.6; max-width: 340px; }
+  #legenda h4 { margin: 0 0 4px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .7; }
+  #legenda b { color: var(--acento); font-weight: 600; }
+  #aviso { left: 50%; bottom: 12%; transform: translate(-50%, 20px); padding: 12px 22px; font-size: 22px; font-weight: 700; opacity: 0; transition: .25s; pointer-events: none; }
+  #aviso.ver { opacity: 1; transform: translate(-50%, 0); }
+  #dicas { right: 14px; bottom: 14px; padding: 8px 12px; font-size: 12px; opacity: .75; line-height: 1.5; }
+  #entrar { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); padding: 18px 34px; font-size: 20px; font-weight: 700;
+            border: 0; border-radius: 14px; background: var(--acento); color: #04121f; cursor: pointer; box-shadow: 0 10px 40px rgba(0,0,0,.5); }
+  #entrar small { display: block; font-size: 13px; font-weight: 500; margin-top: 4px; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="cena"></div>
+<div id="estado" class="caixa">
+  <div class="linha"><span id="ponto"></span><span id="conexao">Conectando aos gestos…</span></div>
+  <div id="gesto">—</div>
+  <div id="barra"><i id="confianca"></i></div>
+  <div id="info">mãos: <span id="nMaos">0</span> · comandos: <span id="nComandos">0</span> · <span id="nMs">—</span> ms por análise</div>
+</div>
+<div id="mini" class="caixa"><img id="stream" alt=""><canvas id="sobre"></canvas><span class="rot">câmera (espelhada)</span></div>
+<div id="legenda" class="caixa"></div>
+<div id="aviso" class="caixa"></div>
+<div id="dicas" class="caixa">Arraste: olhar em volta · duplo clique: olhar para a frente<br>[ ]: campo de visão da câmera · teclado: ← → ↑ ↓ espaço R E</div>
+<button id="entrar">Entrar no carro<small>liga o som e a música</small></button>
+
+<script type="module">
+import * as THREE from "three";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { FilesetResolver, HandLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+
+const $ = id => document.getElementById(id);
+const EMBUTIDO = new URLSearchParams(location.search).has("embutido");
+
+// ======================================================================
+// Cena: unidades em metros. O motorista olha para -Z, +X é a direita, +Y é para cima.
+// ======================================================================
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+$("cena").appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const COR_CEU = new THREE.Color(0xa9cbe8);
+scene.fog = new THREE.Fog(COR_CEU, 70, 380);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const OLHO = new THREE.Vector3(0, 1.19, 0.05);
+const camera = new THREE.PerspectiveCamera(72, innerWidth / innerHeight, 0.02, 900);
+camera.position.copy(OLHO);
+let guinada = 0, arfagem = -0.10;   // para onde o motorista olha (arrastar com o mouse)
+function apontarCamera() {
+  camera.rotation.set(0, 0, 0, "YXZ");
+  camera.rotation.y = guinada; camera.rotation.x = arfagem;
+}
+apontarCamera();
+addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
+let arrastando = null;
+renderer.domElement.addEventListener("pointerdown", e => { arrastando = { x: e.clientX, y: e.clientY, g: guinada, a: arfagem }; });
+addEventListener("pointerup", () => { arrastando = null; });
+addEventListener("pointermove", e => {
+  if (!arrastando) return;
+  guinada = THREE.MathUtils.clamp(arrastando.g - (e.clientX - arrastando.x) * 0.004, -1.2, 1.2);
+  arfagem = THREE.MathUtils.clamp(arrastando.a - (e.clientY - arrastando.y) * 0.004, -0.6, 0.35);
+  apontarCamera();
+});
+renderer.domElement.addEventListener("dblclick", () => { guinada = 0; arfagem = -0.10; apontarCamera(); });
+
+// ---- luz ----
+const sol = new THREE.DirectionalLight(0xfff1dc, 2.4);
+sol.position.set(-2.5, 6, -6);
+sol.target.position.set(0, 0.9, -0.5);
+sol.castShadow = true;
+sol.shadow.mapSize.set(2048, 2048);
+Object.assign(sol.shadow.camera, { left: -1.4, right: 1.4, top: 1.4, bottom: -1.4, near: 1, far: 14 });
+sol.shadow.bias = -0.0004; sol.shadow.radius = 4;
+scene.add(sol, sol.target);
+scene.add(new THREE.HemisphereLight(0xdbeeff, 0x4a5a3a, 0.75));
+
+// ---- céu ----
+const ceu = new THREE.Mesh(new THREE.SphereGeometry(600, 32, 16), new THREE.ShaderMaterial({
+  side: THREE.BackSide, depthWrite: false, fog: false,
+  uniforms: { topo: { value: new THREE.Color(0x3d7fc4) }, horizonte: { value: COR_CEU } },
+  vertexShader: "varying vec3 p; void main(){ p = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }",
+  fragmentShader: "uniform vec3 topo; uniform vec3 horizonte; varying vec3 p; void main(){ float t = clamp(p.y*2.2, 0.0, 1.0); gl_FragColor = vec4(mix(horizonte, topo, t), 1.0); }",
+}));
+scene.add(ceu);
+
+// ======================================================================
+// Mundo lá fora: chão, estrada que corre, árvores, postes, carros e morros
+// ======================================================================
+const mundo = new THREE.Group(); scene.add(mundo);
+const chao = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), new THREE.MeshStandardMaterial({ color: 0x6c8a52, roughness: 1 }));
+chao.rotation.x = -Math.PI / 2; chao.position.y = -0.02; mundo.add(chao);
+
+const CENTRO_ESTRADA = -1.9;   // o carro anda na faixa da direita
+const texEstrada = (() => {
+  const c = document.createElement("canvas"); c.width = 256; c.height = 512;
+  const g = c.getContext("2d");
+  g.fillStyle = "#3b3e42"; g.fillRect(0, 0, 256, 512);
+  for (let i = 0; i < 2500; i++) { g.fillStyle = `rgba(${Math.random() < .5 ? "255,255,255" : "0,0,0"},${Math.random() * .06})`; g.fillRect(Math.random() * 256, Math.random() * 512, 2, 2); }
+  g.fillStyle = "#e9e6dc"; g.fillRect(10, 0, 6, 512); g.fillRect(240, 0, 6, 512);    // bordas
+  g.fillStyle = "#f2c94c"; g.fillRect(124, 0, 8, 300);                              // faixa central tracejada
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 80);
+  t.anisotropy = renderer.capabilities.getMaxAnisotropy(); t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+})();
+const estrada = new THREE.Mesh(new THREE.PlaneGeometry(8.4, 1000), new THREE.MeshStandardMaterial({ map: texEstrada, roughness: .92 }));
+estrada.rotation.x = -Math.PI / 2; estrada.position.set(CENTRO_ESTRADA, 0, -480); mundo.add(estrada);
+const acostamento = new THREE.Mesh(new THREE.PlaneGeometry(14, 1000), new THREE.MeshStandardMaterial({ color: 0x8a8170, roughness: 1 }));
+acostamento.rotation.x = -Math.PI / 2; acostamento.position.set(CENTRO_ESTRADA, -0.01, -480); mundo.add(acostamento);
+
+const COMPRIMENTO = 420;  // trecho em que árvores e postes se repetem
+const objetos = [];       // { obj, z0 } que andam com a estrada
+function repetir(obj) { objetos.push(obj); mundo.add(obj); }
+const tronco = new THREE.CylinderGeometry(0.12, 0.18, 1.6, 8), copa = new THREE.ConeGeometry(1.4, 3.6, 9);
+const matTronco = new THREE.MeshStandardMaterial({ color: 0x5b4330, roughness: 1 });
+const matsCopa = [0x2f6b34, 0x3c7a3a, 0x285c2e, 0x4b8740].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: .95 }));
+for (let i = 0; i < 70; i++) {
+  const arv = new THREE.Group();
+  const t = new THREE.Mesh(tronco, matTronco); t.position.y = 0.8;
+  const c = new THREE.Mesh(copa, matsCopa[i % 4]); c.position.y = 3.2;
+  const esc = 0.8 + Math.random() * 0.9; arv.scale.setScalar(esc);
+  arv.add(t, c);
+  const lado = Math.random() < 0.5 ? -1 : 1;
+  arv.position.set(CENTRO_ESTRADA + lado * (9 + Math.random() * 30), 0, -Math.random() * COMPRIMENTO);
+  repetir(arv);
+}
+const matPoste = new THREE.MeshStandardMaterial({ color: 0xd9d9d9, roughness: .6 });
+const matRefletor = new THREE.MeshStandardMaterial({ color: 0xff7a1a, emissive: 0x552200 });
+for (let i = 0; i < 2 * COMPRIMENTO / 16; i++) {
+  const lado = i % 2 ? -1 : 1;
+  const p = new THREE.Group();
+  const haste = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.9, 0.1), matPoste); haste.position.y = 0.45;
+  const ref = new THREE.Mesh(new THREE.BoxGeometry(0.105, 0.12, 0.03), matRefletor); ref.position.set(0, 0.75, 0.05);
+  p.add(haste, ref);
+  p.position.set(CENTRO_ESTRADA + lado * 4.9, 0, -Math.floor(i / 2) * 16);
+  repetir(p);
+}
+function fazerCarro(cor) {
+  const g = new THREE.Group();
+  const lata = new THREE.MeshStandardMaterial({ color: cor, roughness: .35, metalness: .5 });
+  const vidro = new THREE.MeshStandardMaterial({ color: 0x1b2530, roughness: .15, metalness: .3 });
+  const corpo = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.62, 4.2), lata); corpo.position.y = 0.55;
+  const cabine = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.5, 2.1), vidro); cabine.position.set(0, 1.08, 0.15);
+  const lanterna = new THREE.MeshStandardMaterial({ color: 0xff2a2a, emissive: 0xaa0000 });
+  for (const x of [-0.7, 0.7]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.12, 0.05), lanterna); l.position.set(x, 0.66, 2.11); g.add(l); }
+  const roda = new THREE.CylinderGeometry(0.33, 0.33, 0.24, 16), borracha = new THREE.MeshStandardMaterial({ color: 0x111111 });
+  for (const [x, z] of [[-0.85, 1.35], [0.85, 1.35], [-0.85, -1.35], [0.85, -1.35]]) { const r = new THREE.Mesh(roda, borracha); r.rotation.z = Math.PI / 2; r.position.set(x, 0.33, z); g.add(r); }
+  g.add(corpo, cabine);
+  g.traverse(m => { if (m.isMesh) m.castShadow = true; });
+  return g;
+}
+const carroFrente = fazerCarro(0x2c5aa0); carroFrente.position.set(0, 0, -38); mundo.add(carroFrente);
+const contramao = [fazerCarro(0xd9d9d9), fazerCarro(0x9a2b2b)];
+contramao.forEach((c, i) => { c.rotation.y = Math.PI; c.position.set(CENTRO_ESTRADA - 2.1, 0, -150 - i * 210); mundo.add(c); });
+const matMorro = new THREE.MeshStandardMaterial({ color: 0x5f7f63, roughness: 1, flatShading: true });
+for (let i = 0; i < 14; i++) {
+  const m = new THREE.Mesh(new THREE.ConeGeometry(40 + Math.random() * 60, 25 + Math.random() * 45, 7), matMorro);
+  const lado = i % 2 ? -1 : 1;
+  m.position.set(lado * (90 + Math.random() * 160), 0, -260 - Math.random() * 300);
+  mundo.add(m);
+}
+// chuva: aparece quando o limpador está ligado
+const NGOTAS = 1800;
+const gotasGeo = new THREE.BufferGeometry();
+const gotasPos = new Float32Array(NGOTAS * 3);
+for (let i = 0; i < NGOTAS; i++) { gotasPos[i * 3] = (Math.random() - .5) * 30; gotasPos[i * 3 + 1] = Math.random() * 12; gotasPos[i * 3 + 2] = -Math.random() * 40; }
+gotasGeo.setAttribute("position", new THREE.BufferAttribute(gotasPos, 3));
+const chuva = new THREE.Points(gotasGeo, new THREE.PointsMaterial({ color: 0xbfd6ea, size: 0.05, transparent: true, opacity: .7 }));
+chuva.visible = false; scene.add(chuva);
+
+// ======================================================================
+// Cabine: painel, volante, telas, colunas, capô, retrovisor, para-brisa e limpadores
+// ======================================================================
+const cabine = new THREE.Group(); scene.add(cabine);
+const matPainel = new THREE.MeshStandardMaterial({ color: 0x1e2227, roughness: .82 });
+const matAcab = new THREE.MeshStandardMaterial({ color: 0x2c3138, roughness: .6, metalness: .1 });
+const matCromo = new THREE.MeshStandardMaterial({ color: 0x9aa3ad, roughness: .25, metalness: .9 });
+const matTeto = new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 1 });
+function caixa(w, h, d, mat, x, y, z, rx = 0, ry = 0, rz = 0) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
+  m.position.set(x, y, z); m.rotation.set(rx, ry, rz);
+  m.castShadow = true; m.receiveShadow = true; cabine.add(m); return m;
+}
+caixa(1.76, 0.2, 0.5, matPainel, 0, 0.79, -0.84, -0.18);          // painel
+caixa(1.76, 0.06, 0.3, matAcab, 0, 0.68, -0.62);                  // borda de baixo do painel
+caixa(0.46, 0.05, 0.16, matPainel, 0, 1.04, -0.66, -0.25);        // capuz do quadro de instrumentos
+caixa(0.24, 0.26, 0.55, matAcab, 0.34, 0.6, -0.42);               // console central
+caixa(0.05, 0.12, 0.05, matCromo, 0.34, 0.78, -0.3);              // alavanca de câmbio
+caixa(0.08, 0.035, 0.06, matPainel, 0.34, 0.85, -0.3);
+for (const x of [-0.85, 0.85]) {                                  // portas
+  caixa(0.06, 0.62, 1.6, matAcab, x, 0.6, -0.2);
+  caixa(0.1, 0.05, 1.5, matPainel, x * 0.98, 0.93, -0.18);         // apoio de braço / soleira da janela
+}
+// colunas do para-brisa (de baixo, no painel, até o teto)
+function coluna(x0, y0, z0, x1, y1, z1, r = 0.045) {
+  const a = new THREE.Vector3(x0, y0, z0), b = new THREE.Vector3(x1, y1, z1);
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 1.2, a.distanceTo(b), 10), matTeto);
+  m.position.copy(a).add(b).multiplyScalar(0.5);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize());
+  m.castShadow = true; cabine.add(m);
+}
+coluna(-0.82, 0.95, -1.0, -0.7, 1.5, -0.3, 0.035); coluna(0.82, 0.95, -1.0, 0.7, 1.5, -0.3, 0.035);
+caixa(1.5, 0.07, 0.16, matTeto, 0, 1.52, -0.3);                   // borda do teto
+const teto = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.2), matTeto);
+teto.rotation.x = Math.PI / 2; teto.position.set(0, 1.56, 0.3); cabine.add(teto);
+caixa(0.23, 0.065, 0.025, matPainel, 0.08, 1.43, -0.36);          // retrovisor
+caixa(0.21, 0.052, 0.005, new THREE.MeshStandardMaterial({ color: 0x4a5866, roughness: .25, metalness: .6 }), 0.08, 1.43, -0.347);
+caixa(0.02, 0.08, 0.02, matPainel, 0.08, 1.49, -0.36);
+// capô, visto pelo para-brisa
+const capo = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.05, 1.5), new THREE.MeshStandardMaterial({ color: 0x8c1c1c, roughness: .45, metalness: .25 }));
+capo.position.set(0, 0.86, -1.75); capo.rotation.x = 0.1; capo.receiveShadow = true; cabine.add(capo);
+// para-brisa (vidro) e limpadores
+const vidro = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 0.95), new THREE.MeshPhysicalMaterial({ color: 0xbfd8ea, roughness: .05, transmission: 0, transparent: true, opacity: .07 }));
+vidro.position.set(0, 1.22, -0.66); vidro.rotation.x = -0.92; vidro.visible = false; cabine.add(vidro);
+const limpadores = [-0.42, 0.18].map(x => {
+  const piv = new THREE.Group(); piv.position.set(x, 0.97, -0.98); piv.rotation.x = -0.92;
+  const haste = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.012, 0.012), new THREE.MeshStandardMaterial({ color: 0x0c0d0f, roughness: .7 }));
+  haste.position.x = 0.31; piv.add(haste); cabine.add(piv); return piv;
+});
+// saídas de ar: brilham quando o ar-condicionado está ligado
+const matAr = new THREE.MeshStandardMaterial({ color: 0x15181c, emissive: 0x000000, roughness: .6 });
+[-0.62, 0.62].forEach(x => caixa(0.12, 0.05, 0.02, matAr, x, 0.84, -0.6));
+
+// ---- volante ----
+const volante = new THREE.Group();
+volante.position.set(0, 0.92, -0.47); volante.rotation.x = 0.36; cabine.add(volante);
+const matVolante = new THREE.MeshStandardMaterial({ color: 0x16181b, roughness: .55 });
+const aro = new THREE.Mesh(new THREE.TorusGeometry(0.185, 0.023, 16, 72), matVolante); aro.castShadow = true;
+const cubo = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.065, 0.06, 24), matVolante); cubo.rotation.x = Math.PI / 2;
+const logo = new THREE.Mesh(new THREE.CircleGeometry(0.025, 24), matCromo); logo.position.z = 0.031;
+volante.add(aro, cubo, logo);
+for (const ang of [Math.PI / 2 + 1.25, Math.PI / 2 - 1.25, -Math.PI / 2]) {
+  const raio = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.03, 0.02), matVolante);
+  raio.position.set(Math.cos(ang) * 0.1, Math.sin(ang) * 0.1, 0); raio.rotation.z = ang; raio.castShadow = true; volante.add(raio);
+}
+const colunaDirecao = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, 0.3, 12), matPainel);
+colunaDirecao.position.set(0, 0.86, -0.6); colunaDirecao.rotation.x = 1.2; cabine.add(colunaDirecao);
+
+// ---- telas (texturas desenhadas num canvas) ----
+function tela(larg, alt, px, ppx) {
+  const c = document.createElement("canvas"); c.width = px; c.height = Math.round(px * alt / larg);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(larg, alt), new THREE.MeshBasicMaterial({ map: t, toneMapped: false }));
+  return { c, g: c.getContext("2d"), t, m };
+}
+const central = tela(0.31, 0.19, 1240);
+central.m.position.set(0.34, 1.0, -0.6); central.m.rotation.set(-0.12, -0.38, 0, "YXZ"); cabine.add(central.m);
+const moldura = new THREE.Mesh(new THREE.BoxGeometry(0.335, 0.215, 0.02), matPainel);  // presa atrás da tela
+moldura.position.z = -0.012; moldura.castShadow = true; central.m.add(moldura);
+const quadro = tela(0.38, 0.115, 1140);
+quadro.m.position.set(0, 0.975, -0.575); quadro.m.rotation.x = -0.32; cabine.add(quadro.m);
+
+// ---- faróis ----
+const farolLuzes = [-0.62, 0.62].map(x => {
+  const l = new THREE.SpotLight(0xfff2cc, 0, 70, 0.42, 0.5, 1.2);
+  l.position.set(x, 0.75, -2.5); l.target.position.set(x * 0.4, 0, -30);
+  scene.add(l, l.target); return l;
+});
+
+// ======================================================================
+// Mãos 3D (mesmo desenho de demo/hand3d.html), colocadas dentro do carro
+// ======================================================================
+const R = [0.017, 0.0125, 0.0110, 0.0098, 0.0088, 0.0098, 0.0090, 0.0082, 0.0074, 0.0100, 0.0092, 0.0083, 0.0075,
+           0.0095, 0.0086, 0.0078, 0.0071, 0.0088, 0.0077, 0.0070, 0.0064];
+const FINGER_BONES = [[1,2],[2,3],[3,4],[5,6],[6,7],[7,8],[9,10],[10,11],[11,12],[13,14],[14,15],[15,16],[17,18],[18,19],[19,20]];
+const PALM_EDGE = [[0,1],[0,17],[5,9],[9,13],[13,17],[2,5]];
+const ALL_BONES = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],
+                   [9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+const OUTLINE = [0, 1, 2, 5, 9, 13, 17];
+const PALM_HALF = 0.0115;
+const sphereGeo = new THREE.SphereGeometry(1, 24, 16);
+const UP = new THREE.Vector3(0, 1, 0);
+function makeHand(color) {
+  const skin = new THREE.MeshPhysicalMaterial({ color, roughness: 0.48, metalness: 0, sheen: 0.6, sheenColor: new THREE.Color(0xffd9c4),
+    sheenRoughness: 0.5, clearcoat: 0.08, clearcoatRoughness: 0.6, side: THREE.DoubleSide });
+  const group = new THREE.Group();
+  const add = m => { m.castShadow = true; group.add(m); return m; };
+  const joints = R.map((r, i) => { const m = add(new THREE.Mesh(sphereGeo, skin)); m.scale.setScalar(i === 0 ? PALM_HALF : r); return m; });
+  const bones = [...FINGER_BONES.map(([a, b]) => ({ a, b, ra: R[a], rb: R[b] })), ...PALM_EDGE.map(([a, b]) => ({ a, b, ra: PALM_HALF, rb: PALM_HALF }))]
+    .map(s => { const m = add(new THREE.Mesh(new THREE.CylinderGeometry(s.rb, s.ra, 1, 24, 1, true), skin)); m.userData = s; return m; });
+  for (const i of [1, 2, 5, 9, 13, 17]) joints[i].scale.setScalar(Math.max(R[i], PALM_HALF));
+  const n = OUTLINE.length, palmGeo = new THREE.BufferGeometry();
+  palmGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array((2 * n + 2) * 3), 3));
+  const idx = [], T0 = 0, B0 = n, TC = 2 * n, BC = 2 * n + 1;
+  for (let k = 0; k < n; k++) { const k2 = (k + 1) % n; idx.push(TC, T0 + k, T0 + k2, BC, B0 + k2, B0 + k, T0 + k, B0 + k, B0 + k2, T0 + k, B0 + k2, T0 + k2); }
+  palmGeo.setIndex(idx);
+  const palm = add(new THREE.Mesh(palmGeo, skin));
+  group.visible = false; scene.add(group);
+  return { group, joints, bones, palm, pts: Array.from({ length: 21 }, () => new THREE.Vector3()), T: new THREE.Vector3(), fresh: true };
+}
+const hands = [makeHand(0xe2a07c), makeHand(0xd8956f)];
+
+let HFOV = 62;   // campo de visão horizontal estimado da webcam ([ e ] ajustam)
+function solveTranslation(world, img, W, H) {
+  const f = (W / 2) / Math.tan(THREE.MathUtils.degToRad(HFOV) / 2), cx = W / 2, cy = H / 2;
+  const A = [0,0,0, 0,0,0, 0,0,0], b = [0,0,0];
+  const addRow = (r, y) => { for (let i = 0; i < 3; i++) { b[i] += r[i] * y; for (let j = 0; j < 3; j++) A[i*3+j] += r[i] * r[j]; } };
+  for (let i = 0; i < 21; i++) {
+    const P = world[i], u = img[i].x * W - cx, v = img[i].y * H - cy;
+    addRow([f, 0, -u], u * P.z - f * P.x); addRow([0, f, -v], v * P.z - f * P.y);
+  }
+  const det3 = m => m[0]*(m[4]*m[8]-m[5]*m[7]) - m[1]*(m[3]*m[8]-m[5]*m[6]) + m[2]*(m[3]*m[7]-m[4]*m[6]);
+  const D = det3(A); if (Math.abs(D) < 1e-9) return null;
+  const col = c => { const m = A.slice(); for (let r = 0; r < 3; r++) m[r*3+c] = b[r]; return det3(m) / D; };
+  return new THREE.Vector3(col(0), col(1), col(2));
+}
+// A webcam vira um sensor no painel, olhando para o motorista. No sistema da câmera (x para a direita da imagem,
+// y para baixo, z para a frente, rumo à pessoa), a direita da imagem é a esquerda do motorista (-X no carro),
+// y para baixo é -Y e a frente da câmera é +Z. Assim a mão direita da pessoa aparece à direita, sobre o volante.
+const SENSOR = new THREE.Vector3(0, 1.0, -0.8);
+const PROFUNDIDADE = 0.85;   // encurta a distância até a câmera para as mãos ficarem entre o volante e o motorista
+const tmp = new THREE.Vector3(), dir = new THREE.Vector3(), cen = new THREE.Vector3(), nrm = new THREE.Vector3();
+function updateHand(h, world, img, W, H) {
+  const T = solveTranslation(world, img, W, H);
+  if (!T || T.z < 0.08 || T.z > 3) return;
+  if (h.fresh) h.T.copy(T); else h.T.lerp(T, 0.35);
+  for (let i = 0; i < 21; i++) {
+    const w = world[i];
+    const zc = (h.T.z * PROFUNDIDADE) + w.z;
+    tmp.set(SENSOR.x - (w.x + h.T.x), SENSOR.y - (w.y + h.T.y), SENSOR.z + zc);
+    if (h.fresh) h.pts[i].copy(tmp); else h.pts[i].lerp(tmp, 0.55);
+  }
+  h.fresh = false;
+  h.joints.forEach((m, i) => m.position.copy(h.pts[i]));
+  for (const m of h.bones) {
+    const { a, b } = m.userData;
+    dir.subVectors(h.pts[b], h.pts[a]); const len = dir.length();
+    m.position.addVectors(h.pts[a], h.pts[b]).multiplyScalar(0.5);
+    m.scale.set(1, len, 1); m.quaternion.setFromUnitVectors(UP, dir.normalize());
+  }
+  const p = h.pts;
+  cen.set(0, 0, 0); OUTLINE.forEach(i => cen.add(p[i])); cen.divideScalar(OUTLINE.length);
+  nrm.crossVectors(tmp.subVectors(p[5], p[0]), dir.subVectors(p[17], p[0])).normalize();
+  const pos = h.palm.geometry.attributes.position, n = OUTLINE.length;
+  OUTLINE.forEach((i, k) => {
+    tmp.copy(p[i]).lerp(cen, 0.08);
+    pos.setXYZ(k, tmp.x + nrm.x * PALM_HALF, tmp.y + nrm.y * PALM_HALF, tmp.z + nrm.z * PALM_HALF);
+    pos.setXYZ(n + k, tmp.x - nrm.x * PALM_HALF, tmp.y - nrm.y * PALM_HALF, tmp.z - nrm.z * PALM_HALF);
+  });
+  pos.setXYZ(2 * n, cen.x + nrm.x * PALM_HALF * 1.15, cen.y + nrm.y * PALM_HALF * 1.15, cen.z + nrm.z * PALM_HALF * 1.15);
+  pos.setXYZ(2 * n + 1, cen.x - nrm.x * PALM_HALF * 1.15, cen.y - nrm.y * PALM_HALF * 1.15, cen.z - nrm.z * PALM_HALF * 1.15);
+  pos.needsUpdate = true; h.palm.geometry.computeVertexNormals(); h.palm.geometry.computeBoundingSphere();
+  h.group.visible = true;
+}
+
+// MediaPipe no navegador, sobre o quadro que o servidor publica (a webcam fica com o servidor, para os gestos)
+const stream = $("stream"), sobre = $("sobre"), sctx = sobre.getContext("2d");
+const quadroCanvas = document.createElement("canvas"), qctx = quadroCanvas.getContext("2d");
+let landmarker = null, ultimaAnalise = 0;
+(async () => {
+  try {
+    const fileset = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+    const opts = delegate => ({ baseOptions: { modelAssetPath: "../modelos_externos/hand_landmarker.task", delegate },
+      runningMode: "VIDEO", numHands: 2, minHandDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
+    try { landmarker = await HandLandmarker.createFromOptions(fileset, opts("GPU")); }
+    catch (e) { landmarker = await HandLandmarker.createFromOptions(fileset, opts("CPU")); }
+    stream.src = "/video_cru";
+  } catch (e) { console.error(e); avisar("Mãos 3D indisponíveis: " + e.message, 4000); }
+})();
+function analisarMaos() {
+  const W = stream.naturalWidth, H = stream.naturalHeight;
+  if (!landmarker || !W || performance.now() - ultimaAnalise < 40) return;
+  ultimaAnalise = performance.now();
+  if (quadroCanvas.width !== W) { quadroCanvas.width = W; quadroCanvas.height = H; sobre.width = W; sobre.height = H; }
+  try { qctx.drawImage(stream, 0, 0); } catch (e) { return; }
+  const res = landmarker.detectForVideo(quadroCanvas, performance.now());
+  const order = res.landmarks.map((_, i) => i).sort((a, b) => res.landmarks[b][0].x - res.landmarks[a][0].x);
+  hands.forEach((h, slot) => {
+    const i = order[slot];
+    if (i === undefined) { h.group.visible = false; h.fresh = true; return; }
+    updateHand(h, res.worldLandmarks[i], res.landmarks[i], W, H);
+  });
+  $("nMaos").textContent = res.landmarks.length;
+  sctx.clearRect(0, 0, W, H); sctx.strokeStyle = "#7fd1ff"; sctx.lineWidth = Math.max(2, W / 240);
+  res.landmarks.forEach(lm => { for (const [a, b] of ALL_BONES) { sctx.beginPath(); sctx.moveTo(lm[a].x * W, lm[a].y * H); sctx.lineTo(lm[b].x * W, lm[b].y * H); sctx.stroke(); } });
+}
+
+// ======================================================================
+// Central multimídia: mesmas páginas e comandos do painel antigo (painel_carro.html)
+// ======================================================================
+const PAGINAS = ["musica", "clima", "telefone", "limpador", "farois"];
+const NOMES_PAGINA = { musica: "Música", clima: "Clima", telefone: "Telefone", limpador: "Limpador", farois: "Faróis" };
+const NOMES_LIMPADOR = ["Desligado", "Intermitente", "Normal", "Rápido"];
+const CAMPOS = ["Temperatura", "Ventilação", "Direção do ar"], DIRECOES = ["Rosto", "Pés", "Rosto e pés", "Para-brisa"];
+const CONTATOS = ["Casa", "Trabalho", "Oficina"];
+const st = { pagina: "musica", tocando: false, volume: 0.6, faixa: 0, clima: { ligado: false, temp: 22, vent: 2, dir: 0, campo: 0 },
+             limpador: 0, ultimoLimpador: 2, farois: false, chamada: null, contato: 0, comandos: 0, gesto: "—", conf: 0 };
+let faixas = [];
+const SINTETICAS = [
+  { titulo: "Estrada aberta", artista: "Sintetizada", cor: "#3f7fd6", notas: [57, 60, 64, 67, 64, 60], bpm: 112 },
+  { titulo: "Fim de tarde", artista: "Sintetizada", cor: "#d6743f", notas: [55, 59, 62, 66, 62, 59], bpm: 96 },
+  { titulo: "Cidade à noite", artista: "Sintetizada", cor: "#8a4fd6", notas: [52, 55, 59, 62, 59, 55], bpm: 124 },
+];
+async function carregarFaixas() {
+  let nomes = [];
+  try { nomes = await (await fetch("/musicas/lista")).json(); } catch (e) { nomes = []; }
+  faixas = nomes.length ? nomes.map(arq => {
+    const base = arq.replace(/\.(mp3|m4a|wav|ogg)$/i, "").replace(/_/g, " "), partes = base.split(" - ");
+    let h = 0; for (const ch of base) h = (h * 31 + ch.charCodeAt(0)) % 360;
+    return { arquivo: arq, titulo: partes.slice(1).join(" - ") || base, artista: partes.length > 1 ? partes[0] : "Arquivo de áudio", cor: `hsl(${h} 55% 45%)` };
+  }) : SINTETICAS;
+  desenharCentral();
+}
+// ---- som ----
+let ctx = null, mestre = null, audioEl = null, relogioSintese = null, passoSintese = 0, fatorVoz = 1;
+function iniciarSom() {
+  if (ctx) { ctx.resume(); return; }
+  ctx = new AudioContext(); mestre = ctx.createGain(); mestre.connect(ctx.destination); aplicarVolume();
+}
+function aplicarVolume() { if (mestre) mestre.gain.setTargetAtTime(st.volume * fatorVoz * (st.chamada ? 0.25 : 1), ctx.currentTime, 0.05); }
+function notaSintetica() {
+  const f = faixas[st.faixa], t = ctx.currentTime, n = f.notas[passoSintese++ % f.notas.length];
+  for (const [mult, gan] of [[1, 0.16], [2, 0.05]]) {
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.type = mult === 1 ? "triangle" : "sine"; o.frequency.value = 440 * Math.pow(2, (n - 69) / 12) * mult;
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(gan, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+    o.connect(g); g.connect(mestre); o.start(t); o.stop(t + 0.55);
+  }
+  if (passoSintese % 4 === 0) {   // bumbo leve
+    const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(110, t); o.frequency.exponentialRampToValueAtTime(40, t + 0.15);
+    g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2); o.connect(g); g.connect(mestre); o.start(t); o.stop(t + 0.22);
+  }
+}
+function tocar() {
+  if (!faixas.length) return;
+  iniciarSom();
+  const f = faixas[st.faixa];
+  clearInterval(relogioSintese);
+  if (f.arquivo) {
+    if (!audioEl) { audioEl = new Audio(); ctx.createMediaElementSource(audioEl).connect(mestre); audioEl.addEventListener("ended", () => trocarFaixa(1)); }
+    const url = "/musicas/" + encodeURIComponent(f.arquivo);
+    if (audioEl.getAttribute("src") !== url) audioEl.src = url;
+    audioEl.play().catch(() => avisar("Clique na tela para liberar o som"));
+  } else {
+    relogioSintese = setInterval(notaSintetica, 60000 / f.bpm / 2);
+  }
+  st.tocando = true; desenharCentral();
+}
+function pausar() { clearInterval(relogioSintese); if (audioEl) audioEl.pause(); st.tocando = false; desenharCentral(); }
+function trocarFaixa(d) {
+  st.faixa = (st.faixa + d + faixas.length) % faixas.length; passoSintese = 0;
+  if (audioEl && faixas[st.faixa].arquivo) { audioEl.src = "/musicas/" + encodeURIComponent(faixas[st.faixa].arquivo); }
+  if (st.tocando) tocar(); else desenharCentral();
+}
+// ---- voz: diz a página ao trocar e lê os comandos quando a pessoa pede ----
+const temVoz = "speechSynthesis" in window;
+function falar(frases) {
+  if (!temVoz) return;
+  speechSynthesis.cancel();
+  const voz = speechSynthesis.getVoices().find(v => /^pt[-_]BR/i.test(v.lang));
+  if (!voz) return;
+  fatorVoz = 0.3; aplicarVolume();
+  frases.forEach((txt, i) => {
+    const u = new SpeechSynthesisUtterance(txt); u.voice = voz; u.lang = "pt-BR"; u.rate = 1.05;
+    if (i === frases.length - 1) u.onend = u.onerror = () => { fatorVoz = 1; aplicarVolume(); };
+    speechSynthesis.speak(u);
+  });
+}
+// ---- legenda dos gestos ----
+function comandosAtuais() {
+  const c = st.chamada, p = st.pagina;
+  if (c && c.estado === "tocando") return [["Manter polegar para cima", "atende"], ["Manter polegar para baixo", "recusa"]];
+  if (c) return [["Sinal de pare", "encerra"]];
+  const funcao = ["Um dedo", "próxima função"], volta = ["Puxar a mão", "função anterior"];
+  if (p === "clima") return [["Deslizar para os lados", "troca o ajuste"], ["Polegar", "muda o valor"], ["Sinal de pare", st.clima.ligado ? "desliga" : "liga"], funcao, volta];
+  if (p === "telefone") return [["Sinal de pare", "simula uma chamada"], funcao, volta];
+  if (p === "limpador") return [["Polegar", "muda a velocidade"], ["Sinal de pare", st.limpador ? "desliga" : "liga"], funcao, volta];
+  if (p === "farois") return [["Sinal de pare", st.farois ? "desliga" : "liga"], funcao, volta];
+  return [["Deslizar à direita", "próxima música"], ["Deslizar à esquerda", "música anterior"], ["Sinal de pare", st.tocando ? "pausa" : "toca"], ["Polegar", "volume"], funcao, volta];
+}
+function atualizarLegenda() {
+  $("legenda").innerHTML = `<h4>${NOMES_PAGINA[st.pagina]}${st.chamada ? " · chamada" : ""}</h4>` +
+    [...comandosAtuais(), ["Empurrar a mão", "explica os comandos"]].map(([g, a]) => `<b>${g}:</b> ${a}`).join("<br>");
+}
+let tempoAviso;
+function avisar(txt, ms = 1600) { const a = $("aviso"); a.textContent = txt; a.classList.add("ver"); clearTimeout(tempoAviso); tempoAviso = setTimeout(() => a.classList.remove("ver"), ms); }
+
+// ---- comandos (mesmos nomes do painel antigo e da apresentação) ----
+function mostrarPagina(nova) { st.pagina = nova; atualizarLegenda(); desenharCentral(); falar([NOMES_PAGINA[nova]]); }
+function iniciarChamada() {
+  const nome = CONTATOS[st.contato++ % CONTATOS.length];
+  st.chamada = { nome, estado: "tocando", pendente: null, inicio: 0, retomar: false };
+  st.chamada.limite = setTimeout(() => terminarChamada("Chamada perdida: " + nome), 20000);
+  aplicarVolume(); avisar("📞 Chamada de " + nome); atualizarLegenda(); desenharCentral(); falar(["Chamada de " + nome]);
+}
+function terminarChamada(txt) {
+  clearTimeout(st.chamada.limite);
+  const retomar = st.chamada.retomar; st.chamada = null; aplicarVolume();
+  if (retomar) tocar();
+  avisar(txt); atualizarLegenda(); desenharCentral();
+}
+function executar(c, repeticao = false) {
+  let feito = true;
+  if (c === "ajuda") { if (!repeticao) { falar([NOMES_PAGINA[st.pagina], ...comandosAtuais().map(([g, a]) => g + ": " + a)]); avisar("Comandos de " + NOMES_PAGINA[st.pagina]); st.comandos++; } atualizarHud(); return; }
+  if (st.chamada) {
+    const ch = st.chamada;
+    if (ch.estado === "atendida") { if (c === "alternar" && !repeticao) terminarChamada("Chamada encerrada: " + ch.nome); else feito = false; }
+    else if (c === "volume_mais" || c === "volume_menos") {
+      // atender ou recusar exige manter o polegar (o servidor repete o gesto mantido): evita disparo por engano
+      if (!repeticao) { ch.pendente = c; avisar(c === "volume_mais" ? "Mantenha para atender" : "Mantenha para recusar"); feito = false; }
+      else if (ch.pendente === c) {
+        if (c === "volume_mais") { clearTimeout(ch.limite); ch.retomar = st.tocando; if (st.tocando) pausar(); ch.estado = "atendida"; ch.inicio = performance.now(); avisar("Chamada atendida"); atualizarLegenda(); }
+        else terminarChamada("Chamada recusada: " + ch.nome);
+      } else feito = false;
+    } else feito = false;
+  }
+  else if (c === "funcao" || c === "funcao_anterior") {
+    if (repeticao) return;
+    const nova = PAGINAS[(PAGINAS.indexOf(st.pagina) + (c === "funcao" ? 1 : -1) + PAGINAS.length) % PAGINAS.length];
+    mostrarPagina(nova); avisar(NOMES_PAGINA[nova]);
+  }
+  else if (st.pagina === "clima") {
+    const k = st.clima;
+    if (c === "volume_mais" || c === "volume_menos") {
+      const d = c === "volume_mais" ? 1 : -1;
+      if (k.campo === 0) k.temp = Math.max(16, Math.min(28, k.temp + d));
+      else if (k.campo === 1) k.vent = Math.max(1, Math.min(5, k.vent + d));
+      else k.dir = (k.dir + d + DIRECOES.length) % DIRECOES.length;
+      avisar(k.campo === 0 ? k.temp + "°C" : k.campo === 1 ? "Ventilação " + k.vent : DIRECOES[k.dir]);
+    }
+    else if (repeticao) feito = false;
+    else if (c === "proxima" || c === "anterior") { k.campo = (k.campo + (c === "proxima" ? 1 : -1) + 3) % 3; avisar(CAMPOS[k.campo]); }
+    else if (c === "alternar") { k.ligado = !k.ligado; avisar("Ar-condicionado " + (k.ligado ? "ligado" : "desligado")); atualizarLegenda(); }
+    else feito = false;
+  }
+  else if (repeticao) feito = false;
+  else if (st.pagina === "telefone") { if (c === "alternar") iniciarChamada(); else feito = false; }
+  else if (st.pagina === "limpador") {
+    if (c === "volume_mais" && st.limpador < 3) definirLimpador(st.limpador + 1);
+    else if (c === "volume_menos" && st.limpador > 0) definirLimpador(st.limpador - 1);
+    else if (c === "alternar") definirLimpador(st.limpador ? 0 : st.ultimoLimpador);
+    else feito = false;
+  }
+  else if (st.pagina === "farois") {
+    if (c === "alternar") { st.farois = !st.farois; avisar("Faróis " + (st.farois ? "ligados" : "desligados")); atualizarLegenda(); } else feito = false;
+  }
+  else if (c === "proxima") { trocarFaixa(1); if (!st.tocando) tocar(); avisar("▶ " + faixas[st.faixa].titulo); }
+  else if (c === "anterior") { trocarFaixa(-1); if (!st.tocando) tocar(); avisar("◀ " + faixas[st.faixa].titulo); }
+  else if (c === "alternar") { st.tocando ? pausar() : tocar(); avisar(st.tocando ? "Tocando" : "Pausado"); atualizarLegenda(); }
+  else if (c === "volume_mais" || c === "volume_menos") { st.volume = Math.max(0, Math.min(1, Math.round((st.volume + (c === "volume_mais" ? 0.1 : -0.1)) * 10) / 10)); aplicarVolume(); avisar("Volume " + Math.round(st.volume * 100) + "%"); }
+  else feito = false;
+  if (feito) st.comandos++;
+  desenharCentral(); atualizarHud();
+}
+function definirLimpador(v) { st.limpador = v; if (v) st.ultimoLimpador = v; avisar("Limpador: " + NOMES_LIMPADOR[v]); atualizarLegenda(); }
+
+// ---- desenho da central multimídia ----
+function caixaArred(g, x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
+function desenharCentral() {
+  const { g, c, t } = central, W = c.width, H = c.height;
+  const grad = g.createLinearGradient(0, 0, 0, H); grad.addColorStop(0, "#151b23"); grad.addColorStop(1, "#0b0f14");
+  g.fillStyle = grad; g.fillRect(0, 0, W, H);
+  // abas
+  PAGINAS.forEach((p, i) => {
+    const x = 30 + i * (W - 60) / 5, w = (W - 60) / 5 - 14, ativa = p === st.pagina;
+    caixaArred(g, x, 22, w, 64, 16); g.fillStyle = ativa ? "#2d7ff9" : "#1d242e"; g.fill();
+    g.fillStyle = ativa ? "#fff" : "#9aa7b4"; g.font = "600 30px system-ui"; g.textAlign = "center"; g.fillText(NOMES_PAGINA[p], x + w / 2, 65);
+  });
+  g.textAlign = "left";
+  const hora = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  g.fillStyle = "#9aa7b4"; g.font = "500 26px system-ui"; g.textAlign = "right"; g.fillText(hora, W - 30, H - 24); g.textAlign = "left";
+  const y0 = 120;
+  if (st.chamada) {
+    g.fillStyle = "#1e3a28"; caixaArred(g, 60, y0 + 20, W - 120, H - y0 - 90, 30); g.fill();
+    g.fillStyle = "#fff"; g.font = "700 64px system-ui"; g.fillText("📞 " + st.chamada.nome, 110, y0 + 140);
+    g.font = "500 34px system-ui"; g.fillStyle = "#b7e4c7";
+    g.fillText(st.chamada.estado === "tocando" ? "Chamada recebida (simulada)" : "Em chamada · " + formatar((performance.now() - st.chamada.inicio) / 1000), 110, y0 + 200);
+    g.fillText(st.chamada.estado === "tocando" ? "Manter 👍 atende · manter 👎 recusa" : "✋ Sinal de pare encerra", 110, y0 + 260);
+  } else if (st.pagina === "musica" && faixas.length) {
+    const f = faixas[st.faixa];
+    g.fillStyle = f.cor; caixaArred(g, 60, y0 + 10, 300, 300, 24); g.fill();
+    g.fillStyle = "rgba(255,255,255,.85)"; g.font = "120px system-ui"; g.textAlign = "center"; g.fillText("♪", 210, y0 + 210); g.textAlign = "left";
+    g.fillStyle = "#fff"; g.font = "700 56px system-ui"; g.fillText(f.titulo.slice(0, 26), 400, y0 + 90);
+    g.fillStyle = "#9aa7b4"; g.font = "500 36px system-ui"; g.fillText(f.artista.slice(0, 32), 400, y0 + 145);
+    g.fillText(`Faixa ${st.faixa + 1} de ${faixas.length}`, 400, y0 + 195);
+    // progresso (arquivo) ou "ao vivo" (sintetizada)
+    let frac = 0; if (audioEl && f.arquivo && audioEl.duration) frac = audioEl.currentTime / audioEl.duration;
+    g.fillStyle = "#273140"; caixaArred(g, 400, y0 + 225, W - 520, 12, 6); g.fill();
+    g.fillStyle = "#2d7ff9"; caixaArred(g, 400, y0 + 225, (W - 520) * (f.arquivo ? frac : (st.tocando ? (performance.now() / 8000) % 1 : 0)), 12, 6); g.fill();
+    g.fillStyle = "#fff"; g.font = "700 64px system-ui"; g.fillText(st.tocando ? "❚❚" : "▶", 400, y0 + 315);
+    g.fillStyle = "#9aa7b4"; g.font = "500 30px system-ui"; g.fillText("Volume", W - 330, y0 + 300);
+    g.fillStyle = "#273140"; caixaArred(g, W - 210, y0 + 280, 150, 20, 10); g.fill();
+    g.fillStyle = "#2d7ff9"; caixaArred(g, W - 210, y0 + 280, 150 * st.volume, 20, 10); g.fill();
+  } else if (st.pagina === "clima") {
+    const k = st.clima;
+    const campos = [["Temperatura", k.temp + "°C"], ["Ventilação", "●".repeat(k.vent) + "○".repeat(5 - k.vent)], ["Direção do ar", DIRECOES[k.dir]]];
+    campos.forEach(([n, v], i) => {
+      const x = 60 + i * (W - 120) / 3, w = (W - 120) / 3 - 24, ativo = i === k.campo;
+      caixaArred(g, x, y0 + 20, w, 260, 24); g.fillStyle = ativo ? "#1f3550" : "#18202a"; g.fill();
+      if (ativo) { g.strokeStyle = "#2d7ff9"; g.lineWidth = 5; g.stroke(); }
+      g.fillStyle = "#9aa7b4"; g.font = "500 32px system-ui"; g.fillText(n, x + 26, y0 + 80);
+      g.fillStyle = "#fff"; g.font = "700 " + (i === 1 ? 46 : 60) + "px system-ui"; g.fillText(v, x + 26, y0 + 190);
+    });
+    g.fillStyle = k.ligado ? "#7dd3a6" : "#9aa7b4"; g.font = "600 36px system-ui"; g.fillText("Ar-condicionado " + (k.ligado ? "ligado" : "desligado"), 60, y0 + 345);
+  } else if (st.pagina === "telefone") {
+    g.fillStyle = "#9aa7b4"; g.font = "500 34px system-ui"; g.fillText("Contatos", 60, y0 + 50);
+    CONTATOS.forEach((n, i) => { caixaArred(g, 60, y0 + 80 + i * 90, W - 120, 74, 18); g.fillStyle = "#18202a"; g.fill(); g.fillStyle = "#fff"; g.font = "600 38px system-ui"; g.fillText("👤  " + n, 90, y0 + 130 + i * 90); });
+  } else if (st.pagina === "limpador") {
+    g.fillStyle = "#fff"; g.font = "700 60px system-ui"; g.fillText("Limpador: " + NOMES_LIMPADOR[st.limpador], 60, y0 + 100);
+    NOMES_LIMPADOR.forEach((n, i) => { const x = 60 + i * (W - 120) / 4, w = (W - 120) / 4 - 20; caixaArred(g, x, y0 + 160, w, 120, 20); g.fillStyle = i === st.limpador ? "#2d7ff9" : "#18202a"; g.fill(); g.fillStyle = "#fff"; g.font = "600 32px system-ui"; g.textAlign = "center"; g.fillText(n, x + w / 2, y0 + 232); g.textAlign = "left"; });
+  } else if (st.pagina === "farois") {
+    g.fillStyle = st.farois ? "#ffe29a" : "#56606b"; g.font = "180px system-ui"; g.fillText("💡", 80, y0 + 240);
+    g.fillStyle = "#fff"; g.font = "700 64px system-ui"; g.fillText(st.farois ? "Faróis ligados" : "Faróis desligados", 320, y0 + 170);
+  }
+  t.needsUpdate = true;
+}
+function formatar(s) { return Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0"); }
+// ---- quadro de instrumentos ----
+let velocidade = 88;
+function desenharQuadro() {
+  const { g, c, t } = quadro, W = c.width, H = c.height;
+  g.fillStyle = "#06080b"; g.fillRect(0, 0, W, H);
+  g.fillStyle = "#fff"; g.font = "700 150px system-ui"; g.textAlign = "center"; g.fillText(Math.round(velocidade), W / 2, 205);
+  g.fillStyle = "#7d8a97"; g.font = "500 34px system-ui"; g.fillText("km/h", W / 2, 255); g.textAlign = "left";
+  // barra de velocidade
+  g.strokeStyle = "#1c2733"; g.lineWidth = 16; g.beginPath(); g.arc(W / 2, 175, 150, Math.PI * 0.8, Math.PI * 2.2); g.stroke();
+  g.strokeStyle = "#2d7ff9"; g.beginPath(); g.arc(W / 2, 175, 150, Math.PI * 0.8, Math.PI * (0.8 + 1.4 * Math.min(1, velocidade / 160))); g.stroke();
+  // indicadores
+  const ind = [["💡", st.farois, "#ffe29a"], ["🌧", st.limpador > 0, "#8fd0ff"], ["❄", st.clima.ligado, "#8fd0ff"]];
+  ind.forEach(([ic, on, cor], i) => { g.globalAlpha = on ? 1 : 0.25; g.fillStyle = cor; g.font = "54px system-ui"; g.fillText(ic, 50 + i * 80, 90); });
+  g.globalAlpha = 1;
+  g.fillStyle = "#9aa7b4"; g.font = "500 30px system-ui"; g.fillText(st.tocando && faixas.length ? "♪ " + faixas[st.faixa].titulo.slice(0, 22) : "", 50, 300);
+  g.textAlign = "right"; g.fillText("Gesto: " + st.gesto, W - 50, 90);
+  g.fillStyle = "#2d7ff9"; g.fillRect(W - 50 - 260 * st.conf, 110, 260 * st.conf, 8);
+  g.fillStyle = "#9aa7b4"; g.fillText(new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), W - 50, 300);
+  g.textAlign = "left";
+  t.needsUpdate = true;
+}
+
+// ======================================================================
+// Gestos: da apresentação (postMessage) ou direto do servidor (/eventos)
+// ======================================================================
+function atualizarHud() { $("nComandos").textContent = st.comandos; }
+function receber(e) {
+  if (e.tipo === "erro") { $("conexao").textContent = e.mensagem; $("ponto").className = ""; }
+  if (e.tipo === "comando" && e.comando) executar(e.comando, !!e.repeticao);
+  if (e.tipo === "estado") {
+    st.gesto = e.aquecendo ? "aquecendo…" : e.gesto; st.conf = e.confianca || 0;
+    $("gesto").textContent = st.gesto; $("gesto").className = e.e_comando ? "comando" : "";
+    $("confianca").style.width = (st.conf * 100) + "%"; $("nMs").textContent = Math.round(e.ms || 0);
+  }
+}
+if (EMBUTIDO) {
+  $("conexao").textContent = "Gestos ligados"; $("ponto").className = "ok";
+  addEventListener("message", ev => { if (ev.origin === location.origin && ev.data && ev.data.tipo) receber(ev.data); });
+} else {
+  const fonte = new EventSource("/eventos");
+  fonte.onopen = () => { $("conexao").textContent = "Gestos ligados"; $("ponto").className = "ok"; };
+  fonte.onerror = () => { $("conexao").textContent = "Sem conexão com o modelo"; $("ponto").className = ""; };
+  fonte.onmessage = ev => receber(JSON.parse(ev.data));
+}
+addEventListener("keydown", e => {
+  if (EMBUTIDO && (e.key === "PageDown" || e.key === "PageUp")) { parent.postMessage({ navegar: e.key === "PageDown" ? 1 : -1 }, location.origin); return; }
+  if (e.key === "ArrowRight") executar("proxima");
+  else if (e.key === "ArrowLeft") executar("anterior");
+  else if (e.key === "ArrowUp") { e.preventDefault(); executar("volume_mais", e.repeat); }
+  else if (e.key === "ArrowDown") { e.preventDefault(); executar("volume_menos", e.repeat); }
+  else if (e.key === "r") executar("funcao");
+  else if (e.key === "R") executar("funcao_anterior");
+  else if (e.key.toLowerCase() === "e") executar("ajuda");
+  else if (e.key === " ") { e.preventDefault(); executar("alternar"); }
+  else if (e.key === "[" || e.key === "]") { HFOV = THREE.MathUtils.clamp(HFOV + (e.key === "]" ? 2 : -2), 30, 110); avisar("Campo de visão da câmera: " + HFOV + "°"); }
+});
+$("entrar").onclick = () => { $("entrar").style.display = "none"; iniciarSom(); tocar(); falar([NOMES_PAGINA[st.pagina], "Empurre a mão para ouvir os comandos"]); };
+
+// ======================================================================
+// Laço: estrada andando, limpadores, faróis, chuva e mãos
+// ======================================================================
+let ultimo = performance.now(), angLimpador = 0, sentidoLimpador = 1, pausaLimpador = 0, ultimaTela = 0;
+function laco(agora) {
+  requestAnimationFrame(laco);
+  const dt = Math.min(0.05, (agora - ultimo) / 1000); ultimo = agora;
+  velocidade = 88 + Math.sin(agora / 5200) * 6;
+  const v = velocidade / 3.6;   // m/s
+  texEstrada.offset.y += v * dt / (1000 / 80);
+  for (const o of objetos) { o.position.z += v * dt; if (o.position.z > 6) o.position.z -= COMPRIMENTO; }
+  carroFrente.position.z = -38 + Math.sin(agora / 3000) * 4;
+  for (const c of contramao) { c.position.z += (v + 22) * dt; if (c.position.z > 12) c.position.z -= 420; }
+  // leve balanço da cabine
+  cabine.position.y = Math.sin(agora / 170) * 0.0015 + Math.sin(agora / 530) * 0.002;
+  camera.position.y = OLHO.y + cabine.position.y * 0.6;
+  volante.rotation.z = Math.sin(agora / 2400) * 0.03;
+  // limpadores
+  if (st.limpador > 0 || angLimpador > 0.01) {
+    const vel = [0, 1.6, 2.4, 3.6][st.limpador] || 2.4;
+    if (pausaLimpador > 0) pausaLimpador -= dt;
+    else {
+      angLimpador += sentidoLimpador * vel * dt;
+      if (angLimpador > 1.55) { angLimpador = 1.55; sentidoLimpador = -1; }
+      if (angLimpador < 0) { angLimpador = 0; sentidoLimpador = 1; if (st.limpador === 1) pausaLimpador = 1.4; }
+    }
+  }
+  limpadores.forEach(l => { l.rotation.z = angLimpador; });
+  // chuva
+  chuva.visible = st.limpador > 0;
+  if (chuva.visible) {
+    const p = gotasGeo.attributes.position.array;
+    for (let i = 0; i < NGOTAS; i++) { p[i * 3 + 1] -= 9 * dt; p[i * 3 + 2] += v * dt * 0.3; if (p[i * 3 + 1] < 0 || p[i * 3 + 2] > 0) { p[i * 3 + 1] = 6 + Math.random() * 6; p[i * 3 + 2] = -Math.random() * 40; } }
+    gotasGeo.attributes.position.needsUpdate = true;
+  }
+  // faróis e ar-condicionado
+  farolLuzes.forEach(l => { l.intensity += ((st.farois ? 40 : 0) - l.intensity) * Math.min(1, dt * 6); });
+  matAr.emissive.setHex(st.clima.ligado ? (st.clima.temp <= 21 ? 0x1d5a8a : st.clima.temp >= 25 ? 0x8a3d1d : 0x2d4f66) : 0x000000);
+  analisarMaos();
+  if (agora - ultimaTela > 250) { ultimaTela = agora; desenharQuadro(); if (st.pagina === "musica" || st.chamada) desenharCentral(); }
+  renderer.render(scene, camera);
+}
+atualizarLegenda(); carregarFaixas(); desenharQuadro();
+requestAnimationFrame(laco);
+// Na apresentação, o som liga sozinho quando o navegador deixa (sem som, a música começa no primeiro clique).
+if (EMBUTIDO) { $("entrar").style.display = "none"; try { iniciarSom(); if (ctx.state === "running") tocar(); } catch (e) {} addEventListener("pointerdown", () => { if (!st.tocando && faixas.length) tocar(); }, { once: true }); }
+</script>
+</body>
+</html>
