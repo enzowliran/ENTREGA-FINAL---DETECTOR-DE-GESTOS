@@ -308,7 +308,7 @@
 
           <rect x="690" y="165" width="200" height="100" fill="#eaf1fb" stroke="#9db9ea"/>
           <text x="790" y="207" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">Combinação</text>
-          <text x="790" y="232" text-anchor="middle" font-size="13.5" fill="#364152">números pela GRU,</text>
+          <text x="790" y="232" text-anchor="middle" font-size="13.5" fill="#364152">números pelos pontos,</text>
           <text x="790" y="250" text-anchor="middle" font-size="13.5" fill="#364152">o resto pela CNN</text>
 
           <rect x="960" y="165" width="220" height="100" fill="#1e4fbf"/>
@@ -361,9 +361,9 @@
     <div class="cab an"><h2>Resultados</h2><p class="sub">Juntos, a CNN 3D e os pontos da mão acertam mais que cada um</p></div>
     <div class="corpo">
       <div class="duas" style="grid-template-columns:640px 1fr;gap:56px">
-        <div class="an" style="--d:1"><p class="tituloBloco">Acerto no teste misto</p><svg viewBox="0 0 620 470" width="620" height="470" role="img" aria-label="Acerto por modelo no teste misto"><line x1="40" x2="610" y1="400.0" y2="400.0" stroke="#e3e7ec"/><text x="32" y="405.0" text-anchor="end" font-size="13" fill="#7b8594">0%</text><line x1="40" x2="610" y1="310.0" y2="310.0" stroke="#e3e7ec"/><text x="32" y="315.0" text-anchor="end" font-size="13" fill="#7b8594">25%</text><line x1="40" x2="610" y1="220.0" y2="220.0" stroke="#e3e7ec"/><text x="32" y="225.0" text-anchor="end" font-size="13" fill="#7b8594">50%</text><line x1="40" x2="610" y1="130.0" y2="130.0" stroke="#e3e7ec"/><text x="32" y="135.0" text-anchor="end" font-size="13" fill="#7b8594">75%</text><line x1="40" x2="610" y1="40.0" y2="40.0" stroke="#e3e7ec"/><text x="32" y="45.0" text-anchor="end" font-size="13" fill="#7b8594">100%</text><rect class="barra" x="62.0" y="159.15999999999997" width="86.0" height="240.84000000000003" fill="#c9d8f0"/><text x="105.0" y="149.15999999999997" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">66,9%</text><text x="105.0" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D</text><text x="105.0" y="443" text-anchor="middle" font-size="14" fill="#364152">do zero</text><rect class="barra" x="172.0" y="124.60000000000002" width="86.0" height="275.4" fill="#9db9ea"/><text x="215.0" y="114.60000000000002" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">76,5%</text><text x="215.0" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU sobre</text><text x="215.0" y="443" text-anchor="middle" font-size="14" fill="#364152">os pontos</text><rect class="barra" x="282.0" y="97.60000000000002" width="86.0" height="302.4" fill="#3d74d6"/><text x="325.0" y="87.60000000000002" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">84,0%</text><text x="325.0" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D</text><text x="325.0" y="443" text-anchor="middle" font-size="14" fill="#364152">pré-treinada</text><rect class="barra" x="392.0" y="68.07999999999998" width="86.0" height="331.92" fill="#1e4fbf"/><text x="435.0" y="58.079999999999984" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">92,2%</text><text x="435.0" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU +</text><text x="435.0" y="443" text-anchor="middle" font-size="14" fill="#364152">CNN (média)</text><rect class="barra" x="502.0" y="71.68" width="86.0" height="328.32" fill="#0a1f44"/><text x="545.0" y="61.68000000000001" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">91,2%</text><text x="545.0" y="424" text-anchor="middle" font-size="14" fill="#364152">Regra ao</text><text x="545.0" y="443" text-anchor="middle" font-size="14" fill="#364152">vivo</text></svg></div>
-        <div class="an" style="--d:2"><p class="tituloBloco">Acerto e falsos disparos por modelo</p><table class="tabela"><tr><th>Modelo</th><th>Acerto</th><th>Falsos / min (IPN)</th></tr><tr><td>GRU sobre os pontos</td><td>76,5%</td><td>1,46</td></tr><tr><td>CNN 3D do zero</td><td>66,9%</td><td>—</td></tr><tr><td>CNN 3D pré-treinada + ajuste</td><td>84,0%</td><td>0,19</td></tr><tr><td>GRU + CNN (média 0,3 / 0,7)</td><td>92,2%</td><td>0,10</td></tr><tr><td>GRU + CNN, números pela GRU</td><td>92,0%</td><td>0,25</td></tr><tr class="vencedora"><td>Regra ao vivo: a GRU decide se é número</td><td>91,2%</td><td>a medir</td></tr></table>
-          <p class="nota">3.642 amostras de 5 bases, 36 classes, pessoas fora do treino. Nos números, a regra ao vivo acerta 95,7%. Todos os modelos testados: apêndice A8.</p></div>
+        <div class="an" style="--d:1"><p class="tituloBloco">Acerto no teste misto</p><svg viewBox="0 0 620 470" width="620" height="470" role="img" aria-label="Acerto por modelo no teste misto"><line x1="40" x2="610" y1="400.0" y2="400.0" stroke="#e3e7ec"/><text x="32" y="405.0" text-anchor="end" font-size="13" fill="#7b8594">0%</text><line x1="40" x2="610" y1="310.0" y2="310.0" stroke="#e3e7ec"/><text x="32" y="315.0" text-anchor="end" font-size="13" fill="#7b8594">25%</text><line x1="40" x2="610" y1="220.0" y2="220.0" stroke="#e3e7ec"/><text x="32" y="225.0" text-anchor="end" font-size="13" fill="#7b8594">50%</text><line x1="40" x2="610" y1="130.0" y2="130.0" stroke="#e3e7ec"/><text x="32" y="135.0" text-anchor="end" font-size="13" fill="#7b8594">75%</text><line x1="40" x2="610" y1="40.0" y2="40.0" stroke="#e3e7ec"/><text x="32" y="45.0" text-anchor="end" font-size="13" fill="#7b8594">100%</text><rect class="barra" x="62.0" y="159.15999999999997" width="86.0" height="240.84000000000003" fill="#c9d8f0"/><text x="105.0" y="149.15999999999997" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">66,9%</text><text x="105.0" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D</text><text x="105.0" y="443" text-anchor="middle" font-size="14" fill="#364152">do zero</text><rect class="barra" x="172.0" y="124.60000000000002" width="86.0" height="275.4" fill="#9db9ea"/><text x="215.0" y="114.60000000000002" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">76,5%</text><text x="215.0" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU sobre</text><text x="215.0" y="443" text-anchor="middle" font-size="14" fill="#364152">os pontos</text><rect class="barra" x="282.0" y="97.60000000000002" width="86.0" height="302.4" fill="#3d74d6"/><text x="325.0" y="87.60000000000002" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">84,0%</text><text x="325.0" y="424" text-anchor="middle" font-size="14" fill="#364152">CNN 3D</text><text x="325.0" y="443" text-anchor="middle" font-size="14" fill="#364152">pré-treinada</text><rect class="barra" x="392.0" y="68.07999999999998" width="86.0" height="331.92" fill="#1e4fbf"/><text x="435.0" y="58.079999999999984" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">92,2%</text><text x="435.0" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU +</text><text x="435.0" y="443" text-anchor="middle" font-size="14" fill="#364152">CNN (média)</text><rect class="barra" x="502.0" y="71.68" width="86.0" height="328.32" fill="#0a1f44"/><text x="545.0" y="61.68000000000001" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">91,2%</text><text x="545.0" y="424" text-anchor="middle" font-size="14" fill="#364152">GRU +</text><text x="545.0" y="443" text-anchor="middle" font-size="14" fill="#364152">CNN (portão)</text></svg></div>
+        <div class="an" style="--d:2"><p class="tituloBloco">Acerto e falsos disparos por modelo</p><table class="tabela"><tr><th>Modelo</th><th>Acerto</th><th>Falsos / min (IPN)</th></tr><tr><td>GRU sobre os pontos</td><td>76,5%</td><td>1,46</td></tr><tr><td>CNN 3D do zero</td><td>66,9%</td><td>—</td></tr><tr><td>CNN 3D pré-treinada + ajuste</td><td>84,0%</td><td>0,19</td></tr><tr><td>GRU + CNN (média 0,3 / 0,7)</td><td>92,2%</td><td>0,10</td></tr><tr><td>GRU + CNN, números pela GRU</td><td>92,0%</td><td>0,25</td></tr><tr><td>GRU + CNN, portão da GRU</td><td>91,2%</td><td>—</td></tr><tr class="vencedora"><td>Usada ao vivo: contagem de dedos + CNN</td><td>a medir</td><td>a medir</td></tr></table>
+          <p class="nota">3.642 amostras de 5 bases, 36 classes, pessoas fora do treino. Nos números, o portão da GRU acerta 95,7%. A regra usada ao vivo (contagem de dedos) ainda não foi medida. Todos os modelos: apêndice A8.</p></div>
       </div>
     </div>
   </section>
@@ -461,7 +461,7 @@
     <div class="agenda">
       <div class="an"><h1>Apêndice</h1><div class="conteudo">
         A1 · Dados<br>A2 · Por que não só a voz<br>A3 · CNN 2D e CNN 3D<br>A4 · CNN 3D por dentro<br>A5 · Mão 3D ao vivo<br>A6 · GRU
-        <br>A7 · Combinação<br>A8 · Todos os modelos<br>A9 · Gestos e comandos<br>A10 · Histórico dos dedos<br>A11 · Falsos disparos: método
+        <br>A7 · Combinação e modelo ao vivo<br>A8 · Todos os modelos<br>A9 · Gestos e comandos<br>A10 · Histórico dos dedos<br>A11 · Falsos disparos: método
         <br>A12 · Hardware<br>A13 · Riscos<br>A14 · Outras aplicações<br>A15 · Referências</div></div>
       <div class="itens an" style="--d:1">
         <div class="item"><b>I.</b>O problema</div>
@@ -646,7 +646,7 @@
           </g>
           <!-- rodapé do esquema -->
           <text x="0" y="380" font-size="16" fill="#364152">Leve: 525.212 parâmetros (GRU do teste com o Jester). Treinada do zero sobre os pontos;</text>
-          <text x="0" y="404" font-size="16" fill="#364152">o MediaPipe entra pronto e congelado. Ao vivo, a GRU decide os números (1, 2 e 4 dedos) quando a mão está parada.</text>
+          <text x="0" y="404" font-size="16" fill="#364152">o MediaPipe entra pronto e congelado. Ao vivo, a contagem de dedos decide os números e a GRU reforça a nota (A7).</text>
         </g>
       </svg>
     </div>
@@ -662,10 +662,71 @@
           <table class="tabela tabTexto">
             <tr><th>Regra</th><th>Resultado</th></tr>
             <tr><td>Média simples (peso da GRU 0,2 a 0,3)</td><td>92,2% no teste misto; ao vivo, os números quase nunca passavam do gatilho de 0,7</td></tr>
-            <tr class="vencedora"><td>Regra ao vivo: a GRU decide se é número (mão parada); senão, a CNN</td><td>91,2% no teste misto; 95,7% nos números</td></tr>
+            <tr><td>Portão da GRU: a GRU decide se é número (mão parada); senão, a CNN</td><td>91,2% no teste misto; 95,7% nos números; ao vivo, nota baixa nos números</td></tr>
+            <tr class="vencedora"><td>Usada ao vivo: a contagem de dedos decide se é número; senão, a CNN</td><td>ainda não medida (próximo slide)</td></tr>
           </table>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- A7 (segunda parte). O modelo usado ao vivo -->
+  <section class="slide" data-titulo="A7 · Modelo usado ao vivo" data-fonte="Fonte: demo/player.py (laço ao vivo e combinação)">
+    <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A7 · O modelo usado ao vivo</h2><p class="sub">Os dois modelos analisam cada instante; a contagem de dedos decide qual resposta vale</p></div>
+    <div class="corpo an" style="--d:1">
+      <svg viewBox="0 0 1430 470" width="1424" height="468" role="img" aria-label="Caminho de cada análise no modelo usado ao vivo">
+        <defs><marker id="setaA7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
+        <g font-family="Segoe UI, system-ui, sans-serif">
+          <rect x="0" y="150" width="160" height="100" fill="#0a1f44"/>
+          <text x="80" y="193" text-anchor="middle" font-size="21" font-weight="600" fill="#fff">Câmera</text>
+          <text x="80" y="221" text-anchor="middle" font-size="14" fill="#c9d6ea">análise a cada 0,15 s</text>
+
+          <rect x="230" y="20" width="340" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
+          <rect x="230" y="20" width="6" height="130" fill="#1e4fbf"/>
+          <text x="256" y="60" font-size="21" font-weight="600" fill="#0a1f44">CNN 3D</text>
+          <text x="256" y="90" font-size="16" fill="#364152">Pixels do vídeo (1, 1,5 e 3 s)</text>
+          <text x="256" y="122" font-size="14" fill="#7b8594">uma nota para cada uma das 36 classes</text>
+
+          <rect x="230" y="250" width="340" height="130" fill="#fff" stroke="#1e4fbf" stroke-width="2"/>
+          <rect x="230" y="250" width="6" height="130" fill="#1e4fbf"/>
+          <text x="256" y="290" font-size="21" font-weight="600" fill="#0a1f44">Pontos da mão</text>
+          <text x="256" y="320" font-size="16" fill="#364152">MediaPipe: 21 pontos por quadro</text>
+          <text x="256" y="352" font-size="14" fill="#7b8594">GRU: nota dos números · contagem de dedos</text>
+
+          <rect x="650" y="130" width="300" height="140" fill="#eaf1fb" stroke="#9db9ea"/>
+          <text x="800" y="166" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1.5">CONTAGEM DE DEDOS</text>
+          <text x="800" y="198" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">Mão parada com 1 a 4 dedos,</text>
+          <text x="800" y="224" text-anchor="middle" font-size="18" font-weight="600" fill="#0a1f44">iguais em 5 de 6 quadros?</text>
+          <text x="800" y="252" text-anchor="middle" font-size="13.5" fill="#364152">pela geometria dos 21 pontos</text>
+
+          <rect x="1040" y="30" width="200" height="100" fill="#fff" stroke="#0a1f44" stroke-width="1.5"/>
+          <text x="1140" y="70" text-anchor="middle" font-size="19" font-weight="600" fill="#0a1f44">Número</text>
+          <text x="1140" y="96" text-anchor="middle" font-size="14" fill="#364152">1, 2 ou 4 dedos · nota ≥ 0,9</text>
+          <text x="1004" y="122" font-size="14" font-weight="700" fill="#1e4fbf">sim</text>
+
+          <rect x="1040" y="270" width="200" height="100" fill="#fff" stroke="#0a1f44" stroke-width="1.5"/>
+          <text x="1140" y="310" text-anchor="middle" font-size="19" font-weight="600" fill="#0a1f44">Gesto da CNN</text>
+          <text x="1140" y="336" text-anchor="middle" font-size="14" fill="#364152">deslizar · pare · polegar</text>
+          <text x="1004" y="290" font-size="14" font-weight="700" fill="#1e4fbf">não</text>
+
+          <rect x="1290" y="150" width="140" height="100" fill="#1e4fbf"/>
+          <text x="1360" y="190" text-anchor="middle" font-size="20" font-weight="600" fill="#fff">Gatilho</text>
+          <text x="1360" y="214" text-anchor="middle" font-size="13.5" fill="#e3ecfa">nota ≥ 0,7</text>
+          <text x="1360" y="232" text-anchor="middle" font-size="13.5" fill="#e3ecfa">em 3 análises</text>
+
+          <path d="M160 200 H195 V85 H224" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
+          <path d="M195 200 V315 H224" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
+          <path d="M570 85 H610 V180 H644" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
+          <path d="M570 315 H610 V220 H644" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
+          <path d="M950 180 H995 V80 H1034" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
+          <path d="M950 220 H995 V320 H1034" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
+          <path d="M1240 80 H1265 V185 H1284" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
+          <path d="M1240 320 H1265 V215 H1284" fill="none" stroke="#0a1f44" stroke-width="2" marker-end="url(#setaA7)"/>
+
+          <text x="0" y="428" font-size="16" fill="#364152">A CNN e a GRU rodam em toda análise; nenhuma é pulada. Cinco dedos, só o polegar ou a mão em movimento ficam com a CNN.</text>
+          <text x="0" y="454" font-size="16" fill="#364152">Esta regra substituiu o portão da GRU, que ao vivo dava nota baixa nos números. O acerto e os falsos por minuto dela ainda não foram medidos.</text>
+        </g>
+      </svg>
     </div>
   </section>
 
@@ -692,7 +753,8 @@
 <tr><td>CNN 3D pré-treinada + ajuste</td><td>84,0%</td><td>—</td><td>0,19 / min</td></tr>
 <tr><td>GRU + CNN (média 0,3 / 0,7)</td><td>92,2%</td><td>—</td><td>0,10 / min*</td></tr>
 <tr class="vencedora"><td>GRU + CNN, números pela GRU</td><td>92,0%</td><td>—</td><td>0,25 / min</td></tr>
-<tr class="vencedora"><td>Regra ao vivo: a GRU decide se é número</td><td>91,2%</td><td>—</td><td>a medir</td></tr>
+<tr><td>GRU + CNN, portão da GRU (mão parada)</td><td>91,2%</td><td>—</td><td>—</td></tr>
+<tr class="vencedora"><td>Usada ao vivo: contagem de dedos + CNN</td><td>a medir</td><td>—</td><td>a medir</td></tr>
 </table></div>
     <p class="nota an" style="--d:2;margin-top:6px;font-size:12.5px">— = não medido. * Quase não dispara os números (36/265 trechos de 1 dedo, 0/264 de 2). Cada bloco foi medido num conjunto diferente: compare dentro do bloco.</p>
   </section>
@@ -700,7 +762,7 @@
   <!-- A9. Gestos e comandos -->
   <section class="slide" data-titulo="A9 · Gestos e comandos" data-fonte="Fonte: demo/player.py (COMANDOS_CARRO3D) e classes do modelo final">
     <div class="cab an" style="margin-bottom:18px"><p class="rotuloCab">Apêndice</p><h2>A9 · Gestos e comandos no carro</h2></div>
-    <div class="an" style="--d:1"><table class="tabela tabGestos"><tr><th>Gesto</th><th>Quem reconhece</th><th>Comando no carro</th></tr><tr class="vencedora"><td><b>OK</b> (polegar tocando o indicador)</td><td>pontos da mão</td><td>ativa: bip, voz e 7 s para dar um comando</td></tr><tr><td><b>Um dedo</b></td><td>pontos + GRU</td><td>abre Música</td></tr><tr><td><b>Dois dedos</b></td><td>pontos + GRU</td><td>abre Ar-condicionado</td></tr><tr><td><b>Quatro dedos</b></td><td>pontos + GRU</td><td>abre Telefone</td></tr><tr><td><b>Deslizar para a direita</b></td><td>CNN 3D</td><td>próxima música</td></tr><tr><td><b>Deslizar para a esquerda</b></td><td>CNN 3D</td><td>música anterior</td></tr><tr><td><b>Polegar para cima</b></td><td>CNN 3D</td><td>volume + (no ar, sobe o valor; mantido, atende a chamada)</td></tr><tr><td><b>Polegar para baixo</b></td><td>CNN 3D</td><td>volume − (no ar, desce o valor; mantido, recusa a chamada)</td></tr><tr><td><b>Sinal de pare</b></td><td>CNN 3D</td><td>toca/pausa, liga/desliga o ar, simula/encerra chamada, confirma no menu</td></tr><tr><td><b>Empurrar a mão</b></td><td>CNN 3D</td><td>toca/pausa, liga/desliga o ar, simula/encerra chamada, confirma no menu</td></tr><tr><td><b>Tamborilar os dedos</b></td><td>CNN 3D</td><td>menu de músicas</td></tr><tr><td><b>Puxar a mão</b></td><td>CNN 3D</td><td>explica os comandos em voz alta</td></tr></table></div>
+    <div class="an" style="--d:1"><table class="tabela tabGestos"><tr><th>Gesto</th><th>Quem reconhece</th><th>Comando no carro</th></tr><tr class="vencedora"><td><b>OK</b> (polegar tocando o indicador)</td><td>pontos da mão</td><td>ativa: bip, voz e 7 s para dar um comando</td></tr><tr><td><b>Um dedo</b></td><td>pontos (contagem de dedos)</td><td>abre Música</td></tr><tr><td><b>Dois dedos</b></td><td>pontos (contagem de dedos)</td><td>abre Ar-condicionado</td></tr><tr><td><b>Quatro dedos</b></td><td>pontos (contagem de dedos)</td><td>abre Telefone</td></tr><tr><td><b>Deslizar para a direita</b></td><td>CNN 3D</td><td>próxima música</td></tr><tr><td><b>Deslizar para a esquerda</b></td><td>CNN 3D</td><td>música anterior</td></tr><tr><td><b>Polegar para cima</b></td><td>CNN 3D</td><td>volume + (no ar, sobe o valor; mantido, atende a chamada)</td></tr><tr><td><b>Polegar para baixo</b></td><td>CNN 3D</td><td>volume − (no ar, desce o valor; mantido, recusa a chamada)</td></tr><tr><td><b>Sinal de pare</b></td><td>CNN 3D</td><td>toca/pausa, liga/desliga o ar, simula/encerra chamada, confirma no menu</td></tr><tr><td><b>Empurrar a mão</b></td><td>CNN 3D</td><td>toca/pausa, liga/desliga o ar, simula/encerra chamada, confirma no menu</td></tr><tr><td><b>Tamborilar os dedos</b></td><td>CNN 3D</td><td>menu de músicas</td></tr><tr><td><b>Puxar a mão</b></td><td>CNN 3D</td><td>explica os comandos em voz alta</td></tr></table></div>
     <div class="an" style="--d:2"><p class="nota"><b>36 classes no modelo.</b> Também reconhecidos, sem comando no carro: Deslizar para baixo, Deslizar para cima, Dois dedos para a esquerda, Dois dedos para a direita, Dois dedos para baixo, Dois dedos para cima, Empurrar com dois dedos, Puxar com dois dedos, Rolar a mão para frente, Rolar a mão para trás, Girar a mão no sentido horário, Girar a mão no sentido anti-horário, Zoom in com a mão, Zoom out com a mão, Zoom in com dois dedos, Zoom out com dois dedos, Acenar, Três dedos, Volante · FlickDown, Volante · FlickUp, Volante · SwipeLeft, Volante · SwipeRight, Volante · Tap. E duas classes de rejeição: sem gesto e outro movimento.</p></div>
   </section>
 

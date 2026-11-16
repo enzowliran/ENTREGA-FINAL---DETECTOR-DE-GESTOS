@@ -117,14 +117,15 @@ def tabela_modelos(d, f):
         ("CNN 3D pré-treinada + ajuste", f"{br(f['acc_cnn_pre'])}%", "—", f"{br(f['fl_cnn_pre'], 2)} / min"),
         ("GRU + CNN (média 0,3 / 0,7)", f"{br(f['acc_media'])}%", "—", f"{br(f['fl_media'], 2)} / min*"),
         ("GRU + CNN, números pela GRU", f"{br(f['acc_pesos'])}%", "—", f"{br(f['fl_final'], 2)} / min"),
-        ("Regra ao vivo: a GRU decide se é número", f"{br(f['acc_mistura'])}%", "—", "a medir"),
+        ("GRU + CNN, portão da GRU (mão parada)", f"{br(f['acc_mistura'])}%", "—", "—"),
+        ("Usada ao vivo: contagem de dedos + CNN", "a medir", "—", "a medir"),
     ]
     out = ['<table class="tabela tabModelos"><tr><th>Modelo</th><th>Acerto</th><th>Falsa ativação (Jester)</th><th>Falsos disparos (IPN, vídeo real)</th></tr>']
     for l in linhas:
         if l[1] is None:
             out.append(f'<tr class="bloco"><td colspan="4">{html.escape(l[0])}</td></tr>')
         else:
-            cls = ' class="vencedora"' if l[0].startswith("Regra ao vivo") or l[0].startswith("GRU + CNN, números") else ""
+            cls = ' class="vencedora"' if l[0].startswith("Usada ao vivo") or l[0].startswith("GRU + CNN, números") else ""
             out.append(f"<tr{cls}>" + "".join(f"<td>{html.escape(c)}</td>" for c in l) + "</tr>")
     out.append("</table>")
     return "\n".join(out)
@@ -145,12 +146,15 @@ def tabela_misto(f):
     """Só o bloco do teste misto (o slide de acerto); a tabela completa fica no apêndice."""
     linhas = [("GRU sobre os pontos", f["acc_gru"], f["fl_gru"]), ("CNN 3D do zero", f["acc_cnn_zero"], None),
               ("CNN 3D pré-treinada + ajuste", f["acc_cnn_pre"], f["fl_cnn_pre"]), ("GRU + CNN (média 0,3 / 0,7)", f["acc_media"], f["fl_media"]),
-              ("GRU + CNN, números pela GRU", f["acc_pesos"], f["fl_final"]), ("Regra ao vivo: a GRU decide se é número", f["acc_mistura"], None)]
+              ("GRU + CNN, números pela GRU", f["acc_pesos"], f["fl_final"]), ("GRU + CNN, portão da GRU", f["acc_mistura"], None),
+              ("Usada ao vivo: contagem de dedos + CNN", None, None)]
     out = ['<table class="tabela"><tr><th>Modelo</th><th>Acerto</th><th>Falsos / min (IPN)</th></tr>']
     for nome, a, fl in linhas:
-        cls = ' class="vencedora"' if nome.startswith("Regra ao vivo") else ""
-        falsos = "a medir" if nome.startswith("Regra ao vivo") else (f"{br(fl, 2)}" if fl is not None else "—")
-        out.append(f"<tr{cls}><td>{html.escape(nome)}</td><td>{br(a)}%</td><td>{falsos}</td></tr>")
+        vivo = nome.startswith("Usada ao vivo")
+        cls = ' class="vencedora"' if vivo else ""
+        falsos = "a medir" if vivo else (f"{br(fl, 2)}" if fl is not None else "—")
+        acerto = "a medir" if vivo else f"{br(a)}%"
+        out.append(f"<tr{cls}><td>{html.escape(nome)}</td><td>{acerto}</td><td>{falsos}</td></tr>")
     out.append("</table>")
     return "".join(out)
 
@@ -168,7 +172,7 @@ def tabela_gestos():
     linhas = ['<tr class="vencedora"><td><b>OK</b> (polegar tocando o indicador)</td><td>pontos da mão</td>'
               '<td>ativa: bip, voz e 7 s para dar um comando</td></tr>']
     for n in com:
-        quem = "pontos + GRU" if n in NUMEROS else "CNN 3D"
+        quem = "pontos (contagem de dedos)" if n in NUMEROS else "CNN 3D"
         linhas.append(f'<tr><td><b>{html.escape(V.TRADUCAO.get(n, n))}</b></td><td>{quem}</td><td>{html.escape(acao.get(comandos[n], comandos[n]))}</td></tr>')
     sem = [V.TRADUCAO.get(n, n.replace("Volante: ", "Volante · ")) for n in nomes if n not in comandos and n not in G.SEM_GESTO]
     tabela = ('<table class="tabela tabGestos"><tr><th>Gesto</th><th>Quem reconhece</th><th>Comando no carro</th></tr>'
@@ -184,7 +188,7 @@ def tabela_gestos():
 def grafico_acerto(f):
     barras = [("CNN 3D do zero", f["acc_cnn_zero"], "#c9d8f0"), ("GRU sobre os pontos", f["acc_gru"], "#9db9ea"),
               ("CNN 3D pré-treinada", f["acc_cnn_pre"], "#3d74d6"), ("GRU + CNN (média)", f["acc_media"], "#1e4fbf"),
-              ("Regra ao vivo", f["acc_mistura"], "#0a1f44")]
+              ("GRU + CNN (portão)", f["acc_mistura"], "#0a1f44")]
     W, H, base, topo = 620, 470, 400, 40
     out = [f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Acerto por modelo no teste misto">']
     for v in (0, 25, 50, 75, 100):
