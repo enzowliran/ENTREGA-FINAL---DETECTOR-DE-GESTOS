@@ -659,6 +659,19 @@ def criar_servidor(args, estado, parar):
                 self.send_header("Cache-Control", "no-store")
                 self.end_headers()
                 self.wfile.write((RAIZ / Path(url.path).name).read_bytes())
+            elif url.path == "/demo/mao_modelo.js" or (url.path.startswith("/demo/mao/") and url.path.endswith(".glb")):
+                # Mão realista das páginas hand3d.html e carro3d.html: o código (demo/mao_modelo.js) e os dois modelos (demo/mao/*.glb).
+                nome = Path(url.path).name
+                arquivo = RAIZ / nome if nome.endswith(".js") else RAIZ / "mao" / nome
+                if not arquivo.is_file():
+                    self.send_response(404)
+                    self.end_headers()
+                    return
+                self.send_response(200)
+                self.send_header("Content-Type", "text/javascript; charset=utf-8" if nome.endswith(".js") else "model/gltf-binary")
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write(arquivo.read_bytes())
             elif url.path.startswith("/vendor/"):
                 # Só arquivos diretos de demo/vendor, sem subpastas.
                 arquivo = RAIZ / "vendor" / Path(url.path).name
