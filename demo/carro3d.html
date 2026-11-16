@@ -27,6 +27,8 @@
   #barra i { display: block; height: 100%; width: 0; background: var(--acento); transition: width .15s; }
   #info { font-size: 12px; opacity: .7; margin-top: 6px; }
   #pontosInfo { font-size: 13px; margin-top: 6px; color: #b9c6d2; }
+  #registro { font-size: 13px; margin-top: 4px; color: #b9c6d2; }
+  #registro b.sim { color: #3ad07a; } #registro b.nao { color: #ff8a65; }
   #pontosInfo b { color: #7dd3a6; }
   #mini { right: 14px; top: 14px; width: 240px; overflow: hidden; padding: 0; }
   #mini img, #mini canvas { display: block; width: 100%; transform: scaleX(-1); }
@@ -65,6 +67,7 @@
   <div id="gesto">—</div>
   <div id="barra"><i id="confianca"></i></div>
   <div id="pontosInfo">pontos da mão: aguardando o servidor…</div>
+  <div id="registro">último comando do servidor: —</div>
   <div id="info">mãos: <span id="nMaos">0</span> · comandos: <span id="nComandos">0</span> · <span id="nMs">—</span> ms por análise</div>
 </div>
 <div id="mini" class="caixa"><img id="stream" alt=""><canvas id="sobre"></canvas><span class="rot">câmera (espelhada)</span></div>
@@ -480,7 +483,8 @@ function iniciarSom() {
   if (ctx) { ctx.resume(); return; }
   ctx = new AudioContext(); mestre = ctx.createGain(); mestre.connect(ctx.destination); aplicarVolume();
 }
-function aplicarVolume() { if (mestre) mestre.gain.setTargetAtTime(st.volume * fatorVoz * (st.chamada ? 0.25 : 1), ctx.currentTime, 0.05); }
+let fatorBip = 1;
+function aplicarVolume() { if (mestre) mestre.gain.setTargetAtTime(st.volume * fatorVoz * fatorBip * (st.chamada ? 0.25 : 1), ctx.currentTime, 0.05); }
 function notaSintetica() {
   const f = faixas[st.faixa], t = ctx.currentTime, n = f.notas[passoSintese++ % f.notas.length];
   for (const [mult, gan] of [[1, 0.16], [2, 0.05]]) {
@@ -515,20 +519,29 @@ function trocarFaixa(d) {
   if (audioEl && faixas[st.faixa].arquivo) { audioEl.src = "/musicas/" + encodeURIComponent(faixas[st.faixa].arquivo); }
   if (st.tocando) tocar(); else desenharCentral();
 }
-// ---- voz: diz a página ao trocar e lê os comandos quando a pessoa pede ----
+// ---- voz: fala cada ação em voz alta, para o motorista não precisar olhar a tela ----
+// A música abaixa enquanto a voz fala. fila = true espera a fala anterior terminar (usado no "janela fechada").
 const temVoz = "speechSynthesis" in window;
-function falar(frases) {
-  if (!temVoz) return;
-  speechSynthesis.cancel();
-  const voz = speechSynthesis.getVoices().find(v => /^pt[-_]BR/i.test(v.lang));
-  if (!voz) return;
-  fatorVoz = 0.3; aplicarVolume();
-  frases.forEach((txt, i) => {
-    const u = new SpeechSynthesisUtterance(txt); u.voice = voz; u.lang = "pt-BR"; u.rate = 1.05;
-    if (i === frases.length - 1) u.onend = u.onerror = () => { fatorVoz = 1; aplicarVolume(); };
+function vozPt() {
+  const v = speechSynthesis.getVoices();
+  return v.find(x => /^pt[-_]BR/i.test(x.lang)) || v.find(x => /^pt/i.test(x.lang)) || null;
+}
+let falando = 0;
+function falar(frases, fila = false) {
+  if (!temVoz || !frases.length) return;
+  if (!fila) { speechSynthesis.cancel(); falando = 0; }
+  const voz = vozPt();
+  fatorVoz = 0.2; aplicarVolume();
+  frases.forEach(txt => {
+    const u = new SpeechSynthesisUtterance(txt.replace(/[▶◀👌📞❚]/gu, "").trim()); u.lang = "pt-BR"; u.rate = 1.08;
+    if (voz) u.voice = voz;
+    falando++;
+    u.onend = u.onerror = () => { if (--falando <= 0) { falando = 0; fatorVoz = 1; aplicarVolume(); } };
     speechSynthesis.speak(u);
   });
 }
+// mostra na tela e fala em voz alta (fala pode ser um texto diferente do mostrado)
+function anunciar(txt, fala = txt) { avisar(txt); falar([fala]); }
 // ---- legenda dos gestos ----
 // "Empurrar a mão" faz o papel do antigo sinal de pare (tocar/pausar, ligar/desligar, confirmar); "puxar a mão" explica.
 function comandosAtuais() {
@@ -554,42 +567,42 @@ function iniciarChamada() {
   const nome = CONTATOS[st.contato++ % CONTATOS.length];
   st.chamada = { nome, estado: "tocando", pendente: null, inicio: 0, retomar: false };
   st.chamada.limite = setTimeout(() => terminarChamada("Chamada perdida: " + nome), 20000);
-  aplicarVolume(); avisar("📞 Chamada de " + nome); atualizarLegenda(); desenharCentral(); falar(["Chamada de " + nome]);
+  aplicarVolume(); anunciar("📞 Chamada de " + nome, "Chamada de " + nome + ". Mantenha o polegar para cima para atender."); atualizarLegenda(); desenharCentral();
 }
 function terminarChamada(txt) {
   clearTimeout(st.chamada.limite);
   const retomar = st.chamada.retomar; st.chamada = null; aplicarVolume();
   if (retomar) tocar();
-  avisar(txt); atualizarLegenda(); desenharCentral();
+  anunciar(txt); atualizarLegenda(); desenharCentral();
 }
 function executar(c, repeticao = false) {
   let feito = true;
-  if (c === "ajuda") { if (!repeticao) { falar([NOMES_PAGINA[st.pagina], ...comandosAtuais().map(([g, a]) => g + ": " + a)]); avisar("Comandos de " + NOMES_PAGINA[st.pagina]); st.comandos++; } atualizarHud(); return; }
+  if (c === "ajuda") { if (!repeticao) { falar([NOMES_PAGINA[st.pagina], ...comandosAtuais().map(([g, a]) => g + ": " + a)]); avisar("Comandos de " + NOMES_PAGINA[st.pagina]); st.comandos++; } atualizarHud(); return true; }
   if (st.chamada) {
     const ch = st.chamada;
     if (ch.estado === "atendida") { if (c === "alternar" && !repeticao) terminarChamada("Chamada encerrada: " + ch.nome); else feito = false; }
     else if (c === "volume_mais" || c === "volume_menos") {
       // atender ou recusar exige manter o polegar (o servidor repete o gesto mantido): evita disparo por engano
-      if (!repeticao) { ch.pendente = c; avisar(c === "volume_mais" ? "Mantenha para atender" : "Mantenha para recusar"); feito = false; }
+      if (!repeticao) { ch.pendente = c; anunciar(c === "volume_mais" ? "Mantenha para atender" : "Mantenha para recusar"); feito = false; }
       else if (ch.pendente === c) {
-        if (c === "volume_mais") { clearTimeout(ch.limite); ch.retomar = st.tocando; if (st.tocando) pausar(); ch.estado = "atendida"; ch.inicio = performance.now(); avisar("Chamada atendida"); atualizarLegenda(); }
+        if (c === "volume_mais") { clearTimeout(ch.limite); ch.retomar = st.tocando; if (st.tocando) pausar(); ch.estado = "atendida"; ch.inicio = performance.now(); anunciar("Chamada atendida"); atualizarLegenda(); }
         else terminarChamada("Chamada recusada: " + ch.nome);
       } else feito = false;
     } else feito = false;
   }
   else if (st.menu) {
     // com o menu aberto, só valem navegar, escolher e fechar
-    if (c === "volume_mais") { st.selecionada = (st.selecionada - 1 + faixas.length) % faixas.length; avisar(faixas[st.selecionada].titulo); }
-    else if (c === "volume_menos") { st.selecionada = (st.selecionada + 1) % faixas.length; avisar(faixas[st.selecionada].titulo); }
+    if (c === "volume_mais") { st.selecionada = (st.selecionada - 1 + faixas.length) % faixas.length; anunciar(faixas[st.selecionada].titulo, "Selecionada: " + faixas[st.selecionada].titulo); }
+    else if (c === "volume_menos") { st.selecionada = (st.selecionada + 1) % faixas.length; anunciar(faixas[st.selecionada].titulo, "Selecionada: " + faixas[st.selecionada].titulo); }
     else if (repeticao) feito = false;
-    else if (c === "alternar") { st.menu = false; if (st.selecionada !== st.faixa) { st.faixa = st.selecionada; passoSintese = 0; if (audioEl) audioEl.removeAttribute("src"); } tocar(); avisar("▶ " + faixas[st.faixa].titulo); atualizarLegenda(); }
-    else if (c === "tamborilar") { st.menu = false; avisar("Menu fechado"); atualizarLegenda(); }
+    else if (c === "alternar") { st.menu = false; if (st.selecionada !== st.faixa) { st.faixa = st.selecionada; passoSintese = 0; if (audioEl) audioEl.removeAttribute("src"); } tocar(); anunciar("▶ " + faixas[st.faixa].titulo, "Tocando " + faixas[st.faixa].titulo); atualizarLegenda(); }
+    else if (c === "tamborilar") { st.menu = false; anunciar("Menu fechado"); atualizarLegenda(); }
     else feito = false;
   }
   else if (c === "tamborilar") {
     if (repeticao) return;
     if (st.pagina !== "musica") { st.pagina = "musica"; }
-    st.menu = true; st.selecionada = st.faixa; avisar("Menu de músicas"); atualizarLegenda(); falar(["Menu de músicas"]);
+    st.menu = true; st.selecionada = st.faixa; anunciar("Menu de músicas", "Menu de músicas. Selecionada: " + faixas[st.faixa].titulo); atualizarLegenda();
   }
   else if (c.startsWith("pagina_")) {
     // 1 a 4 dedos (reconhecidos pelos pontos da mão + GRU) abrem direto uma página
@@ -611,22 +624,24 @@ function executar(c, repeticao = false) {
       if (k.campo === 0) k.temp = Math.max(16, Math.min(28, k.temp + d));
       else if (k.campo === 1) k.vent = Math.max(1, Math.min(5, k.vent + d));
       else k.dir = (k.dir + d + DIRECOES.length) % DIRECOES.length;
-      avisar(k.campo === 0 ? k.temp + "°C" : k.campo === 1 ? "Ventilação " + k.vent : DIRECOES[k.dir]);
+      anunciar(k.campo === 0 ? k.temp + "°C" : k.campo === 1 ? "Ventilação " + k.vent : DIRECOES[k.dir],
+               k.campo === 0 ? k.temp + " graus" : k.campo === 1 ? "Ventilação " + k.vent : "Ar no " + DIRECOES[k.dir]);
     }
     else if (repeticao) feito = false;
-    else if (c === "proxima" || c === "anterior") { k.campo = (k.campo + (c === "proxima" ? 1 : -1) + 3) % 3; avisar(CAMPOS[k.campo]); }
-    else if (c === "alternar") { k.ligado = !k.ligado; avisar("Ar-condicionado " + (k.ligado ? "ligado" : "desligado")); atualizarLegenda(); }
+    else if (c === "proxima" || c === "anterior") { k.campo = (k.campo + (c === "proxima" ? 1 : -1) + 3) % 3; anunciar(CAMPOS[k.campo]); }
+    else if (c === "alternar") { k.ligado = !k.ligado; anunciar("Ar-condicionado " + (k.ligado ? "ligado" : "desligado")); atualizarLegenda(); }
     else feito = false;
   }
   else if (repeticao) feito = false;
   else if (st.pagina === "telefone") { if (c === "alternar") iniciarChamada(); else feito = false; }
-  else if (c === "proxima") { trocarFaixa(1); if (!st.tocando) tocar(); avisar("▶ " + faixas[st.faixa].titulo); }
-  else if (c === "anterior") { trocarFaixa(-1); if (!st.tocando) tocar(); avisar("◀ " + faixas[st.faixa].titulo); }
-  else if (c === "alternar") { st.tocando ? pausar() : tocar(); avisar(st.tocando ? "Tocando" : "Pausado"); atualizarLegenda(); }
-  else if (c === "volume_mais" || c === "volume_menos") { st.volume = Math.max(0, Math.min(1, Math.round((st.volume + (c === "volume_mais" ? 0.1 : -0.1)) * 10) / 10)); aplicarVolume(); avisar("Volume " + Math.round(st.volume * 100) + "%"); }
+  else if (c === "proxima") { trocarFaixa(1); if (!st.tocando) tocar(); anunciar("▶ " + faixas[st.faixa].titulo, "Próxima: " + faixas[st.faixa].titulo); }
+  else if (c === "anterior") { trocarFaixa(-1); if (!st.tocando) tocar(); anunciar("◀ " + faixas[st.faixa].titulo, "Anterior: " + faixas[st.faixa].titulo); }
+  else if (c === "alternar") { st.tocando ? pausar() : tocar(); anunciar(st.tocando ? "Tocando" : "Pausado", st.tocando ? "Tocando " + faixas[st.faixa].titulo : "Música pausada"); atualizarLegenda(); }
+  else if (c === "volume_mais" || c === "volume_menos") { st.volume = Math.max(0, Math.min(1, Math.round((st.volume + (c === "volume_mais" ? 0.1 : -0.1)) * 10) / 10)); aplicarVolume(); anunciar("Volume " + Math.round(st.volume * 100) + "%", "Volume " + Math.round(st.volume * 100)); }
   else feito = false;
   if (feito) st.comandos++;
   desenharCentral(); atualizarHud();
+  return feito;
 }
 
 // ---- desenho da central multimídia ----
@@ -723,27 +738,38 @@ function desenharQuadro() {
 // O OK é reconhecido aqui, pela geometria dos pontos da mão (MediaPipe): pontas do polegar e do indicador encostadas
 // e médio, anelar e mínimo esticados, mantido por OK_SEGURAR segundos.
 // ======================================================================
-const JANELA_S = 4, OK_SEGURAR = 0.4;
+const JANELA_S = 7, OK_SEGURAR = 0.4;
 let janelaAte = 0, okDesde = 0, okSolto = true, fimAgendado = null;
 function janelaAberta() { return performance.now() < janelaAte; }
-function bip(freqs, duracao = 0.12) {
+// Sinal sonoro tipo "carrilhão": cada nota tem a fundamental e um harmônico, com ataque rápido e cauda curta. Fica bem
+// mais alto que a música, que abaixa enquanto o sinal toca (fatorBip).
+function bip(notas, duracao = 0.16) {
   try {
     if (!ctx) { ctx = new AudioContext(); mestre = ctx.createGain(); mestre.connect(ctx.destination); aplicarVolume(); }
     ctx.resume();
-    freqs.forEach((f, i) => {
-      const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime + i * (duracao + 0.03);
-      o.type = "sine"; o.frequency.value = f;
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.35, t + 0.01); g.gain.exponentialRampToValueAtTime(0.0001, t + duracao);
-      o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + duracao + 0.02);
+    fatorBip = 0.15; aplicarVolume();
+    const fim = notas.length * (duracao + 0.04) + 0.35;
+    setTimeout(() => { fatorBip = 1; aplicarVolume(); }, fim * 1000);
+    notas.forEach((f, i) => {
+      const t = ctx.currentTime + i * (duracao + 0.04);
+      [[1, "triangle", 0.55], [2, "sine", 0.18], [3, "sine", 0.08]].forEach(([mult, tipo, ganho]) => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.type = tipo; o.frequency.value = f * mult;
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(ganho, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + duracao + 0.25);
+        o.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + duracao + 0.3);
+      });
     });
   } catch (e) { /* sem som: a janela continua visível na tela */ }
 }
 function abrirJanela() {
   janelaAte = performance.now() + JANELA_S * 1000;
-  bip([880, 1320]);                      // abre: dois bipes subindo
+  bip([784, 1047, 1319]);                // abre: três notas subindo (sol, dó, mi)
   avisar("👌 Janela aberta: faça o comando", 1400);
+  setTimeout(() => falar(["Janela aberta"]), 450);
   clearTimeout(fimAgendado);
-  fimAgendado = setTimeout(() => { bip([660, 440], 0.18); avisar("Janela fechada", 1000); desenharQuadro(); }, JANELA_S * 1000);   // fecha: dois bipes descendo
+  fimAgendado = setTimeout(() => {       // fecha: três notas descendo e a voz, depois de qualquer fala em andamento
+    bip([1047, 784, 523], 0.2); avisar("Janela fechada", 1000); setTimeout(() => falar(["Janela fechada"], true), 550); desenharQuadro();
+  }, JANELA_S * 1000);
   desenharQuadro();
 }
 function atualizarJanela() {
@@ -794,8 +820,13 @@ function atualizarHud() { $("nComandos").textContent = st.comandos; }
 function receber(e) {
   if (e.tipo === "erro") { $("conexao").textContent = e.mensagem; $("ponto").className = ""; }
   if (e.tipo === "comando" && e.comando) {
-    if (janelaAberta()) executar(e.comando, !!e.repeticao);
-    else if (!e.repeticao) $("janelaSub").textContent = `ignorado: ${e.gesto || e.comando} (janela fechada)`;
+    const nome = e.gesto || e.classe || e.comando;
+    if (janelaAberta()) {
+      const feito = executar(e.comando, !!e.repeticao);
+      if (!e.repeticao) $("registro").innerHTML = `último comando do servidor: ${nome} → ${feito ? '<b class="sim">executado</b>' : '<b class="nao">sem efeito nesta tela</b>'}`;
+    } else if (!e.repeticao) {
+      $("registro").innerHTML = `último comando do servidor: ${nome} → <b class="nao">ignorado (janela fechada)</b>`;
+    }
   }
   if (e.tipo === "estado") {
     st.gesto = e.aquecendo ? "aquecendo…" : e.gesto; st.conf = e.confianca || 0;
