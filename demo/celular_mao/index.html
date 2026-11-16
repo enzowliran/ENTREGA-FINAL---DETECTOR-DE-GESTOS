@@ -64,8 +64,8 @@
 <main>
   <figure><div class="tela"><canvas class="quadro" id="quadro"></canvas></div>
     <figcaption>1 · O que a câmera vê<span>21 pontos em cada mão</span></figcaption></figure>
-  <figure><div class="tela"><div id="cena"></div><button id="recentrar" type="button">Recentrar</button></div>
-    <figcaption>2 · A mão em 3D<span>arraste para girar</span></figcaption></figure>
+  <figure><div class="tela"><div id="cena"></div></div>
+    <figcaption>2 · A mão em 3D<span>montada a partir dos pontos</span></figcaption></figure>
 </main>
 <div id="dica">Fica melhor com o celular deitado.</div>
 <video id="video" playsinline muted autoplay></video>
@@ -116,22 +116,20 @@ const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x06101f);
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
 const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 20);
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.enablePan = false;
-controls.enableZoom = false;   // a distância é automática: a câmera virtual acompanha a mão para ela ocupar a tela
-const direcao = new THREE.Vector3(0, 0, 1), centro = new THREE.Vector3();
-let distancia = 0.34;
-controls.target.set(0, 0, -0.45);
-function recentrar() { direcao.set(0, 0, 1); camera.position.copy(controls.target).addScaledVector(direcao, distancia); controls.update(); }
+// A câmera virtual fica no lugar da câmera do aparelho, como na apresentação: é desse ponto de vista que a mão 3D fica
+// fiel (a profundidade estimada é a medida mais incerta, e só aparece quando se olha de lado). Para a mão ficar grande,
+// a câmera não se aproxima nem gira: ela mira no centro da mão e fecha o campo de visão (um zoom).
+const centro = new THREE.Vector3(), mira = new THREE.Vector3(0, 0, -0.45);
+let fovAtual = 40;
+camera.position.set(0, 0, 0);
+camera.lookAt(mira);
 function ajustarCamera() {
-  camera.fov = 40;
+  camera.fov = fovAtual;
   const [cw, ch] = tamanhoCena();
   camera.aspect = cw / ch;
   camera.updateProjectionMatrix();
 }
-recentrar(); ajustarCamera();
-$("recentrar").addEventListener("click", recentrar);
+ajustarCamera();
 
 const sol = new THREE.DirectionalLight(0xffffff, 2.2);
 sol.position.set(0.4, 1.2, 0.3);
@@ -221,17 +219,20 @@ function seguirMaos() {
   let raio = 0;
   for (const h of visiveis) for (const p of h.pts) raio = Math.max(raio, p.distanceTo(centro));
   raio += 0.03;
-  const meio = THREE.MathUtils.degToRad(camera.fov) / 2, meioH = Math.atan(Math.tan(meio) * camera.aspect);
-  const ideal = THREE.MathUtils.clamp(raio / Math.sin(Math.min(meio, meioH)), 0.2, 1.6);
-  distancia += (ideal - distancia) * 0.1;
-  direcao.subVectors(camera.position, controls.target).normalize();
-  controls.target.lerp(centro, 0.18);
-  camera.position.copy(controls.target).addScaledVector(direcao, distancia);
-  const piso = controls.target.y - raio - 0.02;   // o chão e a grade ficam logo abaixo da mão
-  chao.position.set(controls.target.x, piso, controls.target.z);
-  grade.position.set(controls.target.x, piso + 0.001, controls.target.z);
-  sol.target.position.copy(controls.target);
-  sol.position.set(controls.target.x + 0.4, controls.target.y + 1.2, controls.target.z + 0.3);
+  // meio ângulo que enquadra a esfera das mãos, vista da câmera; em tela estreita, quem limita é a largura
+  const a = Math.asin(Math.min(raio / Math.max(centro.length(), 0.05), 0.9));
+  const vertical = camera.aspect >= 1 ? a : Math.atan(Math.tan(a) / camera.aspect);
+  const ideal = THREE.MathUtils.clamp(THREE.MathUtils.radToDeg(2 * vertical) * 1.1, 8, 75);
+  fovAtual += (ideal - fovAtual) * 0.1;
+  mira.lerp(centro, 0.18);
+  camera.fov = fovAtual;
+  camera.lookAt(mira);
+  camera.updateProjectionMatrix();
+  const piso = mira.y - raio - 0.02;   // o chão e a grade ficam logo abaixo da mão
+  chao.position.set(mira.x, piso, mira.z);
+  grade.position.set(mira.x, piso + 0.001, mira.z);
+  sol.target.position.copy(mira);
+  sol.position.set(mira.x + 0.4, mira.y + 1.2, mira.z + 0.3);
 }
 
 // ---------- tela 1: a imagem espelhada com os 21 pontos ----------
@@ -308,6 +309,7 @@ async function criarLandmarker(delegate) {
   });
 }
 async function prepararLandmarker() {
+  if (PARAMS.has("cpu")) { landmarker = await criarLandmarker("CPU"); delegado = "CPU"; return; }   // ?cpu=1 força a CPU
   try { landmarker = await criarLandmarker("GPU"); delegado = "GPU"; }
   catch (e) { console.warn("GPU indisponível, usando CPU", e); landmarker = await criarLandmarker("CPU"); delegado = "CPU"; }
 }
@@ -348,7 +350,6 @@ function laco() {
     }
   }
   seguirMaos();
-  controls.update();
   renderer.render(scene, camera);
 }
 laco();
