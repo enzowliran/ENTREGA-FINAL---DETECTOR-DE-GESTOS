@@ -112,6 +112,8 @@ function apontarCamera() {
   camera.rotation.set(0, 0, 0, "YXZ");
   camera.rotation.y = guinada; camera.rotation.x = arfagem;
 }
+// ?olhar=guinada,arfagem (radianos) começa olhando para outro lado; útil para conferir a cabine em capturas
+{ const o = new URLSearchParams(location.search).get("olhar"); if (o) { const [g, a] = o.split(",").map(Number); if (isFinite(g)) guinada = g; if (isFinite(a)) arfagem = a; } }
 apontarCamera();
 addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); });
 let arrastando = null;
@@ -337,10 +339,78 @@ for (const x of [-0.66, -0.52, 0.52, 0.66]) {
 }
 // binóculo do quadro de instrumentos (aba fina, só em volta do quadro; não passa na frente da central)
 arred(0.36, 0.022, 0.08, 0.01, matPainelTopo, 0, 1.05, -0.70, -0.12);
-// console central e câmbio
-arred(0.26, 0.3, 0.6, 0.04, matAcab, 0.38, 0.6, -0.36);
-arred(0.2, 0.012, 0.4, 0.004, matPiano, 0.38, 0.755, -0.33);
-arred(0.045, 0.1, 0.045, 0.02, matCouro, 0.38, 0.81, -0.25);
+// ---- chão: carpete, parede dos pés e pedais ----
+function texturaRuido(cor, variacao, tam = 256, rep = 6) {
+  const c = document.createElement("canvas"); c.width = c.height = tam;
+  const g = c.getContext("2d"); g.fillStyle = cor; g.fillRect(0, 0, tam, tam);
+  for (let i = 0; i < tam * tam / 6; i++) { const v = (Math.random() - .5) * variacao; g.fillStyle = `rgba(${v > 0 ? "255,255,255" : "0,0,0"},${Math.abs(v)})`; g.fillRect(Math.random() * tam, Math.random() * tam, 1, 1); }
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const matCarpete = new THREE.MeshStandardMaterial({ color: 0xffffff, map: texturaRuido("#1c1e22", 0.18), roughness: 1 });
+const piso = new THREE.Mesh(new THREE.PlaneGeometry(1.72, 1.9), matCarpete);
+piso.rotation.x = -Math.PI / 2; piso.position.set(0, 0.3, -0.1); noCabine(piso, false);
+const paredePes = new THREE.Mesh(new THREE.PlaneGeometry(1.72, 0.45), matCarpete);
+paredePes.rotation.x = -0.75; paredePes.position.set(0, 0.42, -0.86); noCabine(paredePes, false);
+arred(0.07, 0.11, 0.015, 0.006, matPiano, 0.1, 0.42, -0.74, -0.75);           // acelerador
+arred(0.12, 0.08, 0.02, 0.01, matPiano, -0.06, 0.45, -0.72, -0.75);           // freio
+arred(0.16, 0.012, 0.3, 0.004, matPainel, -0.32, 0.31, -0.62, 0, 0, 0);       // descanso do pé esquerdo
+
+// ---- console central: túnel, câmbio, porta-copos e apoio de braço ----
+const CX = 0.38;   // centro do console (o motorista fica em x = 0)
+arred(0.27, 0.34, 0.95, 0.05, matAcab, CX, 0.47, -0.12);                       // túnel até o painel
+arred(0.25, 0.22, 0.12, 0.04, matPainel, CX, 0.68, -0.55, 0.35);               // frente inclinada que liga ao painel
+arred(0.23, 0.014, 0.36, 0.006, matPiano, CX, 0.645, -0.32);                   // tampa preta brilhante do câmbio
+arred(0.235, 0.004, 0.365, 0.002, matEscovado, CX, 0.638, -0.32);              // friso metálico em volta
+// alavanca: coifa de couro, haste e manopla com aro cromado
+const coifa = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.05, 0.06, 24, 1, true), matCouro);
+coifa.position.set(CX, 0.68, -0.27); noCabine(coifa);
+const haste = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.014, 0.06, 16), matPiano);
+haste.position.set(CX, 0.73, -0.27); noCabine(haste);
+const manopla = new THREE.Mesh(new THREE.CapsuleGeometry(0.024, 0.04, 6, 20), matCouro);
+manopla.position.set(CX, 0.785, -0.27); manopla.rotation.x = 0.25; noCabine(manopla);
+const aroManopla = new THREE.Mesh(new THREE.TorusGeometry(0.024, 0.003, 8, 32), matEscovado);
+aroManopla.position.set(CX, 0.765, -0.27); aroManopla.rotation.x = Math.PI / 2; noCabine(aroManopla);
+// indicador P R N D (D aceso)
+const texMarcha = (() => {
+  const c = document.createElement("canvas"); c.width = 256; c.height = 64;
+  const g = c.getContext("2d"); g.fillStyle = "#07080a"; g.fillRect(0, 0, 256, 64);
+  g.font = "700 40px system-ui"; g.textAlign = "center"; g.textBaseline = "middle";
+  ["P", "R", "N", "D"].forEach((l, i) => { g.fillStyle = l === "D" ? "#e8f1ff" : "#4a5562"; g.fillText(l, 32 + i * 64, 34); });
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+})();
+const marcha = new THREE.Mesh(new THREE.PlaneGeometry(0.1, 0.025), new THREE.MeshBasicMaterial({ map: texMarcha, toneMapped: false }));
+marcha.rotation.x = -Math.PI / 2; marcha.position.set(CX, 0.6535, -0.37); cabine.add(marcha);
+// botão do freio de mão e porta-copos
+const botaoFreio = new THREE.Mesh(new THREE.CylinderGeometry(0.011, 0.011, 0.008, 20), matEscovado);
+botaoFreio.position.set(CX + 0.07, 0.655, -0.22); noCabine(botaoFreio);
+for (const z of [-0.17, -0.09]) {
+  const copo = new THREE.Mesh(new THREE.CylinderGeometry(0.033, 0.033, 0.006, 32), matPiano);
+  copo.position.set(CX - 0.05, 0.6525, z); noCabine(copo, false);
+  const fundo = new THREE.Mesh(new THREE.CircleGeometry(0.029, 32), new THREE.MeshStandardMaterial({ color: 0x050506, roughness: 1 }));
+  fundo.rotation.x = -Math.PI / 2; fundo.position.set(CX - 0.05, 0.656, z); cabine.add(fundo);
+}
+arred(0.25, 0.07, 0.36, 0.03, matCouro, CX, 0.68, 0.17);                        // apoio de braço acolchoado
+arred(0.252, 0.004, 0.34, 0.002, new THREE.MeshStandardMaterial({ color: 0x3a3f46, roughness: .8 }), CX, 0.716, 0.17);  // costura
+
+// ---- bancos de couro (motorista e passageiro) ----
+const matBanco = new THREE.MeshPhysicalMaterial({ color: 0x24272c, roughness: .7, sheen: .35, sheenColor: new THREE.Color(0x4a5058), sheenRoughness: .7 });
+const matBancoCentro = new THREE.MeshPhysicalMaterial({ color: 0x1b1d21, roughness: .85, map: texturaRuido("#ffffff", 0.25, 128, 8) });
+function banco(x, larg) {
+  const g = new THREE.Group(); g.position.set(x, 0, 0); cabine.add(g);
+  const peca = (w, h, d, r, mat, px, py, pz, rx = 0) => { const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, r), mat); m.position.set(px, py, pz); m.rotation.x = rx; m.castShadow = m.receiveShadow = true; g.add(m); return m; };
+  peca(larg, 0.12, 0.5, 0.05, matBanco, 0, 0.47, 0.33);                     // assento
+  peca(larg * 0.62, 0.02, 0.42, 0.01, matBancoCentro, 0, 0.535, 0.33);      // centro perfurado do assento
+  for (const lado of [-1, 1]) peca(0.07, 0.16, 0.48, 0.035, matBanco, lado * (larg / 2 - 0.02), 0.52, 0.33);   // laterais do assento
+  const encosto = peca(larg, 0.74, 0.13, 0.06, matBanco, 0, 0.87, 0.6, 0.16);  // encosto levemente inclinado
+  peca(larg * 0.6, 0.6, 0.02, 0.01, matBancoCentro, 0, 0.87, 0.528, 0.16);   // centro perfurado do encosto
+  for (const lado of [-1, 1]) peca(0.07, 0.62, 0.16, 0.035, matBanco, lado * (larg / 2 - 0.02), 0.88, 0.585, 0.16);
+  peca(larg * 0.55, 0.17, 0.11, 0.05, matBanco, 0, 1.36, 0.69, 0.12);       // apoio de cabeça
+  for (const lado of [-1, 1]) { const h = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.08, 10), matEscovado); h.position.set(lado * 0.06, 1.26, 0.67); g.add(h); }
+  peca(larg + 0.04, 0.05, 0.46, 0.02, matAcab, 0, 0.385, 0.33);            // base/trilho
+  return g;
+}
+banco(0, 0.52);          // motorista (atrás e abaixo do olho: aparece ao olhar em volta)
+banco(0.72, 0.36);       // passageiro, ao lado do console
 // portas: painel, apoio de braço e maçaneta
 for (const x of [-0.86, 0.86]) {
   arred(0.06, 0.58, 1.55, 0.03, matAcab, x, 0.62, -0.2);
