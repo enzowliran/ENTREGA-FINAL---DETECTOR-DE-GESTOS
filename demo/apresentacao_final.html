@@ -59,7 +59,7 @@
   .tabela tr.bloco td { background: #e2e9f4; color: var(--marinho); font-weight: 600; font-size: 12.5px; letter-spacing: .03em; text-align: left; padding: 7px 14px; }
   .tabTexto td, .tabTexto th { text-align: left !important; vertical-align: top; }
   .tabModelos { font-size: 14.5px; } .tabModelos td { padding: 4px 12px; } .tabModelos th { padding: 8px 12px; font-size: 11px; } .tabModelos tr.bloco td { padding: 6px 12px; }
-  .tabGestos { font-size: 16px; } .tabGestos td { padding: 7px 14px; text-align: left; } .tabGestos th { text-align: left; }
+  .tabGestos { font-size: 17px; } .tabGestos td { padding: 7px 14px; text-align: left; } .tabGestos th { text-align: left; }
   .tabDados { font-size: 17px; } .tabDados td, .tabDados th { text-align: left; }
   .barraCel { display: flex; align-items: center; justify-content: flex-start; gap: 12px; }
   .barraCel i { display: block; height: 12px; background: var(--azul2); }
@@ -197,7 +197,7 @@
   .fxNota { font-size: 14.5px; line-height: 1.45; color: var(--cinza); }
   .fxBase { border-top: 1px solid var(--linha); padding-top: 16px; font-size: 17.5px; line-height: 1.5; color: var(--texto); }
   .fxBase b { color: var(--marinho); }
-  .tabPrincipal { font-size: 17.5px; } .tabPrincipal td { padding: 9px 14px; } .tabPrincipal td:first-child { white-space: nowrap; width: 250px; }
+  .tabPrincipal { font-size: 18px; } .tabPrincipal td { padding: 3px 14px; }
   .tabArq { font-size: 15.5px; } .tabArq td { padding: 9px 12px; } .tabArq td:nth-child(2), .tabArq th:nth-child(2) { text-align: left; }
   .tabArq td:first-child { white-space: nowrap; }
   .tabDensa { font-size: 16px; } .tabDensa td { padding: 8px 12px; }
@@ -212,6 +212,13 @@
   .marcos .col .v { font-size: 54px; font-weight: 600; color: var(--marinho); line-height: 1; margin-top: 14px; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
   .marcos .col .v small { font-size: 18px; font-weight: 400; color: var(--cinza); margin-left: 8px; letter-spacing: 0; }
   .marcos .col h3 { font-size: 22px; margin: 16px 0 8px; } .marcos .col p { font-size: 16.5px; line-height: 1.5; }
+
+  .tabPrincipal td.ic { width: 70px; padding: 3px 4px 3px 14px; line-height: 0; } .tabPrincipal th:first-child { width: 70px; }
+  .tabPrincipal td:nth-child(2) { white-space: nowrap; width: 230px; }
+  .col .icone { height: 96px; margin: 0 0 14px; }
+  .colunas.grande .col h3 { font-size: 28px; margin: 12px 0 12px; } .colunas.grande .col p { font-size: 20.5px; line-height: 1.5; }
+  .colunas.grande .col .n { font-size: 16px; }
+  .textoApoio { font-size: 18px; line-height: 1.5; color: var(--texto); margin: 0 0 8px; } .textoApoio b { color: var(--marinho); }
 
 </style>
 <script src="/vendor/three.min.js"></script>
@@ -254,7 +261,7 @@
       <div class="duas" style="grid-template-columns:1.15fr 1fr;gap:70px">
         <div class="an" style="--d:1">
           <p class="tituloBloco">Tempo para tarefas simples, dirigindo a 110 km/h</p>
-          <svg viewBox="0 0 640 230" width="640" height="230">
+          <svg viewBox="0 0 640 230" width="724" height="260">
             <text x="0" y="62" font-size="17" fill="#364152">Botões físicos</text>
             <rect class="barraH" x="170" y="40" width="120" height="34" fill="#9db9ea"/>
             <text x="302" y="64" font-size="20" font-weight="600" fill="#0a1f44">10 s</text><text x="354" y="64" font-size="15" fill="#7b8594">≈ 300 m sem olhar a estrada</text>
@@ -264,7 +271,7 @@
             <text x="170" y="190" font-size="15" fill="#7b8594">≈ 930 m sem olhar a estrada</text>
             <line x1="170" x2="170" y1="28" y2="166" stroke="#d6dce4"/>
           </svg>
-          <p class="nota">Distâncias calculadas pelo grupo: 110 km/h ≈ 30,6 m por segundo.</p>
+          <p class="nota" style="font-size:16px">Distâncias calculadas pelo grupo: 110 km/h ≈ 30,6 m por segundo.</p>
         </div>
         <div class="kpis an" style="--d:2;gap:40px">
           <div class="kpi forte"><div class="v">4,6×<small>risco de acidente</small></div><div class="r">ao mexer em tela ou aparelho do carro, em condução real (estudo SHRP2, 3.500 motoristas, tabela da NHTSA).</div></div>
@@ -278,11 +285,11 @@
   <section class="slide" data-titulo="A solução" data-parte="A solução">
     <div class="cab an"><h2>A solução</h2><p class="sub">Comandar a central com gestos da mão: sem olhar, sem tocar, sem falar</p></div>
     <div class="corpo">
-      <p class="frase an" style="--d:1">Uma câmera no painel reconhece <em>gestos da mão</em> e envia o comando para a central do carro.</p>
+      <p class="frase an" style="--d:1;margin-bottom:34px">Uma câmera no painel reconhece <em>gestos da mão</em> e envia o comando para a central do carro.</p>
       <div class="colunas">
-        <div class="col an" style="--d:2"><div class="n">01</div><h3>Uma câmera no painel</h3><p>Olha para o motorista, como as câmeras que já monitoram o cansaço em carros novos.</p></div>
-        <div class="col an" style="--d:3"><div class="n">02</div><h3>Gestos simples</h3><p>Deslizar, polegar, empurrar a mão e números com os dedos, feitos sem desviar o olhar.</p></div>
-        <div class="col an" style="--d:4"><div class="n">03</div><h3>Ativação antes do comando</h3><p>Um sinal com a mão liga o sistema. Sem ele, nenhum gesto é executado.</p></div>
+        <div class="col an" style="--d:2"><div class="icone"><svg viewBox="0 0 184 184" width="92" height="92" role="img" aria-hidden="true"><rect x="22" y="52" width="140" height="92" fill="#0a1f44"/><rect x="62" y="36" width="60" height="18" fill="#0a1f44"/><circle cx="92" cy="98" r="30" fill="#1e4fbf" stroke="#9db9ea" stroke-width="5"/><circle cx="92" cy="98" r="12" fill="#0a1f44"/><circle cx="142" cy="68" r="5" fill="#9db9ea"/></svg></div><div class="n">01</div><h3>Uma câmera no painel</h3><p>Olha para o motorista, como as câmeras que já monitoram o cansaço em carros novos.</p></div>
+        <div class="col an" style="--d:3"><div class="icone"><svg viewBox="0 12 196 190" width="92" height="92" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L26 118 M76 128 L68 60 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/><path d="M44 26 H130" fill="none" stroke="#0a1f44" stroke-width="9"/><polygon points="130,13 152,26 130,39" fill="#0a1f44"/></svg></div><div class="n">02</div><h3>Gestos simples</h3><p>Deslizar, polegar, empurrar a mão e números com os dedos, feitos sem desviar o olhar.</p></div>
+        <div class="col an" style="--d:4"><div class="icone"><svg viewBox="0 12 196 190" width="92" height="92" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L44 136 M76 128 Q58 96 42 132 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></div><div class="n">03</div><h3>Ativação antes do comando</h3><p>Um sinal com a mão liga o sistema. Sem ele, nenhum gesto é executado.</p></div>
       </div>
     </div>
   </section>
@@ -351,21 +358,19 @@
   <section class="slide" data-titulo="Os gestos">
     <div class="cab an"><h2>Os gestos</h2><p class="sub">11 gestos viram comando; cada um tem um responsável: a contagem de dedos ou a CNN 3D</p></div>
     <div class="corpo">
-      <div class="duas" style="grid-template-columns:1fr 1.2fr;gap:56px;align-items:start">
+      <div class="duas" style="grid-template-columns:1fr 1.25fr;gap:56px;align-items:start">
         <div class="an" style="--d:1">
           <p class="tituloBloco">Ativação · geometria dos pontos da mão</p>
-          <table class="tabela tabGestos tabPrincipal"><tr><th>Gesto</th><th>O que faz</th></tr>
-            <tr class="vencedora"><td><b>Sinal de OK</b></td><td>ativa o sistema</td></tr></table>
-          <p class="tituloBloco" style="margin-top:38px">Números · contagem de dedos</p>
-          <table class="tabela tabGestos tabPrincipal"><tr><th>Gesto</th><th>Comando no carro</th></tr><tr><td><b>Um dedo</b></td><td>abre Música</td></tr><tr><td><b>Dois dedos</b></td><td>abre Ar-condicionado</td></tr><tr><td><b>Quatro dedos</b></td><td>abre Telefone</td></tr></table>
-          <p class="nota" style="margin-top:14px">Três dedos também é contado, mas não tem comando no carro.</p>
+          <table class="tabela tabGestos tabPrincipal"><tr><th></th><th>Gesto</th><th>O que faz</th></tr><tr class="vencedora"><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L44 136 M76 128 Q58 96 42 132 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Sinal de OK</b></td><td>ativa o sistema</td></tr></table>
+          <p class="tituloBloco" style="margin-top:30px">Números · contagem de dedos</p>
+          <table class="tabela tabGestos tabPrincipal"><tr><th></th><th>Gesto</th><th>Comando no carro</th></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L52 146 M76 128 L68 60 M94 126 L94 110 M112 128 L113 112 M127 140 L131 126" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Um dedo</b></td><td>abre Música</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L52 146 M76 128 L68 60 M94 126 L94 48 M112 128 L113 112 M127 140 L131 126" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Dois dedos</b></td><td>abre Ar-condicionado</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L52 146 M76 128 L68 60 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Quatro dedos</b></td><td>abre Telefone</td></tr></table>
+          <p class="nota" style="margin-top:14px;font-size:16px">Os comandos atuam em três telas: Música, Ar-condicionado e Telefone.</p>
         </div>
         <div class="an" style="--d:2">
           <p class="tituloBloco">Movimentos · CNN 3D</p>
-          <table class="tabela tabGestos tabPrincipal"><tr><th>Gesto</th><th>Comando no carro</th></tr><tr><td><b>Deslizar para a direita</b></td><td>próxima música</td></tr><tr><td><b>Deslizar para a esquerda</b></td><td>música anterior</td></tr><tr><td><b>Polegar para cima</b></td><td>aumenta o volume; no ar, sobe a temperatura</td></tr><tr><td><b>Polegar para baixo</b></td><td>diminui o volume; no ar, baixa a temperatura</td></tr><tr><td><b>Sinal de pare</b></td><td>toca ou pausa; liga ou desliga o ar</td></tr><tr><td><b>Empurrar a mão</b></td><td>o mesmo comando do sinal de pare</td></tr><tr><td><b>Tamborilar os dedos</b></td><td>abre o menu de músicas</td></tr><tr><td><b>Puxar a mão</b></td><td>explica os comandos em voz alta</td></tr></table>
+          <table class="tabela tabGestos tabPrincipal"><tr><th></th><th>Gesto</th><th>Comando no carro</th></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L26 118 M76 128 L68 60 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/><path d="M44 26 H130" fill="none" stroke="#0a1f44" stroke-width="9"/><polygon points="130,13 152,26 130,39" fill="#0a1f44"/></svg></td><td><b>Deslizar para a direita</b></td><td>próxima música</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L26 118 M76 128 L68 60 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/><path d="M130 26 H44" fill="none" stroke="#0a1f44" stroke-width="9"/><polygon points="44,13 22,26 44,39" fill="#0a1f44"/></svg></td><td><b>Deslizar para a esquerda</b></td><td>música anterior</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><g><rect x="64" y="96" width="84" height="78" rx="16" fill="#1e4fbf"/><path d="M80 100 V40" stroke="#1e4fbf" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M100 116 H146 M100 135 H146 M100 154 H146" stroke="#fff" stroke-width="4" fill="none" opacity=".75"/></g></svg></td><td><b>Polegar para cima</b></td><td>aumenta o volume; no ar, sobe a temperatura</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><g transform="rotate(180 96 110)"><rect x="64" y="96" width="84" height="78" rx="16" fill="#1e4fbf"/><path d="M80 100 V40" stroke="#1e4fbf" stroke-width="24" stroke-linecap="round" fill="none"/><path d="M100 116 H146 M100 135 H146 M100 154 H146" stroke="#fff" stroke-width="4" fill="none" opacity=".75"/></g></svg></td><td><b>Polegar para baixo</b></td><td>diminui o volume; no ar, baixa a temperatura</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L26 118 M76 128 L68 60 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/></svg></td><td><b>Sinal de pare</b></td><td>toca ou pausa; liga ou desliga o ar</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L26 118 M76 128 L68 60 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/><path d="M168 150 V84" fill="none" stroke="#0a1f44" stroke-width="9"/><polygon points="155,84 168,62 181,84" fill="#0a1f44"/></svg></td><td><b>Empurrar a mão</b></td><td>o mesmo comando do sinal de pare</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L26 118 M76 128 L68 60 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/><polyline points="60,30 68,40 76,30" fill="none" stroke="#0a1f44" stroke-width="6"/><polyline points="86,18 94,28 102,18" fill="none" stroke="#0a1f44" stroke-width="6"/><polyline points="112,32 120,42 128,32" fill="none" stroke="#0a1f44" stroke-width="6"/><polyline points="137,60 145,70 153,60" fill="none" stroke="#0a1f44" stroke-width="6"/></svg></td><td><b>Tamborilar os dedos</b></td><td>abre o menu de músicas</td></tr><tr><td class="ic"><svg viewBox="0 12 196 190" width="56" height="56" role="img" aria-hidden="true"><path d="M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z" fill="#1e4fbf" stroke="#1e4fbf" stroke-width="14" stroke-linejoin="round"/><path d="M66 160 L26 118 M76 128 L68 60 M94 126 L94 48 M112 128 L120 62 M127 140 L145 90" fill="none" stroke="#1e4fbf" stroke-width="16" stroke-linecap="round"/><path d="M168 74 V140" fill="none" stroke="#0a1f44" stroke-width="9"/><polygon points="155,140 168,162 181,140" fill="#0a1f44"/></svg></td><td><b>Puxar a mão</b></td><td>explica os comandos em voz alta</td></tr></table>
         </div>
       </div>
-      <p class="nota an" style="--d:3;margin-top:26px">Os comandos atuam em três telas: Música, Ar-condicionado e Telefone. Lista completa no apêndice (A9).</p>
     </div>
   </section>
 
@@ -420,15 +425,15 @@
   <section class="slide" data-titulo="Acerto" data-fonte="Fonte: resultados do projeto · teste misto (Jester, IPN Hand, HaGRID), pessoas fora do treino · src/medir_gestos_do_carro.py">
     <div class="cab an"><h2>Resultados</h2><p class="sub">O modelo final, testado com pessoas que não estavam no treino</p></div>
     <div class="corpo">
-      <div class="duas" style="grid-template-columns:780px 1fr;gap:64px;align-items:center">
-        <div class="an" style="--d:1"><p class="tituloBloco">Acerto em cada gesto do carro</p><svg viewBox="0 0 780 458" width="780" height="458" role="img" aria-label="Acerto do modelo final em cada gesto do carro"><text x="0" y="24" font-size="12.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">NÚMEROS · CONTAGEM DE DEDOS</text><text x="0" y="51" font-size="16" fill="#364152">Um dedo</text><rect x="250" y="36" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="36" width="315.0" height="20" fill="#0a1f44"/><text x="684" y="52" font-size="17" font-weight="600" fill="#0a1f44">75%</text><text x="0" y="85" font-size="16" fill="#364152">Dois dedos</text><rect x="250" y="70" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="70" width="342.3" height="20" fill="#0a1f44"/><text x="684" y="86" font-size="17" font-weight="600" fill="#0a1f44">82%</text><text x="0" y="119" font-size="16" fill="#364152">Quatro dedos</text><rect x="250" y="104" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="104" width="407.4" height="20" fill="#0a1f44"/><text x="684" y="120" font-size="17" font-weight="600" fill="#0a1f44">97%</text><text x="0" y="168" font-size="12.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">MOVIMENTOS · CNN 3D</text><text x="0" y="195" font-size="16" fill="#364152">Deslizar para a direita</text><rect x="250" y="180" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="180" width="365.4" height="20" fill="#3d74d6"/><text x="684" y="196" font-size="17" font-weight="600" fill="#0a1f44">87%</text><text x="0" y="229" font-size="16" fill="#364152">Deslizar para a esquerda</text><rect x="250" y="214" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="214" width="378.0" height="20" fill="#3d74d6"/><text x="684" y="230" font-size="17" font-weight="600" fill="#0a1f44">90%</text><text x="0" y="263" font-size="16" fill="#364152">Polegar para cima</text><rect x="250" y="248" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="248" width="399.0" height="20" fill="#3d74d6"/><text x="684" y="264" font-size="17" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="297" font-size="16" fill="#364152">Polegar para baixo</text><rect x="250" y="282" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="282" width="411.6" height="20" fill="#3d74d6"/><text x="684" y="298" font-size="17" font-weight="600" fill="#0a1f44">98%</text><text x="0" y="331" font-size="16" fill="#364152">Sinal de pare</text><rect x="250" y="316" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="316" width="352.8" height="20" fill="#3d74d6"/><text x="684" y="332" font-size="17" font-weight="600" fill="#0a1f44">84%</text><text x="0" y="365" font-size="16" fill="#364152">Empurrar a mão</text><rect x="250" y="350" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="350" width="399.0" height="20" fill="#3d74d6"/><text x="684" y="366" font-size="17" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="399" font-size="16" fill="#364152">Tamborilar os dedos</text><rect x="250" y="384" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="384" width="386.4" height="20" fill="#3d74d6"/><text x="684" y="400" font-size="17" font-weight="600" fill="#0a1f44">92%</text><text x="0" y="433" font-size="16" fill="#364152">Puxar a mão</text><rect x="250" y="418" width="420" height="20" fill="#eef2f7"/><rect class="barraH" x="250" y="418" width="373.8" height="20" fill="#3d74d6"/><text x="684" y="434" font-size="17" font-weight="600" fill="#0a1f44">89%</text><line x1="250" x2="250" y1="30" y2="446" stroke="#d6dce4"/></svg></div>
+      <div class="duas" style="grid-template-columns:820px 1fr;gap:56px;align-items:center">
+        <div class="an" style="--d:1"><p class="tituloBloco">Acerto em cada gesto do carro</p><svg viewBox="0 0 820 532" width="820" height="532" role="img" aria-label="Acerto do modelo final em cada gesto do carro"><text x="0" y="26" font-size="13.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">NÚMEROS · CONTAGEM DE DEDOS</text><text x="0" y="59" font-size="18.5" fill="#364152">Um dedo</text><rect x="270" y="40" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="40" width="330.0" height="26" fill="#0a1f44"/><text x="726" y="60" font-size="20" font-weight="600" fill="#0a1f44">75%</text><text x="0" y="99" font-size="18.5" fill="#364152">Dois dedos</text><rect x="270" y="80" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="80" width="358.6" height="26" fill="#0a1f44"/><text x="726" y="100" font-size="20" font-weight="600" fill="#0a1f44">82%</text><text x="0" y="139" font-size="18.5" fill="#364152">Quatro dedos</text><rect x="270" y="120" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="120" width="426.8" height="26" fill="#0a1f44"/><text x="726" y="140" font-size="20" font-weight="600" fill="#0a1f44">97%</text><text x="0" y="192" font-size="13.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">MOVIMENTOS · CNN 3D</text><text x="0" y="225" font-size="18.5" fill="#364152">Deslizar para a direita</text><rect x="270" y="206" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="206" width="382.8" height="26" fill="#3d74d6"/><text x="726" y="226" font-size="20" font-weight="600" fill="#0a1f44">87%</text><text x="0" y="265" font-size="18.5" fill="#364152">Deslizar para a esquerda</text><rect x="270" y="246" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="246" width="396.0" height="26" fill="#3d74d6"/><text x="726" y="266" font-size="20" font-weight="600" fill="#0a1f44">90%</text><text x="0" y="305" font-size="18.5" fill="#364152">Polegar para cima</text><rect x="270" y="286" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="286" width="418.0" height="26" fill="#3d74d6"/><text x="726" y="306" font-size="20" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="345" font-size="18.5" fill="#364152">Polegar para baixo</text><rect x="270" y="326" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="326" width="431.2" height="26" fill="#3d74d6"/><text x="726" y="346" font-size="20" font-weight="600" fill="#0a1f44">98%</text><text x="0" y="385" font-size="18.5" fill="#364152">Sinal de pare</text><rect x="270" y="366" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="366" width="369.6" height="26" fill="#3d74d6"/><text x="726" y="386" font-size="20" font-weight="600" fill="#0a1f44">84%</text><text x="0" y="425" font-size="18.5" fill="#364152">Empurrar a mão</text><rect x="270" y="406" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="406" width="418.0" height="26" fill="#3d74d6"/><text x="726" y="426" font-size="20" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="465" font-size="18.5" fill="#364152">Tamborilar os dedos</text><rect x="270" y="446" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="446" width="404.8" height="26" fill="#3d74d6"/><text x="726" y="466" font-size="20" font-weight="600" fill="#0a1f44">92%</text><text x="0" y="505" font-size="18.5" fill="#364152">Puxar a mão</text><rect x="270" y="486" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="486" width="391.6" height="26" fill="#3d74d6"/><text x="726" y="506" font-size="20" font-weight="600" fill="#0a1f44">89%</text><line x1="270" x2="270" y1="30" y2="520" stroke="#d6dce4"/></svg></div>
         <div class="kpis an" style="--d:2;gap:32px">
           <div class="kpi forte"><div class="v">87,7%<small>nos 11 gestos do carro</small></div><div class="r">em 1.300 clipes de teste, de três bases públicas.</div></div>
           <div class="kpi"><div class="v">91,2%<small>movimentos</small></div><div class="r">8 gestos, reconhecidos pela CNN 3D.</div></div>
           <div class="kpi"><div class="v">82,0%<small>números</small></div><div class="r">1, 2 e 4 dedos, pela contagem de dedos.</div></div>
         </div>
       </div>
-      <p class="nota an" style="--d:3;margin-top:20px;max-width:1250px">A CNN 3D coloca o gesto certo entre as suas 5 maiores notas em 99,6% dos clipes.</p>
+      <p class="nota an" style="--d:3;margin-top:14px;max-width:1250px;font-size:17px">A CNN 3D coloca o gesto certo entre as suas 5 maiores notas em 99,6% dos clipes.</p>
     </div>
   </section>
 
@@ -438,17 +443,17 @@
     <div class="corpo">
       <div class="an" style="--d:1">
         <p class="tituloBloco">Tempo sem olhar a estrada para tarefas simples, a 110 km/h</p>
-        <svg viewBox="0 0 1420 280" width="1420" height="280">
-          <text x="0" y="60" font-size="18" fill="#364152">Tela de toque</text>
-          <rect class="barraH" x="210" y="36" width="900" height="38" fill="#0a1f44"/>
-          <text x="1124" y="62" font-size="21" font-weight="600" fill="#0a1f44">30,4 s · ≈ 930 m</text>
-          <text x="0" y="140" font-size="18" fill="#364152">Botões físicos</text>
-          <rect class="barraH" x="210" y="116" width="296" height="38" fill="#3d74d6"/>
-          <text x="520" y="142" font-size="21" font-weight="600" fill="#0a1f44">10 s · ≈ 300 m</text>
-          <text x="0" y="220" font-size="18" fill="#364152">Gesto</text>
-          <rect x="208" y="196" width="5" height="38" fill="#1e4fbf"/>
-          <text x="230" y="222" font-size="21" font-weight="600" fill="#1e4fbf">≈ 0 s</text>
-          <line x1="210" x2="210" y1="24" y2="250" stroke="#d6dce4"/>
+        <svg viewBox="0 0 1420 300" width="1420" height="300">
+          <text x="0" y="67" font-size="21" fill="#364152">Tela de toque</text>
+          <rect class="barraH" x="210" y="32" width="900" height="54" fill="#0a1f44"/>
+          <text x="1128" y="68" font-size="26" font-weight="600" fill="#0a1f44">30,4 s · ≈ 930 m</text>
+          <text x="0" y="161" font-size="21" fill="#364152">Botões físicos</text>
+          <rect class="barraH" x="210" y="126" width="296" height="54" fill="#3d74d6"/>
+          <text x="524" y="162" font-size="26" font-weight="600" fill="#0a1f44">10 s · ≈ 300 m</text>
+          <text x="0" y="255" font-size="21" fill="#364152">Gesto</text>
+          <rect x="207" y="220" width="6" height="54" fill="#1e4fbf"/>
+          <text x="232" y="256" font-size="26" font-weight="600" fill="#1e4fbf">≈ 0 s</text>
+          <line x1="210" x2="210" y1="20" y2="286" stroke="#d6dce4"/>
         </svg>
       </div>
       <div class="grade an" style="--d:2;grid-template-columns:1fr 1fr;margin-top:30px">
@@ -462,7 +467,7 @@
   <section class="slide" data-titulo="Próximos passos">
     <div class="cab an"><h2>Próximos passos</h2><p class="sub">Do protótipo no notebook para dentro do carro</p></div>
     <div class="corpo">
-      <div class="colunas" style="grid-template-columns:repeat(4,1fr);gap:36px">
+      <div class="colunas grande" style="grid-template-columns:repeat(4,1fr);gap:40px">
         <div class="col an" style="--d:1"><div class="n">01</div><h3>Treinar com a mão em 3D</h3>
           <p>Um modelo que recebe só a mão reconstruída em 3D. Rosto, fundo e luz deixam de interferir: tudo fica padronizado.</p></div>
         <div class="col an" style="--d:2"><div class="n">02</div><h3>Gravar o cenário real</h3>
@@ -634,7 +639,7 @@
   <section class="slide" data-titulo="A6 · GRU">
     <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A6 · Como a GRU lê a mão</h2><p class="sub">Modelo testado sobre os pontos da mão; não é usado ao vivo</p></div>
     <div class="corpo an" style="--d:1">
-      <svg viewBox="0 0 1424 470" width="1424" height="470" role="img" aria-label="Esquema da GRU">
+      <svg viewBox="0 0 1424 330" width="1424" height="330" role="img" aria-label="Esquema da GRU">
         <defs><marker id="setaG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
         <g font-family="Segoe UI, system-ui, sans-serif">
           <!-- 1. quadros -->
@@ -701,11 +706,10 @@
             <rect x="1202" y="184" width="40" height="14" fill="#9db9ea"/><rect x="1202" y="206" width="22" height="14" fill="#9db9ea"/><rect x="1202" y="228" width="12" height="14" fill="#9db9ea"/>
             <text x="1202" y="270" font-size="13" fill="#7b8594">a maior nota vira o gesto</text>
           </g>
-          <!-- rodapé do esquema -->
-          <text x="0" y="380" font-size="16" fill="#364152">Leve: 525.212 parâmetros (GRU do teste com o Jester). Treinada do zero sobre os pontos; o MediaPipe entra pronto e congelado.</text>
-          <text x="0" y="408" font-size="16" fill="#0a1f44"><tspan font-weight="600">Testada, não usada ao vivo:</tspan> 83,3% sozinha e 95,6% combinada com a CNN nos gestos do carro, mas ao vivo dava nota baixa nos números e confundia a mão aberta com quatro dedos.</text>
-        </g>
+          </g>
       </svg>
+      <p class="textoApoio" style="margin-top:22px">Leve: 525.212 parâmetros (GRU do teste com o Jester). Treinada do zero sobre os pontos; o MediaPipe entra pronto e congelado.</p>
+      <p class="textoApoio"><b>Testada, não usada ao vivo:</b> 83,3% sozinha e 95,6% combinada com a CNN nos gestos do carro, mas ao vivo dava nota baixa nos números e confundia a mão aberta com quatro dedos.</p>
     </div>
   </section>
 
@@ -843,7 +847,7 @@
   <section class="slide" data-titulo="A9 · Gestos e comandos" data-fonte="Fonte: demo/player.py (COMANDOS_CARRO3D) e classes do modelo final">
     <div class="cab an" style="margin-bottom:18px"><p class="rotuloCab">Apêndice</p><h2>A9 · Gestos e comandos no carro</h2></div>
     <div class="an" style="--d:1"><table class="tabela tabGestos"><tr><th>Gesto</th><th>Quem reconhece</th><th>Comando no carro</th></tr><tr class="vencedora"><td><b>OK</b> (polegar tocando o indicador)</td><td>geometria dos pontos</td><td>ativa: bip, voz e 7 s para dar um comando</td></tr><tr><td><b>Um dedo</b></td><td>contagem de dedos (pontos)</td><td>abre Música</td></tr><tr><td><b>Dois dedos</b></td><td>contagem de dedos (pontos)</td><td>abre Ar-condicionado</td></tr><tr><td><b>Quatro dedos</b></td><td>contagem de dedos (pontos)</td><td>abre Telefone</td></tr><tr><td><b>Deslizar para a direita</b></td><td>CNN 3D</td><td>próxima música</td></tr><tr><td><b>Deslizar para a esquerda</b></td><td>CNN 3D</td><td>música anterior</td></tr><tr><td><b>Polegar para cima</b></td><td>CNN 3D</td><td>volume + (no ar, sobe o valor; mantido, atende a chamada)</td></tr><tr><td><b>Polegar para baixo</b></td><td>CNN 3D</td><td>volume − (no ar, desce o valor; mantido, recusa a chamada)</td></tr><tr><td><b>Sinal de pare</b></td><td>CNN 3D</td><td>toca/pausa, liga/desliga o ar, simula/encerra chamada, confirma no menu</td></tr><tr><td><b>Empurrar a mão</b></td><td>CNN 3D</td><td>toca/pausa, liga/desliga o ar, simula/encerra chamada, confirma no menu</td></tr><tr><td><b>Tamborilar os dedos</b></td><td>CNN 3D</td><td>menu de músicas</td></tr><tr><td><b>Puxar a mão</b></td><td>CNN 3D</td><td>explica os comandos em voz alta</td></tr></table></div>
-    <div class="an" style="--d:2"><p class="nota"><b>36 classes no modelo.</b> Também reconhecidos, sem comando no carro: Deslizar para baixo, Deslizar para cima, Dois dedos para a esquerda, Dois dedos para a direita, Dois dedos para baixo, Dois dedos para cima, Empurrar com dois dedos, Puxar com dois dedos, Rolar a mão para frente, Rolar a mão para trás, Girar a mão no sentido horário, Girar a mão no sentido anti-horário, Zoom in com a mão, Zoom out com a mão, Zoom in com dois dedos, Zoom out com dois dedos, Acenar, Três dedos, Volante · FlickDown, Volante · FlickUp, Volante · SwipeLeft, Volante · SwipeRight, Volante · Tap. E duas classes de rejeição: sem gesto e outro movimento.</p></div>
+    <div class="an" style="--d:2"><p class="nota" style="font-size:16px;max-width:1260px"><b>36 classes no modelo.</b> Também reconhecidos, sem comando no carro: Deslizar para baixo, Deslizar para cima, Dois dedos para a esquerda, Dois dedos para a direita, Dois dedos para baixo, Dois dedos para cima, Empurrar com dois dedos, Puxar com dois dedos, Rolar a mão para frente, Rolar a mão para trás, Girar a mão no sentido horário, Girar a mão no sentido anti-horário, Zoom in com a mão, Zoom out com a mão, Zoom in com dois dedos, Zoom out com dois dedos, Acenar, Três dedos, Volante · FlickDown, Volante · FlickUp, Volante · SwipeLeft, Volante · SwipeRight, Volante · Tap. E duas classes de rejeição: sem gesto e outro movimento.</p></div>
   </section>
 
   <!-- A10. Histórico dos dedos -->
@@ -882,7 +886,7 @@
   <section class="slide" data-titulo="A12 · Hardware">
     <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A12 · Como o sistema iria para um carro</h2></div>
     <div class="corpo">
-      <div class="duas" style="grid-template-columns:1fr 470px;gap:44px;align-items:start">
+      <div class="duas" style="grid-template-columns:1fr 600px;gap:44px;align-items:start">
         <table class="tabela tabTexto an" style="--d:1;font-size:16px">
           <tr><th>Tema</th><th>Situação</th></tr>
           <tr><td>Para onde os carros vão</td><td>Carro definido por software: poucos computadores centrais potentes, atualizados pela internet; em geral chips com CPU, GPU e acelerador de IA, não FPGA puro</td></tr>
@@ -935,11 +939,14 @@
   <section class="slide" data-titulo="A13 · Outras aplicações">
     <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A13 · O mesmo modelo, em outros lugares</h2></div>
     <div class="corpo">
-      <table class="tabela tabTexto an" style="--d:1;font-size:18px">
-        <tr><th>Aplicação</th><th>Uso</th><th>Por que gesto</th></tr>
-        <tr><td>Centro cirúrgico</td><td>Ver cortes de tomografia; demo pronta, com a tela travada pelo sinal de pare</td><td>Sem tocar em nada, sem quebrar a esterilidade</td></tr>
-        <tr><td>UTI</td><td>Paciente intubado pede ajuda com números: 1 dedo dor, 2 dedos sede</td><td>O paciente não tem voz</td></tr>
-      </table>
+      <div class="grade" style="grid-template-columns:1fr 1fr;gap:34px;align-items:stretch">
+        <div class="cartao an" style="--d:1"><p class="n">Centro cirúrgico</p><h3>Ver exames sem tocar em nada</h3>
+          <p style="font-size:18px">O cirurgião passa os cortes de uma tomografia e dá zoom com gestos, e o sinal de pare trava a tela. Não toca em nada, então não quebra a esterilidade.</p>
+          <p style="font-size:18px;margin-top:12px"><b>Estágio:</b> demo pronta no projeto: zoom com a mão, um dedo para o próximo corte e polegar para confirmar.</p></div>
+        <div class="cartao an" style="--d:2"><p class="n">UTI</p><h3>Paciente que não pode falar</h3>
+          <p style="font-size:18px">Um paciente intubado pede ajuda com números: um dedo para dor, dois dedos para sede. O gesto é pequeno e não depende da voz.</p>
+          <p style="font-size:18px;margin-top:12px"><b>Estágio:</b> ideia. Usaria a mesma contagem de dedos que reconhece os números no carro.</p></div>
+      </div>
     </div>
   </section>
 

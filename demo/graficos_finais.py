@@ -27,22 +27,22 @@ def br(v, casas=1):
 def grafico_gestos(gc, traducao):
     """Barras horizontais: acerto do modelo final em cada gesto do carro, em dois grupos (quem decide)."""
     pg = gc.get("por_gesto", {})
-    W, x0, larg, alt, passo = 780, 250, 420, 20, 34
+    W, x0, larg, alt, passo = 820, 270, 440, 26, 40
     grupos = [("Números · contagem de dedos", NUMEROS), ("Movimentos · CNN 3D", MOVIMENTOS)]
     y, out = 0, []
     for titulo, classes in grupos:
-        y += 24
-        out.append(f'<text x="0" y="{y}" font-size="12.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">{html.escape(titulo.upper())}</text>')
-        y += 12
+        y += 26
+        out.append(f'<text x="0" y="{y}" font-size="13.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">{html.escape(titulo.upper())}</text>')
+        y += 14
         for c in classes:
             v = pg.get(c, {}).get("acerto_pct")
             if v is None:
                 continue
             cor = "#0a1f44" if c in NUMEROS else "#3d74d6"
-            out.append(f'<text x="0" y="{y + 15}" font-size="16" fill="#364152">{html.escape(traducao.get(c, c))}</text>'
+            out.append(f'<text x="0" y="{y + 19}" font-size="18.5" fill="#364152">{html.escape(traducao.get(c, c))}</text>'
                        f'<rect x="{x0}" y="{y}" width="{larg}" height="{alt}" fill="#eef2f7"/>'
                        f'<rect class="barraH" x="{x0}" y="{y}" width="{larg * v / 100:.1f}" height="{alt}" fill="{cor}"/>'
-                       f'<text x="{x0 + larg + 14}" y="{y + 16}" font-size="17" font-weight="600" fill="#0a1f44">{br(v, 0)}%</text>')
+                       f'<text x="{x0 + larg + 16}" y="{y + 20}" font-size="20" font-weight="600" fill="#0a1f44">{br(v, 0)}%</text>')
             y += passo
         y += 6
     out.append(f'<line x1="{x0}" x2="{x0}" y1="30" y2="{y - 12}" stroke="#d6dce4"/>')
@@ -50,12 +50,74 @@ def grafico_gestos(gc, traducao):
             + "".join(out) + "</svg>")
 
 
+# ---- pictograma da mão: palma cheia e dedos grossos, no azul dos slides ----
+_AZUL, _MARINHO = "#1e4fbf", "#0a1f44"
+_PALMA = "M72 184 L116 184 L131 144 L114 128 L76 128 L63 152 Z"
+# cada dedo: (base, ponta esticada, ponta dobrada)
+_DEDOS = {"polegar": ((66, 160), (26, 118), (52, 146)), "indicador": ((76, 128), (68, 60), (75, 112)),
+          "medio": ((94, 126), (94, 48), (94, 110)), "anelar": ((112, 128), (120, 62), (113, 112)),
+          "minimo": ((127, 140), (145, 90), (131, 126))}
+_ORDEM = ["polegar", "indicador", "medio", "anelar", "minimo"]
+_SETAS = {"direita": ("M44 26 H130", "130,13 152,26 130,39"), "esquerda": ("M130 26 H44", "44,13 22,26 44,39"),
+          "frente": ("M168 150 V84", "155,84 168,62 181,84"), "tras": ("M168 74 V140", "155,140 168,162 181,140")}
+# gesto -> (dedos esticados do polegar ao mínimo, opções do desenho)
+_POSES = {"OK": ((1, 1, 1, 1, 1), {"ok": True}), "One Finger": ((0, 1, 0, 0, 0), {}), "Two Fingers": ((0, 1, 1, 0, 0), {}),
+          "Four Fingers": ((0, 1, 1, 1, 1), {}), "Swiping Right": ((1, 1, 1, 1, 1), {"seta": "direita"}),
+          "Swiping Left": ((1, 1, 1, 1, 1), {"seta": "esquerda"}), "Thumb Up": (None, {"polegar": "cima"}),
+          "Thumb Down": (None, {"polegar": "baixo"}), "Stop Sign": ((1, 1, 1, 1, 1), {}),
+          "Pushing Hand Away": ((1, 1, 1, 1, 1), {"seta": "frente"}), "Drumming Fingers": ((1, 1, 1, 1, 1), {"batidas": True}),
+          "Pulling Hand In": ((1, 1, 1, 1, 1), {"seta": "tras"})}
+
+
+def icone_mao(gesto, tam=56):
+    """Pictograma pequeno da mão para um gesto (SVG)."""
+    esticados, op = _POSES[gesto]
+    if op.get("polegar"):   # punho fechado com o polegar para cima; para baixo, o mesmo desenho girado
+        giro = ' transform="rotate(180 96 110)"' if op["polegar"] == "baixo" else ""
+        corpo = (f'<g{giro}><rect x="64" y="96" width="84" height="78" rx="16" fill="{_AZUL}"/>'
+                 f'<path d="M80 100 V40" stroke="{_AZUL}" stroke-width="24" stroke-linecap="round" fill="none"/>'
+                 f'<path d="M100 116 H146 M100 135 H146 M100 154 H146" stroke="#fff" stroke-width="4" fill="none" opacity=".75"/></g>')
+        return f'<svg viewBox="0 12 196 190" width="{tam}" height="{tam}" role="img" aria-hidden="true">{corpo}</svg>'
+    tracos = []
+    for nome, e in zip(_ORDEM, esticados):
+        base, ponta, dobra = _DEDOS[nome]
+        if op.get("ok") and nome == "polegar":
+            tracos.append("M66 160 L44 136")
+        elif op.get("ok") and nome == "indicador":
+            tracos.append("M76 128 Q58 96 42 132")
+        else:
+            fim = ponta if e else dobra
+            tracos.append(f"M{base[0]} {base[1]} L{fim[0]} {fim[1]}")
+    extra = ""
+    if op.get("seta"):
+        linha, ponta = _SETAS[op["seta"]]
+        extra += f'<path d="{linha}" fill="none" stroke="{_MARINHO}" stroke-width="9"/><polygon points="{ponta}" fill="{_MARINHO}"/>'
+    if op.get("batidas"):
+        for nome in _ORDEM[1:]:
+            x, y = _DEDOS[nome][1]
+            extra += f'<polyline points="{x - 8},{y - 30} {x},{y - 20} {x + 8},{y - 30}" fill="none" stroke="{_MARINHO}" stroke-width="6"/>'
+    return (f'<svg viewBox="0 12 196 190" width="{tam}" height="{tam}" role="img" aria-hidden="true">'
+            f'<path d="{_PALMA}" fill="{_AZUL}" stroke="{_AZUL}" stroke-width="14" stroke-linejoin="round"/>'
+            f'<path d="{" ".join(tracos)}" fill="none" stroke="{_AZUL}" stroke-width="16" stroke-linecap="round"/>{extra}</svg>')
+
+
+def icone_camera(tam=92):
+    return (f'<svg viewBox="0 0 184 184" width="{tam}" height="{tam}" role="img" aria-hidden="true">'
+            '<rect x="22" y="52" width="140" height="92" fill="#0a1f44"/><rect x="62" y="36" width="60" height="18" fill="#0a1f44"/>'
+            '<circle cx="92" cy="98" r="30" fill="#1e4fbf" stroke="#9db9ea" stroke-width="5"/><circle cx="92" cy="98" r="12" fill="#0a1f44"/>'
+            '<circle cx="142" cy="68" r="5" fill="#9db9ea"/></svg>')
+
+
 def gestos_principal(traducao):
-    """Slide Os gestos: duas listas (números e movimentos), cada gesto com o seu comando."""
-    def tabela(classes):
-        linhas = "".join(f"<tr><td><b>{html.escape(traducao.get(c, c))}</b></td><td>{html.escape(ACAO_CURTA[c])}</td></tr>" for c in classes)
-        return f'<table class="tabela tabGestos tabPrincipal"><tr><th>Gesto</th><th>Comando no carro</th></tr>{linhas}</table>'
-    return tabela(NUMEROS), tabela(MOVIMENTOS)
+    """Slide Os gestos: três listas (ativação, números e movimentos), cada gesto com o desenho e o comando."""
+    def tabela(linhas, cabecalho, classe=""):
+        corpo = "".join(f'<tr{classe}><td class="ic">{icone_mao(g)}</td><td><b>{html.escape(nome)}</b></td><td>{html.escape(acao)}</td></tr>'
+                        for g, nome, acao in linhas)
+        return f'<table class="tabela tabGestos tabPrincipal"><tr><th></th><th>Gesto</th><th>{cabecalho}</th></tr>{corpo}</table>'
+    ok = tabela([("OK", "Sinal de OK", "ativa o sistema")], "O que faz", ' class="vencedora"')
+    numeros = tabela([(c, traducao.get(c, c), ACAO_CURTA[c]) for c in NUMEROS], "Comando no carro")
+    movimentos = tabela([(c, traducao.get(c, c), ACAO_CURTA[c]) for c in MOVIMENTOS], "Comando no carro")
+    return ok, numeros, movimentos
 
 
 def grafico_falsos(fluxo_todos, traducao):

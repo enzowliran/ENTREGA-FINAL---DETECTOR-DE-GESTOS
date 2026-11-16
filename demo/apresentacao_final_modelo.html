@@ -59,7 +59,7 @@
   .tabela tr.bloco td { background: #e2e9f4; color: var(--marinho); font-weight: 600; font-size: 12.5px; letter-spacing: .03em; text-align: left; padding: 7px 14px; }
   .tabTexto td, .tabTexto th { text-align: left !important; vertical-align: top; }
   .tabModelos { font-size: 14.5px; } .tabModelos td { padding: 4px 12px; } .tabModelos th { padding: 8px 12px; font-size: 11px; } .tabModelos tr.bloco td { padding: 6px 12px; }
-  .tabGestos { font-size: 16px; } .tabGestos td { padding: 7px 14px; text-align: left; } .tabGestos th { text-align: left; }
+  .tabGestos { font-size: 17px; } .tabGestos td { padding: 7px 14px; text-align: left; } .tabGestos th { text-align: left; }
   .tabDados { font-size: 17px; } .tabDados td, .tabDados th { text-align: left; }
   .barraCel { display: flex; align-items: center; justify-content: flex-start; gap: 12px; }
   .barraCel i { display: block; height: 12px; background: var(--azul2); }
@@ -197,7 +197,7 @@
   .fxNota { font-size: 14.5px; line-height: 1.45; color: var(--cinza); }
   .fxBase { border-top: 1px solid var(--linha); padding-top: 16px; font-size: 17.5px; line-height: 1.5; color: var(--texto); }
   .fxBase b { color: var(--marinho); }
-  .tabPrincipal { font-size: 17.5px; } .tabPrincipal td { padding: 9px 14px; } .tabPrincipal td:first-child { white-space: nowrap; width: 250px; }
+  .tabPrincipal { font-size: 18px; } .tabPrincipal td { padding: 3px 14px; }
   .tabArq { font-size: 15.5px; } .tabArq td { padding: 9px 12px; } .tabArq td:nth-child(2), .tabArq th:nth-child(2) { text-align: left; }
   .tabArq td:first-child { white-space: nowrap; }
   .tabDensa { font-size: 16px; } .tabDensa td { padding: 8px 12px; }
@@ -212,6 +212,13 @@
   .marcos .col .v { font-size: 54px; font-weight: 600; color: var(--marinho); line-height: 1; margin-top: 14px; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
   .marcos .col .v small { font-size: 18px; font-weight: 400; color: var(--cinza); margin-left: 8px; letter-spacing: 0; }
   .marcos .col h3 { font-size: 22px; margin: 16px 0 8px; } .marcos .col p { font-size: 16.5px; line-height: 1.5; }
+
+  .tabPrincipal td.ic { width: 70px; padding: 3px 4px 3px 14px; line-height: 0; } .tabPrincipal th:first-child { width: 70px; }
+  .tabPrincipal td:nth-child(2) { white-space: nowrap; width: 230px; }
+  .col .icone { height: 96px; margin: 0 0 14px; }
+  .colunas.grande .col h3 { font-size: 28px; margin: 12px 0 12px; } .colunas.grande .col p { font-size: 20.5px; line-height: 1.5; }
+  .colunas.grande .col .n { font-size: 16px; }
+  .textoApoio { font-size: 18px; line-height: 1.5; color: var(--texto); margin: 0 0 8px; } .textoApoio b { color: var(--marinho); }
 
 </style>
 <script src="/vendor/three.min.js"></script>
@@ -254,7 +261,7 @@
       <div class="duas" style="grid-template-columns:1.15fr 1fr;gap:70px">
         <div class="an" style="--d:1">
           <p class="tituloBloco">Tempo para tarefas simples, dirigindo a 110 km/h</p>
-          <svg viewBox="0 0 640 230" width="640" height="230">
+          <svg viewBox="0 0 640 230" width="724" height="260">
             <text x="0" y="62" font-size="17" fill="#364152">Botões físicos</text>
             <rect class="barraH" x="170" y="40" width="120" height="34" fill="#9db9ea"/>
             <text x="302" y="64" font-size="20" font-weight="600" fill="#0a1f44">10 s</text><text x="354" y="64" font-size="15" fill="#7b8594">≈ 300 m sem olhar a estrada</text>
@@ -264,7 +271,7 @@
             <text x="170" y="190" font-size="15" fill="#7b8594">≈ 930 m sem olhar a estrada</text>
             <line x1="170" x2="170" y1="28" y2="166" stroke="#d6dce4"/>
           </svg>
-          <p class="nota">Distâncias calculadas pelo grupo: 110 km/h ≈ 30,6 m por segundo.</p>
+          <p class="nota" style="font-size:16px">Distâncias calculadas pelo grupo: 110 km/h ≈ 30,6 m por segundo.</p>
         </div>
         <div class="kpis an" style="--d:2;gap:40px">
           <div class="kpi forte"><div class="v">4,6×<small>risco de acidente</small></div><div class="r">ao mexer em tela ou aparelho do carro, em condução real (estudo SHRP2, 3.500 motoristas, tabela da NHTSA).</div></div>
@@ -278,11 +285,11 @@
   <section class="slide" data-titulo="A solução" data-parte="A solução">
     <div class="cab an"><h2>A solução</h2><p class="sub">Comandar a central com gestos da mão: sem olhar, sem tocar, sem falar</p></div>
     <div class="corpo">
-      <p class="frase an" style="--d:1">Uma câmera no painel reconhece <em>gestos da mão</em> e envia o comando para a central do carro.</p>
+      <p class="frase an" style="--d:1;margin-bottom:34px">Uma câmera no painel reconhece <em>gestos da mão</em> e envia o comando para a central do carro.</p>
       <div class="colunas">
-        <div class="col an" style="--d:2"><div class="n">01</div><h3>Uma câmera no painel</h3><p>Olha para o motorista, como as câmeras que já monitoram o cansaço em carros novos.</p></div>
-        <div class="col an" style="--d:3"><div class="n">02</div><h3>Gestos simples</h3><p>Deslizar, polegar, empurrar a mão e números com os dedos, feitos sem desviar o olhar.</p></div>
-        <div class="col an" style="--d:4"><div class="n">03</div><h3>Ativação antes do comando</h3><p>Um sinal com a mão liga o sistema. Sem ele, nenhum gesto é executado.</p></div>
+        <div class="col an" style="--d:2"><div class="icone"><!--F:IC_CAMERA--></div><div class="n">01</div><h3>Uma câmera no painel</h3><p>Olha para o motorista, como as câmeras que já monitoram o cansaço em carros novos.</p></div>
+        <div class="col an" style="--d:3"><div class="icone"><!--F:IC_GESTO--></div><div class="n">02</div><h3>Gestos simples</h3><p>Deslizar, polegar, empurrar a mão e números com os dedos, feitos sem desviar o olhar.</p></div>
+        <div class="col an" style="--d:4"><div class="icone"><!--F:IC_OK--></div><div class="n">03</div><h3>Ativação antes do comando</h3><p>Um sinal com a mão liga o sistema. Sem ele, nenhum gesto é executado.</p></div>
       </div>
     </div>
   </section>
@@ -351,21 +358,19 @@
   <section class="slide" data-titulo="Os gestos">
     <div class="cab an"><h2>Os gestos</h2><p class="sub">{{n_comandos}} gestos viram comando; cada um tem um responsável: a contagem de dedos ou a CNN 3D</p></div>
     <div class="corpo">
-      <div class="duas" style="grid-template-columns:1fr 1.2fr;gap:56px;align-items:start">
+      <div class="duas" style="grid-template-columns:1fr 1.25fr;gap:56px;align-items:start">
         <div class="an" style="--d:1">
           <p class="tituloBloco">Ativação · geometria dos pontos da mão</p>
-          <table class="tabela tabGestos tabPrincipal"><tr><th>Gesto</th><th>O que faz</th></tr>
-            <tr class="vencedora"><td><b>Sinal de OK</b></td><td>ativa o sistema</td></tr></table>
-          <p class="tituloBloco" style="margin-top:38px">Números · contagem de dedos</p>
+          <!--F:GESTOS_OK-->
+          <p class="tituloBloco" style="margin-top:30px">Números · contagem de dedos</p>
           <!--F:GESTOS_NUMEROS-->
-          <p class="nota" style="margin-top:14px">Três dedos também é contado, mas não tem comando no carro.</p>
+          <p class="nota" style="margin-top:14px;font-size:16px">Os comandos atuam em três telas: Música, Ar-condicionado e Telefone.</p>
         </div>
         <div class="an" style="--d:2">
           <p class="tituloBloco">Movimentos · CNN 3D</p>
           <!--F:GESTOS_MOVIMENTOS-->
         </div>
       </div>
-      <p class="nota an" style="--d:3;margin-top:26px">Os comandos atuam em três telas: Música, Ar-condicionado e Telefone. Lista completa no apêndice (A9).</p>
     </div>
   </section>
 
@@ -420,7 +425,7 @@
   <section class="slide" data-titulo="Acerto" data-fonte="Fonte: resultados do projeto · teste misto (Jester, IPN Hand, HaGRID), pessoas fora do treino · src/medir_gestos_do_carro.py">
     <div class="cab an"><h2>Resultados</h2><p class="sub">O modelo final, testado com pessoas que não estavam no treino</p></div>
     <div class="corpo">
-      <div class="duas" style="grid-template-columns:780px 1fr;gap:64px;align-items:center">
+      <div class="duas" style="grid-template-columns:820px 1fr;gap:56px;align-items:center">
         <div class="an" style="--d:1"><p class="tituloBloco">Acerto em cada gesto do carro</p><!--F:GRAFICO_GESTOS--></div>
         <div class="kpis an" style="--d:2;gap:32px">
           <div class="kpi forte"><div class="v">{{car_acc}}%<small>nos {{n_comandos}} gestos do carro</small></div><div class="r">em {{car_n}} clipes de teste, de três bases públicas.</div></div>
@@ -428,7 +433,7 @@
           <div class="kpi"><div class="v">{{car_num}}%<small>números</small></div><div class="r">1, 2 e 4 dedos, pela contagem de dedos.</div></div>
         </div>
       </div>
-      <p class="nota an" style="--d:3;margin-top:20px;max-width:1250px">A CNN 3D coloca o gesto certo entre as suas 5 maiores notas em {{car_top5}}% dos clipes.</p>
+      <p class="nota an" style="--d:3;margin-top:14px;max-width:1250px;font-size:17px">A CNN 3D coloca o gesto certo entre as suas 5 maiores notas em {{car_top5}}% dos clipes.</p>
     </div>
   </section>
 
@@ -438,17 +443,17 @@
     <div class="corpo">
       <div class="an" style="--d:1">
         <p class="tituloBloco">Tempo sem olhar a estrada para tarefas simples, a 110 km/h</p>
-        <svg viewBox="0 0 1420 280" width="1420" height="280">
-          <text x="0" y="60" font-size="18" fill="#364152">Tela de toque</text>
-          <rect class="barraH" x="210" y="36" width="900" height="38" fill="#0a1f44"/>
-          <text x="1124" y="62" font-size="21" font-weight="600" fill="#0a1f44">30,4 s · ≈ 930 m</text>
-          <text x="0" y="140" font-size="18" fill="#364152">Botões físicos</text>
-          <rect class="barraH" x="210" y="116" width="296" height="38" fill="#3d74d6"/>
-          <text x="520" y="142" font-size="21" font-weight="600" fill="#0a1f44">10 s · ≈ 300 m</text>
-          <text x="0" y="220" font-size="18" fill="#364152">Gesto</text>
-          <rect x="208" y="196" width="5" height="38" fill="#1e4fbf"/>
-          <text x="230" y="222" font-size="21" font-weight="600" fill="#1e4fbf">≈ 0 s</text>
-          <line x1="210" x2="210" y1="24" y2="250" stroke="#d6dce4"/>
+        <svg viewBox="0 0 1420 300" width="1420" height="300">
+          <text x="0" y="67" font-size="21" fill="#364152">Tela de toque</text>
+          <rect class="barraH" x="210" y="32" width="900" height="54" fill="#0a1f44"/>
+          <text x="1128" y="68" font-size="26" font-weight="600" fill="#0a1f44">30,4 s · ≈ 930 m</text>
+          <text x="0" y="161" font-size="21" fill="#364152">Botões físicos</text>
+          <rect class="barraH" x="210" y="126" width="296" height="54" fill="#3d74d6"/>
+          <text x="524" y="162" font-size="26" font-weight="600" fill="#0a1f44">10 s · ≈ 300 m</text>
+          <text x="0" y="255" font-size="21" fill="#364152">Gesto</text>
+          <rect x="207" y="220" width="6" height="54" fill="#1e4fbf"/>
+          <text x="232" y="256" font-size="26" font-weight="600" fill="#1e4fbf">≈ 0 s</text>
+          <line x1="210" x2="210" y1="20" y2="286" stroke="#d6dce4"/>
         </svg>
       </div>
       <div class="grade an" style="--d:2;grid-template-columns:1fr 1fr;margin-top:30px">
@@ -462,7 +467,7 @@
   <section class="slide" data-titulo="Próximos passos">
     <div class="cab an"><h2>Próximos passos</h2><p class="sub">Do protótipo no notebook para dentro do carro</p></div>
     <div class="corpo">
-      <div class="colunas" style="grid-template-columns:repeat(4,1fr);gap:36px">
+      <div class="colunas grande" style="grid-template-columns:repeat(4,1fr);gap:40px">
         <div class="col an" style="--d:1"><div class="n">01</div><h3>Treinar com a mão em 3D</h3>
           <p>Um modelo que recebe só a mão reconstruída em 3D. Rosto, fundo e luz deixam de interferir: tudo fica padronizado.</p></div>
         <div class="col an" style="--d:2"><div class="n">02</div><h3>Gravar o cenário real</h3>
@@ -634,7 +639,7 @@
   <section class="slide" data-titulo="A6 · GRU">
     <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A6 · Como a GRU lê a mão</h2><p class="sub">Modelo testado sobre os pontos da mão; não é usado ao vivo</p></div>
     <div class="corpo an" style="--d:1">
-      <svg viewBox="0 0 1424 470" width="1424" height="470" role="img" aria-label="Esquema da GRU">
+      <svg viewBox="0 0 1424 330" width="1424" height="330" role="img" aria-label="Esquema da GRU">
         <defs><marker id="setaG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
         <g font-family="Segoe UI, system-ui, sans-serif">
           <!-- 1. quadros -->
@@ -701,11 +706,10 @@
             <rect x="1202" y="184" width="40" height="14" fill="#9db9ea"/><rect x="1202" y="206" width="22" height="14" fill="#9db9ea"/><rect x="1202" y="228" width="12" height="14" fill="#9db9ea"/>
             <text x="1202" y="270" font-size="13" fill="#7b8594">a maior nota vira o gesto</text>
           </g>
-          <!-- rodapé do esquema -->
-          <text x="0" y="380" font-size="16" fill="#364152">Leve: {{gru_params}} parâmetros (GRU do teste com o Jester). Treinada do zero sobre os pontos; o MediaPipe entra pronto e congelado.</text>
-          <text x="0" y="408" font-size="16" fill="#0a1f44"><tspan font-weight="600">Testada, não usada ao vivo:</tspan> {{car_gru_so}}% sozinha e {{car_gru}}% combinada com a CNN nos gestos do carro, mas ao vivo dava nota baixa nos números e confundia a mão aberta com quatro dedos.</text>
-        </g>
+          </g>
       </svg>
+      <p class="textoApoio" style="margin-top:22px">Leve: {{gru_params}} parâmetros (GRU do teste com o Jester). Treinada do zero sobre os pontos; o MediaPipe entra pronto e congelado.</p>
+      <p class="textoApoio"><b>Testada, não usada ao vivo:</b> {{car_gru_so}}% sozinha e {{car_gru}}% combinada com a CNN nos gestos do carro, mas ao vivo dava nota baixa nos números e confundia a mão aberta com quatro dedos.</p>
     </div>
   </section>
 
@@ -863,7 +867,7 @@
   <section class="slide" data-titulo="A12 · Hardware">
     <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A12 · Como o sistema iria para um carro</h2></div>
     <div class="corpo">
-      <div class="duas" style="grid-template-columns:1fr 470px;gap:44px;align-items:start">
+      <div class="duas" style="grid-template-columns:1fr 600px;gap:44px;align-items:start">
         <table class="tabela tabTexto an" style="--d:1;font-size:16px">
           <tr><th>Tema</th><th>Situação</th></tr>
           <tr><td>Para onde os carros vão</td><td>Carro definido por software: poucos computadores centrais potentes, atualizados pela internet; em geral chips com CPU, GPU e acelerador de IA, não FPGA puro</td></tr>
@@ -916,11 +920,14 @@
   <section class="slide" data-titulo="A13 · Outras aplicações">
     <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A13 · O mesmo modelo, em outros lugares</h2></div>
     <div class="corpo">
-      <table class="tabela tabTexto an" style="--d:1;font-size:18px">
-        <tr><th>Aplicação</th><th>Uso</th><th>Por que gesto</th></tr>
-        <tr><td>Centro cirúrgico</td><td>Ver cortes de tomografia; demo pronta, com a tela travada pelo sinal de pare</td><td>Sem tocar em nada, sem quebrar a esterilidade</td></tr>
-        <tr><td>UTI</td><td>Paciente intubado pede ajuda com números: 1 dedo dor, 2 dedos sede</td><td>O paciente não tem voz</td></tr>
-      </table>
+      <div class="grade" style="grid-template-columns:1fr 1fr;gap:34px;align-items:stretch">
+        <div class="cartao an" style="--d:1"><p class="n">Centro cirúrgico</p><h3>Ver exames sem tocar em nada</h3>
+          <p style="font-size:18px">O cirurgião passa os cortes de uma tomografia e dá zoom com gestos, e o sinal de pare trava a tela. Não toca em nada, então não quebra a esterilidade.</p>
+          <p style="font-size:18px;margin-top:12px"><b>Estágio:</b> demo pronta no projeto: zoom com a mão, um dedo para o próximo corte e polegar para confirmar.</p></div>
+        <div class="cartao an" style="--d:2"><p class="n">UTI</p><h3>Paciente que não pode falar</h3>
+          <p style="font-size:18px">Um paciente intubado pede ajuda com números: um dedo para dor, dois dedos para sede. O gesto é pequeno e não depende da voz.</p>
+          <p style="font-size:18px;margin-top:12px"><b>Estágio:</b> ideia. Usaria a mesma contagem de dedos que reconhece os números no carro.</p></div>
+      </div>
     </div>
   </section>
 

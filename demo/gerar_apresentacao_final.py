@@ -181,7 +181,7 @@ def tabela_gestos():
     sem = [V.TRADUCAO.get(n, n.replace("Volante: ", "Volante · ")) for n in nomes if n not in comandos and n not in G.SEM_GESTO]
     tabela = ('<table class="tabela tabGestos"><tr><th>Gesto</th><th>Quem reconhece</th><th>Comando no carro</th></tr>'
               + "".join(linhas) + "</table>")
-    resto = (f'<p class="nota"><b>{len(nomes)} classes no modelo.</b> Também reconhecidos, sem comando no carro: '
+    resto = (f'<p class="nota" style="font-size:16px;max-width:1260px"><b>{len(nomes)} classes no modelo.</b> Também reconhecidos, sem comando no carro: '
              + ", ".join(html.escape(s) for s in sem) + ". E duas classes de rejeição: sem gesto e outro movimento.</p>")
     contagem = {"n_numeros": sum(n in NUMEROS for n in nomes), "n_volante": sum(n.startswith("Volante") for n in nomes),
                 "n_comandos": len(com)}
@@ -357,7 +357,7 @@ def main():
     f.update(GF.campos(gc, vivo_webcam))
     graf_falsos, campos_falsos = GF.grafico_falsos(fvc, V.TRADUCAO)
     f.update(campos_falsos)
-    tab_numeros, tab_movimentos = GF.gestos_principal(V.TRADUCAO)
+    tab_ok, tab_numeros, tab_movimentos = GF.gestos_principal(V.TRADUCAO)
 
     def pct_trechos(txt):
         a, b = (txt or "0/0").split("/")
@@ -409,7 +409,8 @@ def main():
         "<!--F:TABELA_GESTOS-->": tab_gestos, "<!--F:RESTO_GESTOS-->": resto_gestos,
         "<!--F:TABELA_DADOS-->": tabela_dados(d),
         "<!--F:GRAFICO_GESTOS-->": GF.grafico_gestos(gc, V.TRADUCAO),
-        "<!--F:GESTOS_NUMEROS-->": tab_numeros, "<!--F:GESTOS_MOVIMENTOS-->": tab_movimentos,
+        "<!--F:GESTOS_NUMEROS-->": tab_numeros, "<!--F:GESTOS_MOVIMENTOS-->": tab_movimentos, "<!--F:GESTOS_OK-->": tab_ok,
+        "<!--F:IC_CAMERA-->": GF.icone_camera(), "<!--F:IC_GESTO-->": GF.icone_mao("Swiping Right", 92), "<!--F:IC_OK-->": GF.icone_mao("OK", 92),
         "<!--F:TABELA_ARQUITETURAS-->": GF.tabela_arquiteturas(arq),
     }
     modelo = (RAIZ / "demo/apresentacao_final_modelo.html").read_text(encoding="utf-8")
