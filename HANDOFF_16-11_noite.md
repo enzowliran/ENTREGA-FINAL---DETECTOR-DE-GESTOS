@@ -68,6 +68,13 @@ O usuário testou o carro na webcam com o veto: **os números (1, 2, 4) não est
 - **Roteiro das falas:** `ROTEIRO_APRESENTACAO.md` (3 pessoas, tempos e perguntas prováveis).
 - **Falta:** ensaio completo pela `demo\abrir_apresentacao_final.bat`; os slides novos só foram vistos por um servidor de arquivos, sem a câmera.
 
+## Retorno do grupo aplicado em 16/11 à noite (34 slides)
+- **Corpo (13 slides):** 8 é novo ("A ativação pelo OK"); saíram Segurança e Limitações; 12 é "Próximos passos" (4 itens curtos).
+- **Apêndice:** saíram A4 arquitetura, A7 combinações / modelo ao vivo / confiança e A13 riscos. Entraram A1 "Jester e preparo" e A7 "MediaPipe e mão parada". A14 é Referências.
+- **Mesma régua (11 gestos do carro):** GRU + CNN 95,6%; contagem + veto 86,2%; modelo final 87,7%; CNN sozinha 81,1% (`gestos_do_carro.json`, `gestos_do_carro_gru.json`). Nos dados a GRU + CNN é melhor; na webcam só o modelo final reconheceu os números.
+- **Janela do OK (simulação, `src/fluxo_janela_ok.py`):** 1,05 → 0,73 comando falso por minuto; o OK abre sozinho 3,08 vezes por minuto no IPN. Proposta não aplicada: pinça < 0,3 e 0,6 s (0,19 falso por minuto). Precisa de teste ao vivo.
+- **Pendente:** foto da câmera para o A12 (o grupo ficou de mandar o arquivo); decidir se aperta o OK.
+
 ## Regras do usuário
 - Decidir, avançar e reportar; respostas curtas e didáticas.
 - Registrar achados no `notebook.ipynb`.

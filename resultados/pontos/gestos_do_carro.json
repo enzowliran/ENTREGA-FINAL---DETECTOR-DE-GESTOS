@@ -5,28 +5,73 @@
   "amostras": 1300,
   "acerto_pct": 87.7,
   "comando_certo_pct": 88.2,
-  "cnn_sozinha_pct": 81.1
+  "cnn_sozinha_pct": 81.1,
+  "com_veto_pct": 86.2,
+  "cnn_top5_pct": 99.6
  },
  "numeros": {
   "amostras": 500,
   "acerto_pct": 82.0,
   "comando_certo_pct": 82.0,
-  "cnn_sozinha_pct": 58.4
+  "cnn_sozinha_pct": 58.4,
+  "com_veto_pct": 71.6,
+  "cnn_top5_pct": 100.0
  },
  "movimentos": {
   "amostras": 800,
   "acerto_pct": 91.2,
   "comando_certo_pct": 92.1,
-  "cnn_sozinha_pct": 95.2
+  "cnn_sozinha_pct": 95.2,
+  "com_veto_pct": 95.2,
+  "cnn_top5_pct": 99.4
  },
  "todas_as_36_classes_pct": 70.9,
+ "todas_as_36_classes_com_veto_pct": 87.9,
  "amostras_total": 3642,
+ "amostras_cenario_do_carro": 1812,
+ "confianca_no_cenario_do_carro": {
+  "modelo_final": {
+   "1 dedo": {
+    "vezes_que_disse": 191,
+    "confianca_pct": 78.5,
+    "passou_quando_mostrado_pct": 75.0
+   },
+   "2 dedos": {
+    "vezes_que_disse": 258,
+    "confianca_pct": 63.2,
+    "passou_quando_mostrado_pct": 81.5
+   },
+   "4 dedos": {
+    "vezes_que_disse": 120,
+    "confianca_pct": 80.8,
+    "passou_quando_mostrado_pct": 97.0
+   }
+  },
+  "com_veto": {
+   "1 dedo": {
+    "vezes_que_disse": 130,
+    "confianca_pct": 97.7,
+    "passou_quando_mostrado_pct": 63.5
+   },
+   "2 dedos": {
+    "vezes_que_disse": 157,
+    "confianca_pct": 86.0,
+    "passou_quando_mostrado_pct": 67.5
+   },
+   "4 dedos": {
+    "vezes_que_disse": 99,
+    "confianca_pct": 97.0,
+    "passou_quando_mostrado_pct": 96.0
+   }
+  }
+ },
  "por_gesto": {
   "One Finger": {
    "amostras": 200,
    "acerto_pct": 75.0,
    "comando_certo_pct": 75.0,
    "cnn_sozinha_pct": 67.0,
+   "com_veto_pct": 63.5,
    "quem_decide": "contagem de dedos",
    "fontes": [
     "HaGRID",
@@ -43,6 +88,7 @@
    "acerto_pct": 81.5,
    "comando_certo_pct": 81.5,
    "cnn_sozinha_pct": 56.0,
+   "com_veto_pct": 67.5,
    "quem_decide": "contagem de dedos",
    "fontes": [
     "HaGRID",
@@ -59,6 +105,7 @@
    "acerto_pct": 97.0,
    "comando_certo_pct": 97.0,
    "cnn_sozinha_pct": 46.0,
+   "com_veto_pct": 96.0,
    "quem_decide": "contagem de dedos",
    "fontes": [
     "HaGRID"
@@ -73,6 +120,7 @@
    "acerto_pct": 87.0,
    "comando_certo_pct": 87.0,
    "cnn_sozinha_pct": 94.0,
+   "com_veto_pct": 94.0,
    "quem_decide": "CNN 3D",
    "fontes": [
     "Jester"
@@ -88,6 +136,7 @@
    "acerto_pct": 90.0,
    "comando_certo_pct": 90.0,
    "cnn_sozinha_pct": 90.0,
+   "com_veto_pct": 90.0,
    "quem_decide": "CNN 3D",
    "fontes": [
     "Jester"
@@ -103,6 +152,7 @@
    "acerto_pct": 95.0,
    "comando_certo_pct": 95.0,
    "cnn_sozinha_pct": 98.0,
+   "com_veto_pct": 98.0,
    "quem_decide": "CNN 3D",
    "fontes": [
     "Jester"
@@ -118,6 +168,7 @@
    "acerto_pct": 98.0,
    "comando_certo_pct": 98.0,
    "cnn_sozinha_pct": 98.0,
+   "com_veto_pct": 98.0,
    "quem_decide": "CNN 3D",
    "fontes": [
     "Jester"
@@ -131,6 +182,7 @@
    "acerto_pct": 84.0,
    "comando_certo_pct": 91.0,
    "cnn_sozinha_pct": 91.0,
+   "com_veto_pct": 91.0,
    "quem_decide": "CNN 3D",
    "fontes": [
     "Jester"
@@ -146,6 +198,7 @@
    "acerto_pct": 95.0,
    "comando_certo_pct": 95.0,
    "cnn_sozinha_pct": 98.0,
+   "com_veto_pct": 98.0,
    "quem_decide": "CNN 3D",
    "fontes": [
     "Jester"
@@ -161,6 +214,7 @@
    "acerto_pct": 92.0,
    "comando_certo_pct": 92.0,
    "cnn_sozinha_pct": 99.0,
+   "com_veto_pct": 99.0,
    "quem_decide": "CNN 3D",
    "fontes": [
     "Jester"
@@ -176,6 +230,7 @@
    "acerto_pct": 89.0,
    "comando_certo_pct": 89.0,
    "cnn_sozinha_pct": 94.0,
+   "com_veto_pct": 94.0,
    "quem_decide": "CNN 3D",
    "fontes": [
     "Jester"

@@ -1,0 +1,29 @@
+{
+ "o_que_e": "Quanto a janela do OK reduz os falsos disparos de número, em vídeo contínuo (simulação, sem rodar rede).",
+ "limites": "simulação com os pontos da mão a 12 quadros/s e só a mão principal; a CNN não entra",
+ "videos": 52,
+ "ipn_minutos_sem_gesto": 31.5,
+ "sem_janela": {
+  "falsos": 33,
+  "falsos_por_minuto": 1.047,
+  "por_classe": {
+   "One Finger": 7,
+   "Two Fingers": 18,
+   "Four Fingers": 8
+  }
+ },
+ "com_janela_do_ok": {
+  "falsos": 23,
+  "falsos_por_minuto": 0.73,
+  "por_classe": {
+   "One Finger": 5,
+   "Two Fingers": 13,
+   "Four Fingers": 5
+  }
+ },
+ "ok_abriu_sozinho": {
+  "vezes_em_trechos_sem_gesto": 97,
+  "por_minuto": 3.079,
+  "vezes_no_video_todo": 513
+ }
+}

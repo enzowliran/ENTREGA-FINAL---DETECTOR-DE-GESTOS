@@ -1,0 +1,30 @@
+{
+ "o_que_e": "A GRU sobre os pontos e a combinação GRU + CNN (testadas, não usadas ao vivo) na régua dos gestos do carro.",
+ "amostras_gestos_do_carro": 1300,
+ "modelos": {
+  "GRU sobre os pontos": {
+   "todas_as_36_classes_pct": 76.5,
+   "gestos_do_carro_pct": 83.3,
+   "numeros_pct": 95.6,
+   "movimentos_pct": 75.6
+  },
+  "GRU + CNN (média 0,3 / 0,7)": {
+   "todas_as_36_classes_pct": 92.4,
+   "gestos_do_carro_pct": 95.8,
+   "numeros_pct": 96.2,
+   "movimentos_pct": 95.6
+  },
+  "GRU + CNN, números pela GRU": {
+   "todas_as_36_classes_pct": 92.0,
+   "gestos_do_carro_pct": 95.6,
+   "numeros_pct": 95.6,
+   "movimentos_pct": 95.6
+  },
+  "CNN 3D pré-treinada": {
+   "todas_as_36_classes_pct": 84.0,
+   "gestos_do_carro_pct": 81.1,
+   "numeros_pct": 58.4,
+   "movimentos_pct": 95.2
+  }
+ }
+}

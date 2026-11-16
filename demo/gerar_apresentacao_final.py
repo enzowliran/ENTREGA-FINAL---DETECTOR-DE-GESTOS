@@ -372,6 +372,24 @@ def main():
         "arq_gru": por_arq.get("cnn_gru", {}).get("top1_val"), "arq_transformer": por_arq.get("cnn_transformer", {}).get("top1_val"),
         "arq_protocolo": arq.get("protocolo"), "jester_treino": d.get("dados", {}).get("videos_treino"),
     })
+    # janela do OK (simulação), a régua dos gestos do carro nos outros modelos e os números do Jester
+    jok = ler("resultados/pontos/fluxo_janela_ok.json") or {}
+    gru_carro = (ler("resultados/pontos/gestos_do_carro_gru.json") or {}).get("modelos", {})
+    jt, por_fonte = d.get("dados", {}), misto["modelos"].get("GRU sobre pontos", {}).get("por_fonte", {})
+    total_1, total_2 = (fv.get("ipn_um_dedo_trechos_certos") or "/").split("/")[1], (fv.get("ipn_dois_dedos_trechos_certos") or "/").split("/")[1]
+    f.update({
+        "fl_ok_sem": jok.get("sem_janela", {}).get("falsos_por_minuto"), "fl_ok_com": jok.get("com_janela_do_ok", {}).get("falsos_por_minuto"),
+        "fl_ok_abre": jok.get("ok_abriu_sozinho", {}).get("por_minuto"),
+        "car_veto": gc.get("gestos_do_carro", {}).get("com_veto_pct"), "car_top5": gc.get("gestos_do_carro", {}).get("cnn_top5_pct"),
+        "car_gru": gru_carro.get("GRU + CNN, números pela GRU", {}).get("gestos_do_carro_pct"),
+        "car_gru_media": gru_carro.get("GRU + CNN (média 0,3 / 0,7)", {}).get("gestos_do_carro_pct"),
+        "jester_total": jt.get("videos_total"), "jester_classes": jt.get("classes"), "jester_val": jt.get("videos_validacao"),
+        "jester_teste": jt.get("videos_teste"), "jester_gb": jt.get("gigabytes"),
+        "jester_frames_mi": round(jt.get("frames", 0) / 1e6, 1) or None,
+        "mix_jester": por_fonte.get("Jester", {}).get("n"), "mix_ipn": por_fonte.get("IPN", {}).get("n"),
+        "mix_hagrid": por_fonte.get("HaGRID", {}).get("n"), "mix_slovo": por_fonte.get("Slovo", {}).get("n"),
+        "mix_driver": por_fonte.get("DriverMHG", {}).get("n"), "um_total": total_1, "dois_total": total_2,
+    })
     tab_contagem, campos_contagem = confianca_contagem()
     f.update(campos_contagem)
     # um falso disparo a cada N minutos, na regra medida
@@ -379,12 +397,9 @@ def main():
     trocas = {
         "<!--F:TABELA_MODELOS-->": tabela_modelos(d, f),
         "<!--F:TABELA_GESTOS-->": tab_gestos, "<!--F:RESTO_GESTOS-->": resto_gestos,
-        "<!--F:CURVA_PESOS-->": curva_pesos(fu),
         "<!--F:TABELA_DADOS-->": tabela_dados(d),
-        "<!--F:TABELA_CONTAGEM-->": tab_contagem,
         "<!--F:GRAFICO_GESTOS-->": GF.grafico_gestos(gc, V.TRADUCAO),
         "<!--F:GESTOS_NUMEROS-->": tab_numeros, "<!--F:GESTOS_MOVIMENTOS-->": tab_movimentos,
-        "<!--F:GRAFICO_FALSOS-->": graf_falsos,
         "<!--F:TABELA_ARQUITETURAS-->": GF.tabela_arquiteturas(arq),
     }
     modelo = (RAIZ / "demo/apresentacao_final_modelo.html").read_text(encoding="utf-8")
