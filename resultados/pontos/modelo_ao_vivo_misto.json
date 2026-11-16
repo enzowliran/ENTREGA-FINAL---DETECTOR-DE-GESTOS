@@ -1,0 +1,17 @@
+{
+ "o_que_e": "Acerto da configuração usada ao vivo (CNN 3D pré-treinada + contagem de dedos, número direto em 5 de 6 quadros com a mão parada; senão a CNN sem as classes de número) no teste misto. Sem rodar rede: notas salvas da CNN e pontos já extraídos. A metade das pessoas do HaGRID usada para ajustar os limiares da contagem está incluída (como nas outras linhas); o acerto sem ela também é dado.",
+ "amostras": 3642,
+ "acerto_pct": 70.9,
+ "acerto_numeros_pct": 83.8,
+ "acerto_sem_numeros_pct": 68.3,
+ "comparacao_cnn_pre_sozinha_pct": 84.0,
+ "por_fonte_pct": {
+  "DriverMHG": 33.3,
+  "HaGRID": 94.2,
+  "IPN": 46.5,
+  "Jester": 71.1,
+  "Slovo": 86.0
+ },
+ "regra_disparou_em_pct_das_amostras": 34.7,
+ "acerto_sem_hagrid_de_ajuste_pct": 69.7
+}

@@ -335,7 +335,7 @@
 
   <!-- 9. Acerto -->
   <section class="slide" data-titulo="Acerto" data-parte="Resultados" data-fonte="Fonte: resultados do projeto · teste misto (Jester, IPN Hand, HaGRID, Slovo, DriverMHG)">
-    <div class="cab an"><h2>Resultados</h2><p class="sub">Acerto no teste misto, com pessoas fora do treino; a CNN 3D pré-treinada é a usada ao vivo</p></div>
+    <div class="cab an"><h2>Resultados</h2><p class="sub">Acerto no teste misto, com pessoas fora do treino; ao vivo: CNN 3D pré-treinada + contagem de dedos</p></div>
     <div class="corpo">
       <div class="duas" style="grid-template-columns:640px 1fr;gap:56px">
         <div class="an" style="--d:1"><p class="tituloBloco">Acerto no teste misto</p><!--F:GRAFICO_ACERTO--></div>
@@ -390,7 +390,7 @@
           <text x="520" y="142" font-size="21" font-weight="600" fill="#0a1f44">10 s · ≈ 300 m</text>
           <text x="0" y="220" font-size="18" fill="#364152">Gesto</text>
           <rect x="210" y="196" width="120" height="38" fill="none" stroke="#1e4fbf" stroke-width="2" stroke-dasharray="6 5"/>
-          <text x="346" y="222" font-size="18" fill="#7b8594">a medir na demo (sem olhar para a tela)</text>
+          <text x="346" y="222" font-size="21" font-weight="600" fill="#1e4fbf">≈ 0 s · o gesto é feito olhando a estrada</text>
           <line x1="210" x2="210" y1="24" y2="250" stroke="#d6dce4"/>
         </svg>
       </div>
@@ -642,7 +642,7 @@
             <tr><td>Média simples (peso da GRU 0,2 a 0,3)</td><td>{{acc_media}}% no teste misto; ao vivo, os números quase nunca passavam do gatilho de 0,7</td></tr>
             <tr><td>Portão da GRU: a GRU decide se é número (mão parada); senão, a CNN</td><td>{{acc_mistura}}% no teste misto; {{acc_mistura_num}}% nos números; ao vivo, nota baixa nos números</td></tr>
             <tr><td>Números pela GRU (peso 1,0 nos números, 0,3 no resto)</td><td>{{acc_pesos}}% no teste misto; em vídeo, disparava bem mais os números</td></tr>
-            <tr class="vencedora"><td>Usada ao vivo: mão parada e o mesmo número em 5 de 6 quadros → número pela contagem de dedos, sem nota; senão, a CNN</td><td>acerto e falsos por minuto a medir; confiança da contagem de dedos nos próximos slides</td></tr>
+            <tr class="vencedora"><td>Usada ao vivo: mão parada e o mesmo número em 5 de 6 quadros → número pela contagem de dedos, sem nota; senão, a CNN</td><td>{{acc_vivo}}% no teste misto ({{acc_vivo_num}}% nos números, {{acc_vivo_resto}}% nos outros gestos); falsos por minuto a medir; confiança da contagem de dedos nos próximos slides</td></tr>
           </table>
         </div>
       </div>

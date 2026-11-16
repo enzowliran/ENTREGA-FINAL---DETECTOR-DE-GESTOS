@@ -120,7 +120,7 @@ def tabela_modelos(d, f):
         ("GRU + CNN (média 0,3 / 0,7)", f"{br(f['acc_media'])}%", "—", f"{br(f['fl_media'], 2)} / min*"),
         ("GRU + CNN, números pela GRU", f"{br(f['acc_pesos'])}%", "—", f"{br(f['fl_final'], 2)} / min"),
         ("GRU + CNN, portão da GRU (mão parada)", f"{br(f['acc_mistura'])}%", "—", "—"),
-        ("Usada ao vivo: CNN 3D + contagem de dedos", "a medir", "—", "a medir"),
+        ("Usada ao vivo: CNN 3D + contagem de dedos", f"{br(f['acc_vivo'])}%" if f.get("acc_vivo") is not None else "a medir", "—", "a medir"),
     ]
     out = ['<table class="tabela tabModelos"><tr><th>Modelo</th><th>Acerto</th><th>Falsa ativação (Jester)</th><th>Falsos disparos (IPN, vídeo real)</th></tr>']
     for l in linhas:
@@ -149,13 +149,13 @@ def tabela_misto(f):
     linhas = [("GRU sobre os pontos", f["acc_gru"], f["fl_gru"]), ("CNN 3D do zero", f["acc_cnn_zero"], None),
               ("CNN 3D pré-treinada + ajuste", f["acc_cnn_pre"], f["fl_cnn_pre"]), ("GRU + CNN (média 0,3 / 0,7)", f["acc_media"], f["fl_media"]),
               ("GRU + CNN, números pela GRU", f["acc_pesos"], f["fl_final"]),
-              ("Usada ao vivo: CNN 3D + contagem de dedos", None, None)]
+              ("Usada ao vivo: CNN 3D + contagem de dedos", f.get("acc_vivo"), None)]
     out = ['<table class="tabela"><tr><th>Modelo</th><th>Acerto</th><th>Falsos / min (IPN)</th></tr>']
     for nome, a, fl in linhas:
         vivo = nome.startswith("Usada ao vivo")
         cls = ' class="vencedora"' if vivo else ""
         falsos = "a medir" if vivo else (f"{br(fl, 2)}" if fl is not None else "—")
-        acerto = "a medir" if vivo else f"{br(a)}%"
+        acerto = "a medir" if a is None else f"{br(a)}%"
         out.append(f"<tr{cls}><td>{html.escape(nome)}</td><td>{acerto}</td><td>{falsos}</td></tr>")
     out.append("</table>")
     return "".join(out)
@@ -237,8 +237,8 @@ def confianca_contagem():
 
 def grafico_acerto(f):
     barras = [("CNN 3D|do zero", f["acc_cnn_zero"], "#c9d8f0"), ("GRU sobre|os pontos", f["acc_gru"], "#9db9ea"),
-              ("CNN 3D|pré-treinada|usada ao vivo", f["acc_cnn_pre"], "#0a1f44"), ("GRU + CNN|(média)", f["acc_media"], "#3d74d6"),
-              ("GRU + CNN|(números|pela GRU)", f["acc_pesos"], "#1e4fbf")]
+              ("CNN 3D|pré-treinada", f["acc_cnn_pre"], "#3d74d6"), ("GRU + CNN|(média)", f["acc_media"], "#3d74d6"),
+              ("GRU + CNN|(números|pela GRU)", f["acc_pesos"], "#1e4fbf"), ("CNN 3D +|contagem|usada ao vivo", f.get("acc_vivo"), "#0a1f44")]
     W, H, base, topo = 620, 470, 400, 40
     out = [f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Acerto por modelo no teste misto">']
     for v in (0, 25, 50, 75, 100):
@@ -325,6 +325,10 @@ def main():
         "acc_cnn_pre": misto["modelos"].get("CNN 3D partindo do Jester inteiro", {}).get("todos"),
         "acc_media": fu["modelos"].get("Pontos + CNN (média)", {}).get("todos"),
         "acc_pesos": regras.get("pesos"), "acc_mistura": regras.get("mistura"), "acc_mistura_num": regras.get("mistura_numeros"),
+        # configuração usada ao vivo (src/medir_modelo_ao_vivo.py): CNN pré-treinada + contagem de dedos, no mesmo teste misto
+        "acc_vivo": (ler("resultados/pontos/modelo_ao_vivo_misto.json") or {}).get("acerto_pct"),
+        "acc_vivo_num": (ler("resultados/pontos/modelo_ao_vivo_misto.json") or {}).get("acerto_numeros_pct"),
+        "acc_vivo_resto": (ler("resultados/pontos/modelo_ao_vivo_misto.json") or {}).get("acerto_sem_numeros_pct"),
         "fl_cnn_pre": fluxo("CNN pré-treinada", "ipn_falsos_por_minuto"), "fl_gru": fluxo("GRU sobre pontos", "ipn_falsos_por_minuto"),
         "fl_media": fluxo("Combinação (0.3 GRU)", "ipn_falsos_por_minuto"), "fl_final": fluxo(final_chave, "ipn_falsos_por_minuto"),
         "um_final": fluxo(final_chave, "ipn_um_dedo_trechos_certos"), "dois_final": fluxo(final_chave, "ipn_dois_dedos_trechos_certos"),
