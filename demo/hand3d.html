@@ -13,6 +13,17 @@
   #cam canvas { position: absolute; inset: 0; height: 100%; }
   #hud { position: fixed; left: 12px; top: 12px; background: rgba(16,20,24,.8); padding: 10px 12px; border-radius: 8px; line-height: 1.5; }
   #hud b { color: #7fd1ff; }
+  body.tres { background: #0a1a33; }
+  body.tres #hud, body.tres #cam, body.tres #start { display: none !important; }
+  body.tres #scene { position: static; }
+  #tresGrade { position: fixed; inset: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; padding: 14px; }
+  #tresGrade figure { margin: 0; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  #tresGrade .tela { flex: 1; min-height: 0; background: #06101f; border: 1px solid #1f3a66; position: relative; overflow: hidden; }
+  #tresGrade canvas.quadroTres { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  #tresGrade #cena3 { position: absolute; inset: 0; }
+  #tresGrade #cena3 canvas { display: block; }
+  #tresGrade figcaption { color: #c9d6ea; font: 600 15px "Segoe UI", system-ui, sans-serif; letter-spacing: .04em; padding: 10px 2px 0; }
+  #tresGrade figcaption span { color: #7f95b8; font-weight: 400; margin-left: 8px; }
   #start { position: fixed; inset: 0; margin: auto; width: 260px; height: 56px; font-size: 18px; border: 0; border-radius: 10px; background: #2f8cff; color: #fff; cursor: pointer; }
 </style>
 <script type="importmap">
@@ -49,6 +60,20 @@ const octx = overlay.getContext("2d");
 
 // Fonte das imagens: a webcam (sozinha) ou o servidor do projeto (na apresentação). Ver "de onde vêm as imagens".
 const PARAMS = new URLSearchParams(location.search);
+// Modo de três telas (?tres=1, usado na apresentação): câmera crua | mesmo quadro com os 21 pontos | mão em 3D.
+const TRES = PARAMS.has("tres");
+let c1 = null, c2 = null, cena3 = null;
+if (TRES) {
+  document.body.classList.add("tres");
+  const grade = document.createElement("div");
+  grade.id = "tresGrade";
+  grade.innerHTML = '<figure><div class="tela"><canvas class="quadroTres" id="c1"></canvas></div><figcaption>1 · Câmera<span>a imagem como chega</span></figcaption></figure>'
+    + '<figure><div class="tela"><canvas class="quadroTres" id="c2"></canvas></div><figcaption>2 · Pontos do MediaPipe<span>21 pontos por mão</span></figcaption></figure>'
+    + '<figure><div class="tela"><div id="cena3"></div></div><figcaption>3 · Modelo 3D<span>os pontos montados em 3D</span></figcaption></figure>';
+  document.body.appendChild(grade);
+  c1 = document.getElementById("c1"); c2 = document.getElementById("c2"); cena3 = document.getElementById("cena3");
+}
+function tamanhoCena() { return TRES ? [cena3.clientWidth || 400, cena3.clientHeight || 600] : [innerWidth, innerHeight]; }
 const EMBUTIDO = PARAMS.has("embutido");
 const DO_SERVIDOR = EMBUTIDO || PARAMS.has("servidor");
 const stream = document.getElementById("stream");
@@ -64,11 +89,11 @@ fovEl.textContent = HFOV;
 // ---------- cena 3D (unidades em metros; câmera virtual = webcam) ----------
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(devicePixelRatio);
-renderer.setSize(innerWidth, innerHeight);
+renderer.setSize(...tamanhoCena());
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-document.getElementById("scene").appendChild(renderer.domElement);
+(TRES ? cena3 : document.getElementById("scene")).appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x101418);
@@ -79,7 +104,7 @@ const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.01, 2
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 function resetView() {
-  camera.position.set(0, 0, 0.001);   // no lugar da webcam
+  camera.position.set(0, 0, TRES ? 0.3 : 0.001);   // no lugar da webcam (no modo três, um pouco atrás, para caber na coluna)
   controls.target.set(0, 0, -0.5);
   controls.update();
 }
@@ -87,7 +112,8 @@ function updateCameraFov() {
   const [vw, vh] = tamanhoFonte();
   const aspect = vw && vh ? vh / vw : 9 / 16;
   camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(HFOV) / 2) * aspect));
-  camera.aspect = innerWidth / innerHeight;
+  const [cw, ch] = tamanhoCena();
+  camera.aspect = cw / ch;
   camera.updateProjectionMatrix();
 }
 resetView(); updateCameraFov();
@@ -110,7 +136,7 @@ const grid = new THREE.GridHelper(2, 40, 0x3a4652, 0x222a32);
 grid.position.set(0, FLOOR_Y + 0.001, -0.6);
 scene.add(grid);
 
-addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); updateCameraFov(); });
+addEventListener("resize", () => { renderer.setSize(...tamanhoCena()); updateCameraFov(); });
 addEventListener("keydown", e => {
   if (e.key === "r" || e.key === "R") resetView();
   if (e.key === "[" || e.key === "]") {
@@ -290,6 +316,24 @@ function proximaImagem() {
   lastVideoTime = video.currentTime;
   return video;
 }
+// Telas 1 e 2 do modo três: o quadro espelhado (como um espelho, igual à mão 3D) e, na 2, o esqueleto do MediaPipe.
+function desenharTres(fonte, res, W, H) {
+  for (const c of [c1, c2]) {
+    if (c.width !== W) { c.width = W; c.height = H; }
+    const g = c.getContext("2d");
+    g.setTransform(-1, 0, 0, 1, W, 0);
+    g.drawImage(fonte, 0, 0, W, H);
+    g.setTransform(1, 0, 0, 1, 0, 0);
+  }
+  const g = c2.getContext("2d");
+  const px = p => [(1 - p.x) * W, p.y * H];
+  res.landmarks.forEach(lm => {
+    g.strokeStyle = "#5aa2ff"; g.lineWidth = Math.max(3, W / 260);
+    for (const [a, b] of ALL_BONES) { g.beginPath(); g.moveTo(...px(lm[a])); g.lineTo(...px(lm[b])); g.stroke(); }
+    g.fillStyle = "#ffffff";
+    lm.forEach(p => { const [x, y] = px(p); g.beginPath(); g.arc(x, y, Math.max(3.5, W / 200), 0, Math.PI * 2); g.fill(); });
+  });
+}
 function loop() {
   requestAnimationFrame(loop);
   const imagem = landmarker ? proximaImagem() : null;
@@ -304,6 +348,7 @@ function loop() {
       updateHand(h, res.worldLandmarks[i], res.landmarks[i], W, H);
     });
     drawOverlay(res);
+    if (TRES) desenharTres(imagem, res, W, H);
     const now = performance.now();
     fps = 0.9 * fps + 0.1 * (1000 / (now - lastT)); lastT = now;
     const labels = order.map(i => (res.handedness[i][0].categoryName === "Left" ? "direita" : "esquerda"));

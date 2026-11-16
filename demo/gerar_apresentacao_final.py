@@ -165,7 +165,7 @@ def tabela_gestos():
     ordem = ["One Finger", "Two Fingers", "Four Fingers", "Swiping Right", "Swiping Left", "Thumb Up", "Thumb Down",
              "Stop Sign", "Pushing Hand Away", "Drumming Fingers", "Pulling Hand In"]
     com = [n for n in ordem if n in comandos and n in nomes]
-    linhas = ['<tr class="vencedora"><td><b>OK 👌</b> (polegar tocando o indicador)</td><td>pontos da mão</td>'
+    linhas = ['<tr class="vencedora"><td><b>OK</b> (polegar tocando o indicador)</td><td>pontos da mão</td>'
               '<td>ativa: bip, voz e 7 s para dar um comando</td></tr>']
     for n in com:
         quem = "pontos + GRU" if n in NUMEROS else "CNN 3D"
@@ -175,29 +175,32 @@ def tabela_gestos():
               + "".join(linhas) + "</table>")
     resto = (f'<p class="nota"><b>{len(nomes)} classes no modelo.</b> Também reconhecidos, sem comando no carro: '
              + ", ".join(html.escape(s) for s in sem) + ". E duas classes de rejeição: sem gesto e outro movimento.</p>")
-    return tabela, resto, len(nomes)
+    contagem = {"n_numeros": sum(n in NUMEROS for n in nomes), "n_volante": sum(n.startswith("Volante") for n in nomes),
+                "n_comandos": len(com)}
+    contagem["n_jester"] = len(nomes) - contagem["n_numeros"] - contagem["n_volante"]
+    return tabela, resto, len(nomes), contagem
 
 
 def grafico_acerto(f):
-    barras = [("CNN 3D do zero", f["acc_cnn_zero"], "#94a3b8"), ("GRU sobre os pontos", f["acc_gru"], "#60a5fa"),
-              ("CNN 3D pré-treinada", f["acc_cnn_pre"], "#a78bfa"), ("GRU + CNN (média)", f["acc_media"], "#0b8a7f"),
-              ("Regra ao vivo", f["acc_mistura"], "#db2777")]
+    barras = [("CNN 3D do zero", f["acc_cnn_zero"], "#c9d8f0"), ("GRU sobre os pontos", f["acc_gru"], "#9db9ea"),
+              ("CNN 3D pré-treinada", f["acc_cnn_pre"], "#3d74d6"), ("GRU + CNN (média)", f["acc_media"], "#1e4fbf"),
+              ("Regra ao vivo", f["acc_mistura"], "#0a1f44")]
     W, H, base, topo = 620, 470, 400, 40
     out = [f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Acerto por modelo no teste misto">']
     for v in (0, 25, 50, 75, 100):
         y = base - (base - topo) * v / 100
-        out.append(f'<line x1="40" x2="{W - 10}" y1="{y}" y2="{y}" stroke="#dde4ea"/><text x="32" y="{y + 5}" text-anchor="end" font-size="14" fill="#93a2ad">{v}</text>')
+        out.append(f'<line x1="40" x2="{W - 10}" y1="{y}" y2="{y}" stroke="#e3e7ec"/><text x="32" y="{y + 5}" text-anchor="end" font-size="13" fill="#7b8594">{v}%</text>')
     largura = (W - 70) / len(barras)
     for i, (nome, v, cor) in enumerate(barras):
         if v is None:
             continue
         x, h = 50 + i * largura + 12, (base - topo) * v / 100
-        out.append(f'<rect class="barra" x="{x}" y="{base - h}" width="{largura - 24}" height="{h}" rx="8" fill="{cor}"/>')
-        out.append(f'<text x="{x + (largura - 24) / 2}" y="{base - h - 10}" text-anchor="middle" font-size="22" font-weight="800" fill="#13232e">{br(v)}%</text>')
+        out.append(f'<rect class="barra" x="{x}" y="{base - h}" width="{largura - 24}" height="{h}" fill="{cor}"/>')
+        out.append(f'<text x="{x + (largura - 24) / 2}" y="{base - h - 10}" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">{br(v)}%</text>')
         palavras = nome.split(" ")
         meio = (len(palavras) + 1) // 2
         for k, parte in enumerate((" ".join(palavras[:meio]), " ".join(palavras[meio:]))):
-            out.append(f'<text x="{x + (largura - 24) / 2}" y="{base + 24 + k * 19}" text-anchor="middle" font-size="15" fill="#5a6b77">{html.escape(parte)}</text>')
+            out.append(f'<text x="{x + (largura - 24) / 2}" y="{base + 24 + k * 19}" text-anchor="middle" font-size="14" fill="#364152">{html.escape(parte)}</text>')
     out.append("</svg>")
     return "".join(out)
 
@@ -213,15 +216,15 @@ def curva_pesos(fu):
     pts = " ".join(f"{px(w):.1f},{py(a):.1f}" for w, a in sorted(curva.items()))
     out = [f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Acerto pelo peso da GRU">']
     for a in (70, 75, 80, 85, 90, 95):
-        out.append(f'<line x1="{x0}" x2="{x1}" y1="{py(a)}" y2="{py(a)}" stroke="#dde4ea"/><text x="{x0 - 10}" y="{py(a) + 5}" text-anchor="end" font-size="14" fill="#93a2ad">{a}%</text>')
+        out.append(f'<line x1="{x0}" x2="{x1}" y1="{py(a)}" y2="{py(a)}" stroke="#e3e7ec"/><text x="{x0 - 10}" y="{py(a) + 5}" text-anchor="end" font-size="13" fill="#7b8594">{a}%</text>')
     for w in (0, 0.2, 0.4, 0.6, 0.8, 1.0):
-        out.append(f'<text x="{px(w)}" y="{y0 + 26}" text-anchor="middle" font-size="14" fill="#93a2ad">{br(w)}</text>')
-    out.append(f'<polyline points="{pts}" fill="none" stroke="#0b8a7f" stroke-width="4"/>')
+        out.append(f'<text x="{px(w)}" y="{y0 + 26}" text-anchor="middle" font-size="13" fill="#7b8594">{br(w)}</text>')
+    out.append(f'<polyline points="{pts}" fill="none" stroke="#1e4fbf" stroke-width="3"/>')
     for w, a in sorted(curva.items()):
-        out.append(f'<circle cx="{px(w)}" cy="{py(a)}" r="6" fill="#0b8a7f"/>')
+        out.append(f'<circle cx="{px(w)}" cy="{py(a)}" r="5" fill="#0a1f44"/>')
     melhor = max(curva, key=curva.get)
-    out.append(f'<text x="{px(melhor)}" y="{py(curva[melhor]) - 16}" text-anchor="middle" font-size="18" font-weight="800" fill="#13232e">{br(curva[melhor])}%</text>')
-    out.append(f'<text x="{(x0 + x1) / 2}" y="{H - 8}" text-anchor="middle" font-size="15" fill="#5a6b77">peso da GRU (0 = só a CNN · 1 = só a GRU)</text></svg>')
+    out.append(f'<text x="{px(melhor)}" y="{py(curva[melhor]) - 16}" text-anchor="middle" font-size="17" font-weight="600" fill="#0a1f44">{br(curva[melhor])}%</text>')
+    out.append(f'<text x="{(x0 + x1) / 2}" y="{H - 8}" text-anchor="middle" font-size="14" fill="#364152">peso da GRU (0 = só a CNN · 1 = só a GRU)</text></svg>')
     return "".join(out)
 
 
@@ -254,7 +257,7 @@ def main():
     fl = (ler("resultados/pontos/fluxo_combinado.json") or {"modelos": {}})
     flm = fl["modelos"]
     regras = regras_finais()
-    tab_gestos, resto_gestos, n_classes = tabela_gestos()
+    tab_gestos, resto_gestos, n_classes, contagem = tabela_gestos()
     reais = ler("resultados/pontos/videos_reais.json") or {}
     fi = ler("resultados/dedos/fluxo_ipn.json") or {}
 
@@ -287,6 +290,7 @@ def main():
         "driver_n": misto["modelos"].get("GRU sobre pontos", {}).get("por_fonte", {}).get("DriverMHG", {}).get("n"),
         "gru_params": (ler("resultados/pontos/jester_coordenadas.json") or {}).get("parametros"),
     }
+    f.update(contagem)
     # um falso disparo a cada N minutos, na regra medida
     f["intervalo_final"] = round(1 / f["fl_final"]) if f.get("fl_final") else None
     trocas = {
