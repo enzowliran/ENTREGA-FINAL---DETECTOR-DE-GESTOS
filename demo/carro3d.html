@@ -80,7 +80,9 @@
 
 <script type="module">
 import * as THREE from "three";
-import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { Sky } from "three/addons/objects/Sky.js";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { FilesetResolver, HandLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
 
 const $ = id => document.getElementById(id);
@@ -89,23 +91,21 @@ const EMBUTIDO = new URLSearchParams(location.search).has("embutido");
 // ======================================================================
 // Cena: unidades em metros. O motorista olha para -Z, +X é a direita, +Y é para cima.
 // ======================================================================
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));   // limite: o notebook esquenta com a GPU no máximo
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.05;
+renderer.toneMappingExposure = 0.62;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 $("cena").appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-const COR_CEU = new THREE.Color(0xa9cbe8);
-scene.fog = new THREE.Fog(COR_CEU, 70, 380);
-const pmrem = new THREE.PMREMGenerator(renderer);
-scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+const COR_CEU = new THREE.Color(0xc4d4e3);   // horizonte: névoa da mesma cor, para o fundo sumir no céu
+scene.fog = new THREE.Fog(COR_CEU, 80, 520);
 
 const OLHO = new THREE.Vector3(0, 1.19, 0.05);
-const camera = new THREE.PerspectiveCamera(72, innerWidth / innerHeight, 0.02, 900);
+const camera = new THREE.PerspectiveCamera(70, innerWidth / innerHeight, 0.02, 1200);
 camera.position.copy(OLHO);
 let guinada = 0, arfagem = -0.10;   // para onde o motorista olha (arrastar com o mouse)
 function apontarCamera() {
@@ -125,197 +125,310 @@ addEventListener("pointermove", e => {
 });
 renderer.domElement.addEventListener("dblclick", () => { guinada = 0; arfagem = -0.10; apontarCamera(); });
 
+// ---- céu físico (Sky) e reflexos a partir dele ----
+const SOL_DIR = new THREE.Vector3().setFromSphericalCoords(1, THREE.MathUtils.degToRad(90 - 32), THREE.MathUtils.degToRad(200));
+function fazerCeu() {
+  const s = new Sky(); s.scale.setScalar(900);
+  const u = s.material.uniforms;
+  u.turbidity.value = 5.5; u.rayleigh.value = 1.4; u.mieCoefficient.value = 0.004; u.mieDirectionalG.value = 0.82;
+  u.sunPosition.value.copy(SOL_DIR);
+  return s;
+}
+scene.add(fazerCeu());
+const pmrem = new THREE.PMREMGenerator(renderer);
+const cenaAmbiente = new THREE.Scene(); cenaAmbiente.add(fazerCeu());
+scene.environment = pmrem.fromScene(cenaAmbiente).texture;
+
 // ---- luz ----
-const sol = new THREE.DirectionalLight(0xfff1dc, 2.4);
-sol.position.set(-2.5, 6, -6);
+const sol = new THREE.DirectionalLight(0xfff0dc, 3.2);
+sol.position.copy(SOL_DIR).multiplyScalar(8).add(new THREE.Vector3(0, 0.9, -0.5));
 sol.target.position.set(0, 0.9, -0.5);
 sol.castShadow = true;
 sol.shadow.mapSize.set(2048, 2048);
-Object.assign(sol.shadow.camera, { left: -1.4, right: 1.4, top: 1.4, bottom: -1.4, near: 1, far: 14 });
-sol.shadow.bias = -0.0004; sol.shadow.radius = 4;
+Object.assign(sol.shadow.camera, { left: -1.3, right: 1.3, top: 1.3, bottom: -1.3, near: 1, far: 16 });
+sol.shadow.bias = -0.0003; sol.shadow.normalBias = 0.01; sol.shadow.radius = 3;
 scene.add(sol, sol.target);
-scene.add(new THREE.HemisphereLight(0xdbeeff, 0x4a5a3a, 0.75));
+scene.add(new THREE.HemisphereLight(0xcfe0f5, 0x55603f, 0.55));
 
-// ---- céu ----
-const ceu = new THREE.Mesh(new THREE.SphereGeometry(600, 32, 16), new THREE.ShaderMaterial({
-  side: THREE.BackSide, depthWrite: false, fog: false,
-  uniforms: { topo: { value: new THREE.Color(0x3d7fc4) }, horizonte: { value: COR_CEU } },
-  vertexShader: "varying vec3 p; void main(){ p = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }",
-  fragmentShader: "uniform vec3 topo; uniform vec3 horizonte; varying vec3 p; void main(){ float t = clamp(p.y*2.2, 0.0, 1.0); gl_FragColor = vec4(mix(horizonte, topo, t), 1.0); }",
-}));
-scene.add(ceu);
-
-// ======================================================================
-// Mundo lá fora: chão, estrada que corre, árvores, postes, carros e morros
-// ======================================================================
-const mundo = new THREE.Group(); scene.add(mundo);
-const chao = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), new THREE.MeshStandardMaterial({ color: 0x6c8a52, roughness: 1 }));
-chao.rotation.x = -Math.PI / 2; chao.position.y = -0.02; mundo.add(chao);
-
-const CENTRO_ESTRADA = -1.9;   // o carro anda na faixa da direita
-const texEstrada = (() => {
-  const c = document.createElement("canvas"); c.width = 256; c.height = 512;
-  const g = c.getContext("2d");
-  g.fillStyle = "#3b3e42"; g.fillRect(0, 0, 256, 512);
-  for (let i = 0; i < 2500; i++) { g.fillStyle = `rgba(${Math.random() < .5 ? "255,255,255" : "0,0,0"},${Math.random() * .06})`; g.fillRect(Math.random() * 256, Math.random() * 512, 2, 2); }
-  g.fillStyle = "#e9e6dc"; g.fillRect(10, 0, 6, 512); g.fillRect(240, 0, 6, 512);    // bordas
-  g.fillStyle = "#f2c94c"; g.fillRect(124, 0, 8, 300);                              // faixa central tracejada
-  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 80);
+// ---- texturas desenhadas em canvas (sem baixar arquivos) ----
+function texturaCanvas(w, h, desenhar, repX = 1, repY = 1) {
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  desenhar(c.getContext("2d"), w, h);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repX, repY);
   t.anisotropy = renderer.capabilities.getMaxAnisotropy(); t.colorSpace = THREE.SRGBColorSpace;
   return t;
-})();
-const estrada = new THREE.Mesh(new THREE.PlaneGeometry(8.4, 1000), new THREE.MeshStandardMaterial({ map: texEstrada, roughness: .92 }));
-estrada.rotation.x = -Math.PI / 2; estrada.position.set(CENTRO_ESTRADA, 0, -480); mundo.add(estrada);
-const acostamento = new THREE.Mesh(new THREE.PlaneGeometry(14, 1000), new THREE.MeshStandardMaterial({ color: 0x8a8170, roughness: 1 }));
-acostamento.rotation.x = -Math.PI / 2; acostamento.position.set(CENTRO_ESTRADA, -0.01, -480); mundo.add(acostamento);
+}
+function ruido(g, w, h, n, cores, tamanho = 2) {
+  for (let i = 0; i < n; i++) { g.fillStyle = cores[(Math.random() * cores.length) | 0]; g.fillRect(Math.random() * w, Math.random() * h, tamanho, tamanho); }
+}
 
-const COMPRIMENTO = 420;  // trecho em que árvores e postes se repetem
-const objetos = [];       // { obj, z0 } que andam com a estrada
-function repetir(obj) { objetos.push(obj); mundo.add(obj); }
-const tronco = new THREE.CylinderGeometry(0.12, 0.18, 1.6, 8), copa = new THREE.ConeGeometry(1.4, 3.6, 9);
-const matTronco = new THREE.MeshStandardMaterial({ color: 0x5b4330, roughness: 1 });
-const matsCopa = [0x2f6b34, 0x3c7a3a, 0x285c2e, 0x4b8740].map(c => new THREE.MeshStandardMaterial({ color: c, roughness: .95 }));
-for (let i = 0; i < 70; i++) {
-  const arv = new THREE.Group();
-  const t = new THREE.Mesh(tronco, matTronco); t.position.y = 0.8;
-  const c = new THREE.Mesh(copa, matsCopa[i % 4]); c.position.y = 3.2;
-  const esc = 0.8 + Math.random() * 0.9; arv.scale.setScalar(esc);
-  arv.add(t, c);
-  const lado = Math.random() < 0.5 ? -1 : 1;
-  arv.position.set(CENTRO_ESTRADA + lado * (9 + Math.random() * 30), 0, -Math.random() * COMPRIMENTO);
-  repetir(arv);
+// ======================================================================
+// Mundo lá fora: grama, estrada com faixas, defensas, postes, árvores, carros e morros
+// ======================================================================
+const mundo = new THREE.Group(); scene.add(mundo);
+const texGrama = texturaCanvas(512, 512, (g, w, h) => {
+  g.fillStyle = "#5d7a43"; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 60; i++) { g.fillStyle = `rgba(${Math.random() < .5 ? "70,96,48" : "112,134,74"},.35)`; g.beginPath(); g.ellipse(Math.random() * w, Math.random() * h, 20 + Math.random() * 60, 10 + Math.random() * 40, Math.random() * 3, 0, 7); g.fill(); }
+  ruido(g, w, h, 9000, ["#4f6b39", "#6b8a4c", "#7d9a58", "#58733f", "#8a9d5e"], 2);
+}, 260, 260);
+const chao = new THREE.Mesh(new THREE.PlaneGeometry(1600, 1600), new THREE.MeshStandardMaterial({ map: texGrama, roughness: 1 }));
+chao.rotation.x = -Math.PI / 2; chao.position.y = -0.03; chao.receiveShadow = false; mundo.add(chao);
+
+const CENTRO_ESTRADA = -1.9;   // o carro anda na faixa da direita
+// asfalto: grão fino, faixa central amarela tracejada e bordas brancas contínuas (1 ladrilho = 16 m de estrada)
+const texEstrada = texturaCanvas(512, 1024, (g, w, h) => {
+  g.fillStyle = "#3a3c3f"; g.fillRect(0, 0, w, h);
+  ruido(g, w, h, 26000, ["#333538", "#45474a", "#2c2e31", "#4c4e51", "#3f4144"], 2);
+  for (let i = 0; i < 6; i++) { g.fillStyle = "rgba(20,20,22,.18)"; g.fillRect(150 + Math.random() * 40, 0, 26, h); g.fillRect(320 + Math.random() * 40, 0, 26, h); }   // marcas de pneu
+  g.fillStyle = "#e8e6df"; g.fillRect(14, 0, 9, h); g.fillRect(w - 23, 0, 9, h);    // bordas
+  g.fillStyle = "#e3b83c"; g.fillRect(w / 2 - 5, 0, 10, h * 0.28);                 // faixa central tracejada
+}, 1, 1000 / 16);
+const estrada = new THREE.Mesh(new THREE.PlaneGeometry(8.4, 1000), new THREE.MeshStandardMaterial({ map: texEstrada, roughness: .9, metalness: 0 }));
+estrada.rotation.x = -Math.PI / 2; estrada.position.set(CENTRO_ESTRADA, 0, -480); mundo.add(estrada);
+const texCascalho = texturaCanvas(256, 256, (g, w, h) => { g.fillStyle = "#8c8576"; g.fillRect(0, 0, w, h); ruido(g, w, h, 5000, ["#7d7668", "#9a9384", "#6f695d", "#a8a191"], 2); }, 4, 200);
+for (const lado of [-1, 1]) {
+  const ac = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 1000), new THREE.MeshStandardMaterial({ map: texCascalho, roughness: 1 }));
+  ac.rotation.x = -Math.PI / 2; ac.position.set(CENTRO_ESTRADA + lado * 5.3, -0.01, -480); mundo.add(ac);
 }
-const matPoste = new THREE.MeshStandardMaterial({ color: 0xd9d9d9, roughness: .6 });
-const matRefletor = new THREE.MeshStandardMaterial({ color: 0xff7a1a, emissive: 0x552200 });
-for (let i = 0; i < 2 * COMPRIMENTO / 16; i++) {
-  const lado = i % 2 ? -1 : 1;
-  const p = new THREE.Group();
-  const haste = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.9, 0.1), matPoste); haste.position.y = 0.45;
-  const ref = new THREE.Mesh(new THREE.BoxGeometry(0.105, 0.12, 0.03), matRefletor); ref.position.set(0, 0.75, 0.05);
-  p.add(haste, ref);
-  p.position.set(CENTRO_ESTRADA + lado * 4.9, 0, -Math.floor(i / 2) * 16);
-  repetir(p);
-}
-function fazerCarro(cor) {
+
+// Objetos que se repetem ao longo da estrada: cada grupo anda e "volta" a cada `periodo` metros (um único desenho por grupo)
+const periodicos = [];
+function grupoPeriodico(periodo, partes) {
+  const geos = new Map();   // material -> [geometrias]
+  for (let z = 0; z > -520; z -= periodo) for (const [geo, mat, x, y] of partes) {
+    const gg = geo.clone(); gg.translate(x, y, z);
+    if (!geos.has(mat)) geos.set(mat, []);
+    geos.get(mat).push(gg);
+  }
   const g = new THREE.Group();
-  const lata = new THREE.MeshStandardMaterial({ color: cor, roughness: .35, metalness: .5 });
-  const vidro = new THREE.MeshStandardMaterial({ color: 0x1b2530, roughness: .15, metalness: .3 });
-  const corpo = new THREE.Mesh(new THREE.BoxGeometry(1.8, 0.62, 4.2), lata); corpo.position.y = 0.55;
-  const cabine = new THREE.Mesh(new THREE.BoxGeometry(1.55, 0.5, 2.1), vidro); cabine.position.set(0, 1.08, 0.15);
-  const lanterna = new THREE.MeshStandardMaterial({ color: 0xff2a2a, emissive: 0xaa0000 });
-  for (const x of [-0.7, 0.7]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.12, 0.05), lanterna); l.position.set(x, 0.66, 2.11); g.add(l); }
-  const roda = new THREE.CylinderGeometry(0.33, 0.33, 0.24, 16), borracha = new THREE.MeshStandardMaterial({ color: 0x111111 });
-  for (const [x, z] of [[-0.85, 1.35], [0.85, 1.35], [-0.85, -1.35], [0.85, -1.35]]) { const r = new THREE.Mesh(roda, borracha); r.rotation.z = Math.PI / 2; r.position.set(x, 0.33, z); g.add(r); }
-  g.add(corpo, cabine);
-  g.traverse(m => { if (m.isMesh) m.castShadow = true; });
+  for (const [mat, lista] of geos) g.add(new THREE.Mesh(mergeGeometries(lista), mat));
+  mundo.add(g); periodicos.push({ g, periodo });
   return g;
 }
-const carroFrente = fazerCarro(0x2c5aa0); carroFrente.position.set(0, 0, -38); mundo.add(carroFrente);
-const contramao = [fazerCarro(0xd9d9d9), fazerCarro(0x9a2b2b)];
+const matMetal = new THREE.MeshStandardMaterial({ color: 0xb9c0c7, roughness: .35, metalness: .85 });
+const matBranco = new THREE.MeshStandardMaterial({ color: 0xe6e8ea, roughness: .55 });
+const matRefletor = new THREE.MeshStandardMaterial({ color: 0xe8a33a, emissive: 0x3a2200, roughness: .4 });
+const matPosteLuz = new THREE.MeshStandardMaterial({ color: 0x8d949b, roughness: .5, metalness: .7 });
+// defensa metálica do lado direito: lâmina contínua + postes a cada 4 m
+const xDefensa = CENTRO_ESTRADA + 4.75;
+const lamina = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.32, 1000), matMetal);
+lamina.position.set(xDefensa, 0.62, -480); mundo.add(lamina);
+grupoPeriodico(4, [[new THREE.BoxGeometry(0.1, 0.72, 0.1), matPosteLuz, xDefensa + 0.06, 0.36]]);
+// balizadores brancos do lado esquerdo a cada 16 m
+grupoPeriodico(16, [[new THREE.BoxGeometry(0.1, 0.9, 0.1), matBranco, CENTRO_ESTRADA - 4.85, 0.45],
+                    [new THREE.BoxGeometry(0.105, 0.14, 0.03), matRefletor, CENTRO_ESTRADA - 4.85, 0.74]]);
+// postes de iluminação a cada 48 m, do lado direito
+const braco = new THREE.BoxGeometry(1.6, 0.06, 0.06); braco.translate(-0.8, 0, 0);
+grupoPeriodico(48, [[new THREE.CylinderGeometry(0.07, 0.11, 8, 10), matPosteLuz, xDefensa + 0.9, 4],
+                    [braco, matPosteLuz, xDefensa + 0.9, 7.95],
+                    [new THREE.BoxGeometry(0.45, 0.08, 0.2), matBranco, xDefensa - 0.6, 7.9]]);
+
+// árvores: modelos com cores nos vértices (um desenho por árvore), copas em camadas e irregulares
+const COMPRIMENTO = 420;  // trecho em que as árvores se repetem
+const objetos = [];
+function repetir(obj) { objetos.push(obj); mundo.add(obj); }
+function pintar(geo, cor) {
+  const n = geo.attributes.position.count, c = new Float32Array(n * 3), col = new THREE.Color(cor);
+  for (let i = 0; i < n; i++) { const v = 0.88 + Math.random() * 0.2; c[i * 3] = col.r * v; c[i * 3 + 1] = col.g * v; c[i * 3 + 2] = col.b * v; }
+  geo.setAttribute("color", new THREE.BufferAttribute(c, 3)); return geo;
+}
+function irregular(geo, amp) {   // desloca vértices iguais do mesmo jeito (sem rachaduras)
+  const p = geo.attributes.position, mapa = new Map();
+  for (let i = 0; i < p.count; i++) {
+    const k = `${p.getX(i).toFixed(3)},${p.getY(i).toFixed(3)},${p.getZ(i).toFixed(3)}`;
+    if (!mapa.has(k)) mapa.set(k, [(Math.random() - .5) * amp, (Math.random() - .5) * amp, (Math.random() - .5) * amp]);
+    const d = mapa.get(k); p.setXYZ(i, p.getX(i) + d[0], p.getY(i) + d[1], p.getZ(i) + d[2]);
+  }
+  geo.computeVertexNormals(); return geo;
+}
+const VERDES = [0x2f5d2c, 0x3b6b32, 0x46783a, 0x2a5230, 0x557f3f, 0x3e6436];
+function modeloArvore(tipo, verde) {
+  const partes = [pintar(new THREE.CylinderGeometry(0.1, 0.17, 2.2, 7).translate(0, 1.1, 0).toNonIndexed(), 0x5a4330)];
+  if (tipo === 0) {   // conífera: três cones
+    [[1.7, 2.4, 2.4], [1.35, 2.1, 3.5], [0.9, 1.8, 4.6]].forEach(([r, h, y]) =>
+      partes.push(pintar(irregular(new THREE.ConeGeometry(r, h, 9, 2).translate(0, y, 0).toNonIndexed(), 0.18), verde)));
+  } else {            // folhosa: várias bolas de folhas
+    [[0, 3.4, 0, 1.6], [0.9, 3.0, 0.3, 1.2], [-0.8, 3.1, -0.2, 1.25], [0.2, 4.2, -0.3, 1.15]].forEach(([x, y, z, r]) =>
+      partes.push(pintar(irregular(new THREE.IcosahedronGeometry(r, 1).translate(x, y, z), 0.25 * r), verde)));
+  }
+  return mergeGeometries(partes);
+}
+const matArvore = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .92, flatShading: true });
+const modelos = [];
+for (let i = 0; i < 8; i++) modelos.push(modeloArvore(i % 2, VERDES[i % VERDES.length]));
+for (let i = 0; i < 64; i++) {
+  const arv = new THREE.Mesh(modelos[i % modelos.length], matArvore);
+  arv.scale.setScalar(0.75 + Math.random() * 0.8); arv.rotation.y = Math.random() * 6.3;
+  const lado = Math.random() < 0.5 ? -1 : 1;
+  arv.position.set(CENTRO_ESTRADA + lado * (9.5 + Math.random() * 34), 0, -Math.random() * COMPRIMENTO);
+  repetir(arv);
+}
+// carros: carroceria arredondada, vidros escuros, lanternas
+function fazerCarro(cor) {
+  const g = new THREE.Group();
+  const lata = new THREE.MeshPhysicalMaterial({ color: cor, roughness: .35, metalness: .55, clearcoat: 1, clearcoatRoughness: .1 });
+  const vidroC = new THREE.MeshStandardMaterial({ color: 0x141c25, roughness: .1, metalness: .5 });
+  const corpo = new THREE.Mesh(new RoundedBoxGeometry(1.8, 0.62, 4.2, 4, 0.14), lata); corpo.position.y = 0.58;
+  const teto = new THREE.Mesh(new RoundedBoxGeometry(1.55, 0.52, 2.1, 4, 0.16), vidroC); teto.position.set(0, 1.1, 0.15);
+  const lanterna = new THREE.MeshStandardMaterial({ color: 0xc81e1e, emissive: 0x6a0000, roughness: .3 });
+  for (const x of [-0.66, 0.66]) { const l = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.1, 0.04), lanterna); l.position.set(x, 0.7, 2.1); g.add(l); }
+  const roda = new THREE.CylinderGeometry(0.33, 0.33, 0.24, 18), borracha = new THREE.MeshStandardMaterial({ color: 0x15161a, roughness: .9 });
+  for (const [x, z] of [[-0.86, 1.35], [0.86, 1.35], [-0.86, -1.35], [0.86, -1.35]]) { const r = new THREE.Mesh(roda, borracha); r.rotation.z = Math.PI / 2; r.position.set(x, 0.33, z); g.add(r); }
+  g.add(corpo, teto);
+  return g;
+}
+const carroFrente = fazerCarro(0x2b4a78); carroFrente.position.set(0, 0, -38); mundo.add(carroFrente);
+const contramao = [fazerCarro(0xc9cdd2), fazerCarro(0x3c4048)];
 contramao.forEach((c, i) => { c.rotation.y = Math.PI; c.position.set(CENTRO_ESTRADA - 2.1, 0, -150 - i * 210); mundo.add(c); });
-const matMorro = new THREE.MeshStandardMaterial({ color: 0x5f7f63, roughness: 1, flatShading: true });
+// morros ao fundo: degradê do verde da base ao azulado no topo (a névoa faz a perspectiva aérea)
+const matMorro = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 1, flatShading: true });
 for (let i = 0; i < 14; i++) {
-  const m = new THREE.Mesh(new THREE.ConeGeometry(40 + Math.random() * 60, 25 + Math.random() * 45, 7), matMorro);
+  const r = 70 + Math.random() * 90, h = 30 + Math.random() * 55;
+  const geo = irregular(new THREE.IcosahedronGeometry(1, 2), 0.08); geo.scale(r, h, r * (0.7 + Math.random() * 0.5));
+  const p = geo.attributes.position, c = new Float32Array(p.count * 3), base = new THREE.Color(0x4f6b45), topo = new THREE.Color(0x8a9db0), t = new THREE.Color();
+  for (let k = 0; k < p.count; k++) { t.copy(base).lerp(topo, THREE.MathUtils.clamp(p.getY(k) / h, 0, 1)); c[k * 3] = t.r; c[k * 3 + 1] = t.g; c[k * 3 + 2] = t.b; }
+  geo.setAttribute("color", new THREE.BufferAttribute(c, 3));
+  const m = new THREE.Mesh(geo, matMorro);
   const lado = i % 2 ? -1 : 1;
-  m.position.set(lado * (90 + Math.random() * 160), 0, -260 - Math.random() * 300);
+  m.position.set(lado * (120 + Math.random() * 200), -2, -300 - Math.random() * 320);
   mundo.add(m);
 }
-const NGOTAS = 0;
-const gotasGeo = new THREE.BufferGeometry();
-const gotasPos = new Float32Array(NGOTAS * 3);
-for (let i = 0; i < NGOTAS; i++) { gotasPos[i * 3] = (Math.random() - .5) * 30; gotasPos[i * 3 + 1] = Math.random() * 12; gotasPos[i * 3 + 2] = -Math.random() * 40; }
-gotasGeo.setAttribute("position", new THREE.BufferAttribute(gotasPos, 3));
-const chuva = new THREE.Points(gotasGeo, new THREE.PointsMaterial({ color: 0xbfd6ea, size: 0.05, transparent: true, opacity: .7 }));
-chuva.visible = false; scene.add(chuva);
 
 // ======================================================================
-// Cabine: painel, volante, telas, colunas, capô, retrovisor, para-brisa e limpadores
+// Cabine: painel moldado, volante de couro, quadro de instrumentos, central multimídia "tablet", colunas, capô, retrovisor
 // ======================================================================
 const cabine = new THREE.Group(); scene.add(cabine);
-const matPainel = new THREE.MeshStandardMaterial({ color: 0x1e2227, roughness: .82 });
-const matAcab = new THREE.MeshStandardMaterial({ color: 0x2c3138, roughness: .6, metalness: .1 });
-const matCromo = new THREE.MeshStandardMaterial({ color: 0x9aa3ad, roughness: .25, metalness: .9 });
-const matTeto = new THREE.MeshStandardMaterial({ color: 0x3a3d42, roughness: 1 });
-function caixa(w, h, d, mat, x, y, z, rx = 0, ry = 0, rz = 0) {
-  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-  m.position.set(x, y, z); m.rotation.set(rx, ry, rz);
-  m.castShadow = true; m.receiveShadow = true; cabine.add(m); return m;
+const matPainel = new THREE.MeshPhysicalMaterial({ color: 0x1f2328, roughness: .78, clearcoat: .05, clearcoatRoughness: .8 });   // plástico soft-touch
+const matPainelTopo = new THREE.MeshPhysicalMaterial({ color: 0x17191d, roughness: .85 });
+const matAcab = new THREE.MeshPhysicalMaterial({ color: 0x2a2e34, roughness: .7, clearcoat: .1 });
+const matPiano = new THREE.MeshPhysicalMaterial({ color: 0x0a0b0d, roughness: .12, clearcoat: 1, clearcoatRoughness: .05, envMapIntensity: .6 });   // preto piano
+const matEscovado = new THREE.MeshStandardMaterial({ color: 0x8f969e, roughness: .38, metalness: .9, envMapIntensity: .8 });
+const matCouro = new THREE.MeshPhysicalMaterial({ color: 0x15171a, roughness: .62, sheen: .4, sheenColor: new THREE.Color(0x3a3f46), sheenRoughness: .6 });
+const matTecido = new THREE.MeshStandardMaterial({ color: 0x6f6e6a, roughness: 1 });     // forro do teto
+const matColuna = new THREE.MeshStandardMaterial({ color: 0x3b3d41, roughness: .95 });
+function noCabine(m, sombra = true) { m.castShadow = sombra; m.receiveShadow = true; cabine.add(m); return m; }
+function arred(w, h, d, r, mat, x, y, z, rx = 0, ry = 0, rz = 0) {
+  const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, r), mat);
+  m.position.set(x, y, z); m.rotation.set(rx, ry, rz); return noCabine(m);
 }
-caixa(1.76, 0.2, 0.5, matPainel, 0, 0.79, -0.84, -0.18);          // painel
-caixa(1.76, 0.06, 0.3, matAcab, 0, 0.68, -0.62);                  // borda de baixo do painel
-caixa(0.46, 0.05, 0.16, matPainel, 0, 1.04, -0.66, -0.25);        // capuz do quadro de instrumentos
-caixa(0.24, 0.26, 0.55, matAcab, 0.34, 0.6, -0.42);               // console central
-caixa(0.05, 0.12, 0.05, matCromo, 0.34, 0.78, -0.3);              // alavanca de câmbio
-caixa(0.08, 0.035, 0.06, matPainel, 0.34, 0.85, -0.3);
-for (const x of [-0.85, 0.85]) {                                  // portas
-  caixa(0.06, 0.62, 1.6, matAcab, x, 0.6, -0.2);
-  caixa(0.1, 0.05, 1.5, matPainel, x * 0.98, 0.93, -0.18);         // apoio de braço / soleira da janela
+// Painel: perfil lateral (profundidade x altura) extrudado na largura do carro, com bordas arredondadas.
+// No desenho, x = distância para a frente (-z do mundo) e y = altura.
+function perfilPainel() {
+  const s = new THREE.Shape();
+  s.moveTo(0.55, 0.60);
+  s.lineTo(0.565, 0.84);
+  s.quadraticCurveTo(0.575, 0.905, 0.63, 0.915);    // lábio arredondado do lado do motorista
+  s.lineTo(0.74, 0.918);
+  s.quadraticCurveTo(0.95, 0.928, 1.08, 0.936);     // tampo até a base do para-brisa
+  s.lineTo(1.09, 0.86);
+  s.lineTo(1.09, 0.60);
+  s.lineTo(0.55, 0.60);
+  return s;
 }
-// colunas do para-brisa (de baixo, no painel, até o teto)
-function coluna(x0, y0, z0, x1, y1, z1, r = 0.045) {
+const geoPainel = new THREE.ExtrudeGeometry(perfilPainel(), { depth: 1.7, bevelEnabled: true, bevelSize: 0.012, bevelThickness: 0.02, bevelSegments: 3, curveSegments: 10 });
+const painel = new THREE.Mesh(geoPainel, matPainel);
+painel.rotation.y = Math.PI / 2; painel.position.x = -0.85; noCabine(painel);
+// faixa de acabamento escovado na frente do painel e saídas de ar (brilham com o ar-condicionado ligado)
+arred(1.62, 0.018, 0.012, 0.004, matEscovado, 0, 0.80, -0.548);
+const matAr = new THREE.MeshStandardMaterial({ color: 0x101215, emissive: 0x000000, roughness: .5 });
+for (const x of [-0.66, -0.52, 0.52, 0.66]) {
+  arred(0.12, 0.045, 0.02, 0.008, matPiano, x, 0.855, -0.556);
+  arred(0.105, 0.03, 0.006, 0.003, matAr, x, 0.855, -0.546);
+}
+// binóculo do quadro de instrumentos (aba fina, só em volta do quadro; não passa na frente da central)
+arred(0.36, 0.022, 0.08, 0.01, matPainelTopo, 0, 1.05, -0.70, -0.12);
+// console central e câmbio
+arred(0.26, 0.3, 0.6, 0.04, matAcab, 0.38, 0.6, -0.36);
+arred(0.2, 0.012, 0.4, 0.004, matPiano, 0.38, 0.755, -0.33);
+arred(0.045, 0.1, 0.045, 0.02, matCouro, 0.38, 0.81, -0.25);
+// portas: painel, apoio de braço e maçaneta
+for (const x of [-0.86, 0.86]) {
+  arred(0.06, 0.58, 1.55, 0.03, matAcab, x, 0.62, -0.2);
+  arred(0.1, 0.05, 0.6, 0.02, matCouro, x * 0.95, 0.78, -0.05);
+  arred(0.08, 0.035, 1.45, 0.015, matPainel, x * 0.985, 0.93, -0.2);
+  arred(0.012, 0.02, 0.1, 0.006, matEscovado, x * 0.955, 0.86, -0.45);
+}
+// colunas A finas (com acabamento) e forro do teto
+function coluna(x0, y0, z0, x1, y1, z1, r) {
   const a = new THREE.Vector3(x0, y0, z0), b = new THREE.Vector3(x1, y1, z1);
-  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r * 1.2, a.distanceTo(b), 10), matTeto);
+  const m = new THREE.Mesh(new THREE.CapsuleGeometry(r, a.distanceTo(b), 4, 12), matColuna);
   m.position.copy(a).add(b).multiplyScalar(0.5);
   m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize());
-  m.castShadow = true; cabine.add(m);
+  m.scale.z = 0.6; return noCabine(m);
 }
-coluna(-0.82, 0.95, -1.0, -0.7, 1.5, -0.3, 0.035); coluna(0.82, 0.95, -1.0, 0.7, 1.5, -0.3, 0.035);
-caixa(1.5, 0.07, 0.16, matTeto, 0, 1.52, -0.3);                   // borda do teto
-const teto = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.2), matTeto);
-teto.rotation.x = Math.PI / 2; teto.position.set(0, 1.56, 0.3); cabine.add(teto);
-caixa(0.23, 0.065, 0.025, matPainel, 0.08, 1.43, -0.36);          // retrovisor
-caixa(0.21, 0.052, 0.005, new THREE.MeshStandardMaterial({ color: 0x4a5866, roughness: .25, metalness: .6 }), 0.08, 1.43, -0.347);
-caixa(0.02, 0.08, 0.02, matPainel, 0.08, 1.49, -0.36);
-// capô, visto pelo para-brisa
-const capo = new THREE.Mesh(new THREE.BoxGeometry(1.7, 0.05, 1.5), new THREE.MeshStandardMaterial({ color: 0x8c1c1c, roughness: .45, metalness: .25 }));
-capo.position.set(0, 0.86, -1.75); capo.rotation.x = 0.1; capo.receiveShadow = true; cabine.add(capo);
-// para-brisa (vidro) e limpadores
-const vidro = new THREE.Mesh(new THREE.PlaneGeometry(1.55, 0.95), new THREE.MeshPhysicalMaterial({ color: 0xbfd8ea, roughness: .05, transmission: 0, transparent: true, opacity: .07 }));
-vidro.position.set(0, 1.22, -0.66); vidro.rotation.x = -0.92; vidro.visible = false; cabine.add(vidro);
+coluna(-0.83, 0.94, -1.05, -0.71, 1.5, -0.3, 0.026); coluna(0.83, 0.94, -1.05, 0.71, 1.5, -0.3, 0.026);
+arred(1.48, 0.06, 0.14, 0.025, matTecido, 0, 1.53, -0.29);
+const teto = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.25), matTecido);
+teto.rotation.x = Math.PI / 2; teto.position.set(0, 1.565, 0.32); noCabine(teto, false);
+// retrovisor escuro, sem reflexo estourado
+arred(0.24, 0.07, 0.03, 0.02, matPainelTopo, 0.08, 1.43, -0.37);
+arred(0.22, 0.054, 0.004, 0.015, new THREE.MeshStandardMaterial({ color: 0x2b3440, roughness: .35, metalness: .35, envMapIntensity: .35 }), 0.08, 1.43, -0.354);
+arred(0.016, 0.07, 0.016, 0.006, matPainelTopo, 0.08, 1.495, -0.37);
+// capô: chapa levemente abaulada, pintura azul-escura com verniz
+const geoCapo = new THREE.PlaneGeometry(1.76, 1.7, 24, 12);
+{
+  const p = geoCapo.attributes.position;
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i), y = p.getY(i), t = (y + 0.85) / 1.7;   // t = 0 junto ao para-brisa, 1 na frente
+    p.setZ(i, 0.045 * (1 - (x / 0.88) ** 2) - 0.13 * t * t);
+  }
+  geoCapo.computeVertexNormals();
+}
+const capo = new THREE.Mesh(geoCapo, new THREE.MeshPhysicalMaterial({ color: 0x16213a, metalness: .2, roughness: .55, clearcoat: .25, clearcoatRoughness: .3, envMapIntensity: .12 }));
+capo.rotation.x = -Math.PI / 2 + 0.08; capo.position.set(0, 0.875, -1.92); capo.receiveShadow = true; cabine.add(capo);
+// para-brisa: vidro levemente azulado entre as colunas, o painel e o teto (as bordas ficam escondidas por eles)
+const geoVidro = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3(-0.82, 0.935, -1.05), new THREE.Vector3(0.82, 0.935, -1.05), new THREE.Vector3(0.7, 1.5, -0.3),
+  new THREE.Vector3(-0.82, 0.935, -1.05), new THREE.Vector3(0.7, 1.5, -0.3), new THREE.Vector3(-0.7, 1.5, -0.3)]);
+geoVidro.computeVertexNormals();
+const vidro = new THREE.Mesh(geoVidro, new THREE.MeshPhysicalMaterial({ color: 0x9db4c9, roughness: .05, transparent: true, opacity: .07, depthWrite: false, side: THREE.DoubleSide }));
+cabine.add(vidro);
+// limpadores em repouso na base do para-brisa
 const limpadores = [-0.42, 0.18].map(x => {
-  const piv = new THREE.Group(); piv.position.set(x, 0.97, -0.98); piv.rotation.x = -0.92;
-  const haste = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.012, 0.012), new THREE.MeshStandardMaterial({ color: 0x0c0d0f, roughness: .7 }));
-  haste.position.x = 0.31; piv.add(haste); cabine.add(piv); return piv;
+  const piv = new THREE.Group(); piv.position.set(x, 0.95, -1.07); piv.rotation.set(-0.92, 0, 0.05);
+  const haste = new THREE.Mesh(new RoundedBoxGeometry(0.6, 0.012, 0.014, 2, 0.005), matPiano);
+  haste.position.x = 0.3; piv.add(haste); cabine.add(piv); return piv;
 });
-// saídas de ar: brilham quando o ar-condicionado está ligado
-const matAr = new THREE.MeshStandardMaterial({ color: 0x15181c, emissive: 0x000000, roughness: .6 });
-[-0.62, 0.62].forEach(x => caixa(0.12, 0.05, 0.02, matAr, x, 0.84, -0.6));
 
-// ---- volante ----
+// ---- volante: aro de couro, três raios (sem raio em cima, para o quadro aparecer pelo vão) ----
 const volante = new THREE.Group();
-volante.position.set(0, 0.92, -0.47); volante.rotation.x = 0.36; cabine.add(volante);
-const matVolante = new THREE.MeshStandardMaterial({ color: 0x16181b, roughness: .55 });
-const aro = new THREE.Mesh(new THREE.TorusGeometry(0.185, 0.023, 16, 72), matVolante); aro.castShadow = true;
-const cubo = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.065, 0.06, 24), matVolante); cubo.rotation.x = Math.PI / 2;
-const logo = new THREE.Mesh(new THREE.CircleGeometry(0.025, 24), matCromo); logo.position.z = 0.031;
-volante.add(aro, cubo, logo);
-for (const ang of [Math.PI / 2 + 1.25, Math.PI / 2 - 1.25, -Math.PI / 2]) {
-  const raio = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.03, 0.02), matVolante);
-  raio.position.set(Math.cos(ang) * 0.1, Math.sin(ang) * 0.1, 0); raio.rotation.z = ang; raio.castShadow = true; volante.add(raio);
+volante.position.set(0, 0.9, -0.47); volante.rotation.x = -0.36; cabine.add(volante);   // topo do aro para a frente, como num carro
+const aro = new THREE.Mesh(new THREE.TorusGeometry(0.185, 0.022, 20, 96), matCouro); aro.castShadow = true;
+const cubo = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.056, 0.045, 32), matCouro); cubo.rotation.x = Math.PI / 2;
+const almofada = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 0.012, 32), matPiano); almofada.rotation.x = Math.PI / 2; almofada.position.z = 0.025;
+const logo = new THREE.Mesh(new THREE.TorusGeometry(0.012, 0.0025, 8, 32), matEscovado); logo.position.z = 0.032;
+volante.add(aro, cubo, almofada, logo);
+for (const [ang, larg] of [[Math.PI + 0.18, 0.15], [-0.18, 0.15], [-Math.PI / 2, 0.13]]) {
+  const raio = new THREE.Mesh(new RoundedBoxGeometry(larg, 0.03, 0.022, 2, 0.01), matCouro);
+  raio.position.set(Math.cos(ang) * 0.11, Math.sin(ang) * 0.11, -0.004); raio.rotation.z = ang; raio.castShadow = true; volante.add(raio);
+  const friso = new THREE.Mesh(new RoundedBoxGeometry(larg * 0.6, 0.006, 0.004, 1, 0.002), matEscovado);
+  friso.position.set(Math.cos(ang) * 0.11, Math.sin(ang) * 0.11, 0.009); friso.rotation.z = ang; volante.add(friso);
 }
-const colunaDirecao = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, 0.3, 12), matPainel);
-colunaDirecao.position.set(0, 0.86, -0.6); colunaDirecao.rotation.x = 1.2; cabine.add(colunaDirecao);
+const colunaDirecao = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.055, 0.32, 20), matPainel);
+colunaDirecao.position.set(0, 0.84, -0.6); colunaDirecao.rotation.x = 1.2; noCabine(colunaDirecao);
 
-// ---- telas (texturas desenhadas num canvas) ----
-function tela(larg, alt, px, ppx) {
+// ---- telas (texturas desenhadas num canvas; cantos arredondados pela transparência do desenho) ----
+function tela(larg, alt, px) {
   const c = document.createElement("canvas"); c.width = px; c.height = Math.round(px * alt / larg);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
-  const m = new THREE.Mesh(new THREE.PlaneGeometry(larg, alt), new THREE.MeshBasicMaterial({ map: t, toneMapped: false }));
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(larg, alt), new THREE.MeshBasicMaterial({ map: t, toneMapped: false, transparent: true }));
   return { c, g: c.getContext("2d"), t, m };
 }
-const central = tela(0.31, 0.19, 1240);
-central.m.position.set(0.34, 1.0, -0.6); central.m.rotation.set(-0.12, -0.38, 0, "YXZ"); cabine.add(central.m);
-const moldura = new THREE.Mesh(new THREE.BoxGeometry(0.335, 0.215, 0.02), matPainel);  // presa atrás da tela
-moldura.position.z = -0.012; moldura.castShadow = true; central.m.add(moldura);
-const quadro = tela(0.38, 0.115, 1140);
-quadro.m.position.set(0, 0.975, -0.575); quadro.m.rotation.x = -0.32; cabine.add(quadro.m);
+// Central multimídia: "tablet" acima do tampo do painel, inclinado para o motorista, preso por um suporte.
+const central = tela(0.3, 0.18, 1240);
+central.m.position.set(0.36, 1.03, -0.66); central.m.rotation.set(-0.1, -0.36, 0, "YXZ"); cabine.add(central.m);
+const moldura = new THREE.Mesh(new RoundedBoxGeometry(0.312, 0.192, 0.012, 3, 0.01), matPiano);
+moldura.position.z = -0.0075; moldura.castShadow = true; central.m.add(moldura);
+const suporte = new THREE.Mesh(new RoundedBoxGeometry(0.06, 0.07, 0.03, 2, 0.01), matPainelTopo);
+suporte.position.set(0, -0.08, -0.03); central.m.add(suporte);
+// Quadro de instrumentos: atrás do volante, aparece pelo vão de cima do aro (como num carro real).
+const quadro = tela(0.3, 0.1, 1140);
+quadro.m.position.set(0, 0.975, -0.665); quadro.m.rotation.x = -0.24; cabine.add(quadro.m);
+const fundoQuadro = new THREE.Mesh(new RoundedBoxGeometry(0.33, 0.12, 0.02, 3, 0.012), matPiano);
+fundoQuadro.position.z = -0.012; quadro.m.add(fundoQuadro);
 
-// ---- faróis ----
-const farolLuzes = [].map(x => {
-  const l = new THREE.SpotLight(0xfff2cc, 0, 70, 0.42, 0.5, 1.2);
-  l.position.set(x, 0.75, -2.5); l.target.position.set(x * 0.4, 0, -30);
-  scene.add(l, l.target); return l;
-});
+// ---- faróis (desligados nesta versão) ----
+const farolLuzes = [];
 
 // ======================================================================
 // Mãos 3D (mesmo desenho de demo/hand3d.html), colocadas dentro do carro
@@ -648,7 +761,8 @@ function executar(c, repeticao = false) {
 function caixaArred(g, x, y, w, h, r) { g.beginPath(); g.roundRect(x, y, w, h, r); }
 function desenharCentral() {
   const { g, c, t } = central, W = c.width, H = c.height;
-  const grad = g.createLinearGradient(0, 0, 0, H); grad.addColorStop(0, "#151b23"); grad.addColorStop(1, "#0b0f14");
+  g.clearRect(0, 0, W, H); g.save(); caixaArred(g, 0, 0, W, H, 34); g.clip();
+  const grad = g.createLinearGradient(0, 0, 0, H); grad.addColorStop(0, "#121821"); grad.addColorStop(1, "#090c11");
   g.fillStyle = grad; g.fillRect(0, 0, W, H);
   // abas
   PAGINAS.forEach((p, i) => {
@@ -705,6 +819,7 @@ function desenharCentral() {
     g.fillStyle = "#9aa7b4"; g.font = "500 34px system-ui"; g.fillText("Contatos", 60, y0 + 50);
     CONTATOS.forEach((n, i) => { caixaArred(g, 60, y0 + 80 + i * 90, W - 120, 74, 18); g.fillStyle = "#18202a"; g.fill(); g.fillStyle = "#fff"; g.font = "600 38px system-ui"; g.fillText("👤  " + n, 90, y0 + 130 + i * 90); });
   }
+  g.restore();
   t.needsUpdate = true;
 }
 function formatar(s) { return Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0"); }
@@ -712,7 +827,8 @@ function formatar(s) { return Math.floor(s / 60) + ":" + String(Math.floor(s % 6
 let velocidade = 88;
 function desenharQuadro() {
   const { g, c, t } = quadro, W = c.width, H = c.height;
-  g.fillStyle = "#06080b"; g.fillRect(0, 0, W, H);
+  g.clearRect(0, 0, W, H); g.save(); caixaArred(g, 0, 0, W, H, 30); g.clip();
+  g.fillStyle = "#05070a"; g.fillRect(0, 0, W, H);
   g.fillStyle = "#fff"; g.font = "700 150px system-ui"; g.textAlign = "center"; g.fillText(Math.round(velocidade), W / 2, 205);
   g.fillStyle = "#7d8a97"; g.font = "500 34px system-ui"; g.fillText("km/h", W / 2, 255); g.textAlign = "left";
   // barra de velocidade
@@ -729,6 +845,7 @@ function desenharQuadro() {
   g.fillStyle = "#2d7ff9"; g.fillRect(W - 50 - 260 * st.conf, 110, 260 * st.conf, 8);
   g.fillStyle = "#9aa7b4"; g.fillText(new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), W - 50, 300);
   g.textAlign = "left";
+  g.restore();
   t.needsUpdate = true;
 }
 
@@ -877,6 +994,7 @@ function laco(agora) {
   const v = velocidade / 3.6;   // m/s
   texEstrada.offset.y += v * dt / (1000 / 80);
   for (const o of objetos) { o.position.z += v * dt; if (o.position.z > 6) o.position.z -= COMPRIMENTO; }
+  for (const q of periodicos) q.g.position.z = (q.g.position.z + v * dt) % q.periodo;
   carroFrente.position.z = -38 + Math.sin(agora / 3000) * 4;
   for (const c of contramao) { c.position.z += (v + 22) * dt; if (c.position.z > 12) c.position.z -= 420; }
   // leve balanço da cabine
