@@ -204,7 +204,8 @@ class Pontos:
       - números (1 a 4 dedos): decide SÓ a regra geométrica. Se a mão está parada (mao_parada) e a contagem dos dedos é
         a mesma em 5 dos 6 últimos quadros (contagem_estavel), o número está detectado. Não há porcentagem: a
         estabilidade em 5 de 6 quadros é a própria confirmação (o Gatilho dispara sem limiar, ver Gatilho._pela_regra);
-      - veto da CNN (16/11): os gestos que não são comando no carro (zoom, deslizar com dois dedos, girar a mão...) têm as
+      - veto da CNN (16/11): DESLIGADO (VETO_CNN = False). Na webcam ele derrubou todas as 116 leituras de número de um
+        teste de 2 minutos, e sem ele os números voltaram a funcionar. O que ele fazia, se for religado: os gestos que não são comando no carro (zoom, deslizar com dois dedos, girar a mão...) têm as
         notas somadas em "Outros gestos"; se a CNN aponta "Outros gestos" ou um movimento do carro (na janela mais longa), o número da regra é
         ignorado. "Sem gesto" e números NÃO vetam: a CNN é fraca nos números parados e costuma lê-los como "sem gesto";
         quem decide se é número é a contagem. Em vídeo contínuo (IPN, sem a janela do OK), os falsos caíram de 1,62 para 1,24 por minuto
@@ -213,6 +214,8 @@ class Pontos:
     A GRU de --pontos não entra em nenhuma decisão e não é mais rodada ao vivo (menos carga na placa de vídeo). O arquivo
     continua sendo exigido por --pontos, que é o que liga este caminho: dele só se confere que as classes batem com as da CNN.
     """
+
+    VETO_CNN = False   # 16/11 à noite: desligado, porque na webcam o veto derrubava os números (1, 2 e 4 dedos)
 
     def __init__(self, args, nomes, dispositivo):
         import pontos_mao as P
@@ -232,7 +235,7 @@ class Pontos:
         self.idx_movimentos = {nomes.index(n) for n in movimentos if n in nomes}
         self.idx_sem_gesto = nomes.index("No gesture") if "No gesture" in nomes else -1
         self.detector = P.DetectorMao(video=True)
-        self.ultimo = {"mao": False, "numero": None, "nota": None, "parada": False, "regra": None, "veto": False}
+        self.ultimo = {"mao": False, "numero": None, "nota": None, "parada": False, "regra": None, "veto": False, "vetaria": False}
         print("Pontos da mão ligados: números (1 a 4 dedos) pela contagem dos dedos com a mão parada, o resto pela CNN"
               f" (a GRU de {Path(args.pontos).name} não é usada)", flush=True)
 
@@ -288,20 +291,23 @@ class Pontos:
         regra = self.contagem_estavel(lista) if parada else None
         num = self.numeros
         numero = regra if regra in self.nomes and self.nomes.index(regra) in num else None
-        veto = False
+        veto = vetaria = False
         if numero is not None:
-            # veto da CNN, na janela mais longa disponível: "Outros gestos" ou um movimento derruba o número
+            # veto da CNN, na janela mais longa disponível: "Outros gestos" ou um movimento derrubaria o número.
+            # DESLIGADO (VETO_CNN = False): na webcam ele derrubava os números. "vetaria" fica só para diagnóstico.
             q = notas_cnn[-1]
             outros_soma = float(q[self.idx_outros].sum())
             k = int(self.idx_ficam[int(q[self.idx_ficam].argmax())])
-            veto = outros_soma > float(q[k]) or k in self.idx_movimentos   # "Sem gesto" e números não vetam
+            vetaria = outros_soma > float(q[k]) or k in self.idx_movimentos   # "Sem gesto" e números não vetam
+            veto = vetaria and self.VETO_CNN
             if veto:
                 numero = None
         outros = notas_cnn.copy()
         outros[:, num] = 0
         outros /= np.maximum(outros.sum(1, keepdims=True), 1e-9)
         # "numero" e "nota" ficam no evento de estado para as páginas não quebrarem: número da regra (ou None), sem nota.
-        self.ultimo = {"mao": bool(lista[-1][2][0]), "parada": parada, "numero": numero, "nota": None, "regra": regra, "veto": veto}
+        self.ultimo = {"mao": bool(lista[-1][2][0]), "parada": parada, "numero": numero, "nota": None, "regra": regra, "veto": veto,
+                       "vetaria": vetaria}
         return outros, numero
 
 
@@ -531,7 +537,7 @@ def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pont
                              "e_comando": nome_atual in COMANDOS, "confianca": confianca, "disparos": estado.disparos,
                              "por_minuto": estado.disparos / minutos, "fps": camera["fps"], "ms": ms,
                              "aquecendo": len(lista) < minimo,
-                             "pontos": {"mao": u["mao"], "parada": u["parada"], "numero": V.TRADUCAO.get(u["numero"], u["numero"]), "nota": u["nota"],
+                             "pontos": {"mao": u["mao"], "parada": u["parada"], "numero": V.TRADUCAO.get(u["numero"], u["numero"]), "nota": u["nota"], "vetaria": u.get("vetaria", False),
                                         "regra": {None: None, "nao_numero": "não é número"}.get(u["regra"], V.TRADUCAO.get(u["regra"], u["regra"]))},
                              "cnn": cnn_sozinha})
             ultimo_estado = agora

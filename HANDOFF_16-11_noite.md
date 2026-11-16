@@ -17,11 +17,16 @@ Projeto: controle por gestos no carro (Insper, Deep Learning; Enzo, Isabela, Mar
   - Mão parada: o pulso andou ≤ 0,5 palma em 6 quadros.
   - Mesma contagem em 5 de 6 quadros: o número passa direto, sem porcentagem (`Gatilho._pela_regra`).
   - O 0,9 fixo foi removido.
-- **Veto da CNN (adicionado hoje):** as classes que o carro não usa são somadas em "Outros gestos". Se, na janela mais longa, a CNN aponta "Outros gestos" ou um movimento do carro, o número é ignorado. "Sem gesto" e números não vetam.
+- **Veto da CNN: DESLIGADO na noite de 16/11** (`Pontos.VETO_CNN = False`). O que ele fazia: as classes que o carro não usa são somadas em "Outros gestos". Se, na janela mais longa, a CNN aponta "Outros gestos" ou um movimento do carro, o número é ignorado. "Sem gesto" e números não vetam.
 - **GRU:** não roda ao vivo. `--pontos gru.pt` continua obrigatório, só para ligar esse caminho.
 - **Janela do OK** (no navegador, `carro3d.html`): abre por 7 s.
 
-## PROBLEMA ABERTO (prioridade 1)
+## RESOLVIDO na noite de 16/11: o veto foi desligado
+Teste de 2 minutos na webcam, sem veto: os números voltaram (um dedo 6, dois dedos 5, quatro dedos 11 disparos), e o usuário confirmou. Em todas as 116 leituras de número, o veto teria derrubado o número. O modelo final é: CNN 3D + contagem de dedos, sem veto. Os slides já mostram essa versão (70,9% e 1,62 falsos/min).
+
+Ativação: a janela abriu 8 vezes, todas pelo detector do OK no navegador; três vieram com 7,0 s entre si (reabriu ao fechar). Não foi alterada. Cada abertura é gravada em `resultados/webcam_ao_vivo/ativacao_*.json` (diagnóstico em `carro3d.html`, `registrarAtivacao`).
+
+## Problema original (histórico)
 O usuário testou o carro na webcam com o veto: **os números (1, 2, 4) não estão sendo reconhecidos**, e às vezes **a ativação abre sozinha**. Na manhã de 16/11, sem veto, os números funcionavam bem.
 
 - **Suspeita para os números:** o veto compara a soma de cerca de 17 classes ("Outros gestos") com uma única classe. Com a CNN em dúvida na webcam, a soma ganha e veta o número.
@@ -36,8 +41,8 @@ O usuário testou o carro na webcam com o veto: **os números (1, 2, 4) não est
 |---|---|---|---|---|
 | CNN sozinha | 84,0% | 0,19 | 5/265 | 0/264 |
 | Números pela GRU (só nos dados; ao vivo não disparava) | 92,0% | 0,25 | 251/265 | 240/264 |
-| Contagem sem veto (funcionou ao vivo de manhã) | 70,9% | 1,62 | 228/265 | 242/264 |
-| Contagem + veto (atual) | 87,9% | 1,24 | 182/265 | 180/264 |
+| **Contagem sem veto (MODELO FINAL, confirmado ao vivo)** | 70,9% | 1,62 | 228/265 | 242/264 |
+| Contagem + veto (testada, desligada) | 87,9% | 1,24 | 182/265 | 180/264 |
 | Contagem + veto com "sem gesto" (removido) | 88,3% | 0,35 | 170/265 | 163/264 |
 
 - **Confiança da contagem** (quando diz k, é k; 1 / 2 / 4 dedos): 74 / 23 / 53% sem veto; 98 / 84 / 94% com o veto atual.
@@ -51,7 +56,7 @@ O usuário testou o carro na webcam com o veto: **os números (1, 2, 4) não est
 
 ## Apresentação final
 - **Arquivos:** `demo/apresentacao_final_modelo.html` mais o gerador `demo/gerar_apresentacao_final.py`, que lê os números de `resultados/` e gera `demo/apresentacao_final.html`. São 33 slides.
-- **Estado:** os slides mostram o modelo com o veto atual (87,9% e 1,24/min). Se o veto sair, trocar no gerador as chaves `vo.get("veto B (ao vivo)...")` e `fvar.get("...veto da CNN (janela mais longa)")` pela versão sem veto. Também revisar os textos de "veto" em "Como funciona" (slide 5), A7, A9, A10 e Limitações.
+- **Estado:** os slides mostram o modelo final, sem veto (70,9% e 1,62/min); o veto aparece como versão testada. Histórico: para trocar, mudaram-se no gerador as chaves `vo.get("veto B (ao vivo)...")` e `fvar.get("...veto da CNN (janela mais longa)")` pela versão sem veto. Também revisar os textos de "veto" em "Como funciona" (slide 5), A7, A9, A10 e Limitações.
 - **Slide 13 "Se tivéssemos mais tempo":** pronto (GRU treinada com vídeos da webcam; placa FPGA Kria KV260 com câmera infravermelha, em ilustração SVG).
 - **Estilo exigido:** formal, só tons de azul, sem emojis, sem tabelas arredondadas. Nunca inventar números.
 

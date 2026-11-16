@@ -120,8 +120,8 @@ def tabela_modelos(d, f):
         ("GRU + CNN (média 0,3 / 0,7)", f"{br(f['acc_media'])}%", "—", f"{br(f['fl_media'], 2)} / min*"),
         ("GRU + CNN, números pela GRU", f"{br(f['acc_pesos'])}%", "—", f"{br(f['fl_final'], 2)} / min"),
         ("GRU + CNN, portão da GRU (mão parada)", f"{br(f['acc_mistura'])}%", "—", "—"),
-        ("CNN 3D + contagem de dedos (sem veto, testada)", f"{br(f.get('acc_semveto'))}%", "—", f"{br(f.get('fl_semveto'), 2)} / min"),
-        ("Usada ao vivo: CNN 3D + contagem de dedos + veto da CNN", f"{br(f.get('acc_vivo'))}%", "—", f"{br(f.get('fl_vivo'), 2)} / min"),
+        ("CNN 3D + contagem de dedos + veto da CNN (testada)", f"{br(f.get('acc_veto'))}%", "—", f"{br(f.get('fl_veto'), 2)} / min"),
+        ("Usada ao vivo: CNN 3D + contagem de dedos", f"{br(f.get('acc_vivo'))}%", "—", f"{br(f.get('fl_vivo'), 2)} / min"),
     ]
     out = ['<table class="tabela tabModelos"><tr><th>Modelo</th><th>Acerto</th><th>Falsa ativação (Jester)</th><th>Falsos disparos (IPN, vídeo real)</th></tr>']
     for l in linhas:
@@ -150,8 +150,8 @@ def tabela_misto(f):
     linhas = [("GRU sobre os pontos", f["acc_gru"], f["fl_gru"]), ("CNN 3D do zero", f["acc_cnn_zero"], None),
               ("CNN 3D pré-treinada + ajuste", f["acc_cnn_pre"], f["fl_cnn_pre"]), ("GRU + CNN (média 0,3 / 0,7)", f["acc_media"], f["fl_media"]),
               ("GRU + CNN, números pela GRU", f["acc_pesos"], f["fl_final"]),
-              ("Contagem de dedos sem veto (testada)", f.get("acc_semveto"), f.get("fl_semveto")),
-              ("Usada ao vivo: CNN 3D + contagem de dedos + veto", f.get("acc_vivo"), f.get("fl_vivo"))]
+              ("Contagem de dedos + veto da CNN (testada)", f.get("acc_veto"), f.get("fl_veto")),
+              ("Usada ao vivo: CNN 3D + contagem de dedos", f.get("acc_vivo"), f.get("fl_vivo"))]
     out = ['<table class="tabela"><tr><th>Modelo</th><th>Acerto</th><th>Falsos / min (IPN)</th></tr>']
     for nome, a, fl in linhas:
         vivo = nome.startswith("Usada ao vivo")
@@ -176,14 +176,13 @@ def tabela_gestos():
     linhas = ['<tr class="vencedora"><td><b>OK</b> (polegar tocando o indicador)</td><td>geometria dos pontos</td>'
               '<td>ativa: bip, voz e 7 s para dar um comando</td></tr>']
     for n in com:
-        quem = "contagem de dedos (pontos) + veto da CNN" if n in NUMEROS else "CNN 3D"
+        quem = "contagem de dedos (pontos)" if n in NUMEROS else "CNN 3D"
         linhas.append(f'<tr><td><b>{html.escape(V.TRADUCAO.get(n, n))}</b></td><td>{quem}</td><td>{html.escape(acao.get(comandos[n], comandos[n]))}</td></tr>')
     sem = [V.TRADUCAO.get(n, n.replace("Volante: ", "Volante · ")) for n in nomes if n not in comandos and n not in G.SEM_GESTO]
     tabela = ('<table class="tabela tabGestos"><tr><th>Gesto</th><th>Quem reconhece</th><th>Comando no carro</th></tr>'
               + "".join(linhas) + "</table>")
     resto = (f'<p class="nota"><b>{len(nomes)} classes no modelo.</b> Também reconhecidos, sem comando no carro: '
-             + ", ".join(html.escape(s) for s in sem) + ". E duas classes de rejeição: sem gesto e outro movimento. Ao vivo, os gestos sem comando são somados em "
-             "“Outros gestos”, que veta os números da contagem de dedos.</p>")
+             + ", ".join(html.escape(s) for s in sem) + ". E duas classes de rejeição: sem gesto e outro movimento.</p>")
     contagem = {"n_numeros": sum(n in NUMEROS for n in nomes), "n_volante": sum(n.startswith("Volante") for n in nomes),
                 "n_comandos": len(com)}
     contagem["n_jester"] = len(nomes) - contagem["n_numeros"] - contagem["n_volante"]
@@ -196,13 +195,14 @@ def confianca_contagem():
     Dados: resultados/pontos/veto_outros.json (src/medir_veto_outros.py), teste misto completo, sem rodar rede.
     """
     vo = (ler("resultados/pontos/veto_outros.json") or {}).get("variantes", {})
-    com = vo.get("veto B (ao vivo): CNN diz Outros gestos ou um movimento", {}).get("por_numero", {})
-    sem = vo.get("sem veto", {}).get("por_numero", {})
+    # "com" = a versão usada ao vivo (sem veto); "sem" = a versão testada com o veto da CNN, desligada em 16/11
+    com = vo.get("sem veto", {}).get("por_numero", {})
+    sem = vo.get("veto B (ao vivo): CNN diz Outros gestos ou um movimento", {}).get("por_numero", {})
 
     def pct(v):
         return "—" if v is None else f"{br(v)}%"
-    out = ['<table class="tabela"><tr><th>Número</th><th>Confiança<br>com veto</th><th>Mostrado e<br>passou, com veto</th>'
-           '<th>Confiança<br>sem veto</th><th>Mostrado e<br>passou, sem veto</th></tr>']
+    out = ['<table class="tabela"><tr><th>Número</th><th>Confiança<br>ao vivo</th><th>Mostrado e<br>passou, ao vivo</th>'
+           '<th>Confiança<br>com veto (testada)</th><th>Mostrado e<br>passou, com veto</th></tr>']
     for k in ("1 dedo", "2 dedos", "3 dedos", "4 dedos"):
         c, s_ = com.get(k, {}), sem.get(k, {})
         nome = k + (" (sem comando)" if k == "3 dedos" else "")
@@ -216,7 +216,7 @@ def confianca_contagem():
 def grafico_acerto(f):
     barras = [("CNN 3D|do zero", f["acc_cnn_zero"], "#c9d8f0"), ("GRU sobre|os pontos", f["acc_gru"], "#9db9ea"),
               ("CNN 3D|pré-treinada", f["acc_cnn_pre"], "#3d74d6"), ("GRU + CNN|(média)", f["acc_media"], "#3d74d6"),
-              ("GRU + CNN|(números|pela GRU)", f["acc_pesos"], "#1e4fbf"), ("CNN 3D +|contagem|+ veto|usada ao vivo", f.get("acc_vivo"), "#0a1f44")]
+              ("GRU + CNN|(números|pela GRU)", f["acc_pesos"], "#1e4fbf"), ("CNN 3D +|contagem|de dedos|usada ao vivo", f.get("acc_vivo"), "#0a1f44")]
     W, H, base, topo = 620, 490, 400, 40
     out = [f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Acerto por modelo no teste misto">']
     for v in (0, 25, 50, 75, 100):
@@ -296,11 +296,12 @@ def main():
         return flm.get(chave, {}).get(campo)
     final_chave = "Combinação (0.3 GRU; números 1.0 GRU)"
     vo = (ler("resultados/pontos/veto_outros.json") or {}).get("variantes", {})
-    vivo, semveto = vo.get("veto B (ao vivo): CNN diz Outros gestos ou um movimento", {}), vo.get("sem veto", {})
+    # 16/11 à noite: o veto saiu do modelo ao vivo (na webcam derrubava os números). "vivo" = sem veto; "veto" = testada
+    vivo, veto = vo.get("sem veto", {}), vo.get("veto B (ao vivo): CNN diz Outros gestos ou um movimento", {})
     fvar = (ler("resultados/pontos/fluxo_ao_vivo_veto2.json") or {}).get("variantes", {})
-    fv_todas = fvar.get("CNN 3D + contagem de dedos + veto da CNN (janela mais longa)", {})
+    fv_todas = fvar.get("CNN 3D + contagem de dedos (confirmada em 1 análise)", {})
     fv, fvc = fv_todas.get("todos os gestos", {}), fv_todas.get("só comandos do carro", {})
-    fs = fvar.get("CNN 3D + contagem de dedos (confirmada em 1 análise)", {}).get("todos os gestos", {})
+    fs = fvar.get("CNN 3D + contagem de dedos + veto da CNN (janela mais longa)", {}).get("todos os gestos", {})
     f = {
         "n_teste": sum(v["n"] for v in misto["modelos"].get("GRU sobre pontos", {}).get("por_fonte", {}).values()),
         "n_classes": n_classes,
@@ -314,11 +315,11 @@ def main():
         "acc_vivo": vivo.get("acerto_36_classes_pct"), "acc_vivo_outros": vivo.get("acerto_pct"),
         "acc_vivo_num": vivo.get("acerto_numeros_pct"), "acc_vivo_resto": vivo.get("acerto_outros_pct"),
         "vivo_sem_numero": vivo.get("sem_numero_passou_numero_pct"),
-        "acc_semveto": semveto.get("acerto_36_classes_pct"), "acc_semveto_num": semveto.get("acerto_numeros_pct"),
-        "semveto_sem_numero": semveto.get("sem_numero_passou_numero_pct"),
+        "acc_veto": veto.get("acerto_36_classes_pct"), "acc_veto_num": veto.get("acerto_numeros_pct"),
+        "veto_sem_numero": veto.get("sem_numero_passou_numero_pct"),
         **{f"{p}{n}": d_.get("por_numero", {}).get(f"{n} dedo" + ("s" if n > 1 else ""), {}).get(c)
            for p, d_, c in (("cv", vivo, "confianca_pct"), ("pv", vivo, "passou_quando_mostrado_pct"),
-                            ("cs", semveto, "confianca_pct"), ("ps", semveto, "passou_quando_mostrado_pct"))
+                            ("cx", veto, "confianca_pct"), ("px", veto, "passou_quando_mostrado_pct"))
            for n in (1, 2, 3, 4)},
         # falsos por minuto em vídeo contínuo (src/fluxo_ao_vivo.py), mesmo critério das outras linhas (todos os gestos)
         "fl_vivo": fv.get("ipn_falsos_por_minuto"), "um_vivo": fv.get("ipn_um_dedo_trechos_certos"),
@@ -326,8 +327,8 @@ def main():
         "fl_vivo_carro": fvc.get("ipn_falsos_por_minuto"),
         "intervalo_vivo": br(1 / fv["ipn_falsos_por_minuto"], 1) if fv.get("ipn_falsos_por_minuto") else None,
         "intervalo_vivo_carro": round(1 / fvc["ipn_falsos_por_minuto"]) if fvc.get("ipn_falsos_por_minuto") else None,
-        "fl_semveto": fs.get("ipn_falsos_por_minuto"), "um_semveto": fs.get("ipn_um_dedo_trechos_certos"),
-        "dois_semveto": fs.get("ipn_dois_dedos_trechos_certos"),
+        "fl_veto": fs.get("ipn_falsos_por_minuto"), "um_veto": fs.get("ipn_um_dedo_trechos_certos"),
+        "dois_veto": fs.get("ipn_dois_dedos_trechos_certos"),
         "fl_cnn_pre": fluxo("CNN pré-treinada", "ipn_falsos_por_minuto"), "fl_gru": fluxo("GRU sobre pontos", "ipn_falsos_por_minuto"),
         "fl_media": fluxo("Combinação (0.3 GRU)", "ipn_falsos_por_minuto"), "fl_final": fluxo(final_chave, "ipn_falsos_por_minuto"),
         "um_final": fluxo(final_chave, "ipn_um_dedo_trechos_certos"), "dois_final": fluxo(final_chave, "ipn_dois_dedos_trechos_certos"),
@@ -378,7 +379,7 @@ def main():
         print("Aviso: campos sem valor:", sobrou)
     assert modelo.count("/*DADOS*/null") == 1
     (RAIZ / "demo/apresentacao_final.html").write_text(modelo.replace("/*DADOS*/null", json.dumps(d, ensure_ascii=False)), encoding="utf-8")
-    print(f"Gerado demo/apresentacao_final.html: ao vivo (com veto) {f['acc_vivo']}% no teste misto, {f['fl_vivo']} falsos/min no IPN; "
+    print(f"Gerado demo/apresentacao_final.html: ao vivo (sem veto) {f['acc_vivo']}% no teste misto, {f['fl_vivo']} falsos/min no IPN; "
           f"confiança da contagem {f['cv1']}/{f['cv2']}/{f['cv4']}% (1/2/4 dedos), {n_classes} classes")
 
 
