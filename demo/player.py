@@ -170,7 +170,8 @@ class Pontos:
 
     A cada quadro do buffer da CNN (12 por segundo), o MediaPipe acha a mão no quadro inteiro. Em cada análise, a GRU
     lê os pontos das mesmas janelas da CNN e as notas viram uma média por classe: nos números (1 a 4 dedos) decide a
-    GRU (peso 1,0); nos outros gestos ela entra com peso --peso-pontos (0,3, o melhor no teste misto).
+    GRU (peso 1,0); nos outros gestos ela entra com peso --peso-pontos (0 = só a CNN, o padrão: no teste misto, com 0,3
+    só 66% dos acertos do Jester passavam da confiança 0,7 do gatilho; com 0, 80%, e o acerto quase não muda).
     """
 
     def __init__(self, args, nomes, dispositivo):
@@ -251,6 +252,10 @@ def laco_modelo(args, estado, parar):
         laco_separado(args, estado, parar, captura, modelo, nomes, indices_gesto)
         return
 
+    if pontos is not None:
+        laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pontos, dispositivo)
+        return
+
     maximo = int(round(max(args.janelas) * V.QUADROS_POR_SEGUNDO))
     minimo = int(round(min(args.janelas) * V.QUADROS_POR_SEGUNDO))
     buffer, historico = collections.deque(maxlen=maximo), collections.deque(maxlen=args.suavizar)
@@ -321,6 +326,110 @@ def laco_modelo(args, estado, parar):
                              "por_minuto": estado.disparos / minutos, "fps": fps, "ms": ms,
                              "aquecendo": len(buffer) < minimo})
             ultimo_estado = agora
+    if captura is not None:
+        captura.release()
+
+
+def laco_pontos(args, estado, parar, captura, modelo, nomes, indices_gesto, pontos, dispositivo):
+    """Laço do modelo final (CNN + pontos da mão + GRU), com NVIDIA.
+
+    A câmera lê numa thread própria e guarda só o quadro mais recente; este laço pega um quadro a cada 1/12 s, roda o
+    MediaPipe nele e, a cada --intervalo, a CNN e a GRU. Assim a câmera fica a ~30 quadros/s e o modelo recebe 12
+    quadros por segundo de verdade, como no treino.
+    """
+    maximo = int(round(max(args.janelas) * V.QUADROS_POR_SEGUNDO))
+    minimo = int(round(min(args.janelas) * V.QUADROS_POR_SEGUNDO))
+    buffer, buffer_pontos = collections.deque(maxlen=maximo), collections.deque(maxlen=maximo)
+    historico = collections.deque(maxlen=args.suavizar)
+    trava = threading.Lock()
+    camera = {"quadro": None, "fps": 0.0, "parou": False, "novo": False}
+
+    def ler_camera():
+        nonlocal captura
+        tempos = collections.deque(maxlen=30)
+        ultimo_video = 0.0
+        while not parar.is_set():
+            if captura is not None and estado.soltar_camera.is_set():
+                captura = esperar_camera(args, estado, parar, captura)
+                with trava:
+                    buffer.clear(); buffer_pontos.clear()
+                if captura is None:
+                    camera["parou"] = True
+                    return
+                continue
+            if captura is None:
+                quadro = np.random.randint(0, 255, (360, 640, 3), dtype=np.uint8)
+                time.sleep(0.03)
+            else:
+                ok, quadro = captura.read()
+                if not ok:
+                    estado.publicar({"tipo": "erro", "mensagem": "A câmera parou de enviar imagens."})
+                    camera["parou"] = True
+                    return
+            agora = time.time()
+            tempos.append(agora)
+            camera["fps"] = (len(tempos) - 1) / max(tempos[-1] - tempos[0], 1e-3)
+            with trava:
+                camera["quadro"], camera["novo"] = quadro, True
+            if agora - ultimo_video >= 0.05:
+                publicar_quadros(estado, quadro, agora)
+                ultimo_video = agora
+
+    leitor = threading.Thread(target=ler_camera, daemon=True)
+    leitor.start()
+    gatilho = Gatilho(args.limiar, args.seguidas, args.pausa, COMANDOS_VOLUME if (args.painel or args.apresentacao) else (), args.repetir)
+    proximo_quadro, ultima_inferencia, ultimo_estado = time.time(), 0.0, 0.0
+    nome_atual, confianca, ms = "Aquecendo", 0.0, 0.0
+    passo = 1 / V.QUADROS_POR_SEGUNDO
+    while not parar.is_set() and not camera["parou"]:
+        agora = time.time()
+        if agora < proximo_quadro:
+            time.sleep(min(0.005, proximo_quadro - agora))
+            continue
+        proximo_quadro = max(proximo_quadro + passo, agora - passo)  # sem acumular atraso
+        with trava:
+            quadro = camera["quadro"]
+        if quadro is None:
+            continue
+        preparado, marcado = V.preparar_quadro(quadro), pontos.quadro(quadro, agora)
+        with trava:
+            buffer.append(preparado); buffer_pontos.append(marcado)
+            lista, lista_pontos = list(buffer), list(buffer_pontos)
+        if len(lista) >= minimo and agora - ultima_inferencia >= args.intervalo:
+            t0 = time.perf_counter()
+            lotes, usadas = [], []
+            for duracao in args.janelas:
+                n = int(round(duracao * V.QUADROS_POR_SEGUNDO))
+                if len(lista) >= n:
+                    indices = np.round(np.linspace(len(lista) - n, len(lista) - 1, V.N_FRAMES)).astype(int)
+                    lotes.append(np.stack([lista[i] for i in indices]))
+                    usadas.append(n)
+            with torch.no_grad(), torch.autocast(dispositivo, dtype=torch.bfloat16):
+                x = (torch.from_numpy(np.stack(lotes)).to(dispositivo) - 127.5) / 127.5
+                todas = modelo(x).float().softmax(1).cpu().numpy()
+            todas = pontos.combinar(todas, lista_pontos, usadas)
+            escolhida = int(np.argmax([q[indices_gesto].max() for q in todas]))
+            historico.append(todas[escolhida])
+            media = np.mean(historico, axis=0)
+            melhor = int(media.argmax())
+            nome_atual, confianca = nomes[melhor], float(media[melhor])
+            ms = (time.perf_counter() - t0) * 1000
+            ultima_inferencia = agora
+            curta = todas[0]
+            presente = nomes[int(curta.argmax())] == nome_atual and float(curta.max()) >= args.limiar
+            disparo = gatilho.atualizar(nome_atual, confianca, agora, presente)
+            if disparo and disparo in COMANDOS:
+                estado.disparos += 1
+                estado.publicar({"tipo": "comando", "comando": COMANDOS[disparo], "classe": disparo, "gesto": V.TRADUCAO.get(disparo, disparo),
+                                 "confianca": confianca, "repeticao": gatilho.foi_repeticao})
+        if agora - ultimo_estado >= 0.2:
+            minutos = max((agora - estado.inicio) / 60, 1e-3)
+            estado.publicar({"tipo": "estado", "gesto": V.TRADUCAO.get(nome_atual, nome_atual),
+                             "e_comando": nome_atual in COMANDOS, "confianca": confianca, "disparos": estado.disparos,
+                             "por_minuto": estado.disparos / minutos, "fps": camera["fps"], "ms": ms,
+                             "aquecendo": len(lista) < minimo})
+            ultimo_estado = agora
+    leitor.join(timeout=2)
     if captura is not None:
         captura.release()
 
@@ -619,7 +728,8 @@ def main():
     a.add_argument("--apresentacao", action="store_true", help="Dispara os gestos de todas as demos; a página repassa cada um ao slide aberto")
     a.add_argument("--carro3d", action="store_true", help="Comandos do carro 3D: os números (1 a 4 dedos) abrem uma página da central")
     a.add_argument("--pontos", default=None, help="GRU sobre os pontos da mão (resultados/pontos/modelo_final/gru.pt), combinada com a CNN")
-    a.add_argument("--peso-pontos", type=float, default=0.3, help="Peso da GRU fora dos números (nos números, a GRU decide)")
+    a.add_argument("--peso-pontos", type=float, default=0.0,
+                   help="Peso da GRU fora dos números (nos números, só a GRU decide). Com 0,3 a confiança da CNN cai e o gatilho de 0,7 falha mais")
     args = a.parse_args()
     if args.apresentacao:
         COMANDOS.clear()
