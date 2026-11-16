@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mão 3D ao vivo</title>
+<!-- Veio do HANDOFF_mao3d.md (15/11/2026). Mudanças: modelo em ../modelos_externos/ e o modo ?embutido=1 da apresentação. -->
+<style>
+  html, body { margin: 0; height: 100%; background: #101418; color: #e8eef2; font: 14px system-ui, sans-serif; overflow: hidden; }
+  #scene { position: fixed; inset: 0; }
+  #cam { position: fixed; right: 12px; bottom: 12px; width: 280px; border: 2px solid #3a4652; border-radius: 8px; overflow: hidden; background: #000; }
+  #cam video, #cam canvas { display: block; width: 100%; transform: scaleX(-1); }
+  #cam canvas { position: absolute; inset: 0; height: 100%; }
+  #hud { position: fixed; left: 12px; top: 12px; background: rgba(16,20,24,.8); padding: 10px 12px; border-radius: 8px; line-height: 1.5; }
+  #hud b { color: #7fd1ff; }
+  #start { position: fixed; inset: 0; margin: auto; width: 260px; height: 56px; font-size: 18px; border: 0; border-radius: 10px; background: #2f8cff; color: #fff; cursor: pointer; }
+</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div id="scene"></div>
+<div id="cam"><video id="video" playsinline muted></video><canvas id="overlay"></canvas></div>
+<div id="hud">
+  <b>Mão 3D ao vivo</b> (MediaPipe Hand Landmarker)<br>
+  <span id="status">Clique em “Ligar câmera”.</span><br>
+  <span id="depth"></span><br>
+  Arraste = girar · scroll = zoom · botão direito = mover<br>
+  <b>R</b> = voltar à visão da câmera · <b>[ ]</b> = ajustar campo de visão (<span id="fovv"></span>°)
+</div>
+<button id="start">Ligar câmera</button>
+
+<script type="module">
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
+import { FilesetResolver, HandLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+
+const statusEl = document.getElementById("status");
+const depthEl = document.getElementById("depth");
+const fovEl = document.getElementById("fovv");
+const video = document.getElementById("video");
+const overlay = document.getElementById("overlay");
+const octx = overlay.getContext("2d");
+
+// Campo de visão horizontal estimado da webcam (graus). Ajustável com [ e ].
+let HFOV = 62;
+fovEl.textContent = HFOV;
+
+// ---------- cena 3D (unidades em metros; câmera virtual = webcam) ----------
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(devicePixelRatio);
+renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+document.getElementById("scene").appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x101418);
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.01, 20);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+function resetView() {
+  camera.position.set(0, 0, 0.001);   // no lugar da webcam
+  controls.target.set(0, 0, -0.5);
+  controls.update();
+}
+function updateCameraFov() {
+  const aspect = video.videoWidth && video.videoHeight ? video.videoHeight / video.videoWidth : 9 / 16;
+  camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(HFOV) / 2) * aspect));
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+}
+resetView(); updateCameraFov();
+
+const sun = new THREE.DirectionalLight(0xffffff, 2.2);
+sun.position.set(0.4, 1.2, 0.3);
+sun.target.position.set(0, -0.3, -0.5);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left: -0.6, right: 0.6, top: 0.6, bottom: -0.6, near: 0.1, far: 3 });
+sun.shadow.radius = 6;
+scene.add(sun, sun.target);
+scene.add(new THREE.HemisphereLight(0xfff4ea, 0x202830, 0.6));
+
+const FLOOR_Y = -0.32;
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(4, 4), new THREE.ShadowMaterial({ opacity: 0.35 }));
+floor.rotation.x = -Math.PI / 2; floor.position.set(0, FLOOR_Y, -0.6); floor.receiveShadow = true;
+scene.add(floor);
+const grid = new THREE.GridHelper(2, 40, 0x3a4652, 0x222a32);
+grid.position.set(0, FLOOR_Y + 0.001, -0.6);
+scene.add(grid);
+
+addEventListener("resize", () => { renderer.setSize(innerWidth, innerHeight); updateCameraFov(); });
+addEventListener("keydown", e => {
+  if (e.key === "r" || e.key === "R") resetView();
+  if (e.key === "[" || e.key === "]") {
+    HFOV = THREE.MathUtils.clamp(HFOV + (e.key === "]" ? 2 : -2), 30, 110);
+    fovEl.textContent = HFOV; updateCameraFov();
+  }
+});
+
+// ---------- geometria da mão ----------
+// Raio aproximado (m) de cada uma das 21 juntas de uma mão adulta.
+const R = [0.017,
+  0.0125, 0.0110, 0.0098, 0.0088,     // polegar
+  0.0098, 0.0090, 0.0082, 0.0074,     // indicador
+  0.0100, 0.0092, 0.0083, 0.0075,     // médio
+  0.0095, 0.0086, 0.0078, 0.0071,     // anelar
+  0.0088, 0.0077, 0.0070, 0.0064];    // mínimo
+const FINGER_BONES = [[1,2],[2,3],[3,4],[5,6],[6,7],[7,8],[9,10],[10,11],[11,12],[13,14],[14,15],[15,16],[17,18],[18,19],[19,20]];
+const PALM_EDGE = [[0,1],[0,17],[5,9],[9,13],[13,17],[2,5]];
+const ALL_BONES = [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],
+                   [9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+const OUTLINE = [0, 1, 2, 5, 9, 13, 17];   // contorno da palma
+const PALM_HALF = 0.0115;                  // meia espessura da palma (m)
+
+const sphereGeo = new THREE.SphereGeometry(1, 24, 16);
+const UP = new THREE.Vector3(0, 1, 0);
+
+function makeHand(color) {
+  const skin = new THREE.MeshPhysicalMaterial({
+    color, roughness: 0.48, metalness: 0, sheen: 0.6, sheenColor: new THREE.Color(0xffd9c4),
+    sheenRoughness: 0.5, clearcoat: 0.08, clearcoatRoughness: 0.6, side: THREE.DoubleSide,
+  });
+  const group = new THREE.Group();
+  const add = m => { m.castShadow = true; group.add(m); return m; };
+
+  const joints = R.map((r, i) => { const m = add(new THREE.Mesh(sphereGeo, skin)); m.scale.setScalar(i === 0 ? PALM_HALF : r); return m; });
+  // segmentos afunilados: cilindro com raio da junta de origem e da junta de destino
+  const bones = [
+    ...FINGER_BONES.map(([a, b]) => ({ a, b, ra: R[a], rb: R[b] })),
+    ...PALM_EDGE.map(([a, b]) => ({ a, b, ra: PALM_HALF, rb: PALM_HALF })),
+  ].map(s => {
+    const m = add(new THREE.Mesh(new THREE.CylinderGeometry(s.rb, s.ra, 1, 24, 1, true), skin));
+    m.userData = s; return m;
+  });
+  // juntas do contorno da palma com o raio da espessura da palma (bordas arredondadas)
+  for (const i of [1, 2, 5, 9, 13, 17]) joints[i].scale.setScalar(Math.max(R[i], PALM_HALF));
+
+  // palma com volume: face superior + inferior + laterais
+  const n = OUTLINE.length;
+  const palmGeo = new THREE.BufferGeometry();
+  palmGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array((2 * n + 2) * 3), 3));
+  const idx = [];
+  const T0 = 0, B0 = n, TC = 2 * n, BC = 2 * n + 1;
+  for (let k = 0; k < n; k++) {
+    const k2 = (k + 1) % n;
+    idx.push(TC, T0 + k, T0 + k2);                 // topo
+    idx.push(BC, B0 + k2, B0 + k);                 // base
+    idx.push(T0 + k, B0 + k, B0 + k2, T0 + k, B0 + k2, T0 + k2); // lateral
+  }
+  palmGeo.setIndex(idx);
+  const palm = add(new THREE.Mesh(palmGeo, skin));
+
+  const pts = Array.from({ length: 21 }, () => new THREE.Vector3());
+  group.visible = false;
+  scene.add(group);
+  return { group, joints, bones, palm, pts, T: new THREE.Vector3(), fresh: true };
+}
+const hands = [makeHand(0xe9a982), makeHand(0x8fbbe0)];
+
+// ---------- posição real no espaço ----------
+// Acha a translação T (câmera -> mão) que faz os pontos 3D métricos da mão,
+// projetados por uma câmera pinhole com o FOV estimado, caírem sobre os pontos 2D detectados.
+// Mínimos quadrados lineares em (Tx, Ty, Tz).
+function solveTranslation(world, img, W, H) {
+  const f = (W / 2) / Math.tan(THREE.MathUtils.degToRad(HFOV) / 2);
+  const cx = W / 2, cy = H / 2;
+  const A = [0,0,0, 0,0,0, 0,0,0], b = [0,0,0];
+  const addRow = (r, y) => {
+    for (let i = 0; i < 3; i++) { b[i] += r[i] * y; for (let j = 0; j < 3; j++) A[i*3+j] += r[i] * r[j]; }
+  };
+  for (let i = 0; i < 21; i++) {
+    const P = world[i], u = img[i].x * W - cx, v = img[i].y * H - cy;
+    addRow([f, 0, -u], u * P.z - f * P.x);
+    addRow([0, f, -v], v * P.z - f * P.y);
+  }
+  const det3 = m => m[0]*(m[4]*m[8]-m[5]*m[7]) - m[1]*(m[3]*m[8]-m[5]*m[6]) + m[2]*(m[3]*m[7]-m[4]*m[6]);
+  const D = det3(A);
+  if (Math.abs(D) < 1e-9) return null;
+  const col = (c) => { const m = A.slice(); for (let r = 0; r < 3; r++) m[r*3+c] = b[r]; return det3(m) / D; };
+  return new THREE.Vector3(col(0), col(1), col(2));
+}
+
+const tmp = new THREE.Vector3(), dir = new THREE.Vector3(), cen = new THREE.Vector3(), nrm = new THREE.Vector3();
+function updateHand(h, world, img, W, H) {
+  const T = solveTranslation(world, img, W, H);
+  if (!T || T.z < 0.08 || T.z > 3) return;
+  if (h.fresh) h.T.copy(T); else h.T.lerp(T, 0.35);          // profundidade oscila mais: suaviza mais
+  for (let i = 0; i < 21; i++) {
+    const w = world[i];
+    // câmera (x dir., y baixo, z frente) -> three (y cima, z para trás); x espelhado (modo selfie)
+    tmp.set(-(w.x + h.T.x), -(w.y + h.T.y), -(w.z + h.T.z));
+    if (h.fresh) h.pts[i].copy(tmp); else h.pts[i].lerp(tmp, 0.55);
+  }
+  h.fresh = false;
+
+  h.joints.forEach((m, i) => m.position.copy(h.pts[i]));
+  for (const m of h.bones) {
+    const { a, b } = m.userData;
+    dir.subVectors(h.pts[b], h.pts[a]);
+    const len = dir.length();
+    m.position.addVectors(h.pts[a], h.pts[b]).multiplyScalar(0.5);
+    m.scale.set(1, len, 1);
+    m.quaternion.setFromUnitVectors(UP, dir.normalize());
+  }
+
+  // palma: contorno deslocado ±espessura ao longo da normal da palma
+  const p = h.pts;
+  cen.set(0, 0, 0); OUTLINE.forEach(i => cen.add(p[i])); cen.divideScalar(OUTLINE.length);
+  nrm.crossVectors(tmp.subVectors(p[5], p[0]), dir.subVectors(p[17], p[0])).normalize();
+  const pos = h.palm.geometry.attributes.position, n = OUTLINE.length;
+  OUTLINE.forEach((i, k) => {
+    // puxa levemente para o centro para não vazar além das juntas arredondadas
+    tmp.copy(p[i]).lerp(cen, 0.08);
+    pos.setXYZ(k,     tmp.x + nrm.x * PALM_HALF, tmp.y + nrm.y * PALM_HALF, tmp.z + nrm.z * PALM_HALF);
+    pos.setXYZ(n + k, tmp.x - nrm.x * PALM_HALF, tmp.y - nrm.y * PALM_HALF, tmp.z - nrm.z * PALM_HALF);
+  });
+  pos.setXYZ(2 * n,     cen.x + nrm.x * PALM_HALF * 1.15, cen.y + nrm.y * PALM_HALF * 1.15, cen.z + nrm.z * PALM_HALF * 1.15);
+  pos.setXYZ(2 * n + 1, cen.x - nrm.x * PALM_HALF * 1.15, cen.y - nrm.y * PALM_HALF * 1.15, cen.z - nrm.z * PALM_HALF * 1.15);
+  pos.needsUpdate = true;
+  h.palm.geometry.computeVertexNormals();
+  h.palm.geometry.computeBoundingSphere();
+  h.group.visible = true;
+}
+
+// ---------- MediaPipe ----------
+let landmarker;
+async function createLandmarker() {
+  const fileset = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
+  const opts = delegate => ({
+    baseOptions: { modelAssetPath: "../modelos_externos/hand_landmarker.task", delegate },
+    runningMode: "VIDEO", numHands: 2,
+    minHandDetectionConfidence: 0.5, minTrackingConfidence: 0.5,
+  });
+  try { return await HandLandmarker.createFromOptions(fileset, opts("GPU")); }
+  catch (e) { console.warn("GPU indisponível, usando CPU", e); return await HandLandmarker.createFromOptions(fileset, opts("CPU")); }
+}
+
+function drawOverlay(res) {
+  overlay.width = video.videoWidth; overlay.height = video.videoHeight;
+  octx.clearRect(0, 0, overlay.width, overlay.height);
+  res.landmarks.forEach(lm => {
+    octx.strokeStyle = "#7fd1ff"; octx.lineWidth = 3;
+    for (const [a, b] of ALL_BONES) {
+      octx.beginPath();
+      octx.moveTo(lm[a].x * overlay.width, lm[a].y * overlay.height);
+      octx.lineTo(lm[b].x * overlay.width, lm[b].y * overlay.height);
+      octx.stroke();
+    }
+  });
+}
+
+let lastVideoTime = -1, fps = 0, lastT = performance.now();
+function loop() {
+  requestAnimationFrame(loop);
+  if (landmarker && video.readyState >= 2 && video.currentTime !== lastVideoTime) {
+    lastVideoTime = video.currentTime;
+    const W = video.videoWidth, H = video.videoHeight;
+    const res = landmarker.detectForVideo(video, performance.now());
+    // ordena da esquerda para a direita (na visão espelhada) para cada cor ficar na mesma mão
+    const order = res.landmarks.map((_, i) => i).sort((a, b) => res.landmarks[b][0].x - res.landmarks[a][0].x);
+    hands.forEach((h, slot) => {
+      const i = order[slot];
+      if (i === undefined) { h.group.visible = false; h.fresh = true; return; }
+      updateHand(h, res.worldLandmarks[i], res.landmarks[i], W, H);
+    });
+    drawOverlay(res);
+    const now = performance.now();
+    fps = 0.9 * fps + 0.1 * (1000 / (now - lastT)); lastT = now;
+    const labels = order.map(i => (res.handedness[i][0].categoryName === "Left" ? "direita" : "esquerda"));
+    statusEl.textContent = `${fps.toFixed(0)} FPS · mãos: ${res.landmarks.length}${labels.length ? " (" + labels.join(", ") + ")" : ""}`;
+    depthEl.textContent = hands.filter(h => h.group.visible).map(h => `${(h.T.z * 100).toFixed(0)} cm`).join(" · ")
+      .replace(/^(.+)$/, "distância da câmera: $1");
+  }
+  controls.update();
+  renderer.render(scene, camera);
+}
+loop();
+
+const startBtn = document.getElementById("start");
+// Dentro da apresentação (?embutido=1), o servidor do projeto (demo/player.py) está usando a webcam para os gestos.
+// A página pede para ele soltar a câmera, liga a dela e, ao sair do slide, desliga e devolve a câmera ao servidor.
+const EMBUTIDO = new URLSearchParams(location.search).has("embutido");
+const espera = ms => new Promise(r => setTimeout(r, ms));
+async function abrirCamera() {
+  for (let tentativa = 0; ; tentativa++) {
+    try { return await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } }); }
+    catch (err) {
+      // o servidor leva um instante para soltar a câmera: tenta de novo por alguns segundos
+      if (!EMBUTIDO || err.name !== "NotReadableError" || tentativa >= 15) throw err;
+      statusEl.textContent = "Esperando a câmera ser liberada…";
+      await espera(400);
+    }
+  }
+}
+function devolverCamera() {
+  if (video.srcObject) { video.srcObject.getTracks().forEach(t => t.stop()); video.srcObject = null; }
+  if (EMBUTIDO) fetch("/camera/retomar", { keepalive: true }).catch(() => {});
+}
+addEventListener("pagehide", devolverCamera);
+startBtn.addEventListener("click", async () => {
+  startBtn.style.display = "none";
+  try {
+    statusEl.textContent = "Carregando modelo…";
+    landmarker ??= await createLandmarker();
+    if (EMBUTIDO) { statusEl.textContent = "Pedindo a câmera ao servidor…"; await fetch("/camera/soltar").catch(() => {}); }
+    statusEl.textContent = "Abrindo câmera…";
+    video.srcObject = await abrirCamera();
+    await video.play();
+    updateCameraFov();
+    statusEl.textContent = "Mostre a mão para a câmera.";
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = err.name === "NotReadableError"
+      ? "Erro: a câmera está em uso por outro programa. Feche-o e tente de novo."
+      : "Erro: " + err.message;
+    startBtn.textContent = "Tentar de novo";
+    startBtn.style.display = "";
+  }
+});
+if (EMBUTIDO) startBtn.click();  // no slide, a câmera liga sozinha
+</script>
+</body>
+</html>

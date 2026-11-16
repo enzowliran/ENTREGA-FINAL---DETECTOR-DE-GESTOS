@@ -47,7 +47,9 @@ COMANDOS_HOSPITAL = {"Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking
 # lista e manda o nome da classe; quem traduz para o comando de cada demo é a própria apresentação.
 GESTOS_APRESENTACAO = sorted({*COMANDOS, *COMANDOS_PAINEL, *COMANDOS_HOSPITAL, "Rolling Hand Forward", "Rolling Hand Backward"})
 # Páginas que a apresentação pode abrir dentro de um slide.
-DEMOS_EMBUTIDAS = {"tenis.html", "painel_carro.html", "hospital.html"}
+DEMOS_EMBUTIDAS = {"tenis.html", "painel_carro.html", "hospital.html", "hand3d.html"}
+# Modelo do MediaPipe usado pela mão 3D (demo/hand3d.html), servido de modelos_externos/.
+MODELO_MAO = RAIZ.parent / "modelos_externos" / "hand_landmarker.task"
 TIPOS_AUDIO = {".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".wav": "audio/wav", ".ogg": "audio/ogg"}
 
 
@@ -58,6 +60,9 @@ class Estado:
         self.assinantes = []
         self.inicio = time.time()
         self.disparos = 0
+        # Ligado pela mão 3D da apresentação: o laço solta a webcam para o navegador usar e só a pega de
+        # volta quando o evento é desligado (a câmera do Windows não pode ser aberta por dois programas).
+        self.soltar_camera = threading.Event()
 
     def publicar(self, evento):
         dados = json.dumps(evento, ensure_ascii=False)
@@ -116,6 +121,30 @@ def abrir_tela_cheia(endereco):
                       "--no-first-run", "--autoplay-policy=no-user-gesture-required"])
 
 
+def abrir_camera(args):
+    captura = cv2.VideoCapture(args.camera, cv2.CAP_DSHOW)
+    captura.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+    captura.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+    return captura
+
+
+def esperar_camera(args, estado, parar, captura):
+    """Solta a webcam enquanto a mão 3D a usa e a abre de novo depois. Devolve a nova captura (ou None se falhar)."""
+    captura.release()
+    estado.publicar({"tipo": "camera", "estado": "solta"})
+    while estado.soltar_camera.is_set() and not parar.is_set():
+        time.sleep(0.1)
+    for _ in range(20):  # o navegador pode levar um instante para liberar a câmera
+        nova = abrir_camera(args)
+        if nova.isOpened():
+            estado.publicar({"tipo": "camera", "estado": "retomada"})
+            return nova
+        nova.release()
+        time.sleep(0.3)
+    estado.publicar({"tipo": "erro", "mensagem": "Não consegui abrir a câmera de novo depois da mão 3D."})
+    return None
+
+
 def laco_modelo(args, estado, parar):
     dispositivo = "cuda" if torch.cuda.is_available() and not args.cpu else "cpu"
     # Sem NVIDIA, cada análise leva cerca de 0,4 s em vez de uma fração disso. Com 3 janelas
@@ -134,9 +163,7 @@ def laco_modelo(args, estado, parar):
 
     captura = None
     if not args.simular:
-        captura = cv2.VideoCapture(args.camera, cv2.CAP_DSHOW)
-        captura.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-        captura.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        captura = abrir_camera(args)
         if not captura.isOpened():
             print(f"ERRO: não consegui abrir a câmera {args.camera}. Feche outros apps que a usem.", flush=True)
             estado.publicar({"tipo": "erro", "mensagem": "Não consegui abrir a câmera. Feche outros apps que a usem."})
@@ -156,6 +183,12 @@ def laco_modelo(args, estado, parar):
     nome_atual, confianca, ms = "Aquecendo", 0.0, 0.0
 
     while not parar.is_set():
+        if captura is not None and estado.soltar_camera.is_set():
+            captura = esperar_camera(args, estado, parar, captura)
+            buffer.clear(); historico.clear()
+            if captura is None:
+                break
+            continue
         if captura is None:
             quadro = np.random.randint(0, 255, (360, 640, 3), dtype=np.uint8)
             time.sleep(0.03)
@@ -230,9 +263,18 @@ def laco_separado(args, estado, parar, captura, modelo, nomes, indices_gesto):
     camera = {"fps": 0.0, "parou": False}
 
     def ler_camera():
+        nonlocal captura
         tempos = collections.deque(maxlen=30)
         ultimo_quadro, ultimo_video = 0.0, 0.0
         while not parar.is_set():
+            if captura is not None and estado.soltar_camera.is_set():
+                captura = esperar_camera(args, estado, parar, captura)
+                with trava_buffer:
+                    buffer.clear()
+                if captura is None:
+                    camera["parou"] = True
+                    return
+                continue
             if captura is None:
                 quadro = np.random.randint(0, 255, (360, 640, 3), dtype=np.uint8)
                 time.sleep(0.03)
@@ -379,6 +421,22 @@ def criar_servidor(args, estado, parar):
                 self.send_header("Content-Type", "text/javascript; charset=utf-8")
                 self.end_headers()
                 self.wfile.write(arquivo.read_bytes())
+            elif url.path in ("/camera/soltar", "/camera/retomar"):
+                # A mão 3D (demo/hand3d.html) pede a webcam emprestada e a devolve ao sair do slide.
+                (estado.soltar_camera.set if url.path.endswith("soltar") else estado.soltar_camera.clear)()
+                self.send_response(204)
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+            elif url.path == "/modelos_externos/hand_landmarker.task":
+                if not MODELO_MAO.is_file():
+                    self.send_response(404)
+                    self.end_headers()
+                    return
+                self.send_response(200)
+                self.send_header("Content-Type", "application/octet-stream")
+                self.send_header("Content-Length", str(MODELO_MAO.stat().st_size))
+                self.end_headers()
+                self.wfile.write(MODELO_MAO.read_bytes())
             elif url.path == "/musicas/lista":
                 pasta = Path(args.musicas)
                 nomes = sorted(a.name for a in pasta.iterdir() if a.suffix.lower() in TIPOS_AUDIO) if pasta.is_dir() else []

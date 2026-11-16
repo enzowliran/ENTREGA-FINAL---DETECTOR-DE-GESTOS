@@ -770,6 +770,22 @@
     </div>
   </section>
 
+  <!-- Apêndice: slides para o Q&A, depois do "Obrigado". -->
+  <section class="slide divisor" data-secao="fim" data-titulo="Apêndice" data-parte="Apêndice">
+    <div class="enfeite an" style="--d:2" data-icone="📎" aria-hidden="true"></div>
+    <div class="numParte an">A</div>
+    <h1 class="an" style="--d:1">Apêndice</h1>
+    <p class="lead an" style="--d:2">Detalhes técnicos para as perguntas.</p>
+  </section>
+
+  <!-- A4. Mão 3D ao vivo (demo/hand3d.html): a página pede a webcam ao servidor ao abrir e a devolve ao sair. -->
+  <section class="slide demo" data-titulo="A4 · Os 21 pontos da mão em 3D" data-demo="mao3d">
+    <div class="topo"><span class="vivo">AO VIVO</span><h2>A4 · O que o MediaPipe vê: 21 pontos da mão em 3D</h2><span class="espaco"></span>
+      <span class="chip">Arraste: <b>girar</b></span><span class="chip">Scroll: <b>zoom</b></span><span class="chip">R: <b>visão da câmera</b></span>
+      <span class="chip">Gestos <b>pausados</b> neste slide: use o teclado</span></div>
+    <div class="quadro"></div>
+  </section>
+
   <div id="rodape">
     <span class="pilula" id="trava">🔓 Livre · pare trava</span>
     <span class="pilula" id="secaoPilula"></span>
@@ -1592,13 +1608,14 @@ const NOMES_PARTES = {};
 })();
 let atual = Math.min(slides.length - 1, Math.max(0, parseInt(location.hash.slice(1)) - 1 || 0));
 let travada = false, bloqueados = 0, disparosTeste = 0;
-const DEMOS = { painel: "painel_carro.html", hospital: "hospital.html" };
+const DEMOS = { painel: "painel_carro.html", hospital: "hospital.html", mao3d: "hand3d.html" };
 const BASE = { "Swiping Left": "anterior", "Swiping Right": "proxima", "Stop Sign": "alternar" };
 const MAPAS = {
   painel: { ...BASE, "Thumb Up": "volume_mais", "Thumb Down": "volume_menos", "Drumming Fingers": "tamborilar", "Pushing Hand Away": "ajuda",
             "One Finger": "funcao", "Pulling Hand In": "funcao_anterior", "Two Fingers": "tamborilar" },
   hospital: { ...BASE, "Thumb Up": "confirmar", "Thumb Down": "desfazer", "Shaking Hand": "normal", "Zooming In With Full Hand": "zoom_mais",
               "Zooming Out With Full Hand": "zoom_menos", "One Finger": "proximo_corte", "Two Fingers": "janela" },
+  mao3d: {},  // a webcam fica com a página da mão 3D: não chegam gestos enquanto o slide está aberto
 };
 let tempoAviso;
 function aviso(texto) { const a = $("aviso"); a.textContent = texto; a.classList.add("ver"); clearTimeout(tempoAviso); tempoAviso = setTimeout(() => a.classList.remove("ver"), 1100); }
@@ -1608,13 +1625,14 @@ function abrirDemo(slide) {
   if (chave === "teste") { $("videoTeste").src = "/video"; return; }
   if (!DEMOS[chave]) return;
   const f = document.createElement("iframe");
-  f.src = `/demo/${DEMOS[chave]}?embutido=1`; f.allow = "autoplay; fullscreen"; f.title = slide.dataset.titulo;
+  f.src = `/demo/${DEMOS[chave]}?embutido=1`; f.allow = "autoplay; fullscreen; camera"; f.title = slide.dataset.titulo;
   slide.querySelector(".quadro").appendChild(f);
 }
 function fecharDemo(slide) {
   if (slide.dataset.demo === "teste") { $("videoTeste").removeAttribute("src"); return; }
   const f = slide.querySelector("iframe");
   if (f) { f.src = "about:blank"; f.remove(); }  // fecha o som e a câmera da demo
+  if (slide.dataset.demo === "mao3d") setTimeout(() => fetch("/camera/retomar").catch(() => {}), 300);
 }
 function mostrar(n) {
   n = Math.max(0, Math.min(slides.length - 1, n));
