@@ -6,6 +6,8 @@ Reaproveita demo/gerar_apresentacao.py (sem alterá-lo) para montar os dados que
   - falsos disparos em vídeo contínuo (resultados/pontos/fluxo_combinado.json, videos_reais.json, fluxo_ipn_cnn_3d.json,
     resultados/dedos/fluxo_ipn.json);
   - comparação de arquiteturas (resultados/jester/comparacao_arquiteturas.json);
+  - confiança da contagem de dedos usada ao vivo (resultados/pontos/confianca_numeros.json; as colunas "sem Jester" e
+    "só fotos HaGRID" são refeitas com a mesma simulação de src/medir_confianca_numeros.py, ~3 s no processador);
   - gestos e comandos do carro (demo/player.py e as classes de resultados/pontos/modelo_final/cnn.pt).
 Os números de fontes externas (NHTSA, NSC, Vi Bilägare, IAM RoadSmart, Euro NCAP) estão escritos no modelo, com a fonte.
 
@@ -75,7 +77,7 @@ def regras_finais():
     # regra medida em vídeo contínuo: números com peso 1,0 da GRU, resto 0,3 da GRU, normalizada
     w = np.full(len(nomes), 0.3); w[num] = 1.0
     q = (1 - w) * pc + w * pg; q /= q.sum(1, keepdims=True)
-    # regra ao vivo (demo/player.py): a GRU diz se é número; se for, a nota é dela; senão, a CNN sem os números
+    # portão da GRU (testado, não usado ao vivo): a GRU diz se é número; se for, a nota é dela; senão, a CNN sem os números
     pn = pg[:, num].sum(1, keepdims=True)
     co = pc.copy(); co[:, num] = 0; co /= np.maximum(co.sum(1, keepdims=True), 1e-9)
     m = (1 - pn) * co; m[:, num] = pg[:, num]
@@ -118,14 +120,14 @@ def tabela_modelos(d, f):
         ("GRU + CNN (média 0,3 / 0,7)", f"{br(f['acc_media'])}%", "—", f"{br(f['fl_media'], 2)} / min*"),
         ("GRU + CNN, números pela GRU", f"{br(f['acc_pesos'])}%", "—", f"{br(f['fl_final'], 2)} / min"),
         ("GRU + CNN, portão da GRU (mão parada)", f"{br(f['acc_mistura'])}%", "—", "—"),
-        ("Usada ao vivo: contagem de dedos + CNN", "a medir", "—", "a medir"),
+        ("Usada ao vivo: CNN 3D + contagem de dedos", "a medir", "—", "a medir"),
     ]
     out = ['<table class="tabela tabModelos"><tr><th>Modelo</th><th>Acerto</th><th>Falsa ativação (Jester)</th><th>Falsos disparos (IPN, vídeo real)</th></tr>']
     for l in linhas:
         if l[1] is None:
             out.append(f'<tr class="bloco"><td colspan="4">{html.escape(l[0])}</td></tr>')
         else:
-            cls = ' class="vencedora"' if l[0].startswith("Usada ao vivo") or l[0].startswith("GRU + CNN, números") else ""
+            cls = ' class="vencedora"' if l[0].startswith("Usada ao vivo") else ""
             out.append(f"<tr{cls}>" + "".join(f"<td>{html.escape(c)}</td>" for c in l) + "</tr>")
     out.append("</table>")
     return "\n".join(out)
@@ -146,8 +148,8 @@ def tabela_misto(f):
     """Só o bloco do teste misto (o slide de acerto); a tabela completa fica no apêndice."""
     linhas = [("GRU sobre os pontos", f["acc_gru"], f["fl_gru"]), ("CNN 3D do zero", f["acc_cnn_zero"], None),
               ("CNN 3D pré-treinada + ajuste", f["acc_cnn_pre"], f["fl_cnn_pre"]), ("GRU + CNN (média 0,3 / 0,7)", f["acc_media"], f["fl_media"]),
-              ("GRU + CNN, números pela GRU", f["acc_pesos"], f["fl_final"]), ("GRU + CNN, portão da GRU", f["acc_mistura"], None),
-              ("Usada ao vivo: contagem de dedos + CNN", None, None)]
+              ("GRU + CNN, números pela GRU", f["acc_pesos"], f["fl_final"]),
+              ("Usada ao vivo: CNN 3D + contagem de dedos", None, None)]
     out = ['<table class="tabela"><tr><th>Modelo</th><th>Acerto</th><th>Falsos / min (IPN)</th></tr>']
     for nome, a, fl in linhas:
         vivo = nome.startswith("Usada ao vivo")
@@ -169,10 +171,10 @@ def tabela_gestos():
     ordem = ["One Finger", "Two Fingers", "Four Fingers", "Swiping Right", "Swiping Left", "Thumb Up", "Thumb Down",
              "Stop Sign", "Pushing Hand Away", "Drumming Fingers", "Pulling Hand In"]
     com = [n for n in ordem if n in comandos and n in nomes]
-    linhas = ['<tr class="vencedora"><td><b>OK</b> (polegar tocando o indicador)</td><td>pontos da mão</td>'
+    linhas = ['<tr class="vencedora"><td><b>OK</b> (polegar tocando o indicador)</td><td>geometria dos pontos</td>'
               '<td>ativa: bip, voz e 7 s para dar um comando</td></tr>']
     for n in com:
-        quem = "pontos (contagem de dedos)" if n in NUMEROS else "CNN 3D"
+        quem = "contagem de dedos (pontos)" if n in NUMEROS else "CNN 3D"
         linhas.append(f'<tr><td><b>{html.escape(V.TRADUCAO.get(n, n))}</b></td><td>{quem}</td><td>{html.escape(acao.get(comandos[n], comandos[n]))}</td></tr>')
     sem = [V.TRADUCAO.get(n, n.replace("Volante: ", "Volante · ")) for n in nomes if n not in comandos and n not in G.SEM_GESTO]
     tabela = ('<table class="tabela tabGestos"><tr><th>Gesto</th><th>Quem reconhece</th><th>Comando no carro</th></tr>'
@@ -185,10 +187,58 @@ def tabela_gestos():
     return tabela, resto, len(nomes), contagem
 
 
+def confianca_contagem():
+    """Confiança da contagem de dedos (a regra que decide os números ao vivo).
+
+    Todos os dados: resultados/pontos/confianca_numeros.json (src/medir_confianca_numeros.py). "Sem Jester" e "só fotos
+    HaGRID": a mesma simulação, refeita aqui só no teste misto. Sem os dados locais, essas colunas ficam com travessão.
+    """
+    cn = ler("resultados/pontos/confianca_numeros.json") or {}
+    extra = {}
+    try:
+        import pickle
+        import medir_confianca_numeros as M
+        linhas = []
+        for a in pickle.load(open(RAIZ / "data/pontos/misto.pkl", "rb")):
+            if a["divisao"] != "teste" or (a["fonte"] == "HaGRID" and M.metade(a["pessoa"]) == 0):
+                continue
+            linhas.append((a["fonte"], a["classe"], M.disparo(a)))
+        for k in NUMEROS:
+            disp = [c for _, c, d in linhas if d == k]
+            hag = [d for fo, c, d in linhas if c == k and fo == "HaGRID"]
+            extra[k] = {"sem_jester": round(100 * sum(c == k for c in disp) / len(disp), 1) if disp else None,
+                        "hagrid": round(100 * sum(d == k for d in hag) / len(hag), 1) if hag else None}
+    except Exception as e:
+        print(f"Aviso: sem refazer a contagem de dedos sem o Jester ({e}); essas colunas ficam com travessão.")
+    curto = {"One Finger": "1 dedo", "Two Fingers": "2 dedos", "Three Fingers": "3 dedos", "Four Fingers": "4 dedos"}
+    por = cn.get("por_numero", {})
+
+    def pct(v):
+        return "—" if v is None else f"{br(v)}%"
+    out = ['<table class="tabela"><tr><th>Número</th><th>Confiança<br>todos os dados</th><th>Confiança<br>sem Jester</th>'
+           '<th>Mostrado e<br>disparou certo</th><th>Só fotos<br>HaGRID</th></tr>']
+    for k in NUMEROS:
+        r, e = por.get(curto[k], {}), extra.get(k, {})
+        nome = curto[k] + (" (sem comando)" if k == "Three Fingers" else "")
+        out.append(f"<tr><td>{html.escape(nome)}</td><td>{pct(r.get('confianca_pct'))}</td><td>{pct(e.get('sem_jester'))}</td>"
+                   f"<td>{pct(r.get('disparou_certo_pct'))}</td><td>{pct(e.get('hagrid'))}</td></tr>")
+    out.append("</table>")
+    sem, am = cn.get("amostras_sem_numero", {}), cn.get("amostras", {})
+    campos = {
+        "cn_sem_numero": sem.get("disparou_numero_pct"), "cn_n_sem": sem.get("total"),
+        "cn_n_jester": am.get("Jester"), "cn_media": cn.get("confianca_media_1_2_4_dedos_pct"),
+        "cn_amostras": ", ".join(f"{k} {br(v, 0)}" for k, v in am.items()) or None,
+        "cn_c1": por.get("1 dedo", {}).get("confianca_pct"), "cn_c2": por.get("2 dedos", {}).get("confianca_pct"),
+        "cn_c4": por.get("4 dedos", {}).get("confianca_pct"),
+        "cn_c2_sj": extra.get("Two Fingers", {}).get("sem_jester"),
+    }
+    return "".join(out), campos
+
+
 def grafico_acerto(f):
-    barras = [("CNN 3D do zero", f["acc_cnn_zero"], "#c9d8f0"), ("GRU sobre os pontos", f["acc_gru"], "#9db9ea"),
-              ("CNN 3D pré-treinada", f["acc_cnn_pre"], "#3d74d6"), ("GRU + CNN (média)", f["acc_media"], "#1e4fbf"),
-              ("GRU + CNN (portão)", f["acc_mistura"], "#0a1f44")]
+    barras = [("CNN 3D|do zero", f["acc_cnn_zero"], "#c9d8f0"), ("GRU sobre|os pontos", f["acc_gru"], "#9db9ea"),
+              ("CNN 3D|pré-treinada|usada ao vivo", f["acc_cnn_pre"], "#0a1f44"), ("GRU + CNN|(média)", f["acc_media"], "#3d74d6"),
+              ("GRU + CNN|(números|pela GRU)", f["acc_pesos"], "#1e4fbf")]
     W, H, base, topo = 620, 470, 400, 40
     out = [f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" role="img" aria-label="Acerto por modelo no teste misto">']
     for v in (0, 25, 50, 75, 100):
@@ -201,10 +251,9 @@ def grafico_acerto(f):
         x, h = 50 + i * largura + 12, (base - topo) * v / 100
         out.append(f'<rect class="barra" x="{x}" y="{base - h}" width="{largura - 24}" height="{h}" fill="{cor}"/>')
         out.append(f'<text x="{x + (largura - 24) / 2}" y="{base - h - 10}" text-anchor="middle" font-size="20" font-weight="600" fill="#0a1f44">{br(v)}%</text>')
-        palavras = nome.split(" ")
-        meio = (len(palavras) + 1) // 2
-        for k, parte in enumerate((" ".join(palavras[:meio]), " ".join(palavras[meio:]))):
-            out.append(f'<text x="{x + (largura - 24) / 2}" y="{base + 24 + k * 19}" text-anchor="middle" font-size="14" fill="#364152">{html.escape(parte)}</text>')
+        for k, parte in enumerate(nome.split("|")):  # "|" separa as linhas do rótulo
+            cor_t, peso = ("#1e4fbf", ' font-weight="700"') if parte == "usada ao vivo" else ("#364152", "")
+            out.append(f'<text x="{x + (largura - 24) / 2}" y="{base + 24 + k * 19}" text-anchor="middle" font-size="14"{peso} fill="{cor_t}">{html.escape(parte)}</text>')
     out.append("</svg>")
     return "".join(out)
 
@@ -295,6 +344,8 @@ def main():
         "gru_params": (ler("resultados/pontos/jester_coordenadas.json") or {}).get("parametros"),
     }
     f.update(contagem)
+    tab_contagem, campos_contagem = confianca_contagem()
+    f.update(campos_contagem)
     # um falso disparo a cada N minutos, na regra medida
     f["intervalo_final"] = round(1 / f["fl_final"]) if f.get("fl_final") else None
     trocas = {
@@ -304,6 +355,7 @@ def main():
         "<!--F:GRAFICO_ACERTO-->": grafico_acerto(f),
         "<!--F:CURVA_PESOS-->": curva_pesos(fu),
         "<!--F:TABELA_DADOS-->": tabela_dados(d),
+        "<!--F:TABELA_CONTAGEM-->": tab_contagem,
     }
     modelo = (RAIZ / "demo/apresentacao_final_modelo.html").read_text(encoding="utf-8")
     for k, v in trocas.items():
@@ -323,8 +375,8 @@ def main():
         print("Aviso: campos sem valor:", sobrou)
     assert modelo.count("/*DADOS*/null") == 1
     (RAIZ / "demo/apresentacao_final.html").write_text(modelo.replace("/*DADOS*/null", json.dumps(d, ensure_ascii=False)), encoding="utf-8")
-    print(f"Gerado demo/apresentacao_final.html: teste misto {f['acc_media']}% (média), regra ao vivo {f['acc_mistura']}%, "
-          f"{f['fl_final']} falsos/min na regra medida, {n_classes} classes")
+    print(f"Gerado demo/apresentacao_final.html: teste misto {f['acc_media']}% (média), confiança da contagem de dedos "
+          f"{f['cn_c1']}/{f['cn_c2']}/{f['cn_c4']}% (1/2/4 dedos), {f['fl_final']} falsos/min na versão com a GRU, {n_classes} classes")
 
 
 if __name__ == "__main__":

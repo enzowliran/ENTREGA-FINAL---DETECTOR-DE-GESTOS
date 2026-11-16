@@ -1,5 +1,5 @@
 {
- "o_que_e": "Confiança da contagem de dedos ao vivo: quando a regra dispara 'k dedos', % das vezes em que eram k dedos. Teste sem treino, pessoas fora do treino e do ajuste dos limiares. Simulação do player: 12 qps, análise a cada 2 quadros, mão parada (5 de 6 quadros, pulso <= 0,5 palma), mesma contagem em 5 de 6, 3 análises seguidas.",
+ "o_que_e": "Confiança da contagem de dedos ao vivo: quando a regra dispara 'k dedos', % das vezes em que eram k dedos. Teste sem treino, pessoas fora do treino e do ajuste dos limiares. Simulação do player: 12 qps, análise a cada 2 quadros, mão parada (5 de 6 quadros, pulso <= 0,5 palma), mesma contagem em 5 de 6; dispara direto, sem as 3 análises seguidas.",
  "amostras": {
   "IPN": 400,
   "Slovo": 100,
@@ -10,38 +10,38 @@
  "por_numero": {
   "1 dedo": {
    "amostras_desse_numero": 159,
-   "disparou_certo_pct": 42.1,
-   "disparou_outro_numero_pct": 2.5,
-   "nao_disparou_pct": 55.3,
-   "vezes_que_a_regra_disse_esse_numero": 97,
-   "confianca_pct": 69.1,
+   "disparou_certo_pct": 73.0,
+   "disparou_outro_numero_pct": 8.8,
+   "nao_disparou_pct": 18.2,
+   "vezes_que_a_regra_disse_esse_numero": 170,
+   "confianca_pct": 68.2,
    "erros_vinham_de": {
-    "IPN: Doing other things": 19,
-    "Jester: Doing other things": 3,
-    "IPN: No gesture": 1,
-    "Slovo: No gesture": 1,
-    "Jester: Sliding Two Fingers Right": 1,
-    "Jester: Sliding Two Fingers Up": 1,
-    "Jester: Pulling Two Fingers In": 1,
-    "Jester: Turning Hand Clockwise": 1
+    "IPN: Doing other things": 28,
+    "Jester: Doing other things": 5,
+    "Jester: Zooming Out With Full Hand": 3,
+    "IPN: No gesture": 2,
+    "Slovo: No gesture": 2,
+    "Jester: Sliding Two Fingers Left": 2,
+    "IPN: 2 dedos": 1,
+    "Jester: Swiping Right": 1
    }
   },
   "2 dedos": {
    "amostras_desse_numero": 153,
-   "disparou_certo_pct": 41.2,
-   "disparou_outro_numero_pct": 0.0,
-   "nao_disparou_pct": 58.8,
-   "vezes_que_a_regra_disse_esse_numero": 379,
-   "confianca_pct": 16.6,
+   "disparou_certo_pct": 75.8,
+   "disparou_outro_numero_pct": 0.7,
+   "nao_disparou_pct": 23.5,
+   "vezes_que_a_regra_disse_esse_numero": 670,
+   "confianca_pct": 17.3,
    "erros_vinham_de": {
-    "Jester: Zooming In With Two Fingers": 67,
-    "Jester: Zooming Out With Two Fingers": 67,
-    "Jester: Pushing Two Fingers Away": 34,
-    "IPN: Doing other things": 31,
-    "Jester: Sliding Two Fingers Up": 23,
-    "Jester: Sliding Two Fingers Left": 21,
-    "Jester: Sliding Two Fingers Down": 17,
-    "Jester: Sliding Two Fingers Right": 14
+    "Jester: Zooming Out With Two Fingers": 79,
+    "Jester: Zooming In With Two Fingers": 72,
+    "Jester: Pushing Two Fingers Away": 61,
+    "Jester: Sliding Two Fingers Up": 52,
+    "IPN: Doing other things": 50,
+    "Jester: Sliding Two Fingers Down": 48,
+    "Jester: Sliding Two Fingers Right": 43,
+    "Jester: Sliding Two Fingers Left": 37
    }
   },
   "3 dedos": {
@@ -49,17 +49,17 @@
    "disparou_certo_pct": 91.8,
    "disparou_outro_numero_pct": 4.9,
    "nao_disparou_pct": 3.3,
-   "vezes_que_a_regra_disse_esse_numero": 78,
-   "confianca_pct": 71.8,
+   "vezes_que_a_regra_disse_esse_numero": 118,
+   "confianca_pct": 47.5,
    "erros_vinham_de": {
-    "Jester: Pushing Two Fingers Away": 7,
-    "Jester: Sliding Two Fingers Up": 4,
-    "Jester: Sliding Two Fingers Left": 3,
-    "Jester: Turning Hand Counterclockwise": 2,
-    "Jester: Pushing Hand Away": 1,
-    "Jester: Sliding Two Fingers Right": 1,
-    "Jester: Pulling Two Fingers In": 1,
-    "Jester: Turning Hand Clockwise": 1
+    "Jester: Sliding Two Fingers Up": 14,
+    "Jester: Pushing Two Fingers Away": 12,
+    "Jester: Sliding Two Fingers Down": 7,
+    "Jester: Turning Hand Counterclockwise": 6,
+    "Jester: Sliding Two Fingers Left": 4,
+    "Jester: Drumming Fingers": 4,
+    "Jester: Turning Hand Clockwise": 3,
+    "Jester: Doing other things": 3
    }
   },
   "4 dedos": {
@@ -67,58 +67,59 @@
    "disparou_certo_pct": 97.8,
    "disparou_outro_numero_pct": 0.0,
    "nao_disparou_pct": 2.2,
-   "vezes_que_a_regra_disse_esse_numero": 83,
-   "confianca_pct": 53.0,
+   "vezes_que_a_regra_disse_esse_numero": 130,
+   "confianca_pct": 33.8,
    "erros_vinham_de": {
-    "Jester: Rolling Hand Backward": 6,
-    "Jester: Turning Hand Clockwise": 6,
-    "Jester: Turning Hand Counterclockwise": 4,
-    "Jester: Stop Sign": 4,
-    "HaGRID: 3 dedos": 3,
-    "Jester: Rolling Hand Forward": 3,
-    "Jester: Zooming Out With Full Hand": 2,
-    "Jester: Drumming Fingers": 2
+    "Jester: Turning Hand Clockwise": 15,
+    "Jester: Rolling Hand Backward": 12,
+    "Jester: Turning Hand Counterclockwise": 9,
+    "Jester: Rolling Hand Forward": 6,
+    "Jester: Stop Sign": 6,
+    "Jester: Swiping Right": 5,
+    "Jester: Swiping Down": 4,
+    "Slovo: No gesture": 3
    }
   }
  },
- "confianca_media_1_2_4_dedos_pct": 46.2,
+ "confianca_media_1_2_4_dedos_pct": 39.8,
  "abaixo_de_70": [
   "1 dedo",
   "2 dedos",
+  "3 dedos",
   "4 dedos"
  ],
  "amostras_sem_numero": {
   "total": 3042,
-  "disparou_numero_pct": 13.1,
+  "disparou_numero_pct": 24.3,
   "por_fonte": {
    "DriverMHG": {
     "amostras": 42,
-    "disparou_numero_pct": 0.0
+    "disparou_numero_pct": 9.5
    },
    "IPN": {
     "amostras": 200,
-    "disparou_numero_pct": 29.0
+    "disparou_numero_pct": 44.5
    },
    "Jester": {
     "amostras": 2700,
-    "disparou_numero_pct": 12.6
+    "disparou_numero_pct": 23.7
    },
    "Slovo": {
     "amostras": 100,
-    "disparou_numero_pct": 2.0
+    "disparou_numero_pct": 6.0
    }
   },
   "classes_que_mais_dispararam": {
-   "Jester: Zooming In With Two Fingers": 68,
-   "Jester: Zooming Out With Two Fingers": 68,
-   "IPN: Doing other things": 51,
-   "Jester: Pushing Two Fingers Away": 41,
-   "Jester: Sliding Two Fingers Up": 28,
-   "Jester: Sliding Two Fingers Left": 24,
-   "Jester: Sliding Two Fingers Down": 17,
-   "Jester: Sliding Two Fingers Right": 16,
-   "Jester: Turning Hand Clockwise": 14,
-   "Jester: Turning Hand Counterclockwise": 14
+   "Jester: Zooming Out With Two Fingers": 81,
+   "IPN: Doing other things": 79,
+   "Jester: Pushing Two Fingers Away": 75,
+   "Jester: Zooming In With Two Fingers": 75,
+   "Jester: Sliding Two Fingers Up": 68,
+   "Jester: Sliding Two Fingers Down": 56,
+   "Jester: Sliding Two Fingers Right": 45,
+   "Jester: Sliding Two Fingers Left": 43,
+   "Jester: Turning Hand Clockwise": 30,
+   "Jester: Turning Hand Counterclockwise": 28
   }
  }
 }

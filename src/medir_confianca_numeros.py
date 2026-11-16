@@ -12,8 +12,8 @@ Teste, sem treino: nada é ajustado aqui. Os dados são só de pessoas fora do t
 
 Simulação igual ao player (demo/player.py, Pontos.mao_parada e Pontos.contagem_estavel): 12 quadros por segundo, uma
 análise a cada 2 quadros (~0,17 s; ao vivo, 0,15 s), mão parada = presente em 5 dos últimos 6 quadros e pulso andou
-no máximo 0,5 palma; número = mesma contagem de 1 a 4 dedos em 5 dos 6 quadros; dispara com o mesmo número em
-3 análises seguidas. Cada amostra conta uma vez: o primeiro número disparado (ou nenhum).
+no máximo 0,5 palma; número = mesma contagem de 1 a 4 dedos em 5 dos 6 quadros; dispara na primeira análise em que isso acontece
+(como o player desde 16/11, sem nota e sem as 3 análises seguidas da CNN). Cada amostra conta uma vez: o primeiro número disparado (ou nenhum).
 
 Uso:
     demo\\python.bat src\\medir_confianca_numeros.py
@@ -33,7 +33,7 @@ import pontos_mao as P
 RAIZ = Path(__file__).resolve().parent.parent
 NUMEROS = list(P.NUMEROS)
 CURTO = {"One Finger": "1 dedo", "Two Fingers": "2 dedos", "Three Fingers": "3 dedos", "Four Fingers": "4 dedos"}
-N, MINIMO, PASSO, SEGUIDAS, MOVIMENTO = 6, 5, 2, 3, 0.5
+N, MINIMO, PASSO, SEGUIDAS, MOVIMENTO = 6, 5, 2, 1, 0.5  # ao vivo (desde 16/11), o número dispara direto: SEGUIDAS = 1
 
 
 def metade(user_id):  # a mesma divisão de src/avaliar_pontos_hagrid.py: metade 0 ajustou os limiares
@@ -118,7 +118,7 @@ def main():
     r = {
         "o_que_e": "Confiança da contagem de dedos ao vivo: quando a regra dispara 'k dedos', % das vezes em que eram k dedos. "
                    "Teste sem treino, pessoas fora do treino e do ajuste dos limiares. Simulação do player: 12 qps, análise a "
-                   "cada 2 quadros, mão parada (5 de 6 quadros, pulso <= 0,5 palma), mesma contagem em 5 de 6, 3 análises seguidas.",
+                   "cada 2 quadros, mão parada (5 de 6 quadros, pulso <= 0,5 palma), mesma contagem em 5 de 6; dispara direto, sem as 3 análises seguidas.",
         "amostras": dict(collections.Counter(f"{f}" for f, _, _ in linhas)),
         "por_numero": por_numero,
         "confianca_media_1_2_4_dedos_pct": round(float(np.mean([c for c in comandos if c is not None])), 1),
