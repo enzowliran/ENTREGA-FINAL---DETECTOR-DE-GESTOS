@@ -119,10 +119,13 @@ const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 20);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.enablePan = false;
-function recentrar() { camera.position.set(0, 0, 0.3); controls.target.set(0, 0, -0.5); controls.update(); }
+controls.enableZoom = false;   // a distância é automática: a câmera virtual acompanha a mão para ela ocupar a tela
+const direcao = new THREE.Vector3(0, 0, 1), centro = new THREE.Vector3();
+let distancia = 0.34;
+controls.target.set(0, 0, -0.45);
+function recentrar() { direcao.set(0, 0, 1); camera.position.copy(controls.target).addScaledVector(direcao, distancia); controls.update(); }
 function ajustarCamera() {
-  const vw = video.videoWidth || 1280, vh = video.videoHeight || 720;
-  camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(HFOV) / 2) * vh / vw));
+  camera.fov = 40;
   const [cw, ch] = tamanhoCena();
   camera.aspect = cw / ch;
   camera.updateProjectionMatrix();
@@ -205,6 +208,30 @@ function atualizar(h, world, img, W, H) {
   nP.crossVectors(a1.subVectors(h.pts[5], h.pts[0]), a2.subVectors(h.pts[17], h.pts[0])).normalize();
   atualizarMao(h.real, h.pts, ladoDaPalma(h, h.pts, nP));
   h.grupo.visible = true;
+}
+
+// A câmera virtual segue as mãos: mira no centro delas e fica à distância em que elas ocupam quase toda a tela.
+// O giro feito com o dedo é mantido (só a direção muda com o arraste; a distância é sempre calculada).
+function seguirMaos() {
+  const visiveis = maos.filter(h => h.grupo.visible);
+  if (!visiveis.length) return;
+  centro.set(0, 0, 0);
+  for (const h of visiveis) for (const p of h.pts) centro.add(p);
+  centro.divideScalar(visiveis.length * 21);
+  let raio = 0;
+  for (const h of visiveis) for (const p of h.pts) raio = Math.max(raio, p.distanceTo(centro));
+  raio += 0.03;
+  const meio = THREE.MathUtils.degToRad(camera.fov) / 2, meioH = Math.atan(Math.tan(meio) * camera.aspect);
+  const ideal = THREE.MathUtils.clamp(raio / Math.sin(Math.min(meio, meioH)), 0.2, 1.6);
+  distancia += (ideal - distancia) * 0.1;
+  direcao.subVectors(camera.position, controls.target).normalize();
+  controls.target.lerp(centro, 0.18);
+  camera.position.copy(controls.target).addScaledVector(direcao, distancia);
+  const piso = controls.target.y - raio - 0.02;   // o chão e a grade ficam logo abaixo da mão
+  chao.position.set(controls.target.x, piso, controls.target.z);
+  grade.position.set(controls.target.x, piso + 0.001, controls.target.z);
+  sol.target.position.copy(controls.target);
+  sol.position.set(controls.target.x + 0.4, controls.target.y + 1.2, controls.target.z + 0.3);
 }
 
 // ---------- tela 1: a imagem espelhada com os 21 pontos ----------
@@ -320,6 +347,7 @@ function laco() {
       statusEl.textContent = n ? `${n} ${n > 1 ? "mãos" : "mão"} · a ${dist} da câmera · ${fps.toFixed(0)} quadros/s` : "Mostre a mão para a câmera";
     }
   }
+  seguirMaos();
   controls.update();
   renderer.render(scene, camera);
 }
