@@ -157,7 +157,7 @@
   #rodape.escuro #trilha, #rodape.escuro #fonteRodape, #rodape.escuro #numSlide, #rodape.escuro #trava { visibility: hidden; }
   #numSlide { font-size: 14px; font-weight: 700; color: var(--marinho); min-width: 34px; font-variant-numeric: tabular-nums; }
   #trilha { display: flex; gap: 0; white-space: nowrap; }
-  #trilha span { color: var(--fraco); }
+  #trilha span { color: var(--fraco); cursor: pointer; }
   #trilha span + span::before { content: "|"; margin: 0 9px; color: var(--linha); }
   #trilha span.atual { color: var(--tinta); font-weight: 600; }
   #fonteRodape { flex: 1; text-align: right; font-style: italic; color: var(--cinza); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -169,7 +169,7 @@
   #navegacao button:hover { background: var(--marinho); color: #fff; border-color: var(--marinho); }
   #mini { position: absolute; right: 14px; bottom: 70px; width: 124px; z-index: 6; overflow: hidden; background: #0a1a33; border: 1px solid var(--linha); transition: opacity .3s; }
   #mini img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
-  #miniGesto { font-size: 10.5px; font-weight: 600; padding: 4px 8px; background: #fff; color: var(--tinta); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #miniGesto { display: none; font-size: 10.5px; font-weight: 600; padding: 4px 8px; background: #fff; color: var(--tinta); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #miniGesto.comando { background: var(--azul); color: #fff; }
   #mini.oculto { opacity: 0; pointer-events: none; }
   #aviso { position: absolute; left: 50%; top: 46%; transform: translate(-50%, -50%); background: rgba(10,31,68,.92); color: #fff; font-size: 26px; font-weight: 600;
@@ -258,6 +258,8 @@
   .regrasMao em { font-style: normal; font-weight: 700; color: var(--azul); white-space: nowrap; }
   .regrasMao .origem { font-size: 13.5px; line-height: 1.45; color: var(--cinza); margin: 4px 0 0; padding-top: 10px; border-top: 1px solid var(--linha); }
   .regrasMao .origem b { color: var(--marinho); font-weight: 600; }
+  .legParada { display: inline-block; font-size: 14px; line-height: 1.4; color: var(--texto); margin: 16px 0 0; padding: 8px 14px; border-left: 3px solid var(--azul); background: var(--zebra); max-width: 880px; }
+  .legParada b { color: var(--marinho); font-weight: 600; } .legParada em { font-style: normal; font-weight: 700; color: var(--azul); white-space: nowrap; }
   .maoTopo { display: grid; grid-template-columns: 430px 1fr; gap: 26px; align-items: start; }
   .maoTopo canvas { display: block; width: 430px; height: 340px; background: #f4f6f9; border: 1px solid var(--linha); cursor: grab; touch-action: none; }
   .maoTopo canvas:active { cursor: grabbing; }
@@ -458,81 +460,7 @@
             <div class="b"><span>Jester</span><div class="tr"><i style="--w:35%"></i></div><b>35,0%</b></div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 6c. A pergunta, parte da mão parada: a caixa fica no mesmo lugar; muda só o conteúdo ao lado -->
-  <section class="slide" data-titulo="A pergunta · mão parada" data-fonte="Fonte: demo/player.py (Pontos.mao_parada, Pontos.contagem_estavel)">
-    <div class="cab an"><h2>A pergunta: a mão está parada?</h2><p class="sub">Meio segundo de quadros e uma régua que cresce e diminui junto com a mão: a palma</p></div>
-    <div class="pergLado">
-      <div class="pergCol">
-        <div class="fxPerg pergZoom">
-          <p class="rot">A pergunta</p>
-          <h3><span class="parte foco">A mão está parada</span> e <span class="parte">mostrando de 1 a 4 dedos</span>?</h3>
-          <p class="peq">conferida a cada 0,15 s</p>
-        </div>
-        <div class="regrasMao an" style="--d:3">
-          <div class="rg"><b>Depois: contagem estável</b><span>a mesma contagem de 1 a 4 dedos em <em>5 dos 6</em> quadros. Aí o número vale, sem porcentagem: a repetição é a confirmação.</span></div>
-        </div>
-      </div>
-      <div class="paradaDuas">
-        <div class="an" style="--d:1">
-          <p class="tituloBloco">A regra da mão parada</p>
-          <svg viewBox="0 0 533 264" width="533" height="264" role="img" aria-label="Seis quadros, a mão em cinco deles, e o pulso dentro de um círculo de meia palma">
-            <g font-family="Segoe UI, system-ui, sans-serif">
-              <text x="0" y="13" font-size="13" font-weight="700" fill="#1e4fbf" letter-spacing="1">6 QUADROS = 0,5 S (12 POR SEGUNDO)</text>
-              <g stroke="#d6dce4" fill="#f4f6f9">
-                <rect x="0" y="24" width="76" height="56"/><rect x="88" y="24" width="76" height="56"/><rect x="176" y="24" width="76" height="56"/>
-                <rect x="264" y="24" width="76" height="56"/><rect x="352" y="24" width="76" height="56"/><rect x="440" y="24" width="76" height="56" stroke="#0a1f44" stroke-width="2"/>
-              </g>
-              <g fill="#0a1f44"><circle cx="34" cy="55" r="5"/><circle cx="129" cy="50" r="5"/><circle cx="302" cy="54" r="5"/><circle cx="392" cy="51" r="5"/><circle cx="478" cy="52" r="6"/></g>
-              <text x="214" y="57" text-anchor="middle" font-size="13" fill="#7b8594">sem mão</text>
-              <g font-size="12.5" fill="#7b8594" text-anchor="middle"><text x="38" y="97">quadro 1</text><text x="126" y="97">2</text><text x="214" y="97">3</text><text x="302" y="97">4</text><text x="390" y="97">5</text><text x="478" y="97" fill="#0a1f44" font-weight="700">agora</text></g>
-              <circle cx="96" cy="182" r="56" fill="#eaf1fb" stroke="#1e4fbf" stroke-width="2" stroke-dasharray="6 5"/>
-              <path d="M96 182 H152" stroke="#1e4fbf" stroke-width="1.5"/>
-              <text x="96" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="#1e4fbf">raio = 0,5 palma</text>
-              <g fill="#9db9ea"><circle cx="78" cy="196" r="5"/><circle cx="87" cy="164" r="5"/><circle cx="110" cy="200" r="5"/><circle cx="101" cy="168" r="5"/></g>
-              <circle cx="96" cy="182" r="6.5" fill="#0a1f44"/>
-              <g font-size="15" fill="#364152"><text x="180" y="156">Pulso nos quadros com mão (azul claro):</text><text x="180" y="178">todos a no máximo 0,5 palma da</text><text x="180" y="200">posição de agora (azul-escuro).</text>
-              <text x="180" y="228" font-weight="700" fill="#0a1f44">Resultado: mão parada.</text></g>
-            </g>
-          </svg>
-          <div class="passoP"><b>1</b><span>Olha os <em>últimos 6 quadros</em> (meio segundo).</span></div>
-          <div class="passoP"><b>2</b><span>A mão tem que aparecer em <em>pelo menos 5</em> deles.</span></div>
-          <div class="passoP"><b>3</b><span>O pulso não pode ter andado mais que <em>0,5 palma</em>.</span></div>
-        </div>
-        <div class="an" style="--d:2">
-          <p class="tituloBloco">Por que medir em palmas, e não em pixels</p>
-          <svg viewBox="0 0 533 345" width="533" height="345" role="img" aria-label="O mesmo movimento da mão perto e longe da câmera: em pixels muda, em palmas é igual">
-            <defs><path id="maoPalmas" d="M94 188 L64 173 L44 153 L32 133 L22 115 M94 188 L76 133 L72 103 L70 83 L68 65 M94 188 L94 129 L94 95 L94 73 L94 53 M94 188 L111 133 L115 103 L117 83 L119 67 M94 188 L126 143 L134 121 L139 105 L143 91 M76 133 L94 129 L111 133 L126 143" vector-effect="non-scaling-stroke"/></defs>
-            <g font-family="Segoe UI, system-ui, sans-serif">
-              <text x="160" y="20" text-anchor="middle" font-size="15" font-weight="700" fill="#0a1f44">Perto da câmera</text>
-              <text x="418" y="138" text-anchor="middle" font-size="15" font-weight="700" fill="#0a1f44">Longe da câmera</text>
-              <!-- antes (claro) e agora (escuro): o pulso andou 0,3 palma nos dois casos -->
-              <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <use href="#maoPalmas" transform="translate(12,-50.8) scale(1.6)" stroke="#d6dce4" stroke-width="2.2"/>
-                <use href="#maoPalmas" transform="translate(40,-50.8) scale(1.6)" stroke="#9db9ea" stroke-width="2.6"/>
-                <use href="#maoPalmas" transform="translate(340.2,118.4) scale(0.7)" stroke="#d6dce4" stroke-width="2"/>
-                <use href="#maoPalmas" transform="translate(352.2,118.4) scale(0.7)" stroke="#9db9ea" stroke-width="2.2"/>
-                <path d="M190.4 250 V155.6 M418 250 V208.7" stroke="#1e4fbf" stroke-width="5"/>
-              </g>
-              <g fill="#0a1f44"><circle cx="190.4" cy="250" r="5"/><circle cx="418" cy="250" r="3.5"/></g>
-              <g fill="#9db9ea"><circle cx="162.4" cy="250" r="4.5"/><circle cx="406" cy="250" r="3"/></g>
-              <g stroke="#0a1f44" stroke-width="1.6" fill="#0a1f44">
-                <path d="M162.4 268 H186" /><path d="M190.4 268 l-7 -4 v8 z" stroke="none"/>
-                <path d="M406 268 H414" /><path d="M418 268 l-6 -3.5 v7 z" stroke="none"/>
-              </g>
-              <g font-size="14" fill="#364152" text-anchor="middle">
-                <text x="176" y="290">pulso andou 28 px</text><text x="176" y="308">÷ palma de 94 px = <tspan font-weight="700" fill="#1e4fbf">0,3 palma</tspan></text>
-                <text x="412" y="290">pulso andou 12 px</text><text x="412" y="308">÷ palma de 41 px = <tspan font-weight="700" fill="#1e4fbf">0,3 palma</tspan></text>
-              </g>
-              <path d="M20 333 H52" stroke="#1e4fbf" stroke-width="5"/>
-              <text x="62" y="338" font-size="13.5" fill="#364152">1 palma = do pulso à base do dedo médio (claro: antes · escuro: agora)</text>
-            </g>
-          </svg>
-          <p class="txtP">Perto da câmera a mão é grande; longe, é pequena. <b>Em pixels, o mesmo movimento muda com a distância; em palmas, não.</b> Por isso a regra de 0,5 palma vale com a mão perto ou longe.</p>
-        </div>
+        <p class="legParada"><b>E a mão parada?</b> O pulso andou no máximo <em>0,5 palma</em> nos últimos 6 quadros (0,5 s), com a mão em pelo menos 5 deles. Aí a contagem vale.</p>
       </div>
     </div>
   </section>
@@ -1701,7 +1629,7 @@
   </div>
   <img id="logoCab" src="/demo/logo_insper_ai.png" alt="Insper AI">
   <img id="logoCabBranco" src="/demo/logo_insper_ai_branco.png" alt="Insper AI" style="display:none">
-  <div id="mini3d"><iframe id="miniMao" title="Mão em 3D" allow="autoplay"></iframe><div>mão em 3D</div></div>
+  <div id="mini3d"><iframe id="miniMao" title="Mão em 3D" allow="autoplay"></iframe></div>
   <div id="mini"><img id="miniVideo" alt="Webcam"><div id="miniGesto">conectando...</div></div>
   <div id="aviso"></div>
 </div>
@@ -2702,7 +2630,7 @@ function morphOk(destino) {
 })();
 // A caixa "A pergunta" do fluxo (slide 6) cresce e vai para a esquerda do slide 7; entre o 7 e o 8 ela fica parada no lugar.
 // Uma cópia da caixa grande (tamanhos em em) anda do lugar e do tamanho de uma caixa até a outra, enquanto os slides trocam.
-const SLIDES_PERGUNTA = ["Como funciona", "A pergunta · dedos", "A pergunta · mão parada"];
+const SLIDES_PERGUNTA = ["Como funciona", "A pergunta · dedos"];
 function caixaPergunta(s) { return s.querySelector(".pergZoom") || s.querySelector(".fxPerg"); }
 function morphPergunta(destino) {
   const palco = $("palco"), de = caixaPergunta(slides[atual]), para = caixaPergunta(slides[destino]);
@@ -2733,6 +2661,13 @@ function ir(passo) {
     return morphOk(destino);
   mostrar(destino);
 }
+$("trilha").addEventListener("click", ev => {
+  const alvo = ev.target.closest("span[data-parte]");
+  if (!alvo || animandoZoom) return;
+  const i = slides.findIndex(sl => sl.dataset.parte === alvo.dataset.parte);
+  if (i >= 0) mostrar(i);
+});
+$("trilha").querySelectorAll("span[data-parte]").forEach(sp => { sp.setAttribute("role", "button"); sp.title = "Ir para " + sp.textContent; });
 function mostrarTrava() {
   $("trava").className = "pilula" + (travada ? " travada" : "");
   $("trava").textContent = travada ? `Travada · pare destrava${bloqueados ? " · " + bloqueados + " bloqueados" : ""}` : "Livre · pare trava";
