@@ -238,7 +238,7 @@
   #mini3d.oculto { opacity: 0; pointer-events: none; }
 
   /* Logo padronizado: mesmo tamanho e mesma posição em todos os slides, inclusive capa e encerramento. */
-  #logoCab { position: absolute; right: 30px; top: 22px; height: 52px; width: auto; z-index: 7; pointer-events: none; }
+  #logoCab, #logoCabBranco { position: absolute; right: 30px; top: 22px; height: 52px; width: auto; z-index: 7; pointer-events: none; }
 
 </style>
 <script src="/vendor/three.min.js"></script>
@@ -1487,7 +1487,8 @@
     <div id="progresso"><div></div></div>
     <span id="navegacao"><button id="btVoltar" title="Slide anterior (PageUp)" aria-label="Slide anterior">‹</button><button id="btAvancar" title="Próximo slide (PageDown)" aria-label="Próximo slide">›</button></span>
   </div>
-  <img id="logoCab" alt="Insper AI">
+  <img id="logoCab" src="/demo/logo_insper_ai.png" alt="Insper AI">
+  <img id="logoCabBranco" src="/demo/logo_insper_ai_branco.png" alt="Insper AI" style="display:none">
   <div id="mini3d"><iframe id="miniMao" title="Mão em 3D" allow="autoplay"></iframe><div>mão em 3D</div></div>
   <div id="mini"><img id="miniVideo" alt="Webcam"><div id="miniGesto">conectando...</div></div>
   <div id="aviso"></div>
@@ -2367,8 +2368,10 @@ function mostrar(n) {
   $("fonteRodape").textContent = s.dataset.fonte || "";
   $("rodape").classList.toggle("escuro", s.classList.contains("escuro"));
   // Logo no canto superior direito, igual em todos os slides: colorido nos claros, branco nos escuros.
-  const logo = $("logoCab"), arquivo = s.classList.contains("escuro") ? "/demo/logo_insper_ai_branco.png" : "/demo/logo_insper_ai.png";
-  if (logo.getAttribute("src") !== arquivo) logo.src = arquivo;
+  // As duas versões já ficam carregadas; aqui só se escolhe qual aparece, sem atraso na troca de slide.
+  const escuro = s.classList.contains("escuro");
+  $("logoCab").style.display = escuro ? "none" : "";
+  $("logoCabBranco").style.display = escuro ? "" : "none";
 }
 let animandoZoom = false;
 function morphOk(destino) {
