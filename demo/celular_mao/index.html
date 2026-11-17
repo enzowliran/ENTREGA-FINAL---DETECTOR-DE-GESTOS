@@ -50,6 +50,17 @@
     #dica { display: block; text-align: center; font-size: 12px; color: var(--fraco); padding: 0 12px 8px; }
   }
   @media (max-height: 430px) { header { padding: 5px 14px 4px; } header h1 { font-size: 15px; } figcaption { font-size: 12px; padding-top: 4px; } main { padding: 8px 12px 6px; } }
+  /* leitura do gesto pelas regras do projeto (contagem de dedos e sinal de OK) */
+  #leitura { position: absolute; left: 8px; right: 8px; bottom: 8px; display: flex; align-items: center; gap: 12px; padding: 8px 12px;
+             background: rgba(6,16,31,.86); border: 1px solid var(--linha); }
+  #leitura .rot { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--azul3); }
+  #gesto { font-size: clamp(18px, 4.2vh, 28px); font-weight: 700; line-height: 1.1; color: #fff; white-space: nowrap; }
+  #gesto.vazio { color: var(--fraco); font-weight: 400; font-size: clamp(13px, 3vh, 16px); white-space: normal; }
+  #dedos { margin-left: auto; display: flex; gap: 5px; align-items: flex-end; }
+  #dedos i { display: block; width: 9px; height: 22px; background: #1f3a66; }
+  #dedos i:nth-child(1), #dedos i:nth-child(6) { height: 15px; } #dedos i:nth-child(5), #dedos i:nth-child(10) { height: 17px; }
+  #dedos i:nth-child(6) { margin-left: 9px; } #dedos.uma i:nth-child(n+6) { display: none; }
+  #dedos i.sim { background: #5aa2ff; }
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/es-module-shims@1.10.0/dist/es-module-shims.js"></script>
 <script type="importmap">
@@ -62,8 +73,10 @@
 <body>
 <header><img src="./logo.png" alt="Insper AI" style="height:22px;align-self:center"><div class="marca">Gestos ao volante</div><h1>A sua mão em 3D</h1><div id="status"></div></header>
 <main>
-  <figure><div class="tela"><canvas class="quadro" id="quadro"></canvas></div>
-    <figcaption>1 · O que a câmera vê<span>21 pontos em cada mão</span></figcaption></figure>
+  <figure><div class="tela"><canvas class="quadro" id="quadro"></canvas>
+      <div id="leitura"><div><div class="rot">Nosso sistema reconhece</div><div id="gesto" class="vazio">Mostre o OK ou os dedos; com duas mãos, somamos</div></div>
+        <div id="dedos" class="uma" title="dedos esticados"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div></div></div>
+    <figcaption>1 · O que a câmera vê<span>21 pontos e a nossa contagem de dedos</span></figcaption></figure>
   <figure><div class="tela"><div id="cena"></div></div>
     <figcaption>2 · A mão em 3D<span>montada a partir dos pontos</span></figcaption></figure>
 </main>
@@ -75,7 +88,7 @@
   <div class="topo">Deep Learning · Insper AI · 2026</div>
   <h2>A sua mão em 3D</h2>
   <div class="linha"></div>
-  <p>A câmera encontra 21 pontos da sua mão e monta a mão em 3D, ao vivo. É o primeiro passo do nosso sistema de gestos para o carro.</p>
+  <p>A câmera encontra 21 pontos da sua mão e monta a mão em 3D, ao vivo. Sobre esses pontos, as regras do nosso sistema reconhecem o sinal de OK e os números de 1 a 4 dedos, como no carro. Com as duas mãos, a página soma os dedos.</p>
   <button id="ligar" type="button">Ligar a câmera</button>
   <p class="peq">Tudo roda no seu aparelho: nenhuma imagem é enviada ou gravada.</p>
   <p id="erro"></p>
@@ -253,6 +266,84 @@ function desenharQuadro(fonte, pontos, W, H) {
   }
 }
 
+// ---------- a parte do projeto: contagem de dedos e sinal de OK, só com geometria dos 21 pontos ----------
+// As mesmas regras do sistema do carro: src/pontos_mao.py (contar_dedos, com os limiares ajustados no HaGRID),
+// demo/player.py (mão parada e mesma leitura em 5 de 6 análises) e demo/carro3d.html (sinal de OK).
+const LIM = { reta: 0.85, angulo: 65, polegarReta: 0.95, polegarFora: 1.20 }, OK_PINCA = 0.5, OK_RETA = 0.78;
+const NOMES = { ok: "Sinal de OK", 1: "Um dedo", 2: "Dois dedos", 3: "Três dedos", 4: "Quatro dedos", 5: "Cinco dedos",
+                6: "Seis dedos", 7: "Sete dedos", 8: "Oito dedos", 9: "Nove dedos", 10: "Dez dedos" };
+const d3 = (a, b) => Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
+function dedosEsticados(w) {   // do polegar ao mínimo: true = esticado
+  const fora = [d3(w[2], w[4]) / Math.max(d3(w[2], w[3]) + d3(w[3], w[4]), 1e-9) >= LIM.polegarReta
+                && d3(w[4], w[17]) / Math.max(d3(w[5], w[17]), 1e-9) >= LIM.polegarFora];
+  for (const [a, b, c, d] of [[5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16], [17, 18, 19, 20]]) {
+    const reta = d3(w[a], w[d]) / Math.max(d3(w[a], w[b]) + d3(w[b], w[c]) + d3(w[c], w[d]), 1e-9);
+    const u = [w[a].x - w[0].x, w[a].y - w[0].y, w[a].z - w[0].z], v = [w[d].x - w[a].x, w[d].y - w[a].y, w[d].z - w[a].z];
+    const cos = (u[0] * v[0] + u[1] * v[1] + u[2] * v[2]) / Math.max(Math.hypot(...u) * Math.hypot(...v), 1e-9);
+    fora.push(reta >= LIM.reta && Math.acos(Math.max(-1, Math.min(1, cos))) * 180 / Math.PI <= LIM.angulo);
+  }
+  return fora;
+}
+function ehOk(w, l, W, H) {   // polegar encostado no indicador e os outros três dedos retos
+  const d2 = (i, j) => Math.hypot((l[i].x - l[j].x) * W, (l[i].y - l[j].y) * H);
+  const r3 = (a, d) => d3(w[a], w[d]) / Math.max(d3(w[a], w[a + 1]) + d3(w[a + 1], w[a + 2]) + d3(w[a + 2], w[d]), 1e-6);
+  const r2 = (a, d) => d2(a, d) / Math.max(d2(a, a + 1) + d2(a + 1, a + 2) + d2(a + 2, d), 1e-6);
+  const pinca = Math.min(d3(w[4], w[8]) / Math.max(d3(w[0], w[9]), 1e-6), d2(4, 8) / Math.max(d2(0, 9), 1e-6));
+  return pinca < OK_PINCA && [[9, 12], [13, 16], [17, 20]].every(([a, d]) => Math.max(r3(a, d), r2(a, d)) > OK_RETA);
+}
+const historico = [], gestoEl = $("gesto"), caixaDedos = $("dedos"), barras = [...caixaDedos.children];
+const DICA = "Mostre o OK ou os dedos; com duas mãos, somamos";
+let ultimaLeitura = 0;
+// ws e ls: pontos 3D e pontos na imagem de cada mão vista (até duas). Chamada a cada quadro; analisa 12 vezes por segundo.
+//   - uma mão: a regra do carro (1 a 4 dedos é número; cinco dedos, só o polegar e punho não são);
+//   - duas mãos: os dedos esticados das duas são somados (dois em cada mão = quatro dedos). A soma só existe nesta página.
+//   - sinal de OK em qualquer uma das mãos: vale o OK.
+function lerGesto(ws, ls, W, H) {
+  const agora = performance.now();
+  if (agora - ultimaLeitura < 80) return;
+  ultimaLeitura = agora;
+  const n = Math.min(ws ? ws.length : 0, 2);
+  let item = { mao: false, rotulo: null };
+  caixaDedos.classList.toggle("uma", n < 2);
+  barras.forEach(b => b.classList.remove("sim"));
+  if (n) {
+    const dedos = [], partes = [];
+    let ok = false, px = 0, py = 0, palma = 0;
+    for (let k = 0; k < n; k++) {
+      const d = dedosEsticados(ws[k]);
+      dedos.push(d); partes.push(d.filter(Boolean).length);
+      d.forEach((e, i) => barras[5 * k + i].classList.toggle("sim", e));
+      ok = ok || ehOk(ws[k], ls[k], W, H);
+      px += ls[k][0].x * W / n; py += ls[k][0].y * H / n;
+      palma += Math.hypot((ls[k][9].x - ls[k][0].x) * W, (ls[k][9].y - ls[k][0].y) * H) / n;
+    }
+    const total = partes.reduce((a, b) => a + b, 0);
+    let numero = null;
+    if (n === 1) numero = total >= 1 && total <= 4 && !(total === 1 && dedos[0][0]) ? total : null;
+    else numero = total >= 1 ? total : null;
+    item = { mao: true, rotulo: ok ? "ok" : numero, pulso: [px, py], palma: Math.max(palma, 1e-6), partes };
+  }
+  historico.push(item);
+  if (historico.length > 6) historico.shift();
+  // vale a leitura que aparece em 5 das 6 últimas análises; os números exigem as mãos paradas (pulso andou até meia palma)
+  let achado = null, detalhe = "";
+  const com = historico.filter(h => h.mao);
+  if (historico.length === 6 && com.length >= 5) {
+    const conta = {};
+    for (const h of com) if (h.rotulo !== null) conta[h.rotulo] = (conta[h.rotulo] || 0) + 1;
+    const [melhor, vezes] = Object.entries(conta).sort((a, b) => b[1] - a[1])[0] || [null, 0];
+    const fim = com[com.length - 1];
+    const parada = Math.max(...com.map(h => Math.hypot(h.pulso[0] - fim.pulso[0], h.pulso[1] - fim.pulso[1]))) / fim.palma <= 0.5;
+    if (vezes >= 5 && (melhor === "ok" || parada)) {
+      achado = melhor;
+      if (melhor !== "ok" && fim.partes.length === 2 && String(fim.rotulo) === melhor) detalhe = ` (${fim.partes[0]} + ${fim.partes[1]})`;
+    }
+  }
+  gestoEl.textContent = achado ? NOMES[achado] + detalhe : DICA;
+  gestoEl.classList.toggle("vazio", !achado);
+  window.__leitura = { item, achado, n: historico.length };
+}
+
 // ---------- poses de exemplo (?maoteste=1), para conferir a página sem câmera ----------
 function poseTeste(nome, espelhar) {
   const fecha = [1.45, 1.6, 0.75], ab = [0.08, 0.1, 0.05];
@@ -288,15 +379,16 @@ function poseTeste(nome, espelhar) {
 function aplicarTeste() {
   const poses = ["aberta", "punho", "um", "ok"];
   const nome = poses.includes(MAOTESTE) ? MAOTESTE : poses[Math.floor(performance.now() / 2500) % poses.length];
-  const W = 1280, H = 720, f = (W / 2) / Math.tan(HFOV * Math.PI / 360), img = [];
+  const W = 1280, H = 720, f = (W / 2) / Math.tan(HFOV * Math.PI / 360), img = [], mundos = [];
   [[0, false, -0.075], [1, true, 0.075]].forEach(([k, espelhar, tx]) => {
     const w = poseTeste(nome, espelhar), T = { x: tx, y: 0, z: 0.42 };
     const p = w.map(q => ({ x: (f * (q.x + T.x) / (q.z + T.z) + W / 2) / W, y: (f * (q.y + T.y) / (q.z + T.z) + H / 2) / H }));
     maos[k].rotulo = espelhar ? "Right" : "Left";
     atualizar(maos[k], w, p, W, H);
-    img.push(p);
+    img.push(p); mundos.push(w);
   });
   desenharQuadro(null, img, W, H);
+  lerGesto(PARAMS.has("uma") ? mundos.slice(0, 1) : mundos, img, W, H);   // &uma=1 testa com uma mão só
   statusEl.textContent = "teste · " + nome;
 }
 
@@ -344,6 +436,7 @@ function laco() {
         atualizar(h, res.worldLandmarks[i], res.landmarks[i], W, H);
       });
       desenharQuadro(video, res.landmarks, W, H);
+      lerGesto(res.worldLandmarks, res.landmarks, W, H);
       const agora = performance.now();
       fps = 0.9 * fps + 0.1 * (1000 / Math.max(agora - antes, 1)); antes = agora;
       const n = res.landmarks.length, dist = maos.filter(h => h.grupo.visible).map(h => `${(h.T.z * 100).toFixed(0)} cm`).join(" e ");
