@@ -237,6 +237,10 @@
   #mini3d div { font-size: 10.5px; font-weight: 600; padding: 4px 8px; background: #fff; color: var(--tinta); white-space: nowrap; }
   #mini3d.oculto { opacity: 0; pointer-events: none; }
 
+  .logoCapa { position: absolute; right: 120px; top: 64px; height: 170px; z-index: 2; }
+  #logoCab { position: absolute; right: 80px; top: 34px; height: 66px; z-index: 5; pointer-events: none; }
+  .slide.demo ~ #logoCab { }
+
 </style>
 <script src="/vendor/three.min.js"></script>
 </head>
@@ -251,6 +255,7 @@
       <path d="M760 210 C 600 280, 520 400, 600 540 S 740 800, 690 900" fill="none" stroke="#9db9ea" stroke-width="1" opacity=".35"/>
       <path d="M760 0 C 470 60, 330 260, 430 450 S 640 760, 470 900" fill="none" stroke="#1e4fbf" stroke-width="1" opacity=".3"/>
     </svg>
+    <img class="logoCapa an" src="/demo/logo_insper_ai_branco.png" alt="Insper AI">
     <p class="topoCapa an">Deep Learning · Insper AI · 2026 · Entrega final</p>
     <h1 class="an" style="--d:1">Gestos ao volante</h1>
     <div class="linhaCapa an" style="--d:2"></div>
@@ -507,6 +512,7 @@
       <path d="M760 120 C 560 200, 470 350, 560 500 S 720 780, 620 900" fill="none" stroke="#3d74d6" stroke-width="1.5" opacity=".45"/>
       <path d="M760 210 C 600 280, 520 400, 600 540 S 740 800, 690 900" fill="none" stroke="#9db9ea" stroke-width="1" opacity=".35"/>
     </svg>
+    <img class="logoCapa an" style="height:130px;top:56px" src="/demo/logo_insper_ai_branco.png" alt="Insper AI">
     <h1 class="an">Obrigado</h1>
     <div class="linhaCapa an" style="--d:1;width:420px;height:2px;background:#fff;margin:30px 0 0"></div>
     <p class="sub2 an" style="--d:2">Perguntas</p>
@@ -1484,6 +1490,7 @@
     <div id="progresso"><div></div></div>
     <span id="navegacao"><button id="btVoltar" title="Slide anterior (PageUp)" aria-label="Slide anterior">‹</button><button id="btAvancar" title="Próximo slide (PageDown)" aria-label="Próximo slide">›</button></span>
   </div>
+  <img id="logoCab" alt="Insper AI">
   <div id="mini3d"><iframe id="miniMao" title="Mão em 3D" allow="autoplay"></iframe><div>mão em 3D</div></div>
   <div id="mini"><img id="miniVideo" alt="Webcam"><div id="miniGesto">conectando...</div></div>
   <div id="aviso"></div>
@@ -2359,6 +2366,11 @@ function mostrar(n) {
   [...$("trilha").children].forEach(x => x.classList.toggle("atual", x.dataset.parte === NOMES_PARTES[n]));
   $("fonteRodape").textContent = s.dataset.fonte || "";
   $("rodape").classList.toggle("escuro", s.classList.contains("escuro"));
+  // Logo no canto do cabeçalho: colorido nos slides claros, branco nos escuros; a capa e o encerramento têm o logo grande.
+  const logo = $("logoCab"), arquivo = s.classList.contains("escuro") ? "/demo/logo_insper_ai_branco.png" : "/demo/logo_insper_ai.png";
+  logo.style.display = s.id === "capa" || s.classList.contains("obrigado") ? "none" : "";
+  if (logo.getAttribute("src") !== arquivo) logo.src = arquivo;
+  logo.style.height = s.classList.contains("demo") ? "52px" : ""; logo.style.top = s.classList.contains("demo") ? "26px" : "";
 }
 let animandoZoom = false;
 function morphOk(destino) {

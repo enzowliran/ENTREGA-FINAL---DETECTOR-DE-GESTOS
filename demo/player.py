@@ -730,8 +730,8 @@ def criar_servidor(args, estado, parar):
                 self.send_header("Cache-Control", "no-store")
                 self.end_headers()
                 self.wfile.write((RAIZ / Path(url.path).name).read_bytes())
-            elif url.path in ("/demo/camera_infravermelha.png", "/demo/qr_mao.png"):
-                # Imagens dos slides: a foto da câmera infravermelha e o QR code da página da mão no celular.
+            elif url.path in ("/demo/camera_infravermelha.png", "/demo/qr_mao.png", "/demo/logo_insper_ai.png", "/demo/logo_insper_ai_branco.png"):
+                # Imagens dos slides: a foto da câmera infravermelha, o QR code da página da mão no celular e o logo da Insper AI.
                 arquivo = RAIZ / Path(url.path).name
                 if not arquivo.is_file():
                     self.send_response(404)
