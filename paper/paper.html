@@ -43,7 +43,7 @@
 
 <div class="resumo">
 <h2>Resumo</h2>
-<p>Ajustar a música ou o ar-condicionado numa tela de toque obriga o motorista a tirar os olhos da estrada. Propomos comandar a central do carro com gestos da mão, captados por uma câmera no painel. O sistema une dois reconhecedores. Uma CNN 3D, treinada do zero no Jester (118.562 vídeos), reconhece os gestos com movimento e chega a 92,6% de acerto nas 27 classes do teste. Uma regra geométrica sobre os 21 pontos da mão do MediaPipe conta os dedos quando a mão está parada. Um sinal de OK abre uma janela de 7 s, e só dentro dela os gestos valem. Nos 11 gestos usados no carro, em 1.300 clipes de pessoas fora do treino, o sistema acerta 87,7%: 91,2% nos movimentos e 82,0% nos números. A contagem de dedos sobe o acerto dos números de 58,4% para 82,0%. Em 31,5 min de vídeo real sem gestos, a CNN 3D não disparou nenhum comando do carro. Ao longo do projeto, os modelos com mais acerto nos dados (até 95,6%) não reconheceram os números na webcam. Por isso a escolha final foi decidida pelo uso real, não pela métrica offline. O texto registra as sete etapas do projeto, explica cada arquitetura testada e dá o motivo de cada descarte.</p>
+<p>Ajustar a música ou o ar-condicionado numa tela de toque obriga o motorista a tirar os olhos da estrada. Propomos comandar a central do carro com gestos da mão, captados por uma câmera no painel. O sistema une dois reconhecedores. Uma CNN 3D, treinada do zero no Jester (118.562 vídeos), reconhece os gestos com movimento e chega a 92,6% de acerto nas 27 classes do teste. Uma regra geométrica sobre os 21 pontos da mão do MediaPipe conta os dedos quando a mão está parada. Um sinal de OK abre uma janela de 7 s, e só dentro dela os gestos valem. Nos 11 gestos usados no carro, em 1.300 clipes de pessoas fora do treino, o sistema acerta 87,7%: 91,2% nos movimentos e 82,0% nos números. A contagem de dedos sobe o acerto dos números de 58,4% para 82,0%. Em 31,5 min de vídeo real sem gestos, a CNN 3D não disparou nenhum comando do carro. Ao longo do projeto, os modelos com mais acerto nos dados (até 95,8%) não reconheceram os números na webcam. Por isso a escolha final foi decidida pelo uso real, não pela métrica offline. O texto registra as sete etapas do projeto, explica cada arquitetura testada e dá o motivo de cada descarte.</p>
 <p class="chaves"><b>Palavras-chave:</b> reconhecimento de gestos, CNN 3D, pontos da mão, interface no carro, falsos disparos.</p>
 </div>
 
@@ -450,7 +450,7 @@
 </div>
 
 <h3>6.3&nbsp;&nbsp;Ajuste, combinações e veto (etapas 5 e 6)</h3>
-<p>A CNN ajustada nas cinco bases acerta 84,0% das 36 classes. Ela é boa nos movimentos (95,2% nos oito do carro) e fraca nos números (58,4%): com a mão parada, costuma responder "sem gesto". A GRU é o contrário: 95,6% nos números e 75,6% nos movimentos. Juntas, chegam a 95,6% nos 11 gestos do carro (Tabela 9). Esse foi o melhor resultado nos dados, e não se confirmou na webcam.</p>
+<p>A CNN ajustada nas cinco bases acerta 84,0% das 36 classes. Ela é boa nos movimentos (95,2% nos oito do carro) e fraca nos números (58,4%): com a mão parada, costuma responder "sem gesto". A GRU é o contrário: 95,6% nos números e 75,6% nos movimentos. Juntas, chegam a 95,8% nos 11 gestos do carro (Tabela 9). Esse foi o melhor resultado nos dados, e não se confirmou na webcam.</p>
 <div class="tab">
 <table>
 <thead><tr><th>Modelo</th><th class="n">36 classes</th><th class="n">11 gestos do carro</th><th class="n">Números</th><th class="n">Movimentos</th></tr></thead>

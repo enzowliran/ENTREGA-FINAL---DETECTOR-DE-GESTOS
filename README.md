@@ -2,6 +2,21 @@
 
 Trabalho final de Deep Learning (Insper), tema mobilidade e segurança.
 
+## Entrega: os três arquivos, abrem direto no navegador
+
+| O que é | Arquivo | Como abrir |
+|---|---|---|
+| **Paper** (14 páginas) | [PAPER.pdf](PAPER.pdf) | clique no link; o GitHub mostra o PDF |
+| **Apresentação** (37 slides) | [APRESENTACAO.pdf](APRESENTACAO.pdf) | clique no link; o GitHub mostra o PDF |
+| **Notebook** | [notebook.ipynb](notebook.ipynb) | clique no link; o GitHub mostra o notebook com os resultados |
+
+Não é preciso instalar nada nem baixar o repositório para ler os três.
+
+- No PDF da apresentação, os slides 1 a 16 são a apresentação e os slides 17 a 37 são o apêndice.
+- Os slides 5, 11, 20, 21 e 22 são demonstrações ao vivo ou interativas (webcam e 3D). No PDF aparecem como uma imagem parada ou um quadro escuro.
+- A apresentação com as demonstrações ao vivo roda em Windows, com webcam: depois da instalação descrita abaixo, dê dois cliques em `demo/abrir_apresentacao_final.bat`.
+- A página da mão em 3D abre em qualquer celular, sem instalar nada: https://gestos-ao-volante-mao.netlify.app
+
 - **Apresentação intermediária:** 12/11/2026
 - **Entrega final (notebook, paper e apresentação):** 17-18/11/2026
 - **Restrição da disciplina:** a rede é treinada do zero, sem pesos de terceiros. Usar o nosso próprio pré-treino é permitido.
