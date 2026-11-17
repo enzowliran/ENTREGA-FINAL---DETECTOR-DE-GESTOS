@@ -2339,8 +2339,11 @@ function mostrar(n) {
   $("mini").classList.toggle("oculto", !!s.dataset.demo);
   if (s.dataset.demo) $("miniVideo").removeAttribute("src"); else if (!$("miniVideo").getAttribute("src")) $("miniVideo").src = "/video";
   // A mão 3D em miniatura acompanha a webcam; nas demos ela é desligada (a demo já usa a câmera e o MediaPipe).
-  $("mini3d").classList.toggle("oculto", !!s.dataset.demo);
-  if (s.dataset.demo) { if ($("miniMao").getAttribute("src")) $("miniMao").src = "about:blank"; }
+  // Ela só aparece depois do slide que apresenta a mão em 3D ("O que o sistema vê"): antes disso a plateia ainda não a conhece.
+  const slideDaMao = slides.findIndex(x => x.dataset.titulo === "O que o sistema vê");
+  const com3d = !s.dataset.demo && slideDaMao >= 0 && n > slideDaMao;
+  $("mini3d").classList.toggle("oculto", !com3d);
+  if (!com3d) { if ($("miniMao").getAttribute("src")) $("miniMao").src = "about:blank"; }
   else if (!($("miniMao").getAttribute("src") || "").includes("hand3d")) $("miniMao").src = "/demo/hand3d.html?embutido=1&mini=1";
   if (s.dataset.secao) $("palco").dataset.secao = s.dataset.secao; else delete $("palco").dataset.secao;
   $("secaoPilula").textContent = NOMES_PARTES[n] || "Abertura";
