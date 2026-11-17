@@ -242,6 +242,49 @@
   /* Logo padronizado: mesmo tamanho e mesma posição em todos os slides, inclusive capa e encerramento. */
   #logoCab, #logoCabBranco { position: absolute; right: 30px; top: 22px; height: 52px; width: auto; z-index: 7; pointer-events: none; }
 
+
+  /* Slides 7 e 8 (A pergunta): a caixa da pergunta do slide 6 cresce e fica à esquerda; o conteúdo muda ao lado */
+  .pergLado { flex: 1; min-height: 0; display: grid; grid-template-columns: 290px 1fr; gap: 34px; align-items: start; }
+  .pergCol { display: flex; flex-direction: column; gap: 16px; }
+  .pergZoom { position: relative; width: 290px; height: 220px; font-size: 20px; padding: 1.25em 1.1em; }
+  .pergZoom .rot { font-size: .75em; margin-bottom: .6em; }
+  .pergZoom h3 { font-size: 1.3em; line-height: 1.22; }
+  .pergZoom p.peq { font-size: .875em; margin-top: .45em; }
+  .pergZoom h3 .parte { transition: color .3s; }
+  .pergZoom h3 .parte.foco { color: var(--azul); text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 5px; }
+  .regrasMao .rg { padding: 9px 0 9px 14px; border-left: 3px solid var(--azul); margin-bottom: 10px; background: var(--zebra); }
+  .regrasMao .rg b { display: block; font-size: 15.5px; color: var(--marinho); }
+  .regrasMao .rg span { display: block; font-size: 14.5px; line-height: 1.4; color: var(--texto); margin-top: 2px; }
+  .regrasMao em { font-style: normal; font-weight: 700; color: var(--azul); white-space: nowrap; }
+  .regrasMao .origem { font-size: 13.5px; line-height: 1.45; color: var(--cinza); margin: 4px 0 0; padding-top: 10px; border-top: 1px solid var(--linha); }
+  .regrasMao .origem b { color: var(--marinho); font-weight: 600; }
+  .maoTopo { display: grid; grid-template-columns: 430px 1fr; gap: 26px; align-items: start; }
+  .maoTopo canvas { display: block; width: 430px; height: 340px; background: #f4f6f9; border: 1px solid var(--linha); cursor: grab; touch-action: none; }
+  .maoTopo canvas:active { cursor: grabbing; }
+  .maoTopo .legendaMao { font-size: 13px; color: var(--cinza); margin: 6px 0 0; line-height: 1.4; }
+  .maoTopo .controles { margin-bottom: 12px; gap: 6px; }
+  .maoTopo .controles button { padding: 6px 11px; font-size: 13.5px; }
+  .tabMao { font-size: 14.5px; }
+  .tabMao th { padding: 7px 10px; font-size: 11px; }
+  .tabMao td { padding: 4px 10px; }
+  .tabMao input[type=range] { width: 150px; accent-color: var(--azul); vertical-align: middle; margin: 0; }
+  .tabMao td.est b { color: var(--azul); }
+  .veredMao { margin-top: 12px; padding: 11px 16px; font-size: 16.5px; line-height: 1.4; border-left: 4px solid var(--fraco); background: var(--zebra); color: var(--texto); }
+  .veredMao.sim { border-left-color: var(--azul); background: var(--gelo); color: var(--marinho); font-weight: 600; }
+  .barrasMp { margin-top: 18px; display: grid; grid-template-columns: 1fr 360px; gap: 30px; align-items: center; padding-top: 14px; border-top: 1px solid var(--linha); }
+  .barrasMp .b { display: grid; grid-template-columns: 130px 1fr 66px; align-items: center; gap: 12px; font-size: 15px; color: var(--texto); margin: 5px 0; }
+  .barrasMp .tr { height: 15px; background: var(--gelo); }
+  .barrasMp .tr i { display: block; height: 100%; width: var(--w); background: var(--azul2); transform-origin: 0 50%; transform: scaleX(0); transition: transform .8s ease .35s; }
+  .slide.ativa .barrasMp .tr i { transform: scaleX(1); }
+  .barrasMp .b b { text-align: right; color: var(--marinho); font-variant-numeric: tabular-nums; }
+  .barrasMp .txt h3 { font-size: 19px; font-weight: 600; color: var(--marinho); margin: 0 0 6px; }
+  .barrasMp .txt p { font-size: 15px; line-height: 1.45; color: var(--texto); margin: 0 0 8px; }
+  .paradaDuas { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; align-items: start; }
+  .paradaDuas .passoP { display: grid; grid-template-columns: 30px 1fr; gap: 10px; font-size: 16px; line-height: 1.45; color: var(--texto); margin: 8px 0; }
+  .paradaDuas .passoP b { color: var(--azul); font-weight: 700; }
+  .paradaDuas .passoP em { font-style: normal; font-weight: 700; color: var(--marinho); }
+  .paradaDuas .txtP { font-size: 16px; line-height: 1.5; color: var(--texto); margin: 10px 0 0; }
+  .paradaDuas .txtP b { color: var(--marinho); }
 </style>
 <script src="/vendor/three.min.js"></script>
 </head>
@@ -335,6 +378,183 @@
             <path d="M550 295 H592 V390 H632" marker-end="url(#seta6)"/>
             <path d="M1130 152 H1154 V250 H1172" marker-end="url(#seta6)"/>
             <path d="M1130 390 H1154 V280 H1172" marker-end="url(#seta6)"/>
+          </g>
+          <text x="571" y="226" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1">SIM</text>
+          <text x="571" y="316" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1">NÃO</text>
+        </svg>
+
+        <div class="fx fxPasso" style="left:0;top:0;width:250px"><b>1</b>Ativar</div>
+        <div class="fx fxPasso" style="left:300px;top:0;width:830px"><b>2</b>Reconhecer</div>
+        <div class="fx fxPasso" style="left:1180px;top:0;width:244px"><b>3</b>Executar</div>
+
+        <div class="fx fxBox fxEsc" style="left:0;top:150px;width:250px;height:230px">
+          <h3>Sinal de OK</h3>
+          <p>Abre a janela em que os gestos valem.</p>
+        </div>
+
+        <div class="fx fxBox fxPerg" style="left:300px;top:170px;width:250px;height:190px">
+          <p class="rot">A pergunta</p>
+          <h3>A mão está parada e mostrando de 1 a 4 dedos?</h3>
+          <p class="peq">conferida a cada 0,15 s</p>
+        </div>
+
+        <div class="fx fxBox fxCam" style="left:640px;top:54px;width:490px;height:196px">
+          <span class="tag">Números</span><h3>Contagem de dedos</h3>
+          <p>O MediaPipe marca 21 pontos da mão; uma regra de geometria conta os dedos esticados. Sem rede neural.</p>
+          <p class="regra">Vale se o número for o mesmo em 5 de 6 quadros.</p>
+        </div>
+        <div class="fx fxBox fxCam" style="left:640px;top:292px;width:490px;height:196px">
+          <span class="tag">Movimentos</span><h3>CNN 3D</h3>
+          <p>Rede neural que lê o vídeo e reconhece o movimento da mão.</p>
+          <p class="regra">Vale se o mesmo gesto tiver nota ≥ 70% em 3 análises seguidas.</p>
+        </div>
+
+        <div class="fx fxBox fxCmd" style="left:1180px;top:195px;width:244px;height:140px">
+          <h3>Comando</h3>
+          <p>na central do carro, com resposta por voz</p>
+        </div>
+
+        <div class="fx fxBase" style="left:0;top:522px;width:1250px"><b>Quem decide.</b> As duas partes analisam a câmera ao mesmo tempo. Com a mão parada e um número à mostra, vale a contagem de dedos; em todo o resto, a CNN 3D.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6b. A pergunta, parte dos dedos: a caixa da pergunta do slide 6 cresce e fica à esquerda (transição em morphPergunta) -->
+  <section class="slide" data-titulo="A pergunta · dedos" data-fonte="Fonte: src/pontos_mao.py (contar_dedos, LIMIARES) · teste misto, MediaPipe por base (pessoas fora do treino)">
+    <div class="cab an"><h2>A pergunta: está mostrando de 1 a 4 dedos?</h2><p class="sub">Uma regra de geometria sobre os 21 pontos da mão conta os dedos esticados. Dobrem os dedos e vejam a contagem mudar</p></div>
+    <div class="pergLado">
+      <div class="pergCol">
+        <div class="fxPerg pergZoom">
+          <p class="rot">A pergunta</p>
+          <h3><span class="parte">A mão está parada</span> e <span class="parte foco">mostrando de 1 a 4 dedos</span>?</h3>
+          <p class="peq">conferida a cada 0,15 s</p>
+        </div>
+        <div class="regrasMao an" style="--d:2">
+          <p class="tituloBloco" style="margin-bottom:10px">A regra, em resumo</p>
+          <div class="rg"><b>Regra 1 · Dedo reto</b><span>linha reta da base à ponta ÷ comprimento do dedo <em>≥ 0,85</em></span></div>
+          <div class="rg"><b>Regra 2 · Direção</b><span>ângulo entre o dedo e a direção da palma <em>≤ 65°</em>; as duas regras valem juntas</span></div>
+          <div class="rg"><b>Polegar · regra própria</b><span>reto <em>≥ 0,95</em> e afastado: ponta a <em>≥ 1,20</em> largura de palma da base do mínimo</span></div>
+          <p class="origem"><b>De onde vieram os limiares:</b> valores iniciais escolhidos à mão (0,80 · 60° · 0,85 · 1,20), depois ajustados em metade da amostra do HaGRID e medidos na outra metade.</p>
+        </div>
+      </div>
+      <div class="an" style="--d:1">
+        <div class="maoTopo">
+          <div>
+            <canvas id="cvMaoP" width="430" height="340"></canvas>
+            <p class="legendaMao">Arrastem para girar. Pontas escuras: dedos que a regra conta como esticados.</p>
+          </div>
+          <div>
+            <div class="controles" id="presetsMaoP"></div>
+            <table class="tabela tabMao" id="tabMaoP"></table>
+            <div class="veredMao" id="veredMaoP"></div>
+          </div>
+        </div>
+        <div class="barrasMp">
+          <div>
+            <div class="b"><span>DriverMHG</span><div class="tr"><i style="--w:100%"></i></div><b>100,0%</b></div>
+            <div class="b"><span>HaGRID (fotos)</span><div class="tr"><i style="--w:98%"></i></div><b>98,0%</b></div>
+            <div class="b"><span>IPN Hand</span><div class="tr"><i style="--w:86.8%"></i></div><b>86,8%</b></div>
+            <div class="b"><span>Slovo</span><div class="tr"><i style="--w:39%"></i></div><b>39,0%</b></div>
+            <div class="b"><span>Jester</span><div class="tr"><i style="--w:35%"></i></div><b>35,0%</b></div>
+          </div>
+          <div class="txt">
+            <h3>Onde o MediaPipe falha</h3>
+            <p>Amostras do teste misto em que ele achou a mão em pelo menos 70% dos quadros.</p>
+            <p>No Jester a mão é pequena e borra quando anda. Por isso os pontos ficam com os números (mão parada) e a CNN 3D com os movimentos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6c. A pergunta, parte da mão parada: a caixa fica no mesmo lugar; muda só o conteúdo ao lado -->
+  <section class="slide" data-titulo="A pergunta · mão parada" data-fonte="Fonte: demo/player.py (Pontos.mao_parada, Pontos.contagem_estavel)">
+    <div class="cab an"><h2>A pergunta: a mão está parada?</h2><p class="sub">Meio segundo de quadros e uma régua que cresce e diminui junto com a mão: a palma</p></div>
+    <div class="pergLado">
+      <div class="pergCol">
+        <div class="fxPerg pergZoom">
+          <p class="rot">A pergunta</p>
+          <h3><span class="parte foco">A mão está parada</span> e <span class="parte">mostrando de 1 a 4 dedos</span>?</h3>
+          <p class="peq">conferida a cada 0,15 s</p>
+        </div>
+        <div class="regrasMao an" style="--d:3">
+          <div class="rg"><b>Depois: contagem estável</b><span>a mesma contagem de 1 a 4 dedos em <em>5 dos 6</em> quadros. Aí o número vale, sem porcentagem: a repetição é a confirmação.</span></div>
+        </div>
+      </div>
+      <div class="paradaDuas">
+        <div class="an" style="--d:1">
+          <p class="tituloBloco">A regra da mão parada</p>
+          <svg viewBox="0 0 533 264" width="533" height="264" role="img" aria-label="Seis quadros, a mão em cinco deles, e o pulso dentro de um círculo de meia palma">
+            <g font-family="Segoe UI, system-ui, sans-serif">
+              <text x="0" y="13" font-size="13" font-weight="700" fill="#1e4fbf" letter-spacing="1">6 QUADROS = 0,5 S (12 POR SEGUNDO)</text>
+              <g stroke="#d6dce4" fill="#f4f6f9">
+                <rect x="0" y="24" width="76" height="56"/><rect x="88" y="24" width="76" height="56"/><rect x="176" y="24" width="76" height="56"/>
+                <rect x="264" y="24" width="76" height="56"/><rect x="352" y="24" width="76" height="56"/><rect x="440" y="24" width="76" height="56" stroke="#0a1f44" stroke-width="2"/>
+              </g>
+              <g fill="#0a1f44"><circle cx="34" cy="55" r="5"/><circle cx="129" cy="50" r="5"/><circle cx="302" cy="54" r="5"/><circle cx="392" cy="51" r="5"/><circle cx="478" cy="52" r="6"/></g>
+              <text x="214" y="57" text-anchor="middle" font-size="13" fill="#7b8594">sem mão</text>
+              <g font-size="12.5" fill="#7b8594" text-anchor="middle"><text x="38" y="97">quadro 1</text><text x="126" y="97">2</text><text x="214" y="97">3</text><text x="302" y="97">4</text><text x="390" y="97">5</text><text x="478" y="97" fill="#0a1f44" font-weight="700">agora</text></g>
+              <circle cx="96" cy="182" r="56" fill="#eaf1fb" stroke="#1e4fbf" stroke-width="2" stroke-dasharray="6 5"/>
+              <path d="M96 182 H152" stroke="#1e4fbf" stroke-width="1.5"/>
+              <text x="96" y="258" text-anchor="middle" font-size="13" font-weight="700" fill="#1e4fbf">raio = 0,5 palma</text>
+              <g fill="#9db9ea"><circle cx="78" cy="196" r="5"/><circle cx="87" cy="164" r="5"/><circle cx="110" cy="200" r="5"/><circle cx="101" cy="168" r="5"/></g>
+              <circle cx="96" cy="182" r="6.5" fill="#0a1f44"/>
+              <g font-size="15" fill="#364152"><text x="180" y="156">Pulso nos quadros com mão (azul claro):</text><text x="180" y="178">todos a no máximo 0,5 palma da</text><text x="180" y="200">posição de agora (azul-escuro).</text>
+              <text x="180" y="228" font-weight="700" fill="#0a1f44">Resultado: mão parada.</text></g>
+            </g>
+          </svg>
+          <div class="passoP"><b>1</b><span>Olha os <em>últimos 6 quadros</em> (meio segundo).</span></div>
+          <div class="passoP"><b>2</b><span>A mão tem que aparecer em <em>pelo menos 5</em> deles.</span></div>
+          <div class="passoP"><b>3</b><span>O pulso não pode ter andado mais que <em>0,5 palma</em>.</span></div>
+        </div>
+        <div class="an" style="--d:2">
+          <p class="tituloBloco">Por que medir em palmas, e não em pixels</p>
+          <svg viewBox="0 0 533 345" width="533" height="345" role="img" aria-label="O mesmo movimento da mão perto e longe da câmera: em pixels muda, em palmas é igual">
+            <defs><path id="maoPalmas" d="M94 188 L64 173 L44 153 L32 133 L22 115 M94 188 L76 133 L72 103 L70 83 L68 65 M94 188 L94 129 L94 95 L94 73 L94 53 M94 188 L111 133 L115 103 L117 83 L119 67 M94 188 L126 143 L134 121 L139 105 L143 91 M76 133 L94 129 L111 133 L126 143" vector-effect="non-scaling-stroke"/></defs>
+            <g font-family="Segoe UI, system-ui, sans-serif">
+              <text x="160" y="20" text-anchor="middle" font-size="15" font-weight="700" fill="#0a1f44">Perto da câmera</text>
+              <text x="418" y="138" text-anchor="middle" font-size="15" font-weight="700" fill="#0a1f44">Longe da câmera</text>
+              <!-- antes (claro) e agora (escuro): o pulso andou 0,3 palma nos dois casos -->
+              <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <use href="#maoPalmas" transform="translate(12,-50.8) scale(1.6)" stroke="#d6dce4" stroke-width="2.2"/>
+                <use href="#maoPalmas" transform="translate(40,-50.8) scale(1.6)" stroke="#9db9ea" stroke-width="2.6"/>
+                <use href="#maoPalmas" transform="translate(340.2,118.4) scale(0.7)" stroke="#d6dce4" stroke-width="2"/>
+                <use href="#maoPalmas" transform="translate(352.2,118.4) scale(0.7)" stroke="#9db9ea" stroke-width="2.2"/>
+                <path d="M190.4 250 V155.6 M418 250 V208.7" stroke="#1e4fbf" stroke-width="5"/>
+              </g>
+              <g fill="#0a1f44"><circle cx="190.4" cy="250" r="5"/><circle cx="418" cy="250" r="3.5"/></g>
+              <g fill="#9db9ea"><circle cx="162.4" cy="250" r="4.5"/><circle cx="406" cy="250" r="3"/></g>
+              <g stroke="#0a1f44" stroke-width="1.6" fill="#0a1f44">
+                <path d="M162.4 268 H186" /><path d="M190.4 268 l-7 -4 v8 z" stroke="none"/>
+                <path d="M406 268 H414" /><path d="M418 268 l-6 -3.5 v7 z" stroke="none"/>
+              </g>
+              <g font-size="14" fill="#364152" text-anchor="middle">
+                <text x="176" y="290">pulso andou 28 px</text><text x="176" y="308">÷ palma de 94 px = <tspan font-weight="700" fill="#1e4fbf">0,3 palma</tspan></text>
+                <text x="412" y="290">pulso andou 12 px</text><text x="412" y="308">÷ palma de 41 px = <tspan font-weight="700" fill="#1e4fbf">0,3 palma</tspan></text>
+              </g>
+              <path d="M20 333 H52" stroke="#1e4fbf" stroke-width="5"/>
+              <text x="62" y="338" font-size="13.5" fill="#364152">1 palma = do pulso à base do dedo médio (claro: antes · escuro: agora)</text>
+            </g>
+          </svg>
+          <p class="txtP">Perto da câmera a mão é grande; longe, é pequena. <b>Em pixels, o mesmo movimento muda com a distância; em palmas, não.</b> Por isso a regra de 0,5 palma vale com a mão perto ou longe.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6d. Como funciona, de novo: a caixa da pergunta volta para o fluxo (morphPergunta) -->
+  <section class="slide" data-titulo="Como funciona">
+    <div class="cab an"><h2>Como funciona</h2><p class="sub">Três passos: ativar, reconhecer e executar. Uma pergunta decide quem reconhece o gesto</p></div>
+    <div class="corpo an" style="--d:1">
+      <div class="fluxo">
+        <svg viewBox="0 0 1424 590" aria-hidden="true">
+          <defs><marker id="seta6b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0a1f44"/></marker></defs>
+          <g fill="none" stroke="#0a1f44" stroke-width="2">
+            <path d="M250 265 H292" marker-end="url(#seta6b)"/>
+            <path d="M550 235 H592 V152 H632" marker-end="url(#seta6b)"/>
+            <path d="M550 295 H592 V390 H632" marker-end="url(#seta6b)"/>
+            <path d="M1130 152 H1154 V250 H1172" marker-end="url(#seta6b)"/>
+            <path d="M1130 390 H1154 V280 H1172" marker-end="url(#seta6b)"/>
           </g>
           <text x="571" y="226" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1">SIM</text>
           <text x="571" y="316" text-anchor="middle" font-size="14" font-weight="700" fill="#1e4fbf" letter-spacing="1">NÃO</text>
@@ -2373,9 +2593,128 @@ function morphOk(destino) {
   setTimeout(() => mostrar(destino), 180);
   setTimeout(() => { faixa.style.visibility = ""; linha.style.visibility = ""; copia.remove(); animandoZoom = false; }, 900);
 }
+// ---------- Slides 7 e 8 (A pergunta) ----------
+// Mão 3D do ESTUDO_TECNICO.html: as contas (reta, ângulo, polegar) e os limiares são os de src/pontos_mao.py.
+(function () {
+  const cv = document.getElementById("cvMaoP");
+  if (!cv) return;
+  const c = cv.getContext("2d"), r = { x: -0.15, y: 0.5 }, NV = "#0a1f44";
+  const NOM = ["Polegar", "Indicador", "Médio", "Anelar", "Mínimo"], curl = [1, 0, 0, 1, 1];
+  const LIM = { reta: 0.85, ang: 65, pr: 0.95, pf: 1.20 };
+  const MCP = [null, [-2.2, 8.5, 0], [0, 9, 0], [1.9, 8.5, 0], [3.6, 7.5, 0]], SEG = [null, [4, 2.5, 2], [4.5, 2.8, 2.1], [4.1, 2.6, 2], [3.2, 1.9, 1.8]], DX = [0, -0.08, 0, 0.06, 0.14];
+  const num = v => v.toFixed(2).replace(".", ",");
+  const nrm = v => { const n = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / n, v[1] / n, v[2] / n]; };
+  const mix = (a, b, t) => nrm([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]);
+  const soma = (a, b, k) => [a[0] + b[0] * k, a[1] + b[1] * k, a[2] + b[2] * k];
+  const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  const angulo = (u, v) => { const d = (u[0] * v[0] + u[1] * v[1] + u[2] * v[2]) / (Math.hypot(u[0], u[1], u[2]) * Math.hypot(v[0], v[1], v[2]) || 1); return Math.acos(Math.max(-1, Math.min(1, d))) * 180 / Math.PI; };
+  function proj(p, w, h, esc, d) {
+    const cy = Math.cos(r.y), sy = Math.sin(r.y), cx = Math.cos(r.x), sx = Math.sin(r.x);
+    const x = p[0] * cy + p[2] * sy; let z = -p[0] * sy + p[2] * cy; const y = p[1] * cx - z * sx; z = p[1] * sx + z * cx;
+    const f = d / (d + z); return [w / 2 + x * f * esc, h / 2 - y * f * esc, z];
+  }
+  function pontos() {
+    const P = [[0, 0, 0]], t = curl[0];
+    const p1 = [-2.0, 1.8, 0.6], p2 = soma(p1, mix([-0.75, 0.66, 0], [-0.2, 0.9, 0.4], t), 3.2), p3 = soma(p2, mix([-0.6, 0.8, 0], [0.85, 0.35, 0.4], t), 3), p4 = soma(p3, mix([-0.6, 0.8, 0], [0.5, -0.8, 0.3], t), 2.4);
+    P.push(p1, p2, p3, p4);
+    for (let f = 1; f < 5; f++) {
+      const d = nrm([DX[f], 1, 0]), fl = [90, 100, 70]; let a = 0, p = MCP[f]; P.push(p);
+      for (let s = 0; s < 3; s++) { a += curl[f] * fl[s] * Math.PI / 180; p = soma(p, [d[0] * Math.cos(a), d[1] * Math.cos(a), Math.sin(a)], SEG[f][s]); P.push(p); }
+    }
+    return P;
+  }
+  function medir(P) {
+    const m = [];
+    m[0] = { reta: dist(P[2], P[4]) / (dist(P[2], P[3]) + dist(P[3], P[4])), fora: dist(P[4], P[17]) / dist(P[5], P[17]) }; m[0].ok = m[0].reta >= LIM.pr && m[0].fora >= LIM.pf;
+    for (let f = 1; f < 5; f++) {
+      const b = 1 + f * 4, comp = dist(P[b], P[b + 1]) + dist(P[b + 1], P[b + 2]) + dist(P[b + 2], P[b + 3]);
+      m[f] = { reta: dist(P[b], P[b + 3]) / comp, ang: angulo(sub(P[b], P[0]), sub(P[b + 3], P[b])) }; m[f].ok = m[f].reta >= LIM.reta && m[f].ang <= LIM.ang;
+    }
+    return m;
+  }
+  const LIG = [[0, 1], [1, 2], [2, 3], [3, 4], [0, 5], [5, 6], [6, 7], [7, 8], [5, 9], [9, 10], [10, 11], [11, 12], [9, 13], [13, 14], [14, 15], [15, 16], [13, 17], [17, 18], [18, 19], [19, 20], [0, 17]];
+  const tab = document.getElementById("tabMaoP"), ver = document.getElementById("veredMaoP"), linhas = [];
+  tab.innerHTML = "<tr><th>Dedo</th><th style=\"text-align:left\">Dobrar</th><th style=\"text-align:left\">Esticado?</th><th>Reta</th><th>Ângulo / afastamento</th></tr>";
+  NOM.forEach((nm, f) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${nm}</td><td style="text-align:left"><input type="range" min="0" max="100" aria-label="Dobrar ${nm}"></td><td class="est" style="text-align:left"></td><td></td><td></td>`;
+    const i = tr.querySelector("input"); i.value = curl[f] * 100;
+    i.oninput = () => { curl[f] = i.value / 100; des(); };
+    tab.appendChild(tr); linhas.push(tr);
+  });
+  function des() {
+    const P = pontos(), m = medir(P);
+    c.clearRect(0, 0, cv.width, cv.height);
+    const Q = P.map(p => proj([p[0] + 1.5, p[1] - 9.3, p[2] - 1], cv.width, cv.height, 17.5, 60));
+    c.lineCap = "round"; c.strokeStyle = "#3d74d6"; c.lineWidth = 5;
+    LIG.forEach(l => { c.beginPath(); c.moveTo(Q[l[0]][0], Q[l[0]][1]); c.lineTo(Q[l[1]][0], Q[l[1]][1]); c.stroke(); });
+    Q.forEach((q, i) => {
+      const ponta = i > 0 && i % 4 === 0, f = Math.floor((i - 1) / 4), ok = ponta && m[f].ok;
+      c.beginPath(); c.arc(q[0], q[1], ok ? 9 : 5, 0, 7); c.fillStyle = ok ? NV : "#fff"; c.fill(); c.strokeStyle = NV; c.lineWidth = 1.5; c.stroke();
+    });
+    c.fillStyle = "#5c6675"; c.font = "12px Segoe UI, Arial"; c.fillText("pulso (ponto 0)", Q[0][0] + 10, Q[0][1] + 4);
+    m.forEach((x, f) => {
+      const td = linhas[f].children;
+      td[2].innerHTML = x.ok ? "<b>sim</b>" : "não";
+      td[3].textContent = num(x.reta) + (f ? " (≥ 0,85)" : " (≥ 0,95)");
+      td[4].textContent = f ? Math.round(x.ang) + "° (≤ 65°)" : num(x.fora) + " (≥ 1,20)";
+    });
+    const n = m.filter(x => x.ok).length, nomes = ["", "um dedo", "dois dedos", "três dedos", "quatro dedos"];
+    ver.className = "veredMao";
+    if (n === 1 && m[0].ok) ver.textContent = "Só o polegar: não é número. É o joinha, que fica com a CNN 3D.";
+    else if (n === 0) ver.textContent = "Nenhum dedo esticado (punho): não é número.";
+    else if (n === 5) ver.textContent = "Cinco dedos: não é número. É a mão aberta, que fica com a CNN 3D (sinal de pare).";
+    else if (n === 3) ver.textContent = "Contagem: três dedos. A regra reconhece, mas no carro três dedos não tem comando.";
+    else { ver.className = "veredMao sim"; ver.textContent = `Contagem: ${nomes[n]}. É número. No carro: ${({ 1: "abre Música", 2: "abre Ar-condicionado", 4: "abre Telefone" })[n]}.`; }
+  }
+  const pre = document.getElementById("presetsMaoP");
+  [["Um dedo", [1, 0, 1, 1, 1]], ["Dois dedos", [1, 0, 0, 1, 1]], ["Três dedos", [1, 0, 0, 0, 1]], ["Quatro dedos", [1, 0, 0, 0, 0]],
+   ["Mão aberta", [0, 0, 0, 0, 0]], ["Punho", [1, 1, 1, 1, 1]], ["Joinha", [0, 1, 1, 1, 1]], ["Meio dobrado", [1, 0.42, 0.42, 1, 1]]].forEach(([nome, v]) => {
+    const b = document.createElement("button"); b.textContent = nome;
+    // Depois do clique o foco sai do botão: as setas e o espaço continuam trocando o slide.
+    b.onclick = () => { v.forEach((x, f) => { curl[f] = x; linhas[f].querySelector("input").value = x * 100; }); des(); b.blur(); };
+    pre.appendChild(b);
+  });
+  tab.addEventListener("change", e => { if (e.target.blur) e.target.blur(); });
+  let on = false, lx, ly;
+  cv.addEventListener("pointerdown", e => { on = true; lx = e.clientX; ly = e.clientY; cv.setPointerCapture(e.pointerId); });
+  cv.addEventListener("pointermove", e => {
+    if (!on) return;
+    r.y += (e.clientX - lx) * 0.01; r.x += (e.clientY - ly) * 0.01; r.x = Math.max(-1.4, Math.min(1.4, r.x)); lx = e.clientX; ly = e.clientY; des();
+  });
+  cv.addEventListener("pointerup", () => { on = false; }); cv.addEventListener("pointercancel", () => { on = false; });
+  des();
+})();
+// A caixa "A pergunta" do fluxo (slide 6) cresce e vai para a esquerda do slide 7; entre o 7 e o 8 ela fica parada no lugar.
+// Uma cópia da caixa grande (tamanhos em em) anda do lugar e do tamanho de uma caixa até a outra, enquanto os slides trocam.
+const SLIDES_PERGUNTA = ["Como funciona", "A pergunta · dedos", "A pergunta · mão parada"];
+function caixaPergunta(s) { return s.querySelector(".pergZoom") || s.querySelector(".fxPerg"); }
+function morphPergunta(destino) {
+  const palco = $("palco"), de = caixaPergunta(slides[atual]), para = caixaPergunta(slides[destino]);
+  const modelo = slides[destino].querySelector(".pergZoom") || slides[atual].querySelector(".pergZoom");
+  if (!de || !para || !modelo) return mostrar(destino);
+  const rp = palco.getBoundingClientRect(), e = rp.width / 1600;
+  const loc = x => { const r = x.getBoundingClientRect(); return { x: (r.left - rp.left) / e, y: (r.top - rp.top) / e, w: r.width / e, h: r.height / e }; };
+  const a = loc(de), b = loc(para);
+  if (!a.w || !b.w) return mostrar(destino);
+  const fonte = x => x.classList.contains("pergZoom") ? 20 : 16;   // 16 px reproduz os tamanhos da caixa do slide 6
+  animandoZoom = true;
+  const copia = modelo.cloneNode(true);
+  Object.assign(copia.style, { position: "absolute", left: a.x + "px", top: a.y + "px", width: a.w + "px", height: a.h + "px", fontSize: fonte(de) + "px", margin: "0", zIndex: "4" });
+  palco.appendChild(copia);
+  de.style.visibility = "hidden"; para.style.visibility = "hidden";
+  copia.getBoundingClientRect();   // fixa o estado inicial antes de animar
+  copia.style.transition = ["left", "top", "width", "height", "font-size"].map(p => p + " .8s cubic-bezier(.6,0,.2,1)").join(", ");
+  Object.assign(copia.style, { left: b.x + "px", top: b.y + "px", width: b.w + "px", height: b.h + "px", fontSize: fonte(para) + "px" });
+  setTimeout(() => mostrar(destino), 180);
+  setTimeout(() => { de.style.visibility = ""; para.style.visibility = ""; copia.remove(); animandoZoom = false; }, 850);
+}
 function ir(passo) {
   if (animandoZoom || atual + passo < 0 || atual + passo >= slides.length) return;
   const destino = atual + passo;
+  if (SLIDES_PERGUNTA.includes(slides[atual].dataset.titulo) && SLIDES_PERGUNTA.includes(slides[destino].dataset.titulo))
+    return morphPergunta(destino);
   if (passo === 1 && slides[atual].dataset.titulo === "Os gestos" && slides[destino].dataset.titulo === "A ativação" && $("blocoOk"))
     return morphOk(destino);
   mostrar(destino);
