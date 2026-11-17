@@ -237,9 +237,8 @@
   #mini3d div { font-size: 10.5px; font-weight: 600; padding: 4px 8px; background: #fff; color: var(--tinta); white-space: nowrap; }
   #mini3d.oculto { opacity: 0; pointer-events: none; }
 
-  .logoCapa { position: absolute; right: 120px; top: 64px; height: 170px; z-index: 2; }
-  #logoCab { position: absolute; right: 80px; top: 34px; height: 66px; z-index: 5; pointer-events: none; }
-  .slide.demo ~ #logoCab { }
+  /* Logo padronizado: mesmo tamanho e mesma posição em todos os slides, inclusive capa e encerramento. */
+  #logoCab { position: absolute; right: 30px; top: 22px; height: 52px; width: auto; z-index: 7; pointer-events: none; }
 
 </style>
 <script src="/vendor/three.min.js"></script>
@@ -255,7 +254,6 @@
       <path d="M760 210 C 600 280, 520 400, 600 540 S 740 800, 690 900" fill="none" stroke="#9db9ea" stroke-width="1" opacity=".35"/>
       <path d="M760 0 C 470 60, 330 260, 430 450 S 640 760, 470 900" fill="none" stroke="#1e4fbf" stroke-width="1" opacity=".3"/>
     </svg>
-    <img class="logoCapa an" src="/demo/logo_insper_ai_branco.png" alt="Insper AI">
     <p class="topoCapa an">Deep Learning · Insper AI · 2026 · Entrega final</p>
     <h1 class="an" style="--d:1">Gestos ao volante</h1>
     <div class="linhaCapa an" style="--d:2"></div>
@@ -449,7 +447,7 @@
     <div class="cab an"><h2>Resultados</h2><p class="sub">O modelo final, testado com pessoas que não estavam no treino</p></div>
     <div class="corpo">
       <div class="duas" style="grid-template-columns:820px 1fr;gap:56px;align-items:center">
-        <div class="an" style="--d:1"><p class="tituloBloco">Acerto em cada gesto do carro</p><svg viewBox="0 0 820 532" width="820" height="532" role="img" aria-label="Acerto do modelo final em cada gesto do carro"><text x="0" y="26" font-size="13.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">NÚMEROS · CONTAGEM DE DEDOS</text><text x="0" y="59" font-size="18.5" fill="#364152">Um dedo</text><rect x="270" y="40" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="40" width="330.0" height="26" fill="#0a1f44"/><text x="726" y="60" font-size="20" font-weight="600" fill="#0a1f44">75%</text><text x="0" y="99" font-size="18.5" fill="#364152">Dois dedos</text><rect x="270" y="80" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="80" width="358.6" height="26" fill="#0a1f44"/><text x="726" y="100" font-size="20" font-weight="600" fill="#0a1f44">82%</text><text x="0" y="139" font-size="18.5" fill="#364152">Quatro dedos</text><rect x="270" y="120" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="120" width="426.8" height="26" fill="#0a1f44"/><text x="726" y="140" font-size="20" font-weight="600" fill="#0a1f44">97%</text><text x="0" y="192" font-size="13.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">MOVIMENTOS · CNN 3D</text><text x="0" y="225" font-size="18.5" fill="#364152">Deslizar para a direita</text><rect x="270" y="206" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="206" width="382.8" height="26" fill="#3d74d6"/><text x="726" y="226" font-size="20" font-weight="600" fill="#0a1f44">87%</text><text x="0" y="265" font-size="18.5" fill="#364152">Deslizar para a esquerda</text><rect x="270" y="246" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="246" width="396.0" height="26" fill="#3d74d6"/><text x="726" y="266" font-size="20" font-weight="600" fill="#0a1f44">90%</text><text x="0" y="305" font-size="18.5" fill="#364152">Polegar para cima</text><rect x="270" y="286" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="286" width="418.0" height="26" fill="#3d74d6"/><text x="726" y="306" font-size="20" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="345" font-size="18.5" fill="#364152">Polegar para baixo</text><rect x="270" y="326" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="326" width="431.2" height="26" fill="#3d74d6"/><text x="726" y="346" font-size="20" font-weight="600" fill="#0a1f44">98%</text><text x="0" y="385" font-size="18.5" fill="#364152">Sinal de pare</text><rect x="270" y="366" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="366" width="369.6" height="26" fill="#3d74d6"/><text x="726" y="386" font-size="20" font-weight="600" fill="#0a1f44">84%</text><text x="0" y="425" font-size="18.5" fill="#364152">Empurrar a mão</text><rect x="270" y="406" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="406" width="418.0" height="26" fill="#3d74d6"/><text x="726" y="426" font-size="20" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="465" font-size="18.5" fill="#364152">Tamborilar os dedos</text><rect x="270" y="446" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="446" width="404.8" height="26" fill="#3d74d6"/><text x="726" y="466" font-size="20" font-weight="600" fill="#0a1f44">92%</text><text x="0" y="505" font-size="18.5" fill="#364152">Puxar a mão</text><rect x="270" y="486" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="486" width="391.6" height="26" fill="#3d74d6"/><text x="726" y="506" font-size="20" font-weight="600" fill="#0a1f44">89%</text><line x1="270" x2="270" y1="30" y2="520" stroke="#d6dce4"/></svg></div>
+        <div class="an" style="--d:1"><p class="tituloBloco">Acerto em cada gesto do carro</p><svg viewBox="0 0 820 532" width="820" height="532" role="img" aria-label="Acerto do modelo final em cada gesto do carro"><text x="0" y="26" font-size="13.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">NÚMEROS · CONTAGEM DE DEDOS</text><text x="0" y="59" font-size="18.5" fill="#364152">Quatro dedos</text><rect x="270" y="40" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="40" width="426.8" height="26" fill="#0a1f44"/><text x="726" y="60" font-size="20" font-weight="600" fill="#0a1f44">97%</text><text x="0" y="99" font-size="18.5" fill="#364152">Dois dedos</text><rect x="270" y="80" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="80" width="358.6" height="26" fill="#0a1f44"/><text x="726" y="100" font-size="20" font-weight="600" fill="#0a1f44">82%</text><text x="0" y="139" font-size="18.5" fill="#364152">Um dedo</text><rect x="270" y="120" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="120" width="330.0" height="26" fill="#0a1f44"/><text x="726" y="140" font-size="20" font-weight="600" fill="#0a1f44">75%</text><text x="0" y="192" font-size="13.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">MOVIMENTOS · CNN 3D</text><text x="0" y="225" font-size="18.5" fill="#364152">Polegar para baixo</text><rect x="270" y="206" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="206" width="431.2" height="26" fill="#3d74d6"/><text x="726" y="226" font-size="20" font-weight="600" fill="#0a1f44">98%</text><text x="0" y="265" font-size="18.5" fill="#364152">Polegar para cima</text><rect x="270" y="246" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="246" width="418.0" height="26" fill="#3d74d6"/><text x="726" y="266" font-size="20" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="305" font-size="18.5" fill="#364152">Empurrar a mão</text><rect x="270" y="286" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="286" width="418.0" height="26" fill="#3d74d6"/><text x="726" y="306" font-size="20" font-weight="600" fill="#0a1f44">95%</text><text x="0" y="345" font-size="18.5" fill="#364152">Tamborilar os dedos</text><rect x="270" y="326" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="326" width="404.8" height="26" fill="#3d74d6"/><text x="726" y="346" font-size="20" font-weight="600" fill="#0a1f44">92%</text><text x="0" y="385" font-size="18.5" fill="#364152">Deslizar para a esquerda</text><rect x="270" y="366" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="366" width="396.0" height="26" fill="#3d74d6"/><text x="726" y="386" font-size="20" font-weight="600" fill="#0a1f44">90%</text><text x="0" y="425" font-size="18.5" fill="#364152">Puxar a mão</text><rect x="270" y="406" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="406" width="391.6" height="26" fill="#3d74d6"/><text x="726" y="426" font-size="20" font-weight="600" fill="#0a1f44">89%</text><text x="0" y="465" font-size="18.5" fill="#364152">Deslizar para a direita</text><rect x="270" y="446" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="446" width="382.8" height="26" fill="#3d74d6"/><text x="726" y="466" font-size="20" font-weight="600" fill="#0a1f44">87%</text><text x="0" y="505" font-size="18.5" fill="#364152">Sinal de pare</text><rect x="270" y="486" width="440" height="26" fill="#eef2f7"/><rect class="barraH" x="270" y="486" width="369.6" height="26" fill="#3d74d6"/><text x="726" y="506" font-size="20" font-weight="600" fill="#0a1f44">84%</text><line x1="270" x2="270" y1="30" y2="520" stroke="#d6dce4"/></svg></div>
         <div class="kpis an" style="--d:2;gap:32px">
           <div class="kpi forte"><div class="v">87,7%<small>nos 11 gestos do carro</small></div><div class="r">em 1.300 clipes de teste, de três bases públicas.</div></div>
           <div class="kpi"><div class="v">91,2%<small>movimentos</small></div><div class="r">8 gestos, reconhecidos pela CNN 3D.</div></div>
@@ -473,9 +471,9 @@
           <text x="0" y="161" font-size="21" fill="#364152">Botões físicos</text>
           <rect class="barraH" x="210" y="126" width="296" height="54" fill="#3d74d6"/>
           <text x="524" y="162" font-size="26" font-weight="600" fill="#0a1f44">10 s · ≈ 300 m</text>
-          <text x="0" y="255" font-size="21" fill="#364152">Gesto</text>
+          <text x="0" y="256" font-size="24" font-weight="800" fill="#0a1f44">Gesto</text>
           <rect x="207" y="220" width="6" height="54" fill="#1e4fbf"/>
-          <text x="232" y="256" font-size="26" font-weight="600" fill="#1e4fbf">≈ 0 s</text>
+          <text x="232" y="262" font-size="44" font-weight="800" fill="#1e4fbf">≈ 0 s</text>
           <line x1="210" x2="210" y1="20" y2="286" stroke="#d6dce4"/>
         </svg>
       </div>
@@ -512,7 +510,6 @@
       <path d="M760 120 C 560 200, 470 350, 560 500 S 720 780, 620 900" fill="none" stroke="#3d74d6" stroke-width="1.5" opacity=".45"/>
       <path d="M760 210 C 600 280, 520 400, 600 540 S 740 800, 690 900" fill="none" stroke="#9db9ea" stroke-width="1" opacity=".35"/>
     </svg>
-    <img class="logoCapa an" style="height:130px;top:56px" src="/demo/logo_insper_ai_branco.png" alt="Insper AI">
     <h1 class="an">Obrigado</h1>
     <div class="linhaCapa an" style="--d:1;width:420px;height:2px;background:#fff;margin:30px 0 0"></div>
     <p class="sub2 an" style="--d:2">Perguntas</p>
@@ -2369,11 +2366,9 @@ function mostrar(n) {
   [...$("trilha").children].forEach(x => x.classList.toggle("atual", x.dataset.parte === NOMES_PARTES[n]));
   $("fonteRodape").textContent = s.dataset.fonte || "";
   $("rodape").classList.toggle("escuro", s.classList.contains("escuro"));
-  // Logo no canto do cabeçalho: colorido nos slides claros, branco nos escuros; a capa e o encerramento têm o logo grande.
+  // Logo no canto superior direito, igual em todos os slides: colorido nos claros, branco nos escuros.
   const logo = $("logoCab"), arquivo = s.classList.contains("escuro") ? "/demo/logo_insper_ai_branco.png" : "/demo/logo_insper_ai.png";
-  logo.style.display = s.id === "capa" || s.classList.contains("obrigado") ? "none" : "";
   if (logo.getAttribute("src") !== arquivo) logo.src = arquivo;
-  logo.style.height = s.classList.contains("demo") ? "52px" : ""; logo.style.top = s.classList.contains("demo") ? "26px" : "";
 }
 let animandoZoom = false;
 function morphOk(destino) {

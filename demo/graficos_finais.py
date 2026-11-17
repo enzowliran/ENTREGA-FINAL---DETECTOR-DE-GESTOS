@@ -34,6 +34,8 @@ def grafico_gestos(gc, traducao):
         y += 26
         out.append(f'<text x="0" y="{y}" font-size="13.5" font-weight="700" fill="#1e4fbf" letter-spacing="1.4">{html.escape(titulo.upper())}</text>')
         y += 14
+        # do maior acerto para o menor, dentro de cada grupo
+        classes = sorted(classes, key=lambda c: -(pg.get(c, {}).get("acerto_pct") or 0))
         for c in classes:
             v = pg.get(c, {}).get("acerto_pct")
             if v is None:

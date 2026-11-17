@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Gestos ao volante</title>
+<style>
+  @page { size: A4; margin: 22mm 20mm 22mm 20mm; }
+  :root { --tinta: #111; --cinza: #555; --linha: #999; }
+  html { background: #fff; }
+  body { font-family: "Times New Roman", Times, serif; font-size: 10.5pt; line-height: 1.38; color: var(--tinta); background: #fff; margin: 0 auto; max-width: 170mm; text-align: justify; hyphens: auto; }
+  h1 { font-size: 17pt; text-align: center; margin: 0 0 10pt; font-weight: bold; line-height: 1.2; }
+  .autores { text-align: center; margin-bottom: 4pt; font-size: 10.5pt; }
+  .autores span { display: inline-block; margin: 0 12pt; }
+  .afil { text-align: center; font-size: 9.5pt; color: var(--cinza); margin-bottom: 16pt; }
+  .resumo { margin: 0 9mm 14pt; font-size: 10pt; }
+  .resumo h2 { text-align: center; font-size: 11pt; margin: 0 0 4pt; }
+  .chaves { margin-top: 4pt; }
+  h2 { font-size: 11.5pt; margin: 14pt 0 5pt; break-after: avoid; }
+  h3 { font-size: 10.5pt; margin: 10pt 0 3pt; font-style: italic; font-weight: bold; break-after: avoid; }
+  p { margin: 0 0 6pt; }
+  ul, ol { margin: 0 0 6pt; }
+  table { border-collapse: collapse; margin: 6pt auto 3pt; font-size: 9pt; text-align: left; }
+  th, td { padding: 2.2pt 7pt; }
+  thead th { border-top: 1.2px solid #000; border-bottom: .7px solid #000; font-weight: bold; }
+  tbody tr:last-child td { border-bottom: 1.2px solid #000; }
+  td.n, th.n { text-align: right; }
+  tr.destaque td { font-weight: bold; }
+  .legenda { font-size: 9pt; text-align: center; margin: 3pt 6mm 10pt; }
+  .legenda b { font-weight: bold; }
+  figure { margin: 8pt 0 4pt; break-inside: avoid; }
+  .tab { break-inside: avoid; }
+  ol.refs { font-size: 9pt; padding-left: 18pt; text-align: left; }
+  ol.refs li { margin-bottom: 2pt; }
+  sup { font-size: 7pt; }
+</style>
+</head>
+<body>
+
+<h1>Gestos ao volante: CNN 3D treinada do zero e contagem de dedos<br>por pontos da mão para comandar a central do carro</h1>
+<div class="autores"><span>Enzo Liran</span><span>Isabela Giusti</span><span>Maria Luiza Xavier</span></div>
+<div class="afil">Insper · Deep Learning · Projeto final, novembro de 2026</div>
+
+<div class="resumo">
+<h2>Resumo</h2>
+<p>Ajustar a música ou o ar-condicionado numa tela de toque obriga o motorista a tirar os olhos da estrada. Propomos comandar a central do carro com gestos da mão, captados por uma câmera no painel. O sistema une dois reconhecedores. Uma CNN 3D, treinada do zero no Jester (118.562 vídeos), reconhece os gestos com movimento e chega a 92,6% de acerto nas 27 classes do teste. Uma regra geométrica sobre os 21 pontos da mão do MediaPipe conta os dedos quando a mão está parada. Um sinal de OK abre uma janela de 7 s, e só dentro dela os gestos valem. Nos 11 gestos usados no carro, em 1.300 clipes de pessoas fora do treino, o sistema acerta 87,7%: 91,2% nos movimentos e 82,0% nos números. A contagem de dedos sobe o acerto dos números de 58,4% para 82,0%. Em 31,5 min de vídeo real sem gestos, a CNN 3D não disparou nenhum comando do carro. Ao longo do projeto, os modelos com mais acerto nos dados (até 95,6%) não reconheceram os números na webcam. Por isso a escolha final foi decidida pelo uso real, não pela métrica offline.</p>
+<p class="chaves"><b>Palavras-chave:</b> reconhecimento de gestos, CNN 3D, pontos da mão, interface no carro, falsos disparos.</p>
+</div>
+
+<h2>1&nbsp;&nbsp;Introdução</h2>
+<p>Nos carros novos, os comandos físicos foram trocados por telas de toque. Cada ajuste exige olhar, mirar e tocar. Num teste a 110 km/h, tarefas simples levaram 10 s com botões físicos e até 30,4 s com tela de toque [3]. Mexer em telas ou aparelhos do carro multiplica por 4,6 o risco de acidente em condução real (SHRP2, segundo a NHTSA [2]), e só nos EUA a distração ao volante causou 3.275 mortes em 2023 [1]. A Euro NCAP passa a penalizar, a partir de 2026, carros que dependem da tela para funções básicas [5]. A voz é a alternativa mais comum, mas também aumenta o tempo de reação em simulador [4] e falha com ruído, em conversas e durante ligações.</p>
+<p>Este trabalho investiga se gestos da mão, vistos por uma câmera no painel, podem substituir a tela nos comandos frequentes. Um comando por gesto só é viável se quase nunca disparar sozinho. Por isso, além do acerto, medimos <b>falsos disparos por minuto</b> em vídeo contínuo. A disciplina exige treinar as redes do zero, sem pesos de terceiros. O detector de pontos da mão do MediaPipe [11] entra como ferramenta congelada, e nenhuma rede nossa parte de pesos pré-treinados externos.</p>
+<p>As contribuições são as seguintes.</p>
+<ol>
+<li>Uma comparação de seis arquiteturas de vídeo treinadas do zero no mesmo protocolo.</li>
+<li>Um sistema híbrido: CNN 3D para os movimentos e geometria dos pontos da mão para os números. Um critério simples de mão parada decide qual dos dois vale em cada momento.</li>
+<li>Uma avaliação em cinco bases públicas, sempre com pessoas fora do treino, e com falsos disparos medidos em vídeo real.</li>
+<li>Um registro de como as métricas offline e o uso na webcam divergiram, e de como isso guiou a escolha do modelo final.</li>
+</ol>
+
+<h2>2&nbsp;&nbsp;Trabalhos relacionados</h2>
+<p><b>Redes para vídeo.</b> As convoluções 3D tratam o tempo como mais uma dimensão da imagem e aprendem o movimento direto dos pixels [6]. Versões maiores, pré-treinadas em grandes bases, dominam o reconhecimento de ações [7], e a convolução (2+1)D separa o espaço do tempo para facilitar o treino [8]. A alternativa é resumir cada quadro com uma CNN 2D e modelar a sequência com uma rede recorrente, como a GRU [17], ou com atenção [18]. Comparamos as duas famílias no mesmo protocolo (Seção 6.1).</p>
+<p><b>Gestos no carro e em tempo real.</b> Molchanov et al. [9] reconhecem gestos dinâmicos de motoristas com uma CNN 3D recorrente. Köpüklü et al. [10] mostram que, em vídeo contínuo, o problema deixa de ser só classificar um clipe e passa a ser decidir quando um gesto começou, com um detector leve antes do classificador. Nosso gatilho e a ativação pelo sinal de OK respondem a essa mesma questão com regras simples.</p>
+<p><b>Pontos da mão.</b> O MediaPipe Hands [11] estima 21 pontos 3D da mão em tempo real, a partir de um detector de palma e de um modelo de pontos. Usamos esses pontos de duas formas: como entrada de uma GRU, que testamos e descartamos, e como base de uma regra geométrica, que ficou no sistema final.</p>
+
+<h2>3&nbsp;&nbsp;Dados</h2>
+<p>Usamos cinco bases (Tabela 1). A divisão é sempre por pessoa: quem está no teste nunca aparece no treino. O <b>teste misto</b> final reúne 3.642 amostras das cinco bases em 36 classes: as 27 do Jester, das quais duas são de rejeição ("sem gesto" e "outro movimento"), os números de 1 a 4 e cinco micro-gestos do volante do DriverMHG. Desse conjunto, 1.300 amostras são dos 11 gestos que viram comando no carro. Nenhuma imagem de pessoa das bases aparece neste texto, por exigência das licenças.</p>
+<div class="tab">
+<table>
+<thead><tr><th>Base</th><th>Tamanho</th><th>Uso</th><th class="n">Amostras no teste misto</th></tr></thead>
+<tbody>
+<tr><td>Jester [12]</td><td>148.092 vídeos, 27 classes, 12 qps</td><td>gestos com movimento</td><td class="n">2.700</td></tr>
+<tr><td>IPN Hand [13]</td><td>50 pessoas, vídeo contínuo de webcam</td><td>1 e 2 dedos, sem gesto, falsos disparos</td><td class="n">400</td></tr>
+<tr><td>HaGRID v2 [14]</td><td>54.456 fotos (de 1.086.158)</td><td>1 a 4 dedos, ajuste dos limiares</td><td class="n">400</td></tr>
+<tr><td>Slovo [15]</td><td>vídeos de celular</td><td>classe "sem gesto"</td><td class="n">100</td></tr>
+<tr><td>DriverMHG [16]</td><td>4 pessoas em simulador de carro</td><td>micro-gestos do volante</td><td class="n">42</td></tr>
+</tbody>
+</table>
+<div class="legenda"><b>Tabela 1.</b> Bases usadas. No Jester, a divisão oficial tem 118.562 vídeos de treino, 14.787 de validação e 14.743 de teste.</div>
+</div>
+
+<h2>4&nbsp;&nbsp;Método</h2>
+<h3>4.1&nbsp;&nbsp;CNN 3D para os gestos com movimento</h3>
+<p>A rede recebe 16 quadros de 96×96 pixels em cores. São quatro blocos com 32, 64, 128 e 256 filtros. Cada bloco tem duas convoluções 3×3×3, com normalização em lote [20] e ReLU, seguidas de <i>max pooling</i> 3D. O tempo só começa a ser reduzido no segundo bloco, para não perder o movimento cedo. No fim, uma média global, <i>dropout</i> de 0,3 [21] e uma camada linear. Ao todo, são 3,52 milhões de parâmetros. Um filtro 3×3×3 olha altura, largura e tempo ao mesmo tempo, então o movimento já é visto nos pixels. Isso é o que distingue uma mão deslizando de uma mão parada, que numa única imagem são indistinguíveis.</p>
+<p>O treino no Jester usa AdamW [22], taxa de aprendizado de até 10<sup>−3</sup> em ciclo único [23], 20 épocas, lote de 48 e suavização de rótulos de 0,05 [24]. Os aumentos de dados são estes:</p>
+<ul>
+<li><i>No tempo:</i> sorteio de um trecho de 40% a 100% do vídeo, para a rede ver o mesmo gesto mais rápido e mais lento.</li>
+<li><i>No espaço:</i> recorte de 80% a 100% da imagem, brilho de ±20% e a cena reduzida a até metade e deslocada.</li>
+<li><i>Sem espelhamento:</i> espelhar trocaria deslizar para a esquerda por deslizar para a direita.</li>
+<li><i>Exemplos sintéticos de "sem gesto":</i> 10% das amostras são um quadro repetido, ruído ou cor lisa. Isso ensina a rede a não disparar sem movimento.</li>
+</ul>
+<p>O modelo final parte dessa CNN treinada no Jester, com os nossos próprios pesos, e é ajustado nas cinco bases com uma camada de saída nova, de 36 classes. O ajuste dura 6 épocas, com taxa de aprendizado de até 3×10<sup>−4</sup>.</p>
+
+<h3>4.2&nbsp;&nbsp;Contagem de dedos pelos pontos da mão</h3>
+<p>O Jester não tem números feitos com os dedos. As tentativas de ensiná-los à CNN falharam fora dos dados de treino (Seção 6.2). Por isso, os números são decididos por geometria. O MediaPipe Hand Landmarker [11] entrega 21 pontos 3D da mão, em metros, a cada quadro. Sobre eles, aplicamos três regras:</p>
+<ul>
+<li><i>Indicador a mínimo:</i> o dedo está esticado se a razão entre a distância da base à ponta e o comprimento do dedo for ≥ 0,85, e se o ângulo entre o dedo e a direção da palma for ≤ 65°.</li>
+<li><i>Polegar:</i> tem regra própria. Precisa estar reto (razão ≥ 0,95) e com a ponta a pelo menos 1,2 largura de palma do dedo mínimo.</li>
+<li><i>Contagem:</i> de 1 a 4 dedos esticados é número. Cinco dedos, só o polegar e punho ficam com a CNN, porque são o sinal de pare e o joinha.</li>
+</ul>
+<p>Os limiares foram ajustados com metade das pessoas do HaGRID, e a outra metade ficou para o teste. Nessa metade de teste, a contagem acerta 88,3% dos números.</p>
+
+<h3>4.3&nbsp;&nbsp;Quem decide e quando o comando dispara</h3>
+<p>Os dois reconhecedores analisam a câmera ao mesmo tempo (Figura 1). A mão é considerada <b>parada</b> se apareceu em pelo menos 5 dos últimos 6 quadros (0,5 s) e se o pulso andou no máximo meia palma. A palma é a distância do pulso à base do dedo médio, o que torna a regra independente da distância à câmera. Com a mão parada e a mesma contagem de 1 a 4 em 5 dos 6 quadros, vale o número. Em todo o resto, vale a CNN 3D, com as classes de número zeradas.</p>
+<p>A CNN analisa janelas de 1, 1,5 e 3 s a cada 0,15 s e tira a média das duas últimas análises. Um gesto dispara quando tem nota ≥ 0,7 em 3 análises seguidas, e depois há uma pausa (1,2 s nas medições; 0,8 s na demonstração). A <b>ativação</b> é um sinal de OK: polegar encostado no indicador, a menos de 0,5 palma, por 0,4 s. O OK abre uma janela de 7 s, avisada por bip e voz, e fora dela nenhum gesto é executado. Assim, um comando por engano exige dois sinais seguidos.</p>
+
+<figure>
+<svg viewBox="0 0 640 150" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Times New Roman, serif" font-size="12">
+  <defs><marker id="s" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10z" fill="#111"/></marker></defs>
+  <g fill="none" stroke="#111" stroke-width="1">
+    <rect x="6" y="55" width="78" height="40"/>
+    <rect x="130" y="10" width="170" height="44"/>
+    <rect x="130" y="96" width="170" height="44"/>
+    <rect x="340" y="50" width="128" height="50"/>
+    <rect x="510" y="50" width="124" height="50"/>
+    <path d="M84 70 L128 34" marker-end="url(#s)"/>
+    <path d="M84 80 L128 116" marker-end="url(#s)"/>
+    <path d="M300 32 L338 64" marker-end="url(#s)"/>
+    <path d="M300 118 L338 88" marker-end="url(#s)"/>
+    <path d="M468 75 L508 75" marker-end="url(#s)"/>
+  </g>
+  <g fill="#111" text-anchor="middle">
+    <text x="45" y="72">Câmera</text><text x="45" y="87">no painel</text>
+    <text x="215" y="28">CNN 3D (16 × 96 × 96)</text><text x="215" y="44">movimentos, ≥ 0,7 em 3 análises</text>
+    <text x="215" y="114">MediaPipe → 21 pontos</text><text x="215" y="130">regra: conta 1 a 4 dedos</text>
+    <text x="404" y="70">Mão parada e</text><text x="404" y="85">número? sim → regra;</text><text x="404" y="98" font-size="11">não → CNN</text>
+    <text x="572" y="70">Comando, só na</text><text x="572" y="85">janela do OK (7 s)</text>
+  </g>
+</svg>
+<div class="legenda"><b>Figura 1.</b> O sistema. Os dois reconhecedores rodam em paralelo, e o critério de mão parada escolhe qual vale. O comando só é executado dentro da janela aberta pelo sinal de OK.</div>
+</figure>
+
+<h2>5&nbsp;&nbsp;Avaliação</h2>
+<p>Reportamos três medidas.</p>
+<ul>
+<li><b>Acerto por clipe:</b> no teste do Jester e no teste misto. Com 100 clipes por gesto, cada acerto por gesto tem margem de até cerca de ±8 pontos (intervalo de 95%); no conjunto dos 1.300 clipes do carro, a margem é de ±1,8 ponto.</li>
+<li><b>Falsos disparos por minuto:</b> medidos em 31,5 min de trechos sem gesto dos vídeos contínuos do IPN, de 13 pessoas fora do treino, com o mesmo laço das demos. Um disparo até 1,5 s depois de um gesto real não conta como falso, por causa do atraso do gatilho.</li>
+<li><b>Trechos de número reconhecidos:</b> vezes em que a pessoa mostrou 1 ou 2 dedos no IPN e o comando certo disparou, em 265 e 264 trechos.</li>
+</ul>
+<p>As variantes do sistema foram comparadas nessas medidas, mas a escolha final foi feita por um teste ao vivo na webcam (Seção 6.2). Esse teste foi curto: um usuário, cerca de 2 minutos, sem anotação gesto a gesto. Ele mostra se os números disparam ou não, e não é uma taxa de acerto.</p>
+
+<h2>6&nbsp;&nbsp;Resultados</h2>
+<h3>6.1&nbsp;&nbsp;Escolha da arquitetura</h3>
+<p>Seis redes foram treinadas do zero no mesmo protocolo: 20 mil vídeos do Jester, 8 épocas, lote 48, seed 42, sem aumento de dados e validação em 5 mil vídeos (Tabela 2). A CNN 3D ficou a 1,8 ponto da versão larga, com menos da metade dos parâmetros, a menor taxa de falsa ativação entre as redes 3D e a análise mais rápida. A versão com blocos residuais [19] teve acerto parecido, com mais falsas ativações. As redes que resumem cada quadro com uma CNN 2D antes de olhar o tempo ficaram muito atrás. A explicação provável é que o movimento se perde nesse resumo. A R(2+1)D [8] ficou de fora porque, com lote 48, passava dos 8 GB da GPU.</p>
+<div class="tab">
+<table>
+<thead><tr><th>Arquitetura</th><th class="n">Parâmetros</th><th class="n">Acerto (val.)</th><th class="n">Falsa ativação</th><th class="n">Tempo/análise</th></tr></thead>
+<tbody>
+<tr><td>CNN 3D larga</td><td class="n">7,92 mi</td><td class="n">84,2%</td><td class="n">0,71%</td><td class="n">3,9 ms</td></tr>
+<tr><td>ResNet 3D</td><td class="n">3,57 mi</td><td class="n">83,0%</td><td class="n">1,14%</td><td class="n">2,4 ms</td></tr>
+<tr class="destaque"><td>CNN 3D (escolhida)</td><td class="n">3,52 mi</td><td class="n">82,4%</td><td class="n">0,43%</td><td class="n">1,9 ms</td></tr>
+<tr><td>CNN 3D leve</td><td class="n">0,88 mi</td><td class="n">78,6%</td><td class="n">1,42%</td><td class="n">1,9 ms</td></tr>
+<tr><td>CNN 2D + Transformer</td><td class="n">2,24 mi</td><td class="n">65,3%</td><td class="n">2,42%</td><td class="n">3,9 ms</td></tr>
+<tr><td>CNN 2D + GRU</td><td class="n">1,57 mi</td><td class="n">50,4%</td><td class="n">0,28%</td><td class="n">2,7 ms</td></tr>
+</tbody>
+</table>
+<div class="legenda"><b>Tabela 2.</b> Comparação em treino curto. Falsa ativação: porcentagem dos vídeos sem gesto em que a rede apontou um gesto com nota ≥ 0,6. Tempo de um clipe numa RTX 5060 Laptop.</div>
+</div>
+<p>Treinada depois no Jester inteiro, a CNN 3D chegou a <b>92,6%</b> no teste (top-5: 99,4%; AUC gesto × sem gesto: 0,9982). A Figura 2a mostra o treino: o acerto de validação passa de 90% na décima época e estabiliza perto de 93%. O acerto de treino fica abaixo do de validação porque só o treino recebe os aumentos de dados e os exemplos sintéticos.</p>
+
+<figure>
+<svg viewBox="0 0 660 190" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="Times New Roman, serif" font-size="11">
+  <!-- (a) curva de treino -->
+  <g>
+    <g stroke="#bbb" stroke-width=".6">
+      <line x1="40" x2="295" y1="140" y2="140"/><line x1="40" x2="295" y1="105.7" y2="105.7"/><line x1="40" x2="295" y1="71.4" y2="71.4"/><line x1="40" x2="295" y1="37.1" y2="37.1"/>
+    </g>
+    <line x1="40" x2="40" y1="20" y2="140" stroke="#111" stroke-width=".8"/><line x1="40" x2="295" y1="140" y2="140" stroke="#111" stroke-width=".8"/>
+    <g fill="#111" text-anchor="end"><text x="35" y="143">30%</text><text x="35" y="109">50%</text><text x="35" y="75">70%</text><text x="35" y="41">90%</text></g>
+    <g fill="#111" text-anchor="middle"><text x="40" y="154">1</text><text x="92" y="154">5</text><text x="157" y="154">10</text><text x="222" y="154">15</text><text x="287" y="154">20</text><text x="167" y="168">época</text></g>
+    <polyline fill="none" stroke="#777" stroke-width="1.1" stroke-dasharray="4 3" points="40,130.2 53,89.8 66,72.1 79,62.9 92,57.7 105,53.8 118,51.5 131,49.3 144,47.4 157,45.9 170,44.9 183,43.7 196,42.8 209,42.1 222,40.9 235,40.6 248,40.1 261,39.7 274,39.4 287,39.2"/>
+    <polyline fill="none" stroke="#111" stroke-width="1.4" points="40,104.7 53,114.3 66,62.9 79,69.0 92,57.2 105,41.9 118,45.5 131,39.9 144,38.5 157,35.9 170,35.4 183,34.2 196,32.9 209,32.9 222,31.8 235,32.3 248,31.8 261,31.8 274,31.5 287,31.5"/>
+    <text x="200" y="26" fill="#111">validação</text><text x="218" y="58" fill="#555">treino</text>
+    <text x="167" y="184" text-anchor="middle" font-style="italic">(a)</text>
+  </g>
+  <!-- (b) acerto por gesto do carro -->
+  <g transform="translate(350,0)">
+    <g fill="#111">
+      <text x="0" y="23">Um dedo</text><text x="0" y="36">Dois dedos</text><text x="0" y="49">Quatro dedos</text>
+      <text x="0" y="66">Deslizar à direita</text><text x="0" y="79">Deslizar à esquerda</text><text x="0" y="92">Polegar para cima</text><text x="0" y="105">Polegar para baixo</text>
+      <text x="0" y="118">Sinal de pare</text><text x="0" y="131">Empurrar a mão</text><text x="0" y="144">Tamborilar</text><text x="0" y="157">Puxar a mão</text>
+    </g>
+    <g fill="#111">
+      <rect x="112" y="15" width="120.0" height="9"/><rect x="112" y="28" width="130.4" height="9"/><rect x="112" y="41" width="155.2" height="9"/>
+    </g>
+    <g fill="#777">
+      <rect x="112" y="58" width="139.2" height="9"/><rect x="112" y="71" width="144.0" height="9"/><rect x="112" y="84" width="152.0" height="9"/><rect x="112" y="97" width="156.8" height="9"/>
+      <rect x="112" y="110" width="134.4" height="9"/><rect x="112" y="123" width="152.0" height="9"/><rect x="112" y="136" width="147.2" height="9"/><rect x="112" y="149" width="142.4" height="9"/>
+    </g>
+    <g fill="#111">
+      <text x="236" y="23">75%</text><text x="246" y="36">82%</text><text x="271" y="49">97%</text>
+      <text x="255" y="66">87%</text><text x="260" y="79">90%</text><text x="268" y="92">95%</text><text x="273" y="105">98%</text>
+      <text x="250" y="118">84%</text><text x="268" y="131">95%</text><text x="263" y="144">92%</text><text x="258" y="157">89%</text>
+    </g>
+    <line x1="112" x2="112" y1="10" y2="162" stroke="#111" stroke-width=".8"/>
+    <text x="150" y="184" text-anchor="middle" font-style="italic">(b)</text>
+  </g>
+</svg>
+<div class="legenda"><b>Figura 2.</b> (a) Acerto por época no treino da CNN 3D no Jester. (b) Acerto do sistema final em cada gesto do carro, 100 clipes por gesto (200 para um e dois dedos); em preto, os números decididos pela contagem de dedos; em cinza, os movimentos decididos pela CNN 3D.</div>
+</figure>
+
+<h3>6.2&nbsp;&nbsp;Os números: quatro tentativas</h3>
+<p>A Tabela 3 resume as tentativas de reconhecer os números.</p>
+<ul>
+<li><i>CNN com fotos do HaGRID transformadas em vídeo:</i> acertou 92,7% nas fotos. Em vídeo real, "um dedo" ficou em primeiro em só 5% a 10% dos vídeos do Slovo.</li>
+<li><i>CNN treinada com vídeos do IPN:</i> funcionou no IPN e teve 0% nos vídeos de sinais. A rede aprendeu o fundo, não a forma da mão.</li>
+<li><i>Pontos da mão:</i> resolveram o problema da forma. A GRU sobre os pontos foi a melhor nos dados, mas ao vivo dava notas baixas aos números e confundia a mão aberta com quatro dedos.</li>
+<li><i>Veto da CNN sobre os números:</i> reduziu os falsos disparos, mas na webcam derrubaria 116 de 116 leituras de número em 2 min de teste. Causa provável: a CNN lia o número parado da nossa webcam como "outro movimento" em 62 dessas leituras.</li>
+</ul>
+<p>O modelo final usa a contagem sem veto.</p>
+<div class="tab">
+<table>
+<thead><tr><th>Versão</th><th class="n">1 dedo</th><th class="n">2 dedos</th><th class="n">Falsos/min (IPN)</th><th>Na webcam</th></tr></thead>
+<tbody>
+<tr><td>CNN sozinha (36 classes)</td><td class="n">5/265</td><td class="n">0/264</td><td class="n">0,19</td><td>números raros</td></tr>
+<tr><td>GRU sobre os pontos + CNN</td><td class="n">251/265</td><td class="n">240/264</td><td class="n">0,25</td><td>números não disparavam</td></tr>
+<tr><td>Contagem + veto da CNN</td><td class="n">182/265</td><td class="n">180/264</td><td class="n">1,24</td><td>vetaria 116/116 leituras</td></tr>
+<tr class="destaque"><td>Contagem sem veto (final)</td><td class="n">228/265</td><td class="n">242/264</td><td class="n">1,62</td><td>22 comandos em 2 min</td></tr>
+</tbody>
+</table>
+<div class="legenda"><b>Tabela 3.</b> Trechos de 1 e 2 dedos do IPN em que o comando certo disparou, e falsos disparos contando todas as 36 classes, sem a janela do OK.</div>
+</div>
+
+<h3>6.3&nbsp;&nbsp;Sistema final</h3>
+<p>Nos 11 gestos do carro, em 1.300 clipes do teste misto, o sistema final acerta <b>87,7%</b>: 91,2% nos 8 movimentos e 82,0% nos números 1, 2 e 4 (Tabela 4 e Figura 2b). A contagem de dedos levou os números de 58,4% para 82,0%. O custo é pequeno nos movimentos, que caem de 95,2% para 91,2%, porque a contagem às vezes lê um número no meio de um movimento. A CNN põe o gesto certo entre as suas 5 maiores notas em 99,6% dos clipes.</p>
+<p>Nos 31,5 min de vídeo real sem gesto, a CNN não disparou <b>nenhum comando do carro</b>: os 6 disparos dela (0,19 por minuto) foram de gestos de dois dedos que o carro não usa. Os falsos disparos de comandos vêm todos dos números. Considerando só os comandos do carro, são 1,05 falso por minuto sem a janela do OK e 0,73 com ela, numa simulação com os mesmos vídeos, ou seja, 30% a menos.</p>
+<div class="tab">
+<table>
+<thead><tr><th>Modelo (11 gestos do carro, 1.300 clipes)</th><th class="n">Acerto</th><th class="n">Falsos/min (IPN, comandos do carro)</th></tr></thead>
+<tbody>
+<tr><td>CNN 3D treinada no Jester + ajuste</td><td class="n">81,1%</td><td class="n">0,00</td></tr>
+<tr><td>Contagem + veto da CNN</td><td class="n">86,2%</td><td class="n">0,76</td></tr>
+<tr><td>GRU + CNN, números pela GRU</td><td class="n">95,6%</td><td class="n">não medido</td></tr>
+<tr class="destaque"><td>CNN 3D + contagem de dedos (final)</td><td class="n">87,7%</td><td class="n">1,05 (0,73 com o OK)</td></tr>
+</tbody>
+</table>
+<div class="legenda"><b>Tabela 4.</b> Mesma régua para todas as versões. A de maior acerto nos dados não reconheceu os números na webcam.</div>
+</div>
+
+<h2>7&nbsp;&nbsp;Discussão e limitações</h2>
+<p><b>Dados × uso real.</b> A lição principal do projeto é que o acerto nos dados serve para selecionar candidatos, mas quem decide é o uso real. As bases públicas têm outra câmera, outra distância e outro fundo. A GRU aprendeu os números sobretudo com fotos, e um modelo com 95% nos dados que não reconhece o gesto na câmera não serve ao motorista.</p>
+<p><b>Falsos disparos.</b> Os falsos disparos ainda estão acima do desejável para um carro, e o sistema final tem mais deles que as versões descartadas. O motivo é que a contagem de dedos é uma regra sem contexto: qualquer mão parada com um, dois ou quatro dedos esticados conta como número. O OK também abre sozinho 3,08 vezes por minuto na simulação com o IPN. Um OK mais rígido (pinça < 0,3 palma por 0,6 s) baixaria os comandos falsos para 0,19 por minuto na simulação, mas ainda não foi testado ao vivo.</p>
+<p><b>O que ainda não foi feito.</b></p>
+<ul>
+<li>O teste na webcam foi curto e com um usuário.</li>
+<li>Não gravamos vídeos da câmera real do painel.</li>
+<li>A latência e o consumo no hardware embarcado não foram medidos.</li>
+<li>Os micro-gestos com as mãos no volante (DriverMHG) foram treinados com só 4 pessoas, e o acerto neles ainda é baixo.</li>
+</ul>
+<p><b>Próximos passos.</b></p>
+<ul>
+<li>Treinar sobre a mão reconstruída em 3D, para que rosto, fundo e luz deixem de interferir.</li>
+<li>Gravar motoristas no cenário real, para treinar e medir onde o sistema vai ser usado.</li>
+<li>Usar uma câmera infravermelha numa placa embarcada e medir tempo de resposta e consumo.</li>
+</ul>
+
+<h2>8&nbsp;&nbsp;Conclusão</h2>
+<p>Um sistema com uma CNN 3D pequena, treinada do zero, e uma regra geométrica sobre os pontos da mão comanda a central do carro em tempo real, com 87,7% de acerto nos 11 gestos e sem disparar comandos de movimento sozinho em vídeo real. A divisão de trabalho é simples: a CNN fica com o que é movimento e a geometria com o que é forma. Ela foi mais robusta na câmera do que modelos com mais acerto nos dados. Uma versão anterior do sistema também foi usada numa demonstração de sala cirúrgica, em que exames são navegados sem tocar em nada.</p>
+
+<h2>Código e uso de IA</h2>
+<p>O código, os resultados e a apresentação estão em github.com/enzowliran/ENTREGA-FINAL---DETECTOR-DE-GESTOS. As bases não são redistribuídas. O assistente Claude (Anthropic) foi usado como apoio na programação, nas análises e na escrita; as decisões e a conferência dos resultados são dos autores.</p>
+
+<h2>Referências</h2>
+<ol class="refs">
+<li>NHTSA. <i>Traffic Safety Facts: Distracted Driving in 2023</i>. DOT HS 813 704.</li>
+<li>NHTSA. <i>Countermeasures That Work: Distracted Driving</i> (dados do estudo SHRP2).</li>
+<li>Vi Bilägare. <i>Physical buttons outperform touchscreens in new cars, test finds</i>, 2022.</li>
+<li>IAM RoadSmart / TRL. Estudo sobre Apple CarPlay e Android Auto em simulador, 2020 (via ETSC).</li>
+<li>Euro NCAP. <i>Buttons are back for basic functions</i>, 2024.</li>
+<li>D. Tran, L. Bourdev, R. Fergus, L. Torresani, M. Paluri. Learning Spatiotemporal Features with 3D Convolutional Networks. <i>ICCV</i>, 2015.</li>
+<li>J. Carreira, A. Zisserman. Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset. <i>CVPR</i>, 2017.</li>
+<li>D. Tran et al. A Closer Look at Spatiotemporal Convolutions for Action Recognition. <i>CVPR</i>, 2018.</li>
+<li>P. Molchanov et al. Online Detection and Classification of Dynamic Hand Gestures with Recurrent 3D Convolutional Neural Networks. <i>CVPR</i>, 2016.</li>
+<li>O. Köpüklü, A. Gunduz, N. Kose, G. Rigoll. Real-time Hand Gesture Detection and Classification Using Convolutional Neural Networks. <i>IEEE FG</i>, 2019.</li>
+<li>F. Zhang et al. MediaPipe Hands: On-device Real-time Hand Tracking. arXiv:2006.10214, 2020.</li>
+<li>J. Materzynska et al. The Jester Dataset: A Large-Scale Video Dataset of Human Gestures. <i>ICCV Workshops</i>, 2019.</li>
+<li>G. Benitez-Garcia et al. IPN Hand: A Video Dataset and Benchmark for Real-Time Continuous Hand Gesture Recognition. <i>ICPR</i>, 2020.</li>
+<li>A. Kapitanov et al. HaGRID: HAnd Gesture Recognition Image Dataset (v2). <i>WACV</i>, 2024.</li>
+<li>A. Kapitanov et al. Slovo: Russian Sign Language Dataset. 2023.</li>
+<li>O. Köpüklü, T. Ledwon, Y. Rong, N. Kose, G. Rigoll. DriverMHG: A Multi-Modal Dataset for Dynamic Recognition of Driver Micro Hand Gestures. arXiv:2003.00951, 2020.</li>
+<li>K. Cho et al. Learning Phrase Representations using RNN Encoder–Decoder for Statistical Machine Translation. <i>EMNLP</i>, 2014.</li>
+<li>A. Vaswani et al. Attention Is All You Need. <i>NeurIPS</i>, 2017.</li>
+<li>K. He, X. Zhang, S. Ren, J. Sun. Deep Residual Learning for Image Recognition. <i>CVPR</i>, 2016.</li>
+<li>S. Ioffe, C. Szegedy. Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift. <i>ICML</i>, 2015.</li>
+<li>N. Srivastava et al. Dropout: A Simple Way to Prevent Neural Networks from Overfitting. <i>JMLR</i>, 2014.</li>
+<li>I. Loshchilov, F. Hutter. Decoupled Weight Decay Regularization. <i>ICLR</i>, 2019.</li>
+<li>L. Smith, N. Topin. Super-Convergence: Very Fast Training of Neural Networks Using Large Learning Rates. 2019.</li>
+<li>C. Szegedy et al. Rethinking the Inception Architecture for Computer Vision. <i>CVPR</i>, 2016.</li>
+</ol>
+</body>
+</html>
