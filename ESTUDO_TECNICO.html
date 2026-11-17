@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estudo técnico · Gestos ao volante</title>
+<style>
+:root{
+  --navy:#0b2545; --azul:#13457a; --azul2:#1f6fb5; --claro:#e8f1fa; --claro2:#f4f8fc;
+  --linha:#c9d9ea; --texto:#16283a; --suave:#51657a; --certo:#0f6b5c; --certobg:#e2f3ef;
+  --erro:#8a2b3a; --errobg:#f8e6e9; --aviso:#7a5a0a; --avisobg:#fbf3da;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.55 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;color:var(--texto);background:#eef3f8}
+header.topo{background:var(--navy);color:#fff;padding:28px 20px 22px}
+.larg{max-width:980px;margin:0 auto}
+header.topo .sobre{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#9fc3e6}
+header.topo h1{margin:6px 0 6px;font-size:30px;line-height:1.15;text-wrap:balance}
+header.topo p{margin:0;color:#cfe0f1;max-width:720px}
+.barra{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid var(--linha);box-shadow:0 1px 6px rgba(11,37,69,.06)}
+.barra .larg{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 20px}
+.placar{font-size:14px;color:var(--suave);margin-right:auto}
+.placar b{color:var(--azul);font-variant-numeric:tabular-nums}
+button{font:inherit;cursor:pointer}
+.bt{border:1px solid var(--azul2);background:#fff;color:var(--azul);border-radius:4px;padding:6px 12px;font-size:14px}
+.bt:hover{background:var(--claro)}
+.bt.cheio{background:var(--azul);color:#fff;border-color:var(--azul)}
+.bt.cheio:hover{background:var(--azul2)}
+.bt:focus-visible,.op:focus-visible,.cab:focus-visible{outline:3px solid #7fb4e6;outline-offset:2px}
+main{padding:18px 20px 80px}
+nav.indice{background:#fff;border:1px solid var(--linha);border-radius:6px;padding:16px 18px;margin-bottom:18px}
+nav.indice h2{margin:0 0 8px;font-size:15px;text-transform:uppercase;letter-spacing:.08em;color:var(--suave)}
+nav.indice ol{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:2px 18px}
+nav.indice a{display:flex;gap:8px;align-items:baseline;padding:5px 4px;color:var(--azul);text-decoration:none;border-radius:3px}
+nav.indice a:hover{background:var(--claro)}
+nav.indice .n{font-variant-numeric:tabular-nums;color:var(--suave);min-width:22px}
+nav.indice .ok{margin-left:auto;font-size:12px;color:var(--certo);white-space:nowrap}
+section.sec{background:#fff;border:1px solid var(--linha);border-radius:6px;margin-bottom:12px;scroll-margin-top:60px}
+.cab{display:flex;width:100%;gap:12px;align-items:center;text-align:left;border:0;background:none;padding:14px 18px;color:var(--navy)}
+.cab .n{flex:none;width:34px;height:34px;border-radius:50%;background:var(--claro);color:var(--azul);display:grid;place-items:center;font-weight:600;font-size:14px}
+.cab h2{margin:0;font-size:19px;line-height:1.25;flex:1}
+.cab .seta{flex:none;transition:transform .2s;color:var(--suave)}
+section.sec.aberta .cab .seta{transform:rotate(90deg)}
+section.sec.aberta .cab{border-bottom:1px solid var(--linha)}
+.corpo{display:none;padding:6px 18px 22px}
+section.sec.aberta .corpo{display:block}
+.destaque .cab .n{background:var(--azul);color:#fff}
+h3{font-size:17px;margin:26px 0 8px;color:var(--azul)}
+h4{font-size:15px;margin:16px 0 6px;color:var(--navy)}
+p{margin:8px 0;max-width:72ch}
+ul,ol{max-width:72ch;padding-left:22px;margin:8px 0}
+li{margin:4px 0}
+code{background:var(--claro2);border:1px solid var(--linha);border-radius:3px;padding:0 4px;font-size:.88em}
+.resumo{background:var(--claro);border-left:4px solid var(--azul2);padding:10px 14px;margin:12px 0;border-radius:0 4px 4px 0}
+.resumo p{margin:4px 0}
+.alerta{background:var(--avisobg);border-left:4px solid #c79a1e;padding:10px 14px;margin:12px 0;border-radius:0 4px 4px 0;color:#4d3a08}
+.alerta b{color:#3b2c05}
+table{border-collapse:collapse;width:100%;margin:10px 0;font-size:14.5px}
+#maoTab{font-size:13px}
+th,td{border:1px solid var(--linha);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--claro);color:var(--navy);font-weight:600}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.final td{background:#f0f7ff;font-weight:600}
+.rolar{overflow-x:auto}
+.fonte{font-size:12.5px;color:var(--suave);margin-top:2px}
+/* passos */
+.passos{border:1px solid var(--linha);border-radius:6px;margin:12px 0;background:var(--claro2)}
+.passos .p{display:none;padding:14px 16px}
+.passos .p.at{display:block}
+.passos.todos .p{display:block;border-bottom:1px dashed var(--linha)}
+.passos .p h4{margin-top:0}
+.pnav{display:flex;gap:8px;align-items:center;padding:8px 12px;border-top:1px solid var(--linha);background:#fff;border-radius:0 0 6px 6px;flex-wrap:wrap}
+.pnav .onde{font-size:13px;color:var(--suave);margin-right:auto}
+.pontinhos{display:flex;gap:5px}
+.pontinhos i{width:8px;height:8px;border-radius:50%;background:var(--linha)}
+.pontinhos i.at{background:var(--azul2)}
+/* do zero */
+.zero{border:2px solid #c79a1e;background:#fffaf0;border-radius:6px;padding:12px 16px;margin:14px 0}
+.zero h4{margin:0 0 6px;color:var(--aviso)}
+.zero[hidden]{display:none}
+/* banca */
+details.banca{border:1px solid var(--linha);border-radius:4px;margin:6px 0;background:#fff}
+details.banca summary{cursor:pointer;padding:9px 12px;font-weight:600;color:var(--navy)}
+details.banca[open] summary{border-bottom:1px solid var(--linha);background:var(--claro2)}
+details.banca .r{padding:8px 14px 12px}
+details.banca .r p:first-child::before{content:"Resposta modelo: ";font-weight:600;color:var(--azul)}
+/* quiz */
+.quiz{margin:10px 0}
+.q{border:1px solid var(--linha);border-radius:6px;padding:12px 14px;margin:10px 0;background:#fff}
+.q .enun{font-weight:600;margin:0 0 8px}
+.q .ops{display:grid;gap:6px}
+.op{text-align:left;border:1px solid var(--linha);background:var(--claro2);border-radius:4px;padding:8px 11px;color:var(--texto)}
+.op:hover:not(:disabled){border-color:var(--azul2);background:var(--claro)}
+.op:disabled{cursor:default}
+.op.errada{background:var(--errobg);border-color:#d7a4ad;color:var(--erro);text-decoration:line-through}
+.op.certa{background:var(--certobg);border-color:#7cc0b3;color:var(--certo);font-weight:600}
+.q .linha{display:flex;gap:10px;align-items:center;margin-top:8px;flex-wrap:wrap;font-size:14px}
+.q .msg{color:var(--suave)}
+.q .msg.bom{color:var(--certo);font-weight:600}
+.q .msg.ruim{color:var(--erro)}
+.q .dica,.q .expl{margin-top:8px;padding:8px 11px;border-radius:4px;font-size:14.5px}
+.q .dica{background:var(--avisobg);color:#4d3a08}
+.q .expl{background:var(--certobg);color:#0b4a40}
+/* interativos */
+.inter{border:1px solid var(--linha);border-radius:6px;margin:14px 0;background:#fff;overflow:hidden}
+.inter>.tit{background:var(--navy);color:#fff;padding:7px 14px;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.inter>.dentro{padding:12px 14px}
+.lado{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:16px;align-items:start}
+@media(max-width:760px){.lado{grid-template-columns:1fr}header.topo h1{font-size:24px}}
+canvas{max-width:100%;display:block;background:var(--claro2);border:1px solid var(--linha);border-radius:4px;touch-action:none}
+.ctrl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0}
+.ctrl label{font-size:14px;display:flex;gap:6px;align-items:center}
+input[type=range]{accent-color:var(--azul2);width:150px}
+.seg{display:inline-flex;border:1px solid var(--azul2);border-radius:4px;overflow:hidden}
+.seg button{border:0;background:#fff;color:var(--azul);padding:5px 10px;font-size:14px}
+.seg button.at{background:var(--azul);color:#fff}
+.medidor{height:16px;background:var(--claro);border-radius:3px;overflow:hidden;border:1px solid var(--linha)}
+.medidor i{display:block;height:100%;background:var(--azul2);width:0;transition:width .2s}
+.veredito{padding:9px 12px;border-radius:4px;background:var(--claro);margin-top:8px;font-weight:600;color:var(--navy)}
+.veredito.sim{background:var(--certobg);color:var(--certo)}
+.veredito.nao{background:var(--errobg);color:var(--erro)}
+.legenda{font-size:13px;color:var(--suave)}
+.barras{display:grid;gap:5px;margin:8px 0}
+.barras .b{display:grid;grid-template-columns:minmax(120px,240px) 1fr 58px;gap:8px;align-items:center;font-size:14px}
+.barras .b .tr{height:18px;background:var(--claro);border-radius:2px;overflow:hidden}
+.barras .b .tr i{display:block;height:100%;background:var(--azul2);transition:width .4s}
+.barras .b.fin .tr i{background:var(--navy)}
+.barras .b.fin span:first-child{font-weight:600}
+.barras .b .v{text-align:right;font-variant-numeric:tabular-nums}
+.fluxo{display:flex;gap:6px;flex-wrap:wrap;align-items:stretch;margin:10px 0}
+.fluxo .cx{flex:1 1 120px;border:1px solid var(--linha);background:var(--claro2);border-radius:4px;padding:8px 10px;font-size:14px;transition:all .3s;cursor:pointer;text-align:left;color:var(--texto)}
+.fluxo .cx b{display:block;color:var(--navy)}
+.fluxo .cx.at{background:var(--azul);border-color:var(--azul);color:#fff}
+.fluxo .cx.at b{color:#fff}
+.quadros{display:flex;gap:6px;flex-wrap:wrap}
+.quadros button{width:54px;height:60px;border:1px solid var(--azul2);background:#fff;border-radius:4px;color:var(--navy);font-size:20px;font-weight:600;line-height:1.1}
+.quadros button small{display:block;font-size:10px;font-weight:400;color:var(--suave)}
+.tempo{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin:10px 0}
+.tempo .t{border:1px solid var(--linha);border-radius:4px;background:#fff;padding:5px 3px;text-align:center;font-size:12px;color:var(--suave);transition:all .3s}
+.tempo .t.lendo{border-color:var(--azul);box-shadow:0 0 0 2px #7fb4e6}
+.tempo .col{height:54px;display:flex;align-items:flex-end;justify-content:center;gap:3px;margin:4px 0}
+.tempo .col i{width:9px;background:var(--azul2);border-radius:2px 2px 0 0;transition:height .35s;height:0}
+.tempo .col i.tras{background:#7fb4e6}
+.tempo .col i.at{background:var(--navy)}
+.cartas{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}
+.carta{border:1px solid var(--linha);border-radius:4px;background:var(--claro2);padding:10px 12px;text-align:left;color:var(--texto);min-height:84px}
+.carta b{color:var(--navy);display:block}
+.carta .def{display:none;font-size:14.5px;margin-top:4px}
+.carta.vira{background:#fff;border-color:var(--azul2)}
+.carta.vira .def{display:block}
+.carta .toque{font-size:12px;color:var(--suave)}
+.carta.vira .toque{display:none}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.chip{border:1px solid var(--linha);background:var(--claro2);border-radius:4px;padding:8px 12px;min-width:130px}
+.chip b{display:block;font-size:22px;color:var(--navy);font-variant-numeric:tabular-nums}
+.chip span{font-size:13px;color:var(--suave)}
+footer{max-width:980px;margin:0 auto;padding:0 20px 40px;color:var(--suave);font-size:13px}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{.barra,.pnav,.ctrl{display:none}.corpo{display:block!important}.passos .p{display:block}}
+</style>
+</head>
+<body>
+<header class="topo"><div class="larg">
+  <div class="sobre">Deep Learning · Insper · material de estudo do grupo</div>
+  <h1>Gestos ao volante: apostila técnica para os 30 minutos de perguntas</h1>
+  <p>Para estudar em grupo. Cada seção tem explicação passo a passo, algo para mexer, perguntas com dica e as respostas modelo para a banca. Todos os números vêm dos arquivos do projeto.</p>
+</div></header>
+
+<div class="barra"><div class="larg">
+  <div class="placar">Perguntas respondidas: <b id="plResp">0</b> de <b id="plTot">0</b> · acertos de primeira: <b id="plPrim">0</b></div>
+  <button class="bt" id="btAbrir">Abrir tudo</button>
+  <button class="bt" id="btFechar">Fechar tudo</button>
+  <button class="bt" id="btZero">Mostrar todas as explicações do zero</button>
+</div></div>
+
+<main class="larg">
+<nav class="indice" aria-label="Índice"><h2>Índice</h2><ol id="indice"></ol></nav>
+
+<!-- ============ 0 ============ -->
+<section class="sec" id="s0" data-t="Visão geral e como usar esta apostila">
+<div class="corpo">
+  <div class="resumo"><p><b>O projeto em uma frase:</b> uma câmera vê a mão do motorista; um sinal de OK liga o sistema; depois, um número parado (1, 2 ou 4 dedos) é lido pela <b>contagem de dedos</b> e um movimento é lido pela <b>CNN 3D</b>.</p></div>
+
+  <h3>Como estudar com isto</h3>
+  <ol>
+    <li>Abram uma seção. Leiam os passos um por vez, em voz alta.</li>
+    <li>Mexam no desenho interativo e discutam o que muda.</li>
+    <li>Respondam às perguntas. Cada uma aceita até três tentativas e tem um botão de dica.</li>
+    <li>Se errarem bastante, a seção abre sozinha uma <b>explicação do zero</b>, com comparações do dia a dia. Dá para abrir à mão também.</li>
+    <li>No fim de cada seção há as <b>perguntas da banca</b>. Tentem responder antes de clicar.</li>
+  </ol>
+
+  <h3>O caminho completo, da câmera ao comando</h3>
+  <p>Cliquem em cada caixa, da esquerda para a direita.</p>
+  <div class="inter"><div class="tit">Interativo · o caminho de um gesto</div><div class="dentro">
+    <div class="fluxo" id="fluxo0"></div>
+    <div class="veredito" id="fluxo0txt"></div>
+    <div class="ctrl"><button class="bt cheio" id="fluxo0play">Tocar a sequência</button></div>
+  </div></div>
+
+  <h3>Os números que precisam estar na ponta da língua</h3>
+  <div class="chips">
+    <div class="chip"><b>87,7%</b><span>modelo final, 11 gestos do carro, 1.300 clipes</span></div>
+    <div class="chip"><b>91,2%</b><span>modelo final, os 8 movimentos</span></div>
+    <div class="chip"><b>82,0%</b><span>modelo final, os 3 números</span></div>
+    <div class="chip"><b>70,9%</b><span>o mesmo modelo, nas 36 classes</span></div>
+    <div class="chip"><b>95,6%</b><span>GRU + CNN (testada, não usada)</span></div>
+    <div class="chip"><b>86,2%</b><span>contagem + veto (testada, desligada)</span></div>
+    <div class="chip"><b>92,6%</b><span>CNN 3D sozinha, teste do Jester, 27 classes</span></div>
+    <div class="chip"><b>1,05 → 0,73</b><span>comandos falsos por minuto, sem e com o OK</span></div>
+  </div>
+  <div class="alerta"><b>Cuidado na hora de falar.</b> O número do modelo final é 87,7%. Os 92% e 95% são de versões que não funcionaram na webcam. O 92,6% é da CNN no Jester, outra prova, com outras classes. Nunca comparem números de réguas diferentes sem avisar.</div>
+  <div class="quiz" data-q="s0"></div>
+</div></section>
+
+<!-- ============ 1 ============ -->
+<section class="sec" id="s1" data-t="CNN 2D e CNN 3D: por que a 3D para movimento">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> a CNN 2D olha uma foto de cada vez; a CNN 3D olha vários quadros juntos, então enxerga o movimento.</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero, sem nenhum termo técnico</h4>
+    <p>Pensem numa lupa pequena. Vocês passam a lupa por uma foto, pedacinho por pedacinho. Em cada pedacinho vocês dão uma nota: "isto parece a borda de um dedo?". Isso é um <b>filtro</b>. A rede tem muitos filtros, e aprende sozinha o que cada um deve procurar.</p>
+    <p>Agora troquem a foto por um <b>bloquinho de folhas</b>, daqueles que viram desenho animado quando a gente folheia. A lupa 2D olha uma folha só. A lupa 3D é um cubinho: olha um pedacinho de três folhas seguidas ao mesmo tempo. Se a mão mudou de lugar de uma folha para a outra, a lupa 3D percebe. A lupa 2D não tem como perceber.</p>
+    <p>Mão deslizando para a direita e mão parada podem dar a mesma foto. Só olhando várias folhas juntas dá para saber qual é qual.</p>
+  </div>
+
+  <div class="passos">
+    <div class="p"><h4>Passo 1 · Uma imagem é uma tabela de números</h4><p>Cada pixel é um número (claro ou escuro). Uma imagem colorida são três tabelas: vermelho, verde e azul.</p></div>
+    <div class="p"><h4>Passo 2 · O filtro</h4><p>Um filtro é uma janelinha de 3×3 números, chamados <b>pesos</b>. Ele é colocado sobre um pedaço da imagem. Multiplica cada pixel pelo peso correspondente e soma tudo. O resultado é uma nota: alta quando o pedaço se parece com o padrão que o filtro procura.</p></div>
+    <div class="p"><h4>Passo 3 · Deslizar</h4><p>O filtro anda pela imagem inteira. As notas de todas as posições formam o <b>mapa de ativação</b>: um mapa de "onde está o padrão". Essa operação de deslizar chama-se <b>convolução</b>.</p></div>
+    <div class="p"><h4>Passo 4 · Camadas</h4><p>As primeiras camadas acham coisas simples (bordas). As seguintes combinam essas bordas em formas (dedo, palma). Ninguém escreve os pesos à mão: o treino ajusta os pesos para errar cada vez menos.</p></div>
+    <div class="p"><h4>Passo 5 · O limite da 2D</h4><p>A CNN 2D recebe uma foto. Ela sabe dizer "tem uma mão aqui". Ela não sabe dizer "a mão está indo para a direita", porque isso não está em uma foto só.</p></div>
+    <div class="p"><h4>Passo 6 · A CNN 3D</h4><p>O filtro vira um cubo de 3×3×3: três pixels de altura, três de largura e <b>três quadros de tempo</b>. Ele desliza pela imagem e também pelo tempo. Assim o próprio filtro compara o que mudou entre quadros vizinhos. No nosso projeto, a entrada é um vídeo curto de 16 quadros.</p></div>
+  </div>
+
+  <div class="inter"><div class="tit">Interativo · o filtro 2D deslizando</div><div class="dentro lado">
+    <div><canvas id="cv2d" width="520" height="260"></canvas></div>
+    <div>
+      <p>À esquerda, a imagem com uma "mão" (quadrados escuros). O quadro azul é o filtro. À direita, o mapa de ativação sendo preenchido.</p>
+      <div class="ctrl"><button class="bt cheio" id="c2play">Pausar</button><button class="bt" id="c2step">Um passo</button></div>
+      <p class="legenda">Reparem: o mapa acende onde a mão está. Ele diz <i>onde</i>, não diz <i>para onde vai</i>.</p>
+    </div>
+  </div></div>
+
+  <div class="inter"><div class="tit">Interativo · desenho 3D · o filtro que olha espaço e tempo</div><div class="dentro lado">
+    <div><canvas id="cv3d" width="520" height="340"></canvas><p class="legenda">Arrastem para girar. Cada placa é um quadro do vídeo; o tempo vai da frente para o fundo.</p></div>
+    <div>
+      <div class="ctrl"><span>Mão:</span><div class="seg" id="c3mao"><button class="at" data-v="1">deslizando</button><button data-v="0">parada</button></div></div>
+      <div class="ctrl"><span>Filtro:</span><div class="seg" id="c3fil"><button data-v="2">2D (uma placa)</button><button class="at" data-v="3">3D (três placas)</button></div></div>
+      <p style="margin-bottom:2px">Resposta do filtro agora:</p>
+      <div class="medidor"><i id="c3med"></i></div>
+      <div class="veredito" id="c3txt"></div>
+      <p class="legenda">Testem as quatro combinações. O filtro 2D acende com a mão parada e com a mão deslizando. O filtro 3D deste exemplo só acende quando a mão muda de lugar entre os quadros.</p>
+    </div>
+  </div></div>
+
+  <h3>No nosso projeto</h3>
+  <ul>
+    <li>A CNN 3D cuida dos <b>movimentos</b>: deslizar, polegar para cima e para baixo, pare, empurrar, puxar e tamborilar.</li>
+    <li>Testamos também redes que usam CNN 2D por quadro e só depois olham o tempo (com GRU ou Transformer). Ficaram bem abaixo: 50,4% e 65,3%, contra 82,4% da CNN 3D, no mesmo protocolo curto (seção 3).</li>
+  </ul>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s1"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>Qual é a diferença entre uma CNN 2D e uma CNN 3D?</summary><div class="r"><p>Na 2D o filtro desliza em altura e largura, sobre uma imagem. Na 3D o filtro tem também a dimensão do tempo: é um cubo 3×3×3 que desliza sobre vários quadros. Por isso a 3D aprende padrões de movimento direto dos pixels.</p></div></details>
+  <details class="banca"><summary>Por que não usar uma CNN 2D em cada quadro e juntar depois?</summary><div class="r"><p>Nós testamos. CNN 2D + GRU ficou em 50,4% e CNN 2D + Transformer em 65,3% na validação, contra 82,4% da CNN 3D, no mesmo protocolo. A explicação provável: a CNN 2D resume cada quadro sozinho, antes de olhar o tempo, e o movimento se perde nesse resumo.</p><p>Ponto honesto: foi um protocolo curto (20 mil vídeos, 8 épocas), e as curvas dessas duas redes ainda subiam na última época.</p></div></details>
+  <details class="banca"><summary>A CNN 3D não é mais cara?</summary><div class="r"><p>Cada filtro 3×3×3 tem 27 pesos por canal em vez de 9. Mesmo assim, a nossa tem 3,52 milhões de parâmetros e levou 1,9 ms por clipe na GPU do notebook, na comparação de arquiteturas.</p></div></details>
+</div></section>
+
+<!-- ============ 2 ============ -->
+<section class="sec" id="s2" data-t="A nossa CNN 3D: arquitetura e treino">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> quatro blocos de convoluções 3×3×3 (32, 64, 128 e 256 filtros), 3,52 milhões de parâmetros, entrada de 16 quadros de 96×96 pixels em cores; treinada do zero no Jester e depois ajustada nas cinco bases.</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero</h4>
+    <p>Pensem numa linha de montagem com quatro estações. O vídeo entra grande e detalhado. Cada estação faz duas coisas: procura padrões (as convoluções) e <b>encolhe</b> o vídeo, guardando só o mais importante (o pooling).</p>
+    <p>A cada estação o vídeo fica menor, mas a rede usa mais filtros, ou seja, descreve mais tipos de padrão. No fim sobra uma lista de 256 números que resume o vídeo inteiro. Uma última conta transforma essa lista em uma nota para cada gesto.</p>
+    <p>O treino foi em duas fases, como aprender a dirigir: primeiro a autoescola (o Jester, uma base enorme); depois, a adaptação ao carro da família (as cinco bases, com os números e os gestos do volante).</p>
+  </div>
+
+  <h3>A rede, bloco por bloco</h3>
+  <p>Cliquem em cada bloco. Os tamanhos foram calculados a partir do código (<code>src/modelos.py</code>, classe <code>CNN3D</code>).</p>
+  <div class="inter"><div class="tit">Interativo · por dentro da CNN 3D</div><div class="dentro">
+    <div class="fluxo" id="arq"></div>
+    <div class="veredito" id="arqtxt"></div>
+  </div></div>
+
+  <h4>O que há dentro de cada bloco</h4>
+  <ol>
+    <li>Convolução 3×3×3.</li>
+    <li>BatchNorm (deixa os números numa escala estável) e ReLU (zera o que é negativo).</li>
+    <li>Outra convolução 3×3×3, com BatchNorm e ReLU.</li>
+    <li>MaxPool: encolhe. No primeiro bloco encolhe só a imagem; nos três seguintes encolhe também o tempo. Por isso o código diz que "o tempo só é reduzido nas camadas finais".</li>
+  </ol>
+  <p>Depois dos quatro blocos: média global (sobram 256 números), dropout de 0,3 e uma camada linear que dá uma nota por classe.</p>
+
+  <h3>Como foi treinada</h3>
+  <div class="passos">
+    <div class="p"><h4>Fase 1 · Do zero, no Jester</h4>
+      <ul><li>Pesos iniciais aleatórios. Nenhum peso pronto de terceiros.</li>
+      <li>118.562 vídeos de treino, 27 classes, 20 épocas, lote de 48.</li>
+      <li>Otimizador AdamW; taxa de aprendizado até 0,001 em ciclo único; suavização dos rótulos de 0,05.</li>
+      <li>Resultado: <b>92,6% no teste do Jester</b> (14.743 vídeos que a rede nunca viu).</li></ul></div>
+    <div class="p"><h4>Fase 2 · Ajuste (fine-tuning) nas cinco bases</h4>
+      <ul><li>O Jester não tem os números (1, 2, 4 dedos). Era preciso ensinar classes novas.</li>
+      <li>A última camada foi trocada: de 27 para <b>36 saídas</b> (as 27 do Jester, os números de 1 a 4 e cinco gestos do volante).</li>
+      <li>6 épocas de ajuste, com taxa menor (0,0003), em 10.529 amostras de treino das cinco bases misturadas.</li>
+      <li>Resultado no teste misto: 84,0% nas 36 classes; 81,1% nos 11 gestos do carro (95,2% nos movimentos, 58,4% nos números).</li></ul></div>
+    <div class="p"><h4>O que isso mostrou</h4><p>A CNN ajustada continuou ótima nos movimentos e fraca nos números parados. Foi isso que levou aos pontos da mão (seções 4 e 5).</p>
+      <p>Comparação que vale citar: a mesma CNN 3D treinada do zero só nas amostras mistas (15 épocas) ficou em 66,9%. Partindo do Jester, 84,0%. É o ganho do pré-treino.</p></div>
+  </div>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s2"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>Descrevam a arquitetura da CNN 3D.</summary><div class="r"><p>Quatro blocos. Cada bloco tem duas convoluções 3×3×3 com BatchNorm e ReLU, e um MaxPool. Os filtros dobram a cada bloco: 32, 64, 128 e 256. Depois vem uma média global, dropout de 0,3 e uma camada linear. São 3,52 milhões de parâmetros. A entrada é um vídeo de 16 quadros de 96×96 pixels, em cores.</p></div></details>
+  <details class="banca"><summary>"Treinada do zero" e "pré-treinada" não se contradizem?</summary><div class="r"><p>Não. A rede nasceu com pesos aleatórios e foi treinada por nós no Jester: isso é o "do zero". Depois, essa mesma rede, já treinada por nós, serviu de ponto de partida para o ajuste nas cinco bases: isso é o "pré-treinada". O pré-treino é nosso, não de terceiros.</p><p>Ponto honesto: o MediaPipe, usado na contagem de dedos, é um modelo pronto do Google.</p></div></details>
+  <details class="banca"><summary>Por que 16 quadros de 96×96?</summary><div class="r"><p>É a entrada definida no projeto: 16 quadros tirados de uma janela de vídeo, 96×96 pixels. Ao vivo usamos janelas de 1, 1,5 e 3 segundos, cada uma resumida em 16 quadros. Não encontrei nos arquivos um experimento comparando outros tamanhos de entrada; se perguntarem, digam que não testamos.</p></div></details>
+  <details class="banca"><summary>Por que não usaram uma rede maior, se a larga acertou mais?</summary><div class="r"><p>A CNN 3D larga fez 84,2% contra 82,4%, mas tem 7,92 milhões de parâmetros contra 3,52, leva 3,9 ms contra 1,9 ms por clipe e teve mais falsas ativações (0,71% contra 0,43%). Escolhemos pelo equilíbrio, pensando em rodar ao vivo e sem disparar sozinho.</p></div></details>
+</div></section>
+
+<!-- ============ 3 ============ -->
+<section class="sec" id="s3" data-t="As outras arquiteturas e por que não foram escolhidas">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> seis redes treinadas do zero no mesmo protocolo curto; a CNN 3D teve o melhor equilíbrio entre acerto, tamanho, velocidade e falsas ativações.</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero</h4>
+    <p>É como um teste de pista com seis carros. Mesma pista, mesmo combustível, mesmo tempo de treino. Assim a comparação é justa.</p>
+    <p>Um carro foi um pouco mais rápido (a CNN 3D larga), mas gasta o dobro. Dois carros de outro tipo (CNN 2D + GRU e CNN 2D + Transformer) ficaram bem para trás. Escolhemos o que anda quase tão bem quanto o mais rápido, gastando metade.</p>
+  </div>
+
+  <h3>O protocolo (igual para todas)</h3>
+  <p>20 mil vídeos de treino do Jester, 8 épocas, lote de 48, semente 42, validação com 5 mil vídeos, sem aumento de dados.</p>
+
+  <div class="rolar"><table>
+    <tr><th>Arquitetura</th><th>Ideia</th><th class="num">Parâmetros</th><th class="num">Acerto (validação)</th><th class="num">Top-5</th><th class="num">Falsa ativação</th><th class="num">Tempo por clipe</th></tr>
+    <tr><td>CNN 3D larga</td><td>A mesma CNN 3D com 50% mais filtros (48 a 384)</td><td class="num">7,92 mi</td><td class="num">84,2%</td><td class="num">98,1%</td><td class="num">0,71%</td><td class="num">3,9 ms</td></tr>
+    <tr><td>ResNet 3D</td><td>CNN 3D com atalhos: a entrada do bloco é somada à saída</td><td class="num">3,57 mi</td><td class="num">83,0%</td><td class="num">97,9%</td><td class="num">1,14%</td><td class="num">2,4 ms</td></tr>
+    <tr class="final"><td>CNN 3D (escolhida)</td><td>Quatro blocos 3×3×3 (32 a 256 filtros)</td><td class="num">3,52 mi</td><td class="num">82,4%</td><td class="num">98,1%</td><td class="num">0,43%</td><td class="num">1,9 ms</td></tr>
+    <tr><td>CNN 3D leve</td><td>A mesma, com metade dos filtros (16 a 128)</td><td class="num">0,88 mi</td><td class="num">78,6%</td><td class="num">97,5%</td><td class="num">1,42%</td><td class="num">1,9 ms</td></tr>
+    <tr><td>CNN 2D + Transformer</td><td>CNN 2D por quadro; 2 camadas de atenção comparam os quadros</td><td class="num">2,24 mi</td><td class="num">65,3%</td><td class="num">92,5%</td><td class="num">2,42%</td><td class="num">3,9 ms</td></tr>
+    <tr><td>CNN 2D + GRU</td><td>CNN 2D resume cada quadro; uma GRU lê os 16 resumos em ordem</td><td class="num">1,57 mi</td><td class="num">50,4%</td><td class="num">87,0%</td><td class="num">0,28%</td><td class="num">2,7 ms</td></tr>
+  </table></div>
+  <p class="fonte">Fonte: resultados/jester/comparacao_arquiteturas.json. Falsa ativação: % dos vídeos sem gesto em que a rede apontou um gesto com nota ≥ 0,6. Tempo: um clipe, na GPU do notebook.</p>
+
+  <h3>Cada uma, em duas frases</h3>
+  <ul>
+    <li><b>ResNet 3D.</b> Igual à CNN 3D, mas com um "atalho" que soma a entrada do bloco à saída. Isso facilita treinar redes fundas. Ficou parecida em acerto (83,0%), com mais falsas ativações.</li>
+    <li><b>CNN 2D + GRU.</b> Uma CNN 2D transforma cada quadro em um vetor. Uma GRU lê os 16 vetores em ordem. Só 50,4%.</li>
+    <li><b>CNN 2D + Transformer.</b> A mesma CNN 2D; no lugar da GRU, camadas de atenção comparam todos os quadros entre si. 65,3%.</li>
+    <li><b>R(2+1)D.</b> Separa a convolução em espaço e tempo. Ficou fora: com lote de 48 passava dos 8 GB da GPU.</li>
+  </ul>
+  <div class="alerta"><b>Atenção: existem duas "GRUs" no projeto.</b> A desta tabela (CNN 2D + GRU) lê <i>pixels</i>, resumidos quadro a quadro. A da seção 7 lê os <i>21 pontos da mão</i>. São modelos diferentes, de etapas diferentes, com resultados diferentes. Não misturem.</div>
+
+  <div class="inter"><div class="tit">Gráfico · acerto na validação, época por época</div><div class="dentro">
+    <canvas id="cvcurva" width="900" height="300"></canvas>
+    <p class="legenda">Dados de comparacao_arquiteturas.json (curva_val). Reparem que todas ainda subiam na época 8.</p>
+  </div></div>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s3"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>Que outras arquiteturas vocês testaram?</summary><div class="r"><p>Seis, no mesmo protocolo: CNN 3D, CNN 3D larga, CNN 3D leve, ResNet 3D, CNN 2D + GRU e CNN 2D + Transformer. A R(2+1)D ficou de fora por memória da GPU.</p></div></details>
+  <details class="banca"><summary>A comparação é justa? Oito épocas é pouco.</summary><div class="r"><p>É justa no sentido de ser igual para todas: mesmos vídeos, mesmas épocas, mesma semente. Mas é curta, e reconhecemos dois limites. Primeiro, todas ainda melhoravam na última época. Segundo, as duas redes com CNN 2D usaram taxa de aprendizado menor (0,0003 contra 0,001). Com mais treino, a distância poderia diminuir. A decisão foi tomada com o que cabia no tempo e na GPU do notebook.</p></div></details>
+  <details class="banca"><summary>Por que a CNN 2D + GRU foi tão mal?</summary><div class="r"><p>Explicação provável, não provada: a CNN 2D resume cada quadro sozinho, em um vetor, antes de olhar o tempo. O movimento fino entre quadros se perde nesse resumo. Na CNN 3D, o filtro já vê o movimento nos pixels. Também pesa o treino curto: a curva dela ia de 49,4% para 50,4% e ainda subia.</p></div></details>
+</div></section>
+
+<!-- ============ 4 ============ -->
+<section class="sec" id="s4" data-t="MediaPipe: como ele acha a mão e os 21 pontos">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> o MediaPipe, do Google, entrega 21 pontos da mão em cada quadro. Ele não diz qual é o gesto. Tudo o que vem depois (mão parada, contagem de dedos, OK) são regras nossas.</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero</h4>
+    <p>Imaginem um boneco de palitinho da mão: uma bolinha no pulso e bolinhas em cada junta dos dedos. São 21 bolinhas. O MediaPipe é um programa pronto que olha a imagem da câmera e desenha esse boneco de palito por cima da mão.</p>
+    <p>Ele faz isso em duas etapas, como achar um amigo numa foto de multidão: primeiro vocês acham <i>onde</i> ele está (um retângulo em volta da palma); depois olham de perto, só aquele pedaço, para ver os detalhes (as 21 juntas).</p>
+    <p>O programa só entrega as bolinhas. Quem conta quantos dedos estão esticados somos nós, com régua e transferidor (seção 5).</p>
+  </div>
+
+  <div class="passos">
+    <div class="p"><h4>Passo 1 · Detector de palma (do Google)</h4><p>Uma rede procura a palma na imagem inteira e devolve um retângulo em volta da mão. A palma é mais fácil de achar do que a mão com os dedos em várias posições.</p></div>
+    <div class="p"><h4>Passo 2 · Modelo de pontos (do Google)</h4><p>Outra rede olha só esse recorte e marca 21 pontos: o pulso (ponto 0) e quatro pontos por dedo, da base à ponta.</p></div>
+    <div class="p"><h4>Passo 3 · Duas versões dos pontos</h4><p>Na imagem: x e y de 0 a 1, e um z relativo. E em metros ("world landmarks"), com origem perto do centro da mão. A nossa contagem usa os pontos em metros, porque não dependem da distância até a câmera nem de a mão estar inclinada.</p></div>
+    <div class="p"><h4>Passo 4 · Modo vídeo</h4><p>Usamos o modo vídeo: ele acompanha a mão de um quadro para o outro, o que é mais rápido. Ao vivo, o MediaPipe roda em 12 quadros por segundo, os mesmos quadros que alimentam a CNN.</p></div>
+    <div class="p"><h4>Passo 5 · Onde termina o Google e começa o nosso</h4><p>O MediaPipe entra pronto e congelado. Não treinamos nada nele. A partir dos 21 pontos, é tudo código nosso.</p></div>
+  </div>
+
+  <div class="rolar"><table>
+    <tr><th>Do Google (pronto, licença Apache 2.0)</th><th>Nosso</th></tr>
+    <tr><td>Detector de palma</td><td>Regra de mão parada (pulso andou no máximo meia palma em 6 quadros)</td></tr>
+    <tr><td>Modelo dos 21 pontos (arquivo <code>hand_landmarker.task</code>, cerca de 8 MB)</td><td>Regra que conta os dedos esticados e os limiares</td></tr>
+    <tr><td>Treinado pelo Google com cerca de 30 mil imagens reais, mais mãos sintéticas</td><td>Contagem estável em 5 de 6 quadros</td></tr>
+    <tr><td></td><td>Detector do OK e a janela de 7 segundos</td></tr>
+    <tr><td></td><td>A CNN 3D inteira e a GRU sobre os pontos</td></tr>
+  </table></div>
+
+  <h3>Onde o MediaPipe falha (importante)</h3>
+  <p>Fração das amostras do teste misto em que ele achou a mão em pelo menos 70% dos quadros:</p>
+  <div class="barras">
+    <div class="b"><span>DriverMHG</span><div class="tr"><i style="width:100%"></i></div><span class="v">100,0%</span></div>
+    <div class="b"><span>HaGRID (fotos)</span><div class="tr"><i style="width:98%"></i></div><span class="v">98,0%</span></div>
+    <div class="b"><span>IPN Hand (webcam)</span><div class="tr"><i style="width:86.8%"></i></div><span class="v">86,8%</span></div>
+    <div class="b"><span>Slovo</span><div class="tr"><i style="width:39%"></i></div><span class="v">39,0%</span></div>
+    <div class="b"><span>Jester</span><div class="tr"><i style="width:35%"></i></div><span class="v">35,0%</span></div>
+  </div>
+  <p>No Jester os vídeos têm cerca de 100 pixels de altura e a mão borra quando anda. Por isso os pontos ficaram com os gestos <b>parados</b> (números), e a CNN 3D ficou com os <b>movimentos</b>.</p>
+
+  <p>A mão 3D que dá para girar e dobrar os dedos está na seção 5.</p>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s4"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>O que é de vocês e o que é do Google?</summary><div class="r"><p>Do Google: o MediaPipe Hand Landmarker, que acha a palma e marca os 21 pontos. É usado pronto, sem treino nosso. Nosso: a regra de mão parada, a contagem de dedos com os limiares, a estabilidade em 5 de 6 quadros, o detector do OK, e as redes que treinamos, a CNN 3D e a GRU.</p></div></details>
+  <details class="banca"><summary>Usar o MediaPipe não quebra a regra de treinar do zero?</summary><div class="r"><p>A restrição de treinar do zero foi seguida nas redes que reconhecem os gestos: a CNN 3D não usa pesos de terceiros. O MediaPipe é uma ferramenta pronta que só localiza a mão; ele não reconhece nenhum gesto. Deixamos isso explícito nos slides e nas referências.</p></div></details>
+  <details class="banca"><summary>E se o MediaPipe não achar a mão?</summary><div class="r"><p>Sem os pontos, a contagem de dedos não dispara nada. A CNN 3D continua funcionando, porque ela lê o vídeo e não depende dos pontos. O risco é perder um número, não inventar um.</p></div></details>
+</div></section>
+
+<!-- ============ 5 ============ -->
+<section class="sec" id="s5" data-t="A contagem de dedos: geometria, mão parada e limiares">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> um dedo está esticado se a linha reta da base à ponta tem pelo menos 85% do comprimento do dedo e ele aponta até 65° da direção da palma. O número vale com a mão parada e a mesma contagem em 5 de 6 quadros. Não há rede neural nem porcentagem.</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero</h4>
+    <p>Peguem um barbante do tamanho do seu dedo indicador. Com o dedo esticado, a distância da base até a ponta é o barbante inteiro. Dobrem o dedo: a ponta chega mais perto da base, e a distância em linha reta fica bem menor que o barbante.</p>
+    <p>A regra faz essa conta: <b>distância em linha reta ÷ comprimento do dedo</b>. Perto de 1, o dedo está reto. Bem abaixo de 1, está dobrado. O corte é 0,85.</p>
+    <p>A segunda checagem é a direção: o dedo tem que apontar "para fora" da palma, não para o lado ou para trás. O corte é 65 graus.</p>
+    <p>E, para não disparar com uma leitura errada de um instante, a contagem tem que se repetir em 5 dos últimos 6 quadros, com a mão quieta. Seis quadros são meio segundo.</p>
+  </div>
+
+  <div class="inter destaque"><div class="tit">Interativo · mão 3D com a regra real do projeto</div><div class="dentro lado">
+    <div><canvas id="cvmao" width="520" height="420"></canvas><p class="legenda">Arrastem para girar a mão. Pontas azul-escuras: dedos que a regra considera esticados.</p></div>
+    <div>
+      <div class="ctrl" id="maoPresets"></div>
+      <div id="maoSliders"></div>
+      <div class="rolar"><table id="maoTab"></table></div>
+      <div class="veredito" id="maoTxt"></div>
+      <p class="legenda">A mão é um modelo desenhado para estudo. As contas (reta, ângulo, polegar) e os limiares são os mesmos de <code>src/pontos_mao.py</code>.</p>
+    </div>
+  </div></div>
+
+  <h3>A regra, passo a passo</h3>
+  <div class="passos">
+    <div class="p"><h4>Passo 1 · Medir a "reta" de cada dedo</h4><p>Para indicador, médio, anelar e mínimo: distância da base (primeira junta) até a ponta, dividida pela soma dos três ossos do dedo. Dedo reto dá perto de 1. Limiar: <b>≥ 0,85</b>.</p></div>
+    <div class="p"><h4>Passo 2 · Medir o ângulo</h4><p>Ângulo entre duas setas: a que vai do pulso à base do dedo, e a que vai da base à ponta. Dedo apontando na direção da palma dá ângulo pequeno. Limiar: <b>≤ 65°</b>. As duas condições têm que valer juntas.</p></div>
+    <div class="p"><h4>Passo 3 · O polegar tem regra própria</h4><p>Ele precisa estar reto (<b>≥ 0,95</b>) e afastado: a ponta a pelo menos <b>1,20</b> largura de palma da base do dedo mínimo. Dobrado sobre a palma, ele fica perto e não conta.</p></div>
+    <div class="p"><h4>Passo 4 · Da contagem ao número</h4><ul><li>1 a 4 dedos esticados: é número.</li><li>Só o polegar: não é número. É o joinha, que fica com a CNN.</li><li>Cinco dedos: não é número. É a mão aberta (pare), que fica com a CNN.</li><li>Zero dedos (punho): não é número. Foi removido porque, no IPN, 51 de 84 disparos falsos eram mão relaxada lida como punho.</li></ul>
+      <p>No carro só 1, 2 e 4 dedos viram comando. Três dedos ficou de fora porque o sinal de OK tem três dedos esticados.</p></div>
+    <div class="p"><h4>Passo 5 · Mão parada</h4><p>Olhamos os últimos 6 quadros (0,5 s a 12 quadros por segundo). A mão está parada se apareceu em pelo menos 5 deles e o pulso andou no máximo <b>0,5 palma</b>. "Palma" é a distância do pulso à base do dedo médio. Medir em palmas faz a regra valer com a mão perto ou longe da câmera.</p></div>
+    <div class="p"><h4>Passo 6 · Contagem estável</h4><p>A mesma contagem em pelo menos <b>5 dos 6</b> quadros. Aí o número é dado como detectado, sem porcentagem. A estabilidade é a própria confirmação.</p></div>
+    <div class="p"><h4>De onde vieram os limiares</h4><p>Os valores iniciais foram escolhidos à mão: reta 0,80, ângulo 60°, polegar reto 0,85, polegar fora 1,20. Depois foram ajustados em metade da amostra do HaGRID e medidos na outra metade: 0,85, 65°, 0,95 e 1,20.</p></div>
+  </div>
+
+  <h3>O que a contagem trouxe (11 gestos do carro, teste misto)</h3>
+  <div class="barras">
+    <div class="b"><span>Números, CNN sozinha</span><div class="tr"><i style="width:58.4%"></i></div><span class="v">58,4%</span></div>
+    <div class="b fin"><span>Números, com a contagem (modelo final)</span><div class="tr"><i style="width:82%"></i></div><span class="v">82,0%</span></div>
+  </div>
+  <p>São 23,6 pontos a mais. Por gesto, no modelo final: um dedo 75,0%, dois dedos 81,5%, quatro dedos 97,0%.</p>
+
+  <div class="alerta"><b>Ponto fraco para saber de cor.</b> "Quando a regra diz k dedos, eram mesmo k dedos?" No cenário do carro: um dedo 78,5%, dois dedos 63,2%, quatro dedos 80,8%. Em todos os dados do teste misto, dois dedos cai para 22,6%, porque muitos gestos do Jester são feitos com dois dedos à mostra (zoom e deslizar com dois dedos). A regra vê os dedos e não sabe que é outro gesto.</div>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s5"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>Como a contagem de dedos funciona?</summary><div class="r"><p>A partir dos 21 pontos em metros. Um dedo conta como esticado se a distância da base à ponta, dividida pelo comprimento do dedo, é pelo menos 0,85, e o ângulo com a direção da palma é no máximo 65°. O polegar tem regra própria: reto (0,95) e afastado (1,20 largura de palma). O número vale com a mão parada e a mesma contagem em 5 de 6 quadros.</p></div></details>
+  <details class="banca"><summary>Isso é Deep Learning? É só uma regra.</summary><div class="r"><p>A contagem em si é geometria, sem treino. O aprendizado profundo está em dois lugares: no MediaPipe, que acha os pontos (do Google), e na nossa CNN 3D, que reconhece os oito movimentos. Tentamos resolver os números com redes três vezes (CNN com fotos, CNN com vídeo real, GRU sobre os pontos). Ao vivo, a regra foi a única que reconheceu os números. Preferimos mostrar o que funciona e explicar por quê.</p></div></details>
+  <details class="banca"><summary>Como escolheram 0,85 e 65°?</summary><div class="r"><p>Começamos com valores à mão (0,80 e 60°). Depois ajustamos em metade da amostra do HaGRID e medimos na outra metade. Ponto honesto: o HaGRID são fotos; os limiares não foram ajustados com a nossa webcam.</p></div></details>
+  <details class="banca"><summary>Por que não há porcentagem nos números?</summary><div class="r"><p>Uma regra de geometria não produz probabilidade. Uma versão anterior dava nota fixa de 0,9, escolhida sem medir. Medimos e vimos que era otimista demais, então tiramos. Hoje a confirmação é a repetição: mesma contagem em 5 de 6 quadros, com a mão parada.</p></div></details>
+</div></section>
+
+<!-- ============ 6 ============ -->
+<section class="sec" id="s6" data-t="Como o modelo final decide: contagem ou CNN">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> a cada 0,15 s o sistema pergunta "a mão está parada e mostrando de 1 a 4 dedos?". Se sim, vale a contagem, que dispara direto. Se não, vale a CNN 3D, que precisa de nota ≥ 70% em 3 análises seguidas.</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero</h4>
+    <p>São dois especialistas olhando a mesma câmera. Um é bom em <b>fotos</b>: conta dedos de uma mão parada. O outro é bom em <b>filmes</b>: reconhece movimentos.</p>
+    <p>Existe um porteiro que faz sempre a mesma pergunta: "a mão está quieta e mostrando de 1 a 4 dedos?". Se sim, ele chama o especialista em fotos e nem escuta o outro. Se não, chama o especialista em filmes.</p>
+    <p>Cada especialista tem a sua exigência antes de apertar o botão. O das fotos: "vi a mesma coisa em 5 de 6 fotos". O dos filmes: "tenho pelo menos 70% de certeza, três vezes seguidas".</p>
+  </div>
+
+  <div class="passos">
+    <div class="p"><h4>Passo 1 · Ativar</h4><p>O sinal de OK (polegar encostado no indicador, três dedos retos, mantido 0,4 s) abre uma janela de 7 segundos, com bip e voz. Fora da janela, nenhum gesto vira comando. O OK é detectado no navegador, pela geometria dos pontos.</p></div>
+    <div class="p"><h4>Passo 2 · As duas partes olham ao mesmo tempo</h4><p>A câmera roda a cerca de 30 quadros por segundo. O sistema pega 12 por segundo. Em cada um, o MediaPipe marca os pontos. A cada 0,15 s roda a CNN, em três janelas de vídeo: 1 s, 1,5 s e 3 s.</p></div>
+    <div class="p"><h4>Passo 3 · A pergunta</h4><p>Mão parada (pulso ≤ 0,5 palma em 6 quadros) <b>e</b> contagem de 1 a 4 dedos igual em 5 de 6 quadros?</p></div>
+    <div class="p"><h4>Passo 4 · Se sim: contagem</h4><p>O gesto é o número. Vai ao gatilho "pela regra": sem limiar e sem análises seguidas. Só valem a pausa depois de um disparo e a exigência de soltar o gesto para repetir (meio segundo sem ver o número).</p></div>
+    <div class="p"><h4>Passo 5 · Se não: CNN 3D</h4><p>As notas das classes de número são zeradas e o resto é renormalizado. Faz-se a média das 2 últimas análises. O gatilho exige o mesmo gesto com nota <b>≥ 0,7 em 3 análises seguidas</b>. Depois, 1,2 s de pausa.</p></div>
+    <div class="p"><h4>Passo 6 · Executar</h4><p>O comando vai para a central (música, ar-condicionado ou telefone), com resposta por voz.</p></div>
+  </div>
+
+  <div class="inter destaque"><div class="tit">Interativo · simulador da decisão</div><div class="dentro">
+    <p>Os 6 últimos quadros. Cliquem em cada um para trocar o que a contagem viu nele.</p>
+    <div class="quadros" id="decQ"></div>
+    <div class="ctrl"><label>Quanto o pulso andou nesses 6 quadros: <input type="range" id="decMov" min="0" max="150" value="20"> <b id="decMovV"></b></label></div>
+    <div class="ctrl"><label>Nota da CNN para o gesto que ela vê: <input type="range" id="decNota" min="0" max="100" value="82"> <b id="decNotaV"></b></label>
+      <label>Análises seguidas com essa nota: <input type="range" id="decSeg" min="1" max="4" value="3" style="width:80px"> <b id="decSegV"></b></label></div>
+    <div id="decOut"></div>
+  </div></div>
+
+  <div class="rolar"><table>
+    <tr><th></th><th>Contagem de dedos</th><th>CNN 3D</th></tr>
+    <tr><td>Cuida de</td><td>1, 2 e 4 dedos (números)</td><td>8 movimentos</td></tr>
+    <tr><td>Entrada</td><td>21 pontos do MediaPipe</td><td>Vídeo: 16 quadros de 96×96</td></tr>
+    <tr><td>Gatilho</td><td>Mão parada e mesma contagem em 5 de 6 quadros</td><td>Nota ≥ 0,7 em 3 análises seguidas</td></tr>
+    <tr><td>Dá porcentagem?</td><td>Não</td><td>Sim (softmax)</td></tr>
+    <tr><td>Tem treino nosso?</td><td>Não. Só limiares ajustados no HaGRID</td><td>Sim. Jester e depois as cinco bases</td></tr>
+  </table></div>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s6"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>Quem decide quando a contagem e a CNN discordam?</summary><div class="r"><p>Se a mão está parada e a contagem vê de 1 a 4 dedos de forma estável, vale a contagem, e a CNN não é consultada para aquele instante. Em todo o resto, vale a CNN, com as classes de número zeradas. Não há votação entre as duas.</p></div></details>
+  <details class="banca"><summary>Por que a CNN precisa de 3 análises seguidas e a contagem não?</summary><div class="r"><p>A CNN dá uma nota por análise, e uma nota alta isolada pode ser ruído; por isso pedimos 70% três vezes seguidas. A contagem já tem a repetição embutida: só existe número se a contagem for a mesma em 5 de 6 quadros. Quando tentamos exigir as duas coisas, os números quase não disparavam: um dedo passava em 42,1% das vezes; disparando direto, 73,0%.</p></div></details>
+  <details class="banca"><summary>Qual é o custo de a contagem disparar direto?</summary><div class="r"><p>Mais números por engano. Na medida do dia 16/11, as amostras sem número que dispararam um número foram de 13,1% para 24,3%. É por isso que existe a ativação pelo OK.</p></div></details>
+</div></section>
+
+<!-- ============ 7 GRU ============ -->
+<section class="sec destaque" id="s7" data-t="A GRU sobre os pontos: como funciona e por que não foi usada (seção mais longa)">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> a GRU é uma rede com memória que lê os 21 pontos da mão quadro a quadro, em ordem. Nos dados ela foi a melhor nos números (95,6%). Na webcam dava nota baixa nos números e lia a mão aberta como quatro dedos. Por isso não roda ao vivo.</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero, sem nenhum termo técnico</h4>
+    <p><b>O problema.</b> Um gesto é uma sequência. Não basta olhar um instante: é preciso lembrar o que veio antes. Para entender a frase "eu não gostei do filme", vocês precisam lembrar do "não" quando chegam em "gostei".</p>
+    <p><b>A ideia.</b> Imaginem alguém assistindo a um jogo e anotando num <b>bloquinho pequeno</b>. Não cabe tudo. A cada lance, a pessoa olha o lance novo, olha o bloquinho, e decide duas coisas: quanto do que já está anotado ela mantém, e quanto ela troca pelo que acabou de ver. No fim do jogo, o bloquinho é o resumo da partida.</p>
+    <p>A GRU é isso. O bloquinho é a <b>memória</b> (128 números na nossa). As duas decisões são os <b>portões</b>. Ninguém programa os portões: a rede aprende, no treino, quando vale a pena guardar e quando vale a pena trocar.</p>
+    <p><b>No nosso caso</b>, cada "lance" é um quadro do vídeo, descrito pelos pontos da mão. A GRU lê os quadros em ordem, do primeiro ao último, e também de trás para a frente. No fim, dá uma nota para cada gesto.</p>
+    <p><b>Por que não usamos.</b> Ela foi muito bem na prova (os dados). Mas, na nossa webcam, ficava insegura nos números e confundia mão aberta com quatro dedos. É como um aluno que estudou só por um livro: vai bem na prova daquele livro e trava quando a pergunta vem com outra cara. Ela aprendeu os números quase só com fotos do HaGRID, em que a mão ocupa a imagem; a nossa webcam é diferente.</p>
+  </div>
+
+  <h3>Parte A · O que é uma GRU</h3>
+  <div class="passos">
+    <div class="p"><h4>Passo 1 · O nome</h4><p>GRU quer dizer <i>Gated Recurrent Unit</i>: unidade recorrente com portões. "Recorrente" porque a mesma conta é repetida a cada passo de tempo. "Com portões" porque existem válvulas que controlam a memória.</p></div>
+    <div class="p"><h4>Passo 2 · Rede recorrente</h4><p>Uma rede comum recebe uma entrada e dá uma saída. Uma rede recorrente recebe uma <b>sequência</b>. Ela guarda um vetor de memória, chamado <b>estado oculto</b> (h). A cada passo ela lê a entrada nova (x) e a memória antiga, e produz a memória nova.</p></div>
+    <div class="p"><h4>Passo 3 · O problema da recorrente simples</h4><p>Na versão simples, a memória é reescrita por inteiro a cada passo. Depois de muitos passos, o que aconteceu no começo se apaga. Para gestos, o começo importa: é ele que diz de onde a mão saiu.</p></div>
+    <div class="p"><h4>Passo 4 · Os dois portões da GRU</h4>
+      <ul><li><b>Portão de atualização (z).</b> Um número entre 0 e 1 para cada posição da memória. Diz quanto da memória antiga é mantido e quanto é trocado pelo conteúdo novo.</li>
+      <li><b>Portão de reinício (r).</b> Também entre 0 e 1. Diz quanto da memória antiga é consultado na hora de montar o conteúdo novo. Perto de 0, a rede "começa de novo" a partir da entrada atual.</li></ul></div>
+    <div class="p"><h4>Passo 5 · A conta de um passo</h4>
+      <ol><li>Calcula r e z a partir da entrada x e da memória antiga h. Cada um passa por uma função que espreme o valor entre 0 e 1 (sigmoide).</li>
+      <li>Monta o <b>candidato</b>: uma proposta de memória nova, feita com x e com a memória antiga multiplicada por r. Passa por tanh, que espreme entre −1 e 1.</li>
+      <li>Mistura: <b>memória nova = z × memória antiga + (1 − z) × candidato</b>.</li></ol>
+      <p>É a convenção do PyTorch, a biblioteca que usamos. Com z perto de 1, a memória quase não muda. Com z perto de 0, ela é trocada pelo candidato.</p></div>
+    <div class="p"><h4>Passo 6 · GRU e LSTM</h4><p>A LSTM é a prima mais antiga, com três portões e duas memórias. A GRU tem dois portões e uma memória: menos parâmetros para a mesma largura. No diário do projeto a ideia começou como "uma LSTM sobre os pontos" e a rede treinada foi uma GRU. Não encontrei nos arquivos uma comparação entre as duas; se perguntarem, digam que só a GRU foi treinada.</p></div>
+  </div>
+
+  <div class="inter destaque"><div class="tit">Interativo · uma célula GRU na mão</div><div class="dentro lado">
+    <div>
+      <div class="ctrl"><label>Memória antiga (h): <input type="range" id="gH" min="-100" max="100" value="60"> <b id="gHv"></b></label></div>
+      <div class="ctrl"><label>Entrada nova (x): <input type="range" id="gX" min="-100" max="100" value="-80"> <b id="gXv"></b></label></div>
+      <div class="ctrl"><label>Portão de reinício (r): <input type="range" id="gR" min="0" max="100" value="100"> <b id="gRv"></b></label></div>
+      <div class="ctrl"><label>Portão de atualização (z): <input type="range" id="gZ" min="0" max="100" value="50"> <b id="gZv"></b></label></div>
+      <p class="legenda">Aqui vocês escolhem os portões para ver o efeito. Na rede de verdade, quem calcula r e z é a própria rede, a cada quadro, com pesos aprendidos no treino. Os pesos deste brinquedo são inventados só para a demonstração.</p>
+    </div>
+    <div>
+      <canvas id="cvgru" width="460" height="250"></canvas>
+      <div class="veredito" id="gTxt"></div>
+      <p class="legenda">Experimentem: z em 1,00 (a memória não muda, por mais forte que seja a entrada). Depois z em 0,00 (a memória vira o candidato). Depois r em 0,00 (o candidato ignora a memória antiga).</p>
+    </div>
+  </div></div>
+
+  <h3>Parte B · A nossa GRU, do quadro à nota</h3>
+  <p>Código: <code>src/treinar_pontos_jester.py</code>, classe <code>Rede</code>. Usem os botões para avançar uma etapa por vez.</p>
+  <div class="inter destaque"><div class="tit">Interativo · animação · a GRU lendo um gesto</div><div class="dentro">
+    <div class="tempo" id="gruT"></div>
+    <div class="veredito" id="gruTxt"></div>
+    <div class="barras" id="gruOut" style="display:none"></div>
+    <div class="ctrl"><button class="bt" id="gruPrev">Etapa anterior</button><button class="bt cheio" id="gruNext">Próxima etapa</button><button class="bt" id="gruReset">Recomeçar</button><span class="legenda" id="gruOnde"></span></div>
+    <p class="legenda">Barra azul: memória da leitura na ordem normal. Barra clara: memória da leitura invertida. Barra escura: peso da atenção. O desenho mostra 8 quadros e valores ilustrativos; a rede de verdade usa até 40 quadros e 128 números de memória em cada direção.</p>
+  </div></div>
+
+  <div class="passos">
+    <div class="p"><h4>Etapa 1 · Quadros</h4><p>O vídeo entra a 12 quadros por segundo. A rede trabalha com até <b>40 quadros</b>. Clipes mais curtos são completados com zeros, e uma máscara avisa a rede quais posições são de verdade.</p></div>
+    <div class="p"><h4>Etapa 2 · 21 pontos</h4><p>Em cada quadro o MediaPipe dá os 21 pontos da mão principal. Se ele perde a mão por até 3 quadros entre duas detecções, o código interpola os pontos no meio. Sem mão, o quadro vira zeros.</p></div>
+    <div class="p"><h4>Etapa 3 · Atributos: 182 números por quadro</h4>
+      <p>Os pontos crus não vão direto. O código monta uma descrição da mão:</p>
+      <div class="rolar"><table>
+        <tr><th>Atributo</th><th class="num">Números</th><th>Para que serve</th></tr>
+        <tr><td>Forma na imagem, relativa ao pulso, dividida pelo tamanho da mão</td><td class="num">42</td><td>O desenho da mão, sem depender da posição nem da distância</td></tr>
+        <tr><td>Forma em 3D (metros), relativa ao pulso, normalizada</td><td class="num">63</td><td>A mesma coisa, com profundidade</td></tr>
+        <tr><td>A mesma forma num referencial da palma</td><td class="num">63</td><td>A forma não muda se a mão gira</td></tr>
+        <tr><td>Orientação da palma em relação à câmera</td><td class="num">6</td><td>Para onde a palma aponta</td></tr>
+        <tr><td>Posição do pulso (centrada na média do clipe)</td><td class="num">2</td><td>Onde a mão está</td></tr>
+        <tr><td>Velocidade do pulso</td><td class="num">2</td><td>Para onde a mão vai (deslizes)</td></tr>
+        <tr><td>Tamanho aparente da mão e sua variação</td><td class="num">2</td><td>Aproximar ou afastar (empurrar, puxar)</td></tr>
+        <tr><td>Presença da mão e nota do MediaPipe</td><td class="num">2</td><td>Se dá para confiar no quadro</td></tr>
+      </table></div>
+      <p class="fonte">A soma dá 182. Contei a partir do código (função <code>atributos</code>); o total bate com os 525.212 parâmetros registrados no resultado.</p>
+      <p>Antes de entrar na rede, cada atributo é normalizado (subtrai a média e divide pelo desvio, calculados no treino).</p></div>
+    <div class="p"><h4>Etapa 4 · Camada de entrada</h4><p>Uma camada linear leva os 182 números para 128, seguida de ReLU. É uma "tradução" dos atributos para o tamanho da memória.</p></div>
+    <div class="p"><h4>Etapa 5 · A GRU: 2 camadas, 128 de memória, bidirecional</h4>
+      <ul><li><b>128</b>: tamanho da memória em cada direção.</li>
+      <li><b>Bidirecional</b>: uma GRU lê do primeiro quadro ao último; outra lê do último ao primeiro. Em cada quadro, as duas memórias são coladas: 128 + 128 = <b>256 números</b>. Assim cada quadro "sabe" o que veio antes e o que vem depois.</li>
+      <li><b>2 camadas</b>: a segunda GRU lê a saída da primeira. Entre elas, dropout de 0,3.</li></ul></div>
+    <div class="p"><h4>Etapa 6 · Atenção: qual quadro pesa mais</h4><p>Uma camada linear dá uma nota para cada quadro. O softmax transforma essas notas em pesos que somam 1. Quadros de preenchimento recebem peso praticamente zero (a máscara). O resumo do clipe é a <b>média ponderada</b> das memórias dos quadros. A rede aprende a dar mais peso aos quadros em que o gesto acontece.</p></div>
+    <div class="p"><h4>Etapa 7 · Saída</h4><p>Dropout de 0,3 e uma camada linear de 256 para o número de classes: 27 no teste só com o Jester, 36 no teste misto. O softmax vira as notas em porcentagens. A maior é o gesto.</p></div>
+    <div class="p"><h4>Tamanho</h4><p><b>525.212 parâmetros</b> na versão de 27 classes. É cerca de 7 vezes menor que a CNN 3D (3,52 milhões). O número é da GRU do teste com o Jester; a versão de 36 classes tem a mesma estrutura com a saída maior, e não achei o total dela registrado nos arquivos.</p></div>
+  </div>
+
+  <h3>Parte C · Como ela foi treinada</h3>
+  <ul>
+    <li><b>Do zero</b>, sobre os pontos. O MediaPipe entra pronto e congelado.</li>
+    <li>Só com clipes em que o MediaPipe achou a mão em pelo menos 70% dos quadros.</li>
+    <li>80 épocas, lote de 128, otimizador AdamW, taxa de aprendizado até 0,001 em ciclo único, suavização dos rótulos de 0,1.</li>
+    <li>Aumento de dados: velocidade entre 0,8 e 1,25 vez, recorte de 80% a 100% do clipe, até 10% dos quadros zerados (simula o MediaPipe perdendo a mão) e um ruído pequeno nos atributos.</li>
+    <li>No teste só com o Jester: 3.035 clipes de treino com mão, de 8.100. No teste misto: 10.529 amostras de treino das cinco bases, 36 classes.</li>
+  </ul>
+
+  <h3>Parte D · Os resultados, cada um na sua régua</h3>
+  <div class="rolar"><table>
+    <tr><th>Medida</th><th>Onde</th><th class="num">GRU sobre os pontos</th><th class="num">Comparação</th></tr>
+    <tr><td>Só Jester, todos os 2.700 clipes</td><td>amostra da validação, 27 classes</td><td class="num">67,7%</td><td class="num">CNN 3D: 93,4%</td></tr>
+    <tr><td>Só Jester, os 944 clipes com mão</td><td>idem</td><td class="num">80,8%</td><td class="num">CNN 3D: 93,9%</td></tr>
+    <tr><td>Teste misto, 36 classes</td><td>3.642 amostras, 5 bases</td><td class="num">76,5%</td><td class="num">CNN ajustada: 84,0%</td></tr>
+    <tr><td>Teste misto, só HaGRID (números)</td><td>fotos</td><td class="num">96,5%</td><td class="num">CNN ajustada: 41,8%</td></tr>
+    <tr><td>Teste misto, só Jester (movimentos)</td><td></td><td class="num">73,1%</td><td class="num">CNN ajustada: 93,1%</td></tr>
+    <tr><td>11 gestos do carro</td><td>1.300 clipes</td><td class="num">83,3%</td><td class="num">modelo final: 87,7%</td></tr>
+    <tr><td>Números do carro</td><td>500 clipes</td><td class="num">95,6%</td><td class="num">modelo final: 82,0%</td></tr>
+    <tr><td>Movimentos do carro</td><td>800 clipes</td><td class="num">75,6%</td><td class="num">modelo final: 91,2%</td></tr>
+    <tr><td>Falsos por minuto, vídeo contínuo</td><td>IPN, 31,5 min sem gesto</td><td class="num">1,46</td><td class="num">CNN ajustada: 0,19</td></tr>
+  </table></div>
+  <p><b>Leitura:</b> a GRU é ótima nos números e fraca nos movimentos. A CNN é o contrário. Daí a ideia de juntar as duas.</p>
+
+  <h4>GRU + CNN (testada, não usada)</h4>
+  <div class="rolar"><table>
+    <tr><th>Combinação</th><th class="num">11 gestos do carro</th><th class="num">Números</th><th class="num">Movimentos</th><th class="num">36 classes</th><th>No vídeo contínuo do IPN</th></tr>
+    <tr><td>Média das notas (0,3 GRU e 0,7 CNN)</td><td class="num">95,8%</td><td class="num">96,2%</td><td class="num">95,6%</td><td class="num">92,4% *</td><td>0,10 falso/min, mas quase não dispara os números: 36 de 265 trechos de um dedo, 0 de 264 de dois</td></tr>
+    <tr><td>Números só pela GRU; movimentos pela média</td><td class="num">95,6%</td><td class="num">95,6%</td><td class="num">95,6%</td><td class="num">92,0%</td><td>0,25 falso/min; 251 de 265 e 240 de 264 trechos</td></tr>
+  </table></div>
+  <p class="fonte">* O arquivo gestos_do_carro_gru.json diz 92,4%; o slide A8 e o diário de 13/11 dizem 92,2% para a mesma combinação. A diferença vem de como o peso da média foi escolhido em cada medida. Se citarem, digam "cerca de 92%".</p>
+  <p><b>Por que a média simples não dispara os números ao vivo:</b> nos clipes cortados vence a maior nota, qualquer que seja. No vídeo contínuo, o gatilho exige nota ≥ 0,7. Com peso 0,3 para a GRU, a média quase nunca chega lá nos números, porque a CNN (peso 0,7) dá nota baixa para número parado.</p>
+
+  <h4>Mais dados ajudam (curva de aprendizado, só Jester)</h4>
+  <div class="barras">
+    <div class="b"><span>758 clipes de treino (25%)</span><div class="tr"><i style="width:71.3%"></i></div><span class="v">71,3%</span></div>
+    <div class="b"><span>1.517 clipes (50%)</span><div class="tr"><i style="width:75.8%"></i></div><span class="v">75,8%</span></div>
+    <div class="b"><span>3.035 clipes (100%)</span><div class="tr"><i style="width:80.8%"></i></div><span class="v">80,8%</span></div>
+  </div>
+  <p class="fonte">Acerto nos clipes de teste com mão. Em todos os clipes: 58,0%, 62,4% e 67,7%.</p>
+  <p>Cada vez que os dados dobram, sobe cerca de 5 pontos, e a curva ainda não achatou. É o argumento para o próximo passo: treinar a GRU com vídeos da nossa câmera.</p>
+
+  <h3>Parte E · Por que não foi usada</h3>
+  <div class="passos">
+    <div class="p"><h4>1 · O que aconteceu na webcam</h4><p>Ao vivo, a GRU dava <b>nota baixa nos números</b>, abaixo dos 70% do gatilho, e lia a <b>mão aberta como "quatro dedos"</b>. Está registrado no diário de 16/11 e no código (<code>Pontos.combinar</code>).</p></div>
+    <div class="p"><h4>2 · A causa provável</h4><p>Ela aprendeu os números sobretudo com <b>fotos do HaGRID</b>, em que a mão ocupa a imagem. A nossa webcam tem outra distância, outro ângulo e outro fundo. É uma diferença entre os dados de treino e o uso real.</p></div>
+    <div class="p"><h4>3 · A decisão</h4><p>A GRU saiu do caminho ao vivo. Os números passaram para a contagem de dedos, que não depende de treino. O arquivo da GRU ainda é pedido pelo programa, só para ligar o caminho dos pontos e conferir que as classes batem; a rede em si não roda.</p></div>
+    <div class="p"><h4>4 · A lição que o grupo tirou</h4><p>O teste com dados seleciona candidatos; quem decide é o uso real. Um modelo com 95% nos dados que não reconhece o gesto na câmera não serve ao motorista.</p></div>
+    <div class="p"><h4>5 · O que faríamos com mais tempo</h4><p>Gravar a nossa câmera e treinar a GRU com esses vídeos. A curva de aprendizado indica que ela ainda melhora com mais dados.</p></div>
+  </div>
+  <div class="alerta"><b>Onde a banca pode apertar.</b> "Vocês têm um número do teste ao vivo da GRU?" Não achei nos arquivos uma medida numérica desse teste. O que existe é o relato no diário e no código. O teste ao vivo registrado com números (22 comandos de número em cerca de 2 minutos, um usuário) é do modelo final, não da GRU. Sejam francos: foi uma observação na webcam, não uma medida controlada.</div>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s7"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>O que é uma GRU?</summary><div class="r"><p>É uma rede recorrente: lê uma sequência passo a passo e mantém uma memória. Tem dois portões. O de atualização decide quanto da memória antiga é mantido. O de reinício decide quanto da memória antiga entra no cálculo do conteúdo novo. Isso permite lembrar do começo da sequência quando chega ao fim.</p></div></details>
+  <details class="banca"><summary>Como é a GRU de vocês?</summary><div class="r"><p>Recebe, por quadro, 182 atributos calculados dos 21 pontos da mão: forma, posição e velocidade do pulso, tamanho da mão e presença. Uma camada linear leva para 128. Depois, uma GRU bidirecional de 2 camadas com 128 de memória. Uma camada de atenção dá um peso a cada quadro, e o resumo ponderado vai para a camada final. São 525 mil parâmetros, na versão de 27 classes.</p></div></details>
+  <details class="banca"><summary>O que significa "bidirecional"?</summary><div class="r"><p>São duas leituras: uma do primeiro quadro ao último, outra do último ao primeiro. Em cada quadro juntamos as duas memórias. Assim a descrição de cada quadro leva em conta o que veio antes e o que vem depois.</p><p>Ponto honesto: ler de trás para a frente exige ter o clipe inteiro. Ao vivo, isso só é possível sobre uma janela dos últimos quadros já gravados.</p></div></details>
+  <details class="banca"><summary>Para que serve a atenção?</summary><div class="r"><p>Para a rede escolher quais quadros pesam mais no resumo. Em vez de pegar só o último estado ou a média simples, ela calcula um peso para cada quadro e faz a média ponderada. Quadros sem mão ou de preenchimento ficam com peso quase zero.</p></div></details>
+  <details class="banca"><summary>Se a GRU + CNN fez 95,6%, por que não usaram?</summary><div class="r"><p>Porque nos dados e na webcam o resultado divergiu. Na webcam, a GRU dava nota baixa nos números e lia a mão aberta como quatro dedos. O modelo final faz 87,7% nos dados, menos que os 95,6%, mas foi o único que reconheceu os números em uso real. Escolhemos pelo uso real e mostramos os dois números.</p></div></details>
+  <details class="banca"><summary>Por que a GRU é ruim nos movimentos?</summary><div class="r"><p>Porque depende do MediaPipe achar a mão, e ele falha justamente quando a mão anda rápido e borra. No Jester, só 35% das amostras do teste misto têm mão em pelo menos 70% dos quadros. Nos deslizes é pior. Sem pontos, a GRU vê zeros. E ela treinou com 3.035 clipes do Jester, enquanto a CNN treinou com 118.562.</p></div></details>
+  <details class="banca"><summary>Qual a diferença entre esta GRU e a "CNN 2D + GRU" da comparação de arquiteturas?</summary><div class="r"><p>São dois modelos diferentes. A CNN 2D + GRU lê pixels: uma CNN 2D resume cada quadro e a GRU lê os resumos. Fez 50,4% na comparação curta do Jester. A GRU sobre os pontos lê as coordenadas das juntas da mão, dadas pelo MediaPipe. É muito menor e foi testada depois, para os números.</p></div></details>
+</div></section>
+
+<!-- ============ 8 ============ -->
+<section class="sec" id="s8" data-t="O veto da CNN: o que era e por que foi desligado">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> o veto deixava a CNN cancelar um número da contagem quando ela achava que via outro gesto. Nos dados ajudava. Na webcam cancelaria 116 de 116 leituras de número. Foi desligado em 16/11.</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero</h4>
+    <p>Lembram dos dois especialistas? O veto era dar ao especialista em filmes (a CNN) o direito de dizer "espera, isso não é um número, é outra coisa" e cancelar o que o especialista em fotos (a contagem) tinha visto.</p>
+    <p>Parecia boa ideia: evitava que um zoom com dois dedos virasse "dois dedos". O problema: na nossa webcam, o especialista em filmes quase nunca reconhece um número parado. Ele fica em dúvida e espalha um pouquinho de nota em muitos gestos.</p>
+    <p>E o veto <b>somava</b> todos esses pouquinhos numa pilha chamada "Outros gestos". Vinte e três pouquinhos somados ganham de qualquer nota sozinha. Resultado: o veto cancelava tudo.</p>
+  </div>
+
+  <div class="passos">
+    <div class="p"><h4>Passo 1 · O problema que o veto queria resolver</h4><p>A contagem vê dedos. Ela não sabe se é um número ou um zoom com dois dedos. Sem veto, 24,3% das amostras sem número dispararam um número, no teste misto de 36 classes.</p></div>
+    <div class="p"><h4>Passo 2 · Como o veto funcionava</h4><p>A CNN tem 36 classes. As <b>23</b> que não viram comando no carro (zoom, deslizar com dois dedos, girar a mão, "outro movimento", gestos do volante) tinham as notas <b>somadas</b> numa classe "Outros gestos". Olhando a janela mais longa: se a soma de "Outros gestos" fosse maior que a maior nota entre as classes que ficam, ou se a CNN apontasse um movimento do carro, o número era ignorado. "Sem gesto" e as classes de número não vetavam.</p></div>
+    <div class="p"><h4>Passo 3 · Nos dados, ajudou</h4><p>Nas 36 classes: de 70,9% para 87,9%. Falsos por minuto no IPN (todos os gestos): de 1,62 para 1,24. A confiança da contagem no cenário do carro subiu: um dedo de 78,5% para 97,7%; dois dedos de 63,2% para 86,0%.</p></div>
+    <div class="p"><h4>Passo 4 · Mas custava números</h4><p>Nos números do carro: de 82,0% (sem veto) para 71,6% (com veto). Nos 11 gestos do carro: 86,2% com veto contra 87,7% sem. Ou seja, na régua do carro o veto já perdia.</p></div>
+    <div class="p"><h4>Passo 5 · Na webcam, quebrou</h4><p>Teste de cerca de 2 minutos (123 s), um usuário, sem veto: houve 116 leituras em que a contagem deu um número. Em <b>todas as 116</b> o veto teria cancelado. Em 62 delas a CNN apontava "outro movimento". Sem o veto, saíram 22 comandos de número (um dedo 6, dois dedos 5, quatro dedos 11).</p></div>
+    <div class="p"><h4>Passo 6 · Decisão</h4><p><code>Pontos.VETO_CNN = False</code>. O código ainda calcula "vetaria", só para diagnóstico. O trabalho de segurar os números falsos ficou para a ativação pelo OK.</p></div>
+  </div>
+
+  <div class="inter"><div class="tit">Interativo · por que somar 23 classes quebra o veto</div><div class="dentro lado">
+    <div>
+      <div class="ctrl"><label>Nota média de cada uma das 23 classes não usadas: <input type="range" id="vP" min="0" max="40" value="15"> <b id="vPv"></b></label></div>
+      <div class="ctrl"><label>Maior nota entre as classes que ficam (por exemplo "sem gesto"): <input type="range" id="vT" min="0" max="100" value="30"> <b id="vTv"></b></label></div>
+      <p class="legenda">Valores ilustrativos, para entender a regra. A regra é a do código: veta se a soma das 23 for maior que a maior nota das que ficam.</p>
+    </div>
+    <div>
+      <div class="barras" id="vB"></div>
+      <div class="veredito" id="vTxt"></div>
+    </div>
+  </div></div>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s8"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>O que é o veto que vocês testaram?</summary><div class="r"><p>Era uma regra em que a CNN podia cancelar um número lido pela contagem de dedos. As classes que o carro não usa eram somadas em "Outros gestos". Se essa soma ganhasse, ou se a CNN visse um movimento do carro, o número era descartado.</p></div></details>
+  <details class="banca"><summary>Se o veto dava 87,9% contra 70,9%, por que desligar?</summary><div class="r"><p>Esses dois números são das 36 classes. Na régua do carro, o veto já era pior: 86,2% contra 87,7%, porque derrubava números verdadeiros. E na webcam ele derrubaria todas as 116 leituras de número de um teste de 2 minutos. Com veto, os números não funcionavam ao vivo.</p></div></details>
+  <details class="banca"><summary>O teste de 116 leituras é suficiente para decidir?</summary><div class="r"><p>É um teste pequeno: um usuário, cerca de 2 minutos, sem anotação gesto a gesto. Ele não dá uma taxa de acerto. Mas o resultado foi extremo, 116 de 116, e coerente com a queixa de que os números tinham parado de funcionar. Para a decisão de ligar ou desligar, foi suficiente. Para medir o sistema, não é, e dizemos isso.</p></div></details>
+  <details class="banca"><summary>Havia alternativa a desligar?</summary><div class="r"><p>Sim, registrada e não testada: vetar só quando a classe mais alta das 36, sem somar, fosse um gesto não usado ou um movimento. Não deu tempo de testar na webcam.</p></div></details>
+</div></section>
+
+<!-- ============ 9 ============ -->
+<section class="sec" id="s9" data-t="Os resultados: 87,7%, 91,2%, 82,0% e a diferença para 70,9%">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> o modelo final acerta 87,7% dos 11 gestos do carro (91,2% nos movimentos, 82,0% nos números). O mesmo modelo faz 70,9% quando a prova inclui as 36 classes. São duas réguas, não dois modelos.</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero</h4>
+    <p>Pensem num aluno e em duas provas. A prova A só tem a matéria que ele vai usar no trabalho: 11 assuntos. Ele tira 87,7. A prova B tem 36 assuntos, incluindo 25 que ele nunca vai usar. Ele tira 70,9.</p>
+    <p>É o mesmo aluno, no mesmo dia. A nota muda porque a prova muda. O que derruba a nota na prova B: vários daqueles 25 assuntos são gestos feitos com dois dedos à mostra (zoom, deslizar com dois dedos). O nosso contador de dedos vê os dedos e responde "dois dedos". Na prova B isso conta como erro.</p>
+    <p>No carro, esses 25 gestos não são comandos. Mas, se o motorista fizer algo parecido sem querer, pode sair um "dois dedos" por engano. É por isso que existe o sinal de OK.</p>
+  </div>
+
+  <h3>Como foi medido</h3>
+  <ul>
+    <li><b>Teste misto:</b> 3.642 amostras de cinco bases (Jester 2.700, IPN 400, HaGRID 400, Slovo 100, DriverMHG 42), 36 classes. Sempre pessoas que não estavam no treino.</li>
+    <li><b>Os 11 gestos do carro:</b> as 1.300 amostras desse teste que são de gestos com comando no carro (500 de números, 800 de movimentos).</li>
+    <li><b>Critério:</b> por clipe. Acerto é quando a classe prevista é a do clipe, entre as 36 possíveis.</li>
+    <li>Tudo isso é sem a janela do OK.</li>
+  </ul>
+
+  <div class="inter destaque"><div class="tit">Interativo · todos os modelos, na régua que vocês escolherem</div><div class="dentro">
+    <div class="ctrl"><span>Régua:</span><div class="seg" id="resReg">
+      <button class="at" data-v="carro">11 gestos do carro</button><button data-v="num">Só números</button><button data-v="mov">Só movimentos</button><button data-v="c36">36 classes</button></div></div>
+    <div class="barras" id="resB"></div>
+    <div class="veredito" id="resTxt"></div>
+    <p class="fonte">Fontes: resultados/pontos/gestos_do_carro.json e gestos_do_carro_gru.json.</p>
+  </div></div>
+
+  <div class="inter"><div class="tit">Interativo · acerto por gesto</div><div class="dentro">
+    <div class="ctrl"><span>Versão:</span><div class="seg" id="gesV">
+      <button class="at" data-v="0">Modelo final</button><button data-v="1">CNN sozinha</button><button data-v="2">Com veto</button></div></div>
+    <div class="barras" id="gesB"></div>
+    <p class="legenda" id="gesTxt"></p>
+  </div></div>
+
+  <h3>Três coisas que os números mostram</h3>
+  <div class="passos">
+    <div class="p"><h4>1 · A contagem resolveu os números</h4><p>CNN sozinha nos números: 58,4%. Com a contagem: 82,0%. Quatro dedos foi de 46,0% para 97,0%.</p></div>
+    <div class="p"><h4>2 · Mas custou um pouco nos movimentos</h4><p>CNN sozinha nos movimentos: 95,2%. Modelo final: 91,2%. Por quê? A contagem às vezes "rouba" um movimento: se a mão passa parada com dedos à mostra, sai um número. Exemplos do arquivo: 6 clipes de "sinal de pare" e 5 de "deslizar para a direita" viraram "quatro dedos".</p></div>
+    <div class="p"><h4>3 · Por que 70,9% nas 36 classes</h4><p>24,3% das amostras sem número dispararam um número. As classes que mais causaram isso: "fazendo outra coisa" (96), zoom out com dois dedos (81), empurrar com dois dedos (75), zoom in com dois dedos (75), deslizar dois dedos para cima (68) e para baixo (56). Nenhuma é comando no carro. Por isso a régua dos 11 gestos é a que descreve o uso.</p></div>
+    <div class="p"><h4>Outros números do slide de resultados</h4><ul><li>Top-5 da CNN nos gestos do carro: 99,6%. O gesto certo está entre as cinco maiores notas em quase todos os clipes.</li><li>Melhores gestos: polegar para baixo 98%, quatro dedos 97%, polegar para cima 95%, empurrar a mão 95%.</li><li>Piores: um dedo 75% (18 clipes viraram "dois dedos"), dois dedos 81,5%, sinal de pare 84%.</li><li>"Comando certo": 88,2%. É um pouco maior que 87,7% porque pare e empurrar a mão dão o mesmo comando; confundir um com o outro não muda o que o carro faz.</li></ul></div>
+  </div>
+
+  <div class="alerta"><b>A frase honesta para a banca.</b> Nos dados, a GRU + CNN (95,6%) é melhor que o modelo final (87,7%). O modelo final é melhor que a versão com veto (86,2%) e que a CNN sozinha (81,1%), e foi o único que reconheceu os números na webcam.</div>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s9"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>Qual é o acerto do modelo de vocês?</summary><div class="r"><p>87,7% nos 11 gestos do carro, em 1.300 clipes de pessoas que não estavam no treino. 91,2% nos oito movimentos e 82,0% nos três números.</p></div></details>
+  <details class="banca"><summary>E o 70,9%? Por que não está nos slides principais?</summary><div class="r"><p>É o mesmo modelo, medido nas 36 classes. A diferença vem de 25 classes que não são comando no carro. Muitas são gestos com dois dedos à mostra, que a contagem lê como "dois dedos". Deixamos no corpo o número que descreve o uso no carro e trouxemos o 70,9% para o apêndice. Ele é real e mostra a fraqueza da contagem: ela vê dedos, não intenção.</p></div></details>
+  <details class="banca"><summary>Por que escolheram este modelo, se outro acertou mais?</summary><div class="r"><p>A GRU + CNN fez 95,6% nos dados. Na webcam, dava nota baixa nos números. O teste com dados seleciona candidatos; quem decide é o uso real. Ficamos com o modelo que funcionou na câmera e mostramos os dois números.</p></div></details>
+  <details class="banca"><summary>Os 87,7% valem para o carro de verdade?</summary><div class="r"><p>Não podemos afirmar. As bases são de webcam e fotos, não de uma câmera no painel. Nenhum teste foi feito dentro de um carro, nem à noite. O número mede pessoas novas nas mesmas condições das bases. Gravar o cenário real é o segundo item dos próximos passos.</p></div></details>
+</div></section>
+
+<!-- ============ 10 ============ -->
+<section class="sec" id="s10" data-t="Os disparos por engano: como medimos, com e sem o OK">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> em 31,5 minutos de vídeo real sem gesto, o modelo final soltou 33 comandos falsos (1,05 por minuto), todos números, nenhum movimento. Com a janela do OK, na simulação, 23 (0,73 por minuto).</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero</h4>
+    <p>Um alarme de carro pode errar de dois jeitos: não tocar quando roubam, ou tocar sozinho. O segundo irrita tanto que as pessoas desligam o alarme. Aqui é igual: um comando que sai sozinho distrai o motorista.</p>
+    <p>Para medir isso, pegamos vídeos longos de pessoas na frente da webcam <b>sem fazer gesto nenhum</b> (mexendo no cabelo, descansando a mão). Ligamos o sistema e contamos quantas vezes ele disparou. Dividimos pelos minutos.</p>
+    <p>O sinal de OK é uma segunda trava: o sistema só escuta por 7 segundos depois do OK. Para sair um comando por engano, precisariam acontecer dois enganos seguidos.</p>
+  </div>
+
+  <div class="passos">
+    <div class="p"><h4>Passo 1 · Os vídeos</h4><p>Vídeos contínuos do IPN Hand, de 13 pessoas fora do treino: 52 vídeos, com 31,5 minutos de trechos sem gesto.</p></div>
+    <div class="p"><h4>Passo 2 · O mesmo laço das demos</h4><p>Janelas de 1, 1,5 e 3 s, uma análise a cada 0,15 s, média das 2 últimas, gatilho de 0,7 em 3 análises seguidas, 1,2 s de pausa.</p></div>
+    <div class="p"><h4>Passo 3 · O que conta como falso</h4><p>Um disparo num trecho sem gesto. Até 1,5 s depois de um gesto de verdade não conta, por causa do atraso do gatilho.</p></div>
+    <div class="p"><h4>Passo 4 · A conta</h4><p>33 falsos ÷ 31,5 min = 1,05 por minuto. Considerando só comandos do carro.</p></div>
+    <div class="p"><h4>Passo 5 · A janela do OK (simulação)</h4><p>Nos mesmos vídeos, o detector do OK decide quando a janela de 7 s está aberta. Só conta o falso que cai dentro de uma janela. Resultado: 23 falsos, 0,73 por minuto. É 30% a menos.</p></div>
+    <div class="p"><h4>Passo 6 · O limite da simulação</h4><p>Ela usa só os pontos da mão, a 12 quadros por segundo, só a mão principal, e a CNN não entra. É uma simulação nos vídeos do IPN, não um teste no carro.</p></div>
+  </div>
+
+  <div class="inter"><div class="tit">Interativo · os 33 disparos falsos</div><div class="dentro">
+    <div class="ctrl"><div class="seg" id="falV"><button class="at" data-v="0">Sem a janela do OK</button><button data-v="1">Com a janela do OK</button></div></div>
+    <canvas id="cvfal" width="900" height="150"></canvas>
+    <div class="veredito" id="falTxt"></div>
+  </div></div>
+
+  <h3>Por que o modelo final tem mais falsos que os outros</h3>
+  <div class="rolar"><table>
+    <tr><th>Versão</th><th class="num">Falsos/min, todos os gestos (IPN)</th><th class="num">Falsos/min, só comandos do carro</th></tr>
+    <tr><td>CNN 3D ajustada, sozinha</td><td class="num">0,19</td><td class="num">0,00</td></tr>
+    <tr><td>GRU + CNN, números pela GRU (testada)</td><td class="num">0,25</td><td class="num">não medido</td></tr>
+    <tr><td>Contagem + veto (testada, desligada)</td><td class="num">1,24</td><td class="num">0,76</td></tr>
+    <tr class="final"><td>Modelo final: CNN 3D + contagem, sem veto</td><td class="num">1,62</td><td class="num">1,05</td></tr>
+  </table></div>
+  <ul>
+    <li><b>Todos os 33 falsos são números</b>: um dedo 7, dois dedos 18, quatro dedos 8. A CNN não disparou nenhum movimento por engano nesses 31,5 minutos.</li>
+    <li>A contagem dispara <b>direto</b>, sem nota mínima. Uma mão em repouso com dois dedos à mostra por meio segundo já vale como "dois dedos".</li>
+    <li>As outras versões tinham um freio: a GRU precisava de nota ≥ 0,7; o veto deixava a CNN cancelar. O modelo final não tem esse freio, porque foi justamente ele que impedia os números de funcionar na webcam.</li>
+    <li>É uma troca consciente: mais números reconhecidos (228 de 265 trechos de um dedo e 242 de 264 de dois) e mais falsos. Os falsos ficam por conta do OK.</li>
+  </ul>
+
+  <div class="alerta"><b>O ponto mais fraco desta parte.</b> O OK ajuda pouco, só 30%, porque o próprio detector do OK abre sozinho <b>3,08 vezes por minuto</b> nesses vídeos (97 vezes nos trechos sem gesto). Existe uma proposta, não aplicada: exigir a pinça mais fechada (menos de 0,3 palma) por 0,6 s. Na simulação, o OK abriria sozinho 1,24 vez por minuto e os falsos cairiam para 0,19 por minuto. Falta testar ao vivo.</div>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s10"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>Quantos comandos saem por engano?</summary><div class="r"><p>Sem a ativação, 1,05 por minuto, todos números. Com a ativação pelo OK, 0,73 na simulação. Nenhum movimento saiu por engano em 31,5 minutos.</p></div></details>
+  <details class="banca"><summary>Como mediram?</summary><div class="r"><p>Em vídeo contínuo do IPN Hand, com 13 pessoas fora do treino e 31,5 minutos de trechos sem gesto, usando o mesmo laço e o mesmo gatilho das demos. Cada disparo num trecho sem gesto conta como falso.</p></div></details>
+  <details class="banca"><summary>Um comando falso por minuto não é muito para um carro?</summary><div class="r"><p>É, e por isso não dizemos que o sistema está pronto para um carro. Duas observações. Os vídeos do IPN mostram pessoas mexendo as mãos na frente da webcam o tempo todo, o que é mais difícil do que a mão no volante. E o caminho para baixar já está medido em simulação: um OK mais exigente levaria a 0,19 por minuto. Falta testar ao vivo.</p></div></details>
+  <details class="banca"><summary>O "30% menos" foi medido no carro?</summary><div class="r"><p>Não. É uma simulação com os pontos da mão nos vídeos do IPN, sem a CNN. Mostra o efeito esperado da janela, não é um teste de uso.</p></div></details>
+  <details class="banca"><summary>Por que o modelo final dispara mais que a CNN sozinha?</summary><div class="r"><p>A CNN sozinha quase não dispara porque também quase não reconhece os números: 5 de 265 trechos de um dedo e 0 de 264 de dois. A contagem reconhece 228 e 242, e o preço são os disparos com a mão em repouso mostrando dedos.</p></div></details>
+</div></section>
+
+<!-- ============ 11 ============ -->
+<section class="sec" id="s11" data-t="Os dados: cinco bases, divisão por pessoa e preparo">
+<div class="corpo">
+  <div class="resumo"><p><b>Em uma frase:</b> cinco bases públicas, cada uma com um papel; quem está no teste nunca aparece no treino; no treino da CNN os vídeos são variados no tempo e no espaço, e 10% viram "sem gesto".</p></div>
+  <button class="bt btzero">Explicar do zero</button>
+  <div class="zero" hidden><h4>Do zero</h4>
+    <p><b>Por que dividir por pessoa.</b> Se a mesma pessoa aparece no treino e na prova, a rede pode decorar a mão, a roupa e o quarto dela. A nota sai alta, e é uma nota enganosa. Para saber se a rede funciona com gente nova, a prova só pode ter pessoas que a rede nunca viu.</p>
+    <p><b>Por que variar os vídeos.</b> É como treinar um goleiro: se todo chute vem no mesmo canto, ele só aprende aquele canto. Então mudamos a velocidade, o recorte e o brilho, e a rede aprende o gesto, não o detalhe do vídeo.</p>
+    <p><b>Por que exemplos de "sem gesto".</b> A rede precisa aprender também quando ficar quieta. Mostramos vídeos em que nada acontece e dizemos: "aqui a resposta certa é nenhum gesto".</p>
+  </div>
+
+  <div class="rolar"><table>
+    <tr><th>Base</th><th>O que é</th><th>Para que usamos</th><th>Licença</th></tr>
+    <tr><td><b>Jester</b></td><td>148.092 vídeos de webcam, 27 classes, cerca de 3 s cada, 12 quadros por segundo</td><td>Gestos com movimento (CNN 3D)</td><td>Pesquisa; sem imagens nos slides</td></tr>
+    <tr><td><b>IPN Hand</b></td><td>50 pessoas, vídeo contínuo de webcam</td><td>Um e dois dedos, sem gesto, outros; e os falsos disparos</td><td>CC BY 4.0</td></tr>
+    <tr><td><b>HaGRID v2</b></td><td>Fotos: baixamos 54.456 de 1.086.158</td><td>Números de 1 a 4 dedos; ajuste dos limiares</td><td>Atribuição; sem rostos</td></tr>
+    <tr><td><b>Slovo</b></td><td>Vídeos de celular, com trechos "sem sinal"</td><td>Sem gesto (ensinar a não disparar)</td><td>CC BY-SA</td></tr>
+    <tr><td><b>DriverMHG</b></td><td>Simulador de carro; 4 pessoas no disco</td><td>Micro-gestos do volante</td><td>Pesquisa; não redistribuir</td></tr>
+  </table></div>
+
+  <h3>O Jester em números</h3>
+  <div class="chips">
+    <div class="chip"><b>148.092</b><span>vídeos no total</span></div>
+    <div class="chip"><b>118.562</b><span>treino</span></div>
+    <div class="chip"><b>14.787</b><span>validação</span></div>
+    <div class="chip"><b>14.743</b><span>teste</span></div>
+    <div class="chip"><b>5,3 milhões</b><span>de quadros, 27,1 GB</span></div>
+  </div>
+  <p>A divisão é a oficial da base. O teste foi usado uma vez, no fim.</p>
+
+  <h3>Divisão por pessoa</h3>
+  <ul>
+    <li>Regra geral: quem está no teste nunca aparece no treino.</li>
+    <li>HaGRID: 12.725 pessoas no treino, 854 na validação, 0 em comum.</li>
+    <li>IPN: 13 pessoas ficaram só para teste.</li>
+    <li>Limiares da contagem: ajustados com metade das pessoas da amostra do HaGRID e medidos na outra metade.</li>
+  </ul>
+
+  <h3>O preparo dos vídeos para a CNN</h3>
+  <div class="passos">
+    <div class="p"><h4>Entrada</h4><p>16 quadros por vídeo, 96×96 pixels, em cores.</p></div>
+    <div class="p"><h4>Variação no tempo</h4><p>No treino, sorteia-se um trecho (de 40% a 100% do vídeo) e a posição dos quadros. A rede vê o mesmo gesto mais rápido e mais lento.</p></div>
+    <div class="p"><h4>Variação no espaço</h4><p>Recorte de 80% a 100% da imagem, brilho de ±20%, e a cena reduzida a até metade e deslocada. A mão aparece menor e fora do centro.</p></div>
+    <div class="p"><h4>Sem espelhar</h4><p>Inverter a imagem trocaria "deslizar para a esquerda" por "deslizar para a direita". Por isso não espelhamos.</p></div>
+    <div class="p"><h4>Exemplos de "sem gesto"</h4><p>10% das amostras de treino viram "sem gesto": um quadro repetido (mão parada), ruído ou cor lisa. Ensina a rede a não disparar sem movimento.</p></div>
+    <div class="p"><h4>O teste misto</h4><p>As cinco bases juntas, 36 classes: as 27 do Jester, os números de 1 a 4 e cinco gestos do volante. 10.529 amostras de treino e 3.642 de teste (Jester 2.700, IPN 400, HaGRID 400, Slovo 100, DriverMHG 42).</p></div>
+  </div>
+  <p class="fonte">"Aumento de dados" é o nome técnico dessas variações: criar versões diferentes do mesmo exemplo para a rede generalizar.</p>
+
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s11"></div>
+
+  <h3>O que a banca pode perguntar</h3>
+  <details class="banca"><summary>Que dados vocês usaram?</summary><div class="r"><p>Cinco bases públicas. Jester para os movimentos: 148.092 vídeos, 27 classes. IPN Hand para um e dois dedos em webcam e para medir os falsos disparos. HaGRID para as fotos de números. Slovo para exemplos de sem gesto. DriverMHG para micro-gestos do volante. Sempre separando as pessoas de treino e de teste.</p></div></details>
+  <details class="banca"><summary>Por que dividir por pessoa e não por vídeo?</summary><div class="r"><p>Para a nota medir generalização para pessoas novas. Se a mesma pessoa está nos dois lados, a rede pode decorar a mão e o fundo dela, e o acerto fica inflado.</p></div></details>
+  <details class="banca"><summary>Os dados representam o carro?</summary><div class="r"><p>Só em parte. O Jester e o IPN são de webcam, de frente. O DriverMHG é de simulador de carro, mas temos só 4 pessoas no disco e 42 amostras de teste, de uma pessoa; nenhum modelo foi bem nele e o número é frágil. Não temos gravações da nossa câmera num painel. Isso está nos próximos passos.</p></div></details>
+  <details class="banca"><summary>Por que não usaram aumento de dados na comparação de arquiteturas?</summary><div class="r"><p>Para manter o protocolo curto e igual para as seis redes. O aumento entrou no treino completo da CNN escolhida.</p></div></details>
+</div></section>
+
+<!-- ============ 12 ============ -->
+<section class="sec" id="s12" data-t="Pontos fracos: onde a banca pode apertar">
+<div class="corpo">
+  <div class="resumo"><p>Nada aqui é para esconder. Para cada ponto: o fato, e uma forma franca de responder. Cliquem para abrir.</p></div>
+  <details class="banca"><summary>1 · Nos dados, o modelo escolhido não é o melhor</summary><div class="r"><p>GRU + CNN faz 95,6% e o modelo final 87,7%, na mesma régua. A escolha foi pelo uso na webcam. Reconheçam o número e expliquem o critério.</p></div></details>
+  <details class="banca"><summary>2 · A decisão ao vivo se apoia em um teste pequeno</summary><div class="r"><p>Um usuário, 123 segundos, sem anotação gesto a gesto. Mostra o efeito do veto (116 de 116); não é taxa de acerto. Não há medida de acerto ao vivo com várias pessoas. Do teste ao vivo da GRU, não achei número nos arquivos.</p></div></details>
+  <details class="banca"><summary>3 · 70,9% nas 36 classes</summary><div class="r"><p>É o mesmo modelo. 24,3% das amostras sem número dispararam um número. A contagem vê dedos, não intenção.</p></div></details>
+  <details class="banca"><summary>4 · Quando o sistema diz "dois dedos", acerta 63,2% das vezes</summary><div class="r"><p>No cenário do carro: um dedo 78,5%, dois dedos 63,2%, quatro dedos 80,8%. Em todos os dados, dois dedos cai para 22,6%. É a classe mais frágil.</p></div></details>
+  <details class="banca"><summary>5 · 1,05 comando falso por minuto, e o OK só reduz 30%</summary><div class="r"><p>O OK abre sozinho 3,08 vezes por minuto nos vídeos do IPN. A redução de 30% é simulação, sem a CNN. O OK mais exigente (0,19 por minuto) não foi testado ao vivo.</p></div></details>
+  <details class="banca"><summary>6 · A contagem piorou um pouco os movimentos</summary><div class="r"><p>De 95,2% (CNN sozinha) para 91,2% (modelo final). Alguns movimentos com a mão aberta viram "quatro dedos".</p></div></details>
+  <details class="banca"><summary>7 · Um dedo é o pior gesto: 75%</summary><div class="r"><p>18 dos 200 clipes viraram "dois dedos". Sinal de pare, 84%, se confunde com empurrar a mão (7) e com quatro dedos (6).</p></div></details>
+  <details class="banca"><summary>8 · Nenhum teste em carro</summary><div class="r"><p>Tudo foi em webcam de notebook. Sem câmera no painel, sem noite, sem sol forte, sem vibração. A câmera infravermelha e a placa embarcada são propostas. Tempo de resposta, consumo e o efeito de reduzir para 8 bits não foram medidos.</p></div></details>
+  <details class="banca"><summary>9 · Os números dependem de um modelo de terceiros</summary><div class="r"><p>O MediaPipe é do Google. A CNN é do zero; a localização da mão, não. E o MediaPipe acha a mão em só 35% das amostras do Jester.</p></div></details>
+  <details class="banca"><summary>10 · A comparação de arquiteturas foi curta</summary><div class="r"><p>20 mil vídeos, 8 épocas, sem aumento de dados, e todas ainda melhoravam. As redes com CNN 2D usaram taxa de aprendizado diferente.</p></div></details>
+  <details class="banca"><summary>11 · Algumas escolhas foram feitas olhando o teste</summary><div class="r"><p>O diário registra: as quatro regras de combinação GRU + CNN foram comparadas no próprio IPN de validação, "não é um teste cego". O peso da média foi escolhido em metade do teste e medido na outra. Os limiares da contagem vêm de fotos do HaGRID, não da nossa câmera.</p></div></details>
+  <details class="banca"><summary>12 · Três dedos e o DriverMHG ficaram pelo caminho</summary><div class="r"><p>Três dedos não é comando porque o OK tem três dedos esticados. Os micro-gestos do volante estão no modelo (cinco classes), mas com 42 amostras de teste de uma pessoa: número frágil.</p></div></details>
+  <details class="banca"><summary>13 · Os dados de distração são de outros estudos</summary><div class="r"><p>10 s contra 30,4 s (Vi Bilägare), risco 4,6 vezes (SHRP2), 3.275 mortes (NHTSA). As distâncias (cerca de 300 m e 930 m) foram calculadas pelo grupo. O "≈ 0 s" do gesto é uma premissa do projeto: não medimos o olhar do motorista.</p></div></details>
+  <div class="resumo"><p><b>Como responder bem a um ponto fraco:</b> diga o número, diga o que ele significa, diga o que fariam a seguir. Três frases. Não se desculpem e não mudem de assunto.</p></div>
+</div></section>
+
+<!-- ============ 13 ============ -->
+<section class="sec" id="s13" data-t="Glossário curto">
+<div class="corpo">
+  <p>Tentem explicar o termo em voz alta antes de virar a carta.</p>
+  <div class="cartas" id="cartas"></div>
+  <h3>Perguntas para treinar</h3>
+  <div class="quiz" data-q="s13"></div>
+</div></section>
+
+<!-- ============ 14 ============ -->
+<section class="sec" id="s14" data-t="Simulado final: perguntas misturadas">
+<div class="corpo">
+  <p>Dez perguntas sorteadas de todas as seções. Façam com o cronômetro, um respondendo e os outros conferindo.</p>
+  <div class="ctrl"><button class="bt cheio" id="simNovo">Sortear um simulado</button><span class="legenda" id="simPl"></span></div>
+  <div id="sim"></div>
+</div></section>
+
+</main>
+<footer>Material de estudo gerado a partir dos arquivos do projeto: HANDOFF_16-11_noite.md, ROTEIRO_APRESENTACAO.md, demo/apresentacao_final.html, notebook.ipynb, demo/player.py, src/pontos_mao.py, src/modelos.py, src/treinar_pontos_jester.py e os JSON em resultados/. Os desenhos interativos são ilustrações didáticas; onde os valores são inventados para a demonstração, o texto avisa.</footer>
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)}, $$=function(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s))};
+function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e}
+function pct(v,d){return v.toFixed(d==null?1:d).replace('.',',')+'%'}
+function num(v,d){return v.toFixed(d==null?2:d).replace('.',',')}
+function embaralhar(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function visivel(c){return c.offsetParent!==null}
+function seg(id,fn){var box=$('#'+id);box.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;$$('button',box).forEach(function(x){x.classList.toggle('at',x===b)});fn(b.dataset.v)})}
+
+/* ================= PERGUNTAS ================= */
+var QUIZ={
+s0:[
+ {q:"A mão está parada, mostrando dois dedos. Quem reconhece esse gesto no modelo final?",o:["A contagem de dedos, sobre os 21 pontos do MediaPipe","A CNN 3D","A GRU sobre os pontos","O detector do OK"],d:"Pensem na frase do slide 6: número parado é com um, movimento é com o outro.",e:"Número parado é com a contagem de dedos. Movimento é com a CNN 3D. A GRU foi testada e não roda ao vivo."},
+ {q:"Qual destes é o acerto do modelo final nos 11 gestos do carro?",o:["87,7%","95,6%","92,6%","70,9%"],d:"95,6% e 92,6% são de outras versões ou de outra prova. 70,9% é de outra régua.",e:"87,7%. O 95,6% é da GRU + CNN (não usada). O 92,6% é da CNN no teste do Jester. O 70,9% é o mesmo modelo final, medido nas 36 classes."}
+],
+s1:[
+ {q:"Olhando um único quadro, o que uma CNN 2D não tem como saber?",o:["Para que lado a mão está se movendo","Se existe uma mão na imagem","Onde a mão está na imagem","Se a mão está aberta ou fechada"],d:"O que muda entre uma foto de mão parada e uma foto tirada no meio de um deslize?",e:"O movimento só existe entre quadros. Uma foto não mostra direção. Por isso a 2D sozinha não distingue deslizar de ficar parado."},
+ {q:"O filtro da nossa CNN 3D tem tamanho 3×3×3. O que são as três dimensões?",o:["Altura, largura e tempo (quadros)","Altura, largura e cor","Vermelho, verde e azul","Largura, profundidade da mão e tempo"],d:"A CNN 2D já tem duas delas. A terceira é a novidade.",e:"Altura, largura e tempo. O filtro cobre 3 pixels por 3 pixels em 3 quadros seguidos."},
+ {q:"O que é um mapa de ativação?",o:["As notas que um filtro deu em cada posição da entrada","A lista de pesos de um filtro","A porcentagem final de cada gesto","O conjunto dos 21 pontos da mão"],d:"Vejam o desenho do filtro deslizando: o que vai sendo preenchido à direita?",e:"É o resultado de deslizar o filtro: uma nota para cada posição, mostrando onde o padrão aparece."},
+ {q:"No mesmo protocolo curto, quanto fez a CNN 2D + GRU, contra 82,4% da CNN 3D?",o:["50,4%","65,3%","78,6%","84,2%"],d:"Foi a pior das seis. 65,3% é da versão com Transformer.",e:"50,4%. A CNN 2D + Transformer fez 65,3%. As duas resumem cada quadro antes de olhar o tempo."}
+],
+s2:[
+ {q:"Quantos filtros tem cada um dos quatro blocos da CNN 3D?",o:["32, 64, 128 e 256","16, 32, 64 e 128","48, 96, 192 e 384","64, 64, 64 e 64"],d:"Dobram a cada bloco. 16 a 128 é a versão leve; 48 a 384 é a larga.",e:"32, 64, 128 e 256. A leve usa metade; a larga, 50% a mais."},
+ {q:"Qual é a entrada da CNN 3D?",o:["16 quadros de 96×96 pixels, em cores","Os 21 pontos da mão em cada quadro","Uma foto de 224×224 pixels","40 quadros com 182 números cada"],d:"Duas das alternativas descrevem a entrada de outros modelos do projeto.",e:"16 quadros de 96×96, em cores. Os 21 pontos são a entrada da contagem; 40 quadros com 182 números são a entrada da GRU."},
+ {q:"O que foi feito no ajuste (fine-tuning) nas cinco bases?",o:["A última camada passou de 27 para 36 saídas e a rede treinou mais 6 épocas","A rede inteira foi treinada do zero outra vez","Só a contagem de dedos foi ajustada","Foram carregados pesos prontos de terceiros"],d:"A rede já sabia os 27 gestos do Jester. Faltavam classes novas.",e:"Partiu-se da CNN treinada no Jester, trocou-se a última camada para 36 classes e treinou-se 6 épocas com taxa menor."},
+ {q:"O que significa o 92,6%?",o:["Acerto da CNN 3D no teste do Jester, 27 classes","Acerto do modelo final nos 11 gestos do carro","Acerto da GRU + CNN","Acerto da contagem de dedos nos números"],d:"É um número da entrega intermediária, antes de existirem os números com dedos.",e:"É a CNN 3D sozinha, no teste oficial do Jester (14.743 vídeos). Não é o número do modelo final."}
+],
+s3:[
+ {q:"A CNN 3D larga acertou mais (84,2%). Por que não foi a escolhida?",o:["Tem mais que o dobro de parâmetros, é mais lenta e teve mais falsas ativações","Ela não cabia na GPU","Ela não foi treinada no mesmo protocolo","Porque usava pesos de terceiros"],d:"Olhem as colunas de parâmetros, tempo e falsa ativação da tabela.",e:"7,92 mi contra 3,52 mi de parâmetros, 3,9 ms contra 1,9 ms e 0,71% contra 0,43% de falsa ativação, para ganhar 1,8 ponto."},
+ {q:"Por que a R(2+1)D ficou fora da comparação?",o:["Com lote de 48, passava dos 8 GB da GPU","Porque acertou menos de 50%","Porque não existe em PyTorch","Porque só funciona com fotos"],d:"Foi um limite do notebook, não do acerto.",e:"Memória. Com lote de 48 ela passava dos 8 GB da GPU e ficava muito mais lenta."},
+ {q:"Qual é a crítica mais justa a essa comparação de arquiteturas?",o:["O treino foi curto (8 épocas) e todas ainda melhoravam","Cada rede usou vídeos diferentes","A validação usou as mesmas pessoas do treino","Só duas redes foram testadas"],d:"Olhem o gráfico: como estão as curvas na época 8?",e:"Mesmos vídeos e mesma semente, mas só 20 mil vídeos e 8 épocas. As curvas ainda subiam, principalmente as das redes com CNN 2D."}
+],
+s4:[
+ {q:"O que o MediaPipe entrega para o nosso sistema?",o:["21 pontos da mão em cada quadro","O nome do gesto","Quantos dedos estão esticados","Se a mão está parada"],d:"Ele localiza. Quem interpreta somos nós.",e:"Só os 21 pontos (e o lado da mão). Gesto, contagem e mão parada saem do nosso código."},
+ {q:"Qual destas partes é nossa, e não do Google?",o:["A regra de mão parada e a contagem de dedos","O detector de palma","O modelo que marca os 21 pontos","O arquivo hand_landmarker.task"],d:"O Google entrega pontos. O que vem depois deles?",e:"Mão parada, contagem, estabilidade em 5 de 6 quadros e o OK são regras nossas sobre os pontos."},
+ {q:"Por que os pontos da mão não foram usados para os movimentos?",o:["No Jester, o MediaPipe acha a mão em só 35% das amostras: a mão é pequena e borra","Porque o MediaPipe não funciona em vídeo","Porque os pontos não têm profundidade","Porque a licença não permite"],d:"Olhem o gráfico de barras desta seção.",e:"Em movimento rápido e baixa resolução o MediaPipe perde a mão. Sem pontos não há o que ler. A CNN 3D lê os pixels e não depende disso."}
+],
+s5:[
+ {q:"Quando um dedo (indicador a mínimo) conta como esticado?",o:["Reta ≥ 0,85 e ângulo ≤ 65°","Reta ≥ 0,95 e afastado 1,20 palma","Quando a ponta está acima do pulso na imagem","Quando a CNN dá nota ≥ 0,7"],d:"São duas condições juntas. A alternativa com 0,95 e 1,20 é a regra de outro dedo.",e:"Reta ≥ 0,85 e ângulo ≤ 65°. A regra de 0,95 e 1,20 é a do polegar."},
+ {q:"A regra vê cinco dedos esticados. O que acontece?",o:["Não é número; o gesto fica com a CNN 3D (pode ser o sinal de pare)","Dispara 'cinco dedos'","Dispara 'quatro dedos'","O sistema desliga"],d:"Só de 1 a 4 dedos é número.",e:"Mão aberta não é número. Fica com a CNN, que conhece o sinal de pare. O mesmo vale para só o polegar (joinha) e para o punho."},
+ {q:"O que é 'mão parada' no nosso código?",o:["Nos últimos 6 quadros, a mão apareceu em pelo menos 5 e o pulso andou no máximo 0,5 palma","A CNN respondeu 'sem gesto'","Os dedos não mudaram por 3 segundos","O MediaPipe devolveu velocidade zero"],d:"Seis quadros a 12 por segundo são meio segundo.",e:"Pulso andou no máximo meia palma em 6 quadros (0,5 s), com a mão presente em pelo menos 5 deles."},
+ {q:"Por que a distância do pulso é medida em 'palmas' e não em pixels?",o:["Para a regra valer com a mão perto ou longe da câmera","Porque o MediaPipe só mede em palmas","Para a conta ficar mais rápida","Porque a câmera não tem pixels suficientes"],d:"O que acontece com o tamanho da mão em pixels quando ela se afasta?",e:"Perto da câmera a mão é grande; longe, pequena. Dividir pelo tamanho da palma torna a regra independente da distância."},
+ {q:"No cenário do carro, quando o modelo final diz 'dois dedos', em quantas vezes eram mesmo dois dedos?",o:["63,2%","97,0%","81,5%","22,6%"],d:"81,5% é outra pergunta: 'quando mostram dois dedos, o sistema reconhece?'. 22,6% é em todos os dados.",e:"63,2%. É a confiança. Em todos os dados do teste misto cai para 22,6%. Com veto subia para 86,0%, mas o veto não funcionou ao vivo."}
+],
+s6:[
+ {q:"Qual é o gatilho da CNN 3D?",o:["O mesmo gesto com nota ≥ 0,7 em 3 análises seguidas","A mesma contagem em 5 de 6 quadros","Nota ≥ 0,9 em uma análise","Qualquer nota acima de 0,5"],d:"Uma das alternativas é o gatilho da contagem de dedos.",e:"≥ 0,7 em 3 análises seguidas, e depois 1,2 s de pausa. 5 de 6 quadros é o gatilho da contagem."},
+ {q:"Mão parada, dois dedos estáveis em 6 de 6 quadros. No mesmo instante a CNN dá 90% para 'deslizar para a direita'. O que o sistema faz?",o:["Dispara 'dois dedos': vale a contagem","Dispara 'deslizar para a direita': a CNN tem nota alta","Não dispara nada, por causa do conflito","Faz a média entre os dois"],d:"Existe votação entre as duas partes? Releiam o passo 4.",e:"Se a pergunta 'mão parada e 1 a 4 dedos?' dá sim, vale a contagem. Não há votação. Era o veto que deixava a CNN cancelar, e ele está desligado."},
+ {q:"De quanto em quanto tempo o sistema analisa a câmera?",o:["A cada 0,15 s","A cada 7 s","A cada 1,2 s","A cada 3 s"],d:"7 s, 1,2 s e 3 s existem no projeto, mas são outras coisas.",e:"0,15 s. 7 s é a janela do OK; 1,2 s é a pausa depois de um disparo; 3 s é a janela de vídeo mais longa."},
+ {q:"Como a janela de comandos é aberta?",o:["Sinal de OK mantido por 0,4 s; a janela dura 7 s","Mão aberta por 3 s; a janela dura 1 min","Por um comando de voz","Ela fica sempre aberta"],d:"Está no slide 8.",e:"OK por 0,4 s abre 7 s, com bip e voz. Fora da janela, nenhum gesto vira comando."}
+],
+s7:[
+ {q:"Para que serve a memória (estado oculto) de uma GRU?",o:["Para carregar, de um quadro para o seguinte, um resumo do que já foi visto","Para guardar os vídeos de treino","Para armazenar os pesos da rede","Para contar quantos dedos estão esticados"],d:"Pensem no bloquinho de anotações da explicação do zero.",e:"É um vetor (128 números na nossa, por direção) atualizado a cada quadro. É o que permite lembrar do começo do gesto ao chegar no fim."},
+ {q:"O portão de atualização (z) está perto de 1 em uma posição da memória. O que acontece ali?",o:["A memória antiga é quase toda mantida","A memória é apagada","A memória é trocada pela entrada nova","A rede para de ler a sequência"],d:"Na fórmula: memória nova = z × antiga + (1 − z) × candidato.",e:"Com z perto de 1, sobra quase só a memória antiga. Com z perto de 0, entra o candidato. Testem no interativo."},
+ {q:"E o portão de reinício (r) perto de 0?",o:["O candidato é montado quase só com a entrada atual, ignorando a memória antiga","A memória nova fica igual à antiga","A rede reinicia o treino","O quadro é descartado"],d:"O r age antes da mistura: ele decide quanto da memória antiga entra na conta do candidato.",e:"r multiplica a memória antiga dentro do candidato. Perto de 0, o candidato 'esquece' o passado e olha só a entrada."},
+ {q:"O que entra na nossa GRU, em cada quadro?",o:["182 números calculados a partir dos 21 pontos da mão","Os pixels do quadro, 96×96","O resumo de uma CNN 2D","Só a contagem de dedos"],d:"O nome completo é 'GRU sobre os pontos'.",e:"Atributos dos pontos: forma da mão, posição e velocidade do pulso, tamanho, presença. Quem lê pixels é a CNN 3D. Quem recebe o resumo de uma CNN 2D é a outra GRU, da comparação de arquiteturas."},
+ {q:"O que quer dizer 'bidirecional'?",o:["Uma GRU lê do primeiro ao último quadro, outra do último ao primeiro, e as memórias são juntadas","A rede reconhece as duas mãos","A rede roda na CPU e na GPU","A rede lê pontos e pixels"],d:"128 + 128 = 256.",e:"Duas leituras, em sentidos opostos. Em cada quadro as duas memórias de 128 são coladas, formando 256 números."},
+ {q:"Para que serve a camada de atenção da nossa GRU?",o:["Dar um peso a cada quadro e resumir o clipe pela média ponderada","Achar a mão na imagem","Escolher entre a GRU e a CNN","Cancelar números duvidosos"],d:"Nem todo quadro de um clipe mostra o gesto.",e:"A rede aprende quais quadros importam. Quadros de preenchimento ficam com peso quase zero."},
+ {q:"Nos dados, onde a GRU foi muito melhor que a CNN ajustada?",o:["Nos números (95,6% contra 58,4%)","Nos movimentos (75,6% contra 95,2%)","No Jester (73,1% contra 93,1%)","Nos falsos por minuto (1,46 contra 0,19)"],d:"Em três alternativas a GRU perde. Leiam os números com atenção.",e:"Nos números. Nos movimentos, no Jester e nos falsos por minuto, a CNN é melhor. Por isso a ideia de combinar."},
+ {q:"Por que a GRU não roda ao vivo?",o:["Na webcam dava nota baixa nos números e lia a mão aberta como quatro dedos","Era lenta demais para o notebook","Foi a pior nos dados","A licença não permitia"],d:"Nos dados ela foi bem. O problema apareceu em outro lugar.",e:"Divergência entre dados e uso real. Causa provável: aprendeu os números quase só com fotos do HaGRID, diferentes da nossa webcam."},
+ {q:"Qual frase sobre o 95,6% está correta?",o:["É da GRU + CNN nos 11 gestos do carro, nos dados; não é o modelo usado ao vivo","É o acerto do modelo final","É o acerto da GRU na webcam","É o acerto da CNN no Jester"],d:"Releiam o cuidado do roteiro: quais números são do modelo final?",e:"95,6% é de uma versão testada e descartada. O modelo final faz 87,7%. Na webcam, a GRU não tem número medido."},
+ {q:"Quantos parâmetros tem a GRU (versão de 27 classes)?",o:["Cerca de 525 mil","Cerca de 3,52 milhões","Cerca de 7,92 milhões","Cerca de 21 mil"],d:"É bem menor que a CNN 3D.",e:"525.212. A CNN 3D tem 3,52 milhões: cerca de 7 vezes mais."}
+],
+s8:[
+ {q:"No teste de cerca de 2 minutos na webcam, em quantas das 116 leituras de número o veto teria cancelado o número?",o:["Em todas as 116","Em 62","Em 22","Em nenhuma"],d:"62 e 22 aparecem no mesmo teste, mas contam outras coisas.",e:"116 de 116. Em 62 delas a CNN apontava 'outro movimento'. 22 foi o total de comandos de número que saíram sem o veto."},
+ {q:"Por que somar as classes em 'Outros gestos' era um problema na webcam?",o:["Muitas notas pequenas somadas passam facilmente de qualquer nota sozinha","Porque a soma demorava para calcular","Porque as classes somadas eram os números","Porque a soma dava sempre zero"],d:"Mexam no interativo: 23 classes com 1,5% cada dão quanto?",e:"Com a CNN em dúvida, ela espalha nota em muitas classes. 23 pedaços pequenos somados vencem, e o número é cancelado."},
+ {q:"Na régua dos 11 gestos do carro, como o veto se saiu contra o modelo final?",o:["Pior: 86,2% contra 87,7%","Melhor: 87,9% contra 70,9%","Igual","Melhor: 95,6% contra 87,7%"],d:"87,9% contra 70,9% é verdade, mas em outra régua.",e:"Nos gestos do carro o veto perde: derruba números verdadeiros (71,6% contra 82,0% nos números). Nas 36 classes ele ganha."}
+],
+s9:[
+ {q:"Qual é a relação entre o 87,7% e o 70,9%?",o:["É o mesmo modelo em duas réguas: 11 gestos do carro e 36 classes","São dois modelos diferentes","70,9% é com veto e 87,7% sem","70,9% é na webcam e 87,7% nos dados"],d:"Pensem no aluno e nas duas provas.",e:"Mesmo modelo, mesmos dados de teste. Muda o que entra na conta: só os gestos com comando no carro, ou todas as 36 classes."},
+ {q:"Nos movimentos, a CNN sozinha faz 95,2% e o modelo final 91,2%. Por quê?",o:["A contagem às vezes transforma um movimento em número","Porque a CNN foi retreinada e piorou","Porque o modelo final usa menos quadros","Porque o veto cancela movimentos"],d:"O que acontece se, no meio de um 'pare', a mão fica parada com dedos à mostra?",e:"A contagem tem prioridade com a mão parada. Exemplos: 6 clipes de 'pare' e 5 de 'deslizar para a direita' viraram 'quatro dedos'."},
+ {q:"Em que condições o 87,7% foi medido?",o:["1.300 clipes do teste misto, pessoas fora do treino, sem a janela do OK","Na webcam do grupo, com 3 pessoas","Em um carro, com motoristas","No teste do Jester, 14.743 vídeos"],d:"É um teste com dados de bases públicas.",e:"1.300 clipes de três bases (Jester, IPN e HaGRID), de pessoas que não estavam no treino."},
+ {q:"Nos dados, qual versão acertou mais nos 11 gestos do carro?",o:["GRU + CNN (cerca de 95,6%)","O modelo final (87,7%)","Contagem + veto (86,2%)","CNN sozinha (81,1%)"],d:"A resposta honesta não é o nosso modelo.",e:"A GRU + CNN. O modelo final foi escolhido porque foi o único que reconheceu os números na webcam."}
+],
+s10:[
+ {q:"33 comandos falsos em 31,5 minutos sem gesto. Quanto dá por minuto?",o:["1,05","0,73","3,08","1,62"],d:"33 ÷ 31,5.",e:"1,05 por minuto, só comandos do carro, sem a janela do OK. 0,73 é com a janela; 3,08 é o OK abrindo sozinho; 1,62 conta todos os gestos."},
+ {q:"De que tipo foram os 33 disparos falsos do modelo final?",o:["Todos números (um, dois e quatro dedos)","Todos movimentos","Metade números, metade movimentos","Todos 'sinal de OK'"],d:"Quem dispara direto, sem nota mínima?",e:"Um dedo 7, dois dedos 18, quatro dedos 8. Nenhum movimento: a CNN não confundiu a mão em repouso com um comando."},
+ {q:"Por que a janela do OK reduz os falsos em só 30%?",o:["Porque o detector do OK abre sozinho 3,08 vezes por minuto nesses vídeos","Porque a janela dura só 0,15 s","Porque a CNN ignora a janela","Porque o OK não foi implementado"],d:"A segunda trava também erra.",e:"Com a janela abrindo sozinha tantas vezes, muitos falsos caem dentro dela. Um OK mais exigente (proposta não aplicada) levaria a 0,19 por minuto na simulação."},
+ {q:"De onde vem o '30% menos números por engano'?",o:["De uma simulação com os pontos da mão nos vídeos do IPN, sem a CNN","De um teste dentro de um carro","Do teste de 2 minutos na webcam","Do teste do Jester"],d:"Está nos 'cuidados' do roteiro.",e:"É simulação: 33 falsos viram 23 quando só valem os que caem numa janela aberta pelo detector do OK."}
+],
+s11:[
+ {q:"Por que os vídeos não são espelhados no aumento de dados?",o:["Espelhar trocaria 'deslizar para a esquerda' por 'deslizar para a direita'","Porque espelhar é lento","Porque a rede não aceita imagens espelhadas","Porque o Jester já vem espelhado"],d:"Que gestos dependem do lado?",e:"O rótulo ficaria errado. Para gestos com direção, espelhar muda o significado."},
+ {q:"O que a divisão por pessoa garante?",o:["Que o teste mede pessoas que a rede nunca viu","Que cada pessoa tem o mesmo número de vídeos","Que não há vídeos repetidos no treino","Que todas as classes têm o mesmo tamanho"],d:"O que a rede poderia decorar se a mesma pessoa estivesse nos dois lados?",e:"Sem isso a rede pode decorar a mão e o fundo de cada pessoa, e o acerto sai inflado."},
+ {q:"Quantos vídeos de treino tem o Jester?",o:["118.562","148.092","14.743","20.000"],d:"148.092 é o total. 20 mil foi a amostra da comparação de arquiteturas.",e:"118.562 de treino, 14.787 de validação e 14.743 de teste: 148.092 no total."}
+],
+s13:[
+ {q:"O que é fine-tuning?",o:["Continuar o treino de uma rede já treinada, com dados novos","Treinar uma rede do zero","Reduzir a precisão dos pesos","Escolher o limiar do gatilho"],d:"No projeto: Jester primeiro, cinco bases depois.",e:"É o ajuste: parte-se de pesos já treinados (no nosso caso, por nós, no Jester) e treina-se mais um pouco com dados novos."},
+ {q:"O que o softmax faz?",o:["Transforma as notas da rede em porcentagens que somam 100%","Desliga neurônios ao acaso no treino","Normaliza a saída de cada camada","Encolhe a imagem"],d:"É o último passo antes do gatilho de 0,7.",e:"Vira as notas em uma distribuição. A nota de 0,7 do gatilho é uma saída do softmax."},
+ {q:"O top-5 da CNN nos gestos do carro é 99,6%. O que isso quer dizer?",o:["O gesto certo está entre as 5 maiores notas em 99,6% dos clipes","A rede acerta 99,6% dos gestos","Só 5 gestos são reconhecidos","5 pessoas acertaram 99,6%"],d:"Top-1 exige a maior nota. Top-5 é mais generoso.",e:"Quase sempre a rede 'considera' o gesto certo, mesmo quando ele não é a primeira aposta."},
+ {q:"No nosso projeto, o que é um falso positivo?",o:["Um comando disparado sem que ninguém tenha feito o gesto","Um gesto feito e não reconhecido","Um gesto reconhecido com nota baixa","Um quadro em que o MediaPipe não acha a mão"],d:"É o alarme que toca sozinho.",e:"É o disparo por engano. Medimos em falsos por minuto, em vídeo sem gesto. Gesto feito e não reconhecido é o falso negativo."},
+ {q:"O que o dropout faz durante o treino?",o:["Zera ao acaso parte dos números de uma camada, para a rede não depender de poucos deles","Apaga vídeos ruins da base","Diminui a taxa de aprendizado","Remove camadas da rede"],d:"Na CNN e na GRU o valor é 0,3.",e:"Com 0,3, cerca de 30% das ativações são zeradas a cada passo de treino. Na hora de usar a rede, o dropout fica desligado."}
+]
+};
+
+var est={resp:0,prim:0,tot:0,sec:{}};
+function atualizaPlacar(){$('#plResp').textContent=est.resp;$('#plPrim').textContent=est.prim;$('#plTot').textContent=est.tot;
+  Object.keys(est.sec).forEach(function(k){var s=est.sec[k],m=$('#ix-'+k);if(m)m.textContent=s.resp+' de '+s.tot+' respondidas'})}
+function montaPergunta(p,ctx){
+  var box=el('div','q'),tent=0,fim=false;
+  box.appendChild(el('p','enun',p.q));
+  var ops=el('div','ops');box.appendChild(ops);
+  var linha=el('div','linha');var bd=el('button','bt','Dica');var msg=el('span','msg','Até 3 tentativas.');linha.appendChild(bd);linha.appendChild(msg);
+  var dica=el('div','dica','<b>Dica:</b> '+p.d);dica.hidden=true;
+  var expl=el('div','expl','<b>Por quê:</b> '+p.e);expl.hidden=true;
+  bd.onclick=function(){dica.hidden=false};
+  function acabar(acertou){fim=true;$$('.op',ops).forEach(function(b){b.disabled=true;if(b.dataset.c==='1')b.classList.add('certa')});expl.hidden=false;bd.hidden=true;ctx.fim(acertou,tent)}
+  embaralhar(p.o.map(function(t,i){return {t:t,c:i===0}})).forEach(function(o){
+    var b=el('button','op',o.t);b.dataset.c=o.c?'1':'0';
+    b.onclick=function(){if(fim)return;tent++;
+      if(o.c){msg.className='msg bom';msg.textContent=tent===1?'Certo, de primeira.':'Certo, na '+tent+'ª tentativa.';acabar(true)}
+      else{b.classList.add('errada');b.disabled=true;ctx.erro();
+        if(tent>=3){msg.className='msg ruim';msg.textContent='A resposta certa está marcada em verde. Leiam o porquê.';acabar(false)}
+        else{msg.className='msg ruim';msg.textContent='Ainda não. Tentem de novo ('+(3-tent)+(3-tent===1?' tentativa restante':' tentativas restantes')+').';if(tent>=2)dica.hidden=false}}};
+    ops.appendChild(b)});
+  box.appendChild(linha);box.appendChild(dica);box.appendChild(expl);return box}
+
+function montaQuiz(div){
+  var k=div.dataset.q,lista=QUIZ[k]||[];div.innerHTML='';
+  var s=est.sec[k]||(est.sec[k]={resp:0,tot:lista.length,erros:0,avisou:false});
+  est.resp-=s.resp;est.prim-=(s.prim||0);s.resp=0;s.prim=0;s.erros=0;
+  lista.forEach(function(p){div.appendChild(montaPergunta(p,{
+    erro:function(){s.erros++;if(s.erros>=3&&!s.avisou){s.avisou=true;abreZero(div.closest('section'),true)}},
+    fim:function(ok,t){s.resp++;est.resp++;if(ok&&t===1){est.prim++;s.prim++}atualizaPlacar()}}))});
+  var r=el('button','bt','Refazer as perguntas desta seção');r.onclick=function(){s.avisou=false;montaQuiz(div);atualizaPlacar()};div.appendChild(r)}
+
+function abreZero(sec,auto){var z=$('.zero',sec);if(!z)return;z.hidden=false;
+  if(auto&&!$('.auto',z)){var a=el('p','auto','<b>Vocês erraram algumas vezes nesta seção. Sem problema: leiam esta versão do zero, em voz alta, e depois refaçam as perguntas.</b>');z.insertBefore(a,z.children[1]);z.scrollIntoView({behavior:'smooth',block:'center'})}}
+
+/* ================= ESTRUTURA ================= */
+var secs=$$('section.sec');
+secs.forEach(function(s,i){
+  var b=el('button','cab');b.setAttribute('aria-expanded','false');
+  b.innerHTML='<span class="n">'+i+'</span><h2>'+s.dataset.t+'</h2><span class="seta">&#9654;</span>';
+  b.onclick=function(){abre(s,!s.classList.contains('aberta'))};s.insertBefore(b,s.firstChild);
+  var li=el('li');li.innerHTML='<a href="#'+s.id+'"><span class="n">'+i+'</span><span>'+s.dataset.t+'</span><span class="ok" id="ix-'+s.id+'"></span></a>';
+  li.firstChild.onclick=function(){abre(s,true)};$('#indice').appendChild(li)});
+function abre(s,sim){s.classList.toggle('aberta',sim);$('.cab',s).setAttribute('aria-expanded',sim?'true':'false')}
+$('#btAbrir').onclick=function(){secs.forEach(function(s){abre(s,true)})};
+$('#btFechar').onclick=function(){secs.forEach(function(s){abre(s,false)})};
+var zeroTodos=false;
+$('#btZero').onclick=function(){zeroTodos=!zeroTodos;$$('.zero').forEach(function(z){z.hidden=!zeroTodos});this.textContent=zeroTodos?'Esconder as explicações do zero':'Mostrar todas as explicações do zero'};
+$$('.btzero').forEach(function(b){b.onclick=function(){var z=b.nextElementSibling;z.hidden=!z.hidden}});
+abre(secs[0],true);
+if(location.hash){var alvo=$(location.hash);if(alvo&&alvo.classList.contains('sec'))abre(alvo,true)}
+
+$$('.passos').forEach(function(ps){
+  var p=$$('.p',ps),i=0,nav=el('div','pnav'),onde=el('span','onde'),pts=el('span','pontinhos');
+  var ant=el('button','bt','Anterior'),prox=el('button','bt cheio','Próximo passo'),todos=el('button','bt','Ver todos');
+  p.forEach(function(){pts.appendChild(el('i'))});
+  function mostra(){p.forEach(function(x,j){x.classList.toggle('at',j===i)});$$('i',pts).forEach(function(x,j){x.classList.toggle('at',j<=i)});onde.textContent='Passo '+(i+1)+' de '+p.length;ant.disabled=i===0;prox.disabled=i===p.length-1}
+  ant.onclick=function(){i=Math.max(0,i-1);mostra()};prox.onclick=function(){i=Math.min(p.length-1,i+1);mostra()};
+  todos.onclick=function(){var t=ps.classList.toggle('todos');todos.textContent=t?'Ver um por vez':'Ver todos'};
+  nav.appendChild(onde);nav.appendChild(pts);nav.appendChild(ant);nav.appendChild(prox);nav.appendChild(todos);ps.appendChild(nav);mostra()});
+
+$$('.quiz').forEach(function(d){est.tot+=(QUIZ[d.dataset.q]||[]).length;montaQuiz(d)});atualizaPlacar();
+
+/* simulado */
+$('#simNovo').onclick=function(){
+  var todas=[];Object.keys(QUIZ).forEach(function(k){QUIZ[k].forEach(function(p){todas.push(p)})});
+  var dez=embaralhar(todas).slice(0,10),box=$('#sim'),feitas=0,certas=0;box.innerHTML='';
+  function pl(){$('#simPl').textContent='Respondidas: '+feitas+' de 10 · acertos de primeira: '+certas}
+  dez.forEach(function(p,i){var q=montaPergunta(p,{erro:function(){},fim:function(ok,t){feitas++;if(ok&&t===1)certas++;pl()}});$('.enun',q).textContent=(i+1)+'. '+p.q;box.appendChild(q)});pl()};
+
+/* glossário */
+[["Época","Uma passada completa por todos os exemplos de treino. A CNN 3D treinou 20 épocas no Jester; a GRU, 80."],
+ ["Lote (batch)","Quantos exemplos a rede vê antes de cada ajuste dos pesos. CNN: 48. GRU: 128."],
+ ["Parâmetros (pesos)","Os números que a rede aprende. CNN 3D: 3,52 milhões. GRU: 525.212."],
+ ["Taxa de aprendizado","O tamanho do passo de cada ajuste dos pesos. No Jester: até 0,001. No ajuste fino: 0,0003, menor, para não estragar o que já foi aprendido."],
+ ["Fine-tuning (ajuste fino)","Continuar o treino de uma rede já treinada, com dados novos. No projeto: a CNN do Jester, ajustada nas cinco bases, de 27 para 36 classes."],
+ ["Softmax","Conta que transforma as notas finais em porcentagens que somam 100%. É dela que sai o 0,7 do gatilho."],
+ ["Dropout","No treino, zera ao acaso parte das ativações (0,3 nas nossas redes). Evita que a rede decore os exemplos. No uso, fica desligado."],
+ ["BatchNorm","Normalização por lote: põe a saída de cada camada numa escala estável (média perto de 0, variação perto de 1). Deixa o treino mais rápido e estável. Vem depois de cada convolução da CNN 3D."],
+ ["ReLU","Função que zera os valores negativos e mantém os positivos. É o que dá à rede a capacidade de aprender relações que não são linhas retas."],
+ ["Quantização","Guardar os pesos com menos precisão (por exemplo, 8 bits em vez de 32) para a rede ficar menor e mais rápida num chip. No projeto <b>não foi feita</b>: o efeito de reduzir para 8 bits está na lista do que falta medir."],
+ ["Top-1 e top-5","Top-1: a maior nota é a classe certa. Top-5: a classe certa está entre as cinco maiores notas. CNN nos gestos do carro: top-5 de 99,6%."],
+ ["Falso positivo","O sistema dispara um comando sem o gesto ter sido feito. Medimos em falsos por minuto. O contrário, gesto feito e não reconhecido, é o falso negativo."],
+ ["Limiar","Um valor de corte. Exemplos: nota ≥ 0,7 no gatilho da CNN; reta ≥ 0,85 na contagem de dedos."],
+ ["Aumento de dados","Criar variações dos exemplos de treino (velocidade, recorte, brilho) para a rede generalizar melhor."],
+ ["Suavização dos rótulos","Em vez de dizer à rede '100% esta classe', diz-se um pouco menos. Evita excesso de confiança. CNN: 0,05. GRU: 0,1."],
+ ["Estado oculto","A memória de uma rede recorrente, atualizada a cada passo. Na nossa GRU: 128 números por direção."],
+ ["Validação e teste","Validação: dados usados para tomar decisões durante o projeto. Teste: dados guardados para a medida final. Nos dois, pessoas fora do treino."]
+].forEach(function(c){var b=el('button','carta','<b>'+c[0]+'</b><span class="toque">Toquem para ver</span><span class="def">'+c[1]+'</span>');b.onclick=function(){b.classList.toggle('vira')};$('#cartas').appendChild(b)});
+
+/* ================= FLUXOS CLICÁVEIS ================= */
+function fluxo(id,txtId,itens){var box=$('#'+id),t=$('#'+txtId);
+  function sel(i){$$('.cx',box).forEach(function(c,j){c.classList.toggle('at',j===i)});t.innerHTML=itens[i][2]}
+  itens.forEach(function(it,i){var c=el('button','cx','<b>'+it[0]+'</b>'+it[1]);c.onclick=function(){sel(i)};box.appendChild(c)});sel(0);return sel}
+var selF=fluxo('fluxo0','fluxo0txt',[
+ ["1 · Câmera","12 quadros por segundo","A webcam roda a cerca de 30 quadros por segundo. O sistema usa 12 por segundo, como nos vídeos de treino."],
+ ["2 · Sinal de OK","abre 7 segundos","Polegar encostado no indicador por 0,4 s. Abre uma janela de 7 s, com bip e voz. Fora dela, nada é executado."],
+ ["3 · A pergunta","a cada 0,15 s","A mão está parada e mostrando de 1 a 4 dedos? Essa pergunta decide quem responde."],
+ ["4a · Sim: contagem de dedos","números 1, 2 e 4","O MediaPipe marca 21 pontos. Uma regra de geometria conta os dedos esticados. Vale com a mesma contagem em 5 de 6 quadros."],
+ ["4b · Não: CNN 3D","8 movimentos","A rede lê 16 quadros de vídeo e dá uma nota por gesto. Vale com nota ≥ 70% em 3 análises seguidas."],
+ ["5 · Comando","música, ar, telefone","O comando vai para a central do carro, com resposta por voz."]]);
+$('#fluxo0play').onclick=function(){var i=0;selF(0);var t=setInterval(function(){i++;if(i>5){clearInterval(t);return}selF(i)},1700)};
+fluxo('arq','arqtxt',[
+ ["Entrada","16 × 96×96 × 3","Um vídeo curto: 16 quadros, cada um com 96×96 pixels, em 3 cores."],
+ ["Bloco 1","32 filtros","Duas convoluções 3×3×3 com 32 filtros. O pooling encolhe só a imagem: saem 16 quadros de 48×48. O tempo fica inteiro."],
+ ["Bloco 2","64 filtros","64 filtros. Agora o pooling encolhe também o tempo: saem 8 passos de 24×24."],
+ ["Bloco 3","128 filtros","128 filtros. Saem 4 passos de 12×12."],
+ ["Bloco 4","256 filtros","256 filtros. Saem 2 passos de 6×6. Cada número agora resume um pedaço grande do vídeo."],
+ ["Média global","256 números","Tira-se a média de cada um dos 256 mapas. Sobra uma lista de 256 números: o resumo do vídeo."],
+ ["Dropout","0,3","No treino, 30% desses números são zerados ao acaso, para a rede não depender de poucos deles."],
+ ["Camada final","27, depois 36 notas","Uma camada linear dá uma nota por classe: 27 no Jester, 36 depois do ajuste. O softmax transforma em porcentagens. Total da rede: 3,52 milhões de parâmetros."]]);
+
+/* ================= 3D básico ================= */
+function proj(p,r,w,h,esc,d){var cy=Math.cos(r.y),sy=Math.sin(r.y),cx=Math.cos(r.x),sx=Math.sin(r.x);
+  var x=p[0]*cy+p[2]*sy,z=-p[0]*sy+p[2]*cy,y=p[1]*cx-z*sx;z=p[1]*sx+z*cx;var f=d/(d+z);return [w/2+x*f*esc,h/2-y*f*esc,z]}
+function arrasta(cv,r,redes){var on=false,lx,ly;
+  cv.addEventListener('pointerdown',function(e){on=true;lx=e.clientX;ly=e.clientY;cv.setPointerCapture(e.pointerId)});
+  cv.addEventListener('pointermove',function(e){if(!on)return;r.y+=(e.clientX-lx)*0.01;r.x+=(e.clientY-ly)*0.01;r.x=Math.max(-1.4,Math.min(1.4,r.x));lx=e.clientX;ly=e.clientY;redes()});
+  cv.addEventListener('pointerup',function(){on=false});cv.addEventListener('pointercancel',function(){on=false})}
+var AZ='#1f6fb5',NV='#0b2545',CL='#c9d9ea';
+
+/* ---- filtro 2D ---- */
+(function(){var cv=$('#cv2d'),c=cv.getContext('2d'),W=8,H=6,T=30,pos=0,roda=true,feitos={};
+  var mao={};[[3,1],[4,1],[3,2],[4,2],[5,2],[3,3],[4,3],[5,3],[4,4]].forEach(function(p){mao[p[0]+','+p[1]]=1});
+  var np=(W-2)*(H-2);
+  function nota(fx,fy){var s=0;for(var i=0;i<3;i++)for(var j=0;j<3;j++)if(mao[(fx+i)+','+(fy+j)])s++;return s/8}
+  function des(){c.clearRect(0,0,cv.width,cv.height);var ox=14,oy=40;
+    c.font='13px Segoe UI,Arial';c.fillStyle=NV;c.fillText('imagem',ox,24);c.fillText('mapa de ativação',300,24);
+    for(var x=0;x<W;x++)for(var y=0;y<H;y++){c.fillStyle=mao[x+','+y]?'#13457a':'#fff';c.fillRect(ox+x*T,oy+y*T,T-1,T-1)}
+    var fx=pos%(W-2),fy=Math.floor(pos/(W-2));
+    c.strokeStyle=AZ;c.lineWidth=3;c.strokeRect(ox+fx*T-1,oy+fy*T-1,3*T+1,3*T+1);
+    feitos[pos]=nota(fx,fy);
+    for(var p=0;p<np;p++){var ax=p%(W-2),ay=Math.floor(p/(W-2)),v=feitos[p];
+      c.fillStyle=v==null?'#fff':'rgba(31,111,181,'+(0.08+0.92*v)+')';c.fillRect(300+ax*T,oy+T+ay*T,T-1,T-1);
+      if(p===pos){c.strokeStyle=NV;c.lineWidth=2;c.strokeRect(300+ax*T,oy+T+ay*T,T-1,T-1)}}
+    c.fillStyle='#51657a';c.fillText('nota nesta posição: '+num(nota(fx,fy)),300,oy+T+4*T+22)}
+  function passo(){pos++;if(pos>=np){pos=0;feitos={}}des()}
+  setInterval(function(){if(roda&&visivel(cv))passo()},420);
+  $('#c2play').onclick=function(){roda=!roda;this.textContent=roda?'Pausar':'Continuar'};$('#c2step').onclick=function(){roda=false;$('#c2play').textContent='Continuar';passo()};des()})();
+
+/* ---- filtro 3D ---- */
+(function(){var cv=$('#cv3d'),c=cv.getContext('2d'),r={x:-0.35,y:0.6},NT=6,mov=1,dim=3,ft=0;
+  function col(t){return mov?t:2}
+  function quad(pts,fill,stroke,lw){c.beginPath();pts.forEach(function(p,i){var q=proj(p,r,cv.width,cv.height,38,14);if(i)c.lineTo(q[0],q[1]);else c.moveTo(q[0],q[1])});c.closePath();if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.lineWidth=lw||1;c.stroke()}}
+  function zt(t){return (t-(NT-1)/2)*1.25}
+  function des(){c.clearRect(0,0,cv.width,cv.height);var ord=[];for(var t=0;t<NT;t++)ord.push(t);
+    ord.sort(function(a,b){return proj([0,0,zt(b)],r,1,1,1,14)[2]-proj([0,0,zt(a)],r,1,1,1,14)[2]});
+    var meio=dim===3?ft+1:ft,fc=col(meio),f0=dim===3?ft:ft,f1=dim===3?ft+2:ft;
+    ord.forEach(function(t){var z=zt(t);
+      quad([[-3,-2,z],[3,-2,z],[3,2,z],[-3,2,z]],'rgba(255,255,255,.82)',CL,1);
+      var cx=col(t)-3;quad([[cx,-1,z],[cx+1,-1,z],[cx+1,1,z],[cx,1,z]],'#13457a');
+      if(t>=f0&&t<=f1){var a=Math.max(0,Math.min(3,fc-1))-3;quad([[a,-1.5,z],[a+3,-1.5,z],[a+3,1.5,z],[a,1.5,z]],'rgba(31,111,181,.16)',AZ,2.5)}});
+    var p0=proj([-3,-2.5,zt(0)],r,cv.width,cv.height,38,14),p1=proj([-3,-2.5,zt(NT-1)],r,cv.width,cv.height,38,14);
+    c.strokeStyle='#51657a';c.lineWidth=1;c.beginPath();c.moveTo(p0[0],p0[1]);c.lineTo(p1[0],p1[1]);c.stroke();c.fillStyle='#51657a';c.font='12px Segoe UI,Arial';c.fillText('tempo',p1[0]+4,p1[1]+4);
+    var resp=dim===3?Math.abs(col(ft+2)-col(ft))/2:1;
+    $('#c3med').style.width=(resp*100)+'%';
+    var t=$('#c3txt');
+    if(dim===2){t.className='veredito sim';t.textContent='Filtro 2D: acende. Ele vê uma mão na placa, parada ou não. Não sabe a diferença.'}
+    else if(resp>0){t.className='veredito sim';t.textContent='Filtro 3D: acende. A mão mudou de lugar entre as três placas que ele cobre.'}
+    else{t.className='veredito nao';t.textContent='Filtro 3D: não acende. A mão está no mesmo lugar nas três placas: não há movimento.'}}
+  setInterval(function(){if(!visivel(cv))return;ft++;if(ft>NT-(dim===3?3:1))ft=0;des()},900);
+  seg('c3mao',function(v){mov=+v;des()});seg('c3fil',function(v){dim=+v;ft=0;des()});arrasta(cv,r,des);des()})();
+
+/* ---- curvas de treino ---- */
+(function(){var cv=$('#cvcurva'),c=cv.getContext('2d');
+  var D=[["CNN 3D larga",[23.2,41.8,54.0,65.4,76.6,79.8,83.6,84.2],'#7fb4e6',[6,4]],["ResNet 3D",[17.4,50.4,59.8,69.8,72.2,78.5,82.1,83.0],'#4f90cc',[2,3]],
+   ["CNN 3D (escolhida)",[24.2,45.8,55.4,68.3,73.8,79.0,82.3,82.4],'#0b2545',[]],["CNN 3D leve",[19.3,41.9,52.7,58.5,72.4,73.1,77.9,78.6],'#1f6fb5',[10,3]],
+   ["CNN 2D + Transformer",[9.1,10.4,22.2,33.6,48.8,59.6,64.5,65.3],'#51657a',[4,4]],["CNN 2D + GRU",[9.9,8.7,18.1,22.3,34.1,44.4,49.4,50.4],'#8aa0b6',[1,3]]];
+  var L=46,R=200,Tp=14,B=34,w=cv.width-L-R,h=cv.height-Tp-B;
+  function X(i){return L+i*w/7}function Y(v){return Tp+h-(v/90)*h}
+  c.font='12px Segoe UI,Arial';c.strokeStyle=CL;c.fillStyle='#51657a';c.lineWidth=1;
+  for(var v=0;v<=90;v+=15){c.beginPath();c.moveTo(L,Y(v));c.lineTo(L+w,Y(v));c.stroke();c.fillText(v+'%',8,Y(v)+4)}
+  for(var i=0;i<8;i++)c.fillText(''+(i+1),X(i)-3,cv.height-14);c.fillText('época',L+w/2-14,cv.height-1);
+  D.forEach(function(d,k){c.setLineDash(d[3]);c.strokeStyle=d[2];c.lineWidth=d[0].indexOf('escolhida')>0?3.5:2;c.beginPath();d[1].forEach(function(v,i){if(i)c.lineTo(X(i),Y(v));else c.moveTo(X(i),Y(v))});c.stroke();
+    var ly=24+k*24;c.beginPath();c.moveTo(L+w+14,ly);c.lineTo(L+w+44,ly);c.stroke();c.setLineDash([]);c.fillStyle=NV;c.fillText(d[0]+' · '+pct(d[1][7]),L+w+50,ly+4)})})();
+
+/* ---- mão 3D ---- */
+(function(){var cv=$('#cvmao'),c=cv.getContext('2d'),r={x:-0.15,y:0.5};
+  var NOM=['Polegar','Indicador','Médio','Anelar','Mínimo'],curl=[1,0,0,1,1];
+  var LIM={reta:0.85,ang:65,pr:0.95,pf:1.20};
+  var MCP=[null,[-2.2,8.5,0],[0,9,0],[1.9,8.5,0],[3.6,7.5,0]],SEG=[null,[4,2.5,2],[4.5,2.8,2.1],[4.1,2.6,2],[3.2,1.9,1.8]],DX=[0,-0.08,0,0.06,0.14];
+  function nrm(v){var n=Math.hypot(v[0],v[1],v[2])||1;return [v[0]/n,v[1]/n,v[2]/n]}
+  function mix(a,b,t){return nrm([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,a[2]+(b[2]-a[2])*t])}
+  function soma(a,b,k){return [a[0]+b[0]*k,a[1]+b[1]*k,a[2]+b[2]*k]}
+  function dist(a,b){return Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2])}
+  function sub(a,b){return [a[0]-b[0],a[1]-b[1],a[2]-b[2]]}
+  function angulo(u,v){var d=(u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(Math.hypot(u[0],u[1],u[2])*Math.hypot(v[0],v[1],v[2])||1);return Math.acos(Math.max(-1,Math.min(1,d)))*180/Math.PI}
+  function pontos(){var P=[[0,0,0]],t=curl[0];
+    var p1=[-2.0,1.8,0.6],p2=soma(p1,mix([-0.75,0.66,0],[-0.2,0.9,0.4],t),3.2),p3=soma(p2,mix([-0.6,0.8,0],[0.85,0.35,0.4],t),3),p4=soma(p3,mix([-0.6,0.8,0],[0.5,-0.8,0.3],t),2.4);
+    P.push(p1,p2,p3,p4);
+    for(var f=1;f<5;f++){var d=nrm([DX[f],1,0]),a=0,p=MCP[f],fl=[90,100,70];P.push(p);
+      for(var s=0;s<3;s++){a+=curl[f]*fl[s]*Math.PI/180;p=soma(p,[d[0]*Math.cos(a),d[1]*Math.cos(a),Math.sin(a)],SEG[f][s]);P.push(p)}}
+    return P}
+  function medir(P){var m=[];
+    m[0]={reta:dist(P[2],P[4])/(dist(P[2],P[3])+dist(P[3],P[4])),fora:dist(P[4],P[17])/dist(P[5],P[17])};m[0].ok=m[0].reta>=LIM.pr&&m[0].fora>=LIM.pf;
+    for(var f=1;f<5;f++){var b=1+f*4,comp=dist(P[b],P[b+1])+dist(P[b+1],P[b+2])+dist(P[b+2],P[b+3]);
+      m[f]={reta:dist(P[b],P[b+3])/comp,ang:angulo(sub(P[b],P[0]),sub(P[b+3],P[b]))};m[f].ok=m[f].reta>=LIM.reta&&m[f].ang<=LIM.ang}
+    return m}
+  var LIG=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+  function des(){var P=pontos(),m=medir(P);c.clearRect(0,0,cv.width,cv.height);
+    var Q=P.map(function(p){return proj([p[0]+1.5,p[1]-9.3,p[2]-1],r,cv.width,cv.height,19.5,60)});
+    c.lineCap='round';c.strokeStyle='#4f90cc';c.lineWidth=5;LIG.forEach(function(l){c.beginPath();c.moveTo(Q[l[0]][0],Q[l[0]][1]);c.lineTo(Q[l[1]][0],Q[l[1]][1]);c.stroke()});
+    Q.forEach(function(q,i){var ponta=i>0&&i%4===0,f=Math.floor((i-1)/4),ok=ponta&&m[f].ok;
+      c.beginPath();c.arc(q[0],q[1],ok?9:5,0,7);c.fillStyle=ok?NV:'#fff';c.fill();c.strokeStyle=NV;c.lineWidth=1.5;c.stroke()});
+    c.fillStyle='#51657a';c.font='12px Segoe UI,Arial';c.fillText('pulso (ponto 0)',Q[0][0]+10,Q[0][1]+4);
+    var h='<tr><th>Dedo</th><th>Esticado?</th><th class="num">Reta</th><th class="num">Ângulo / afastamento</th></tr>';
+    m.forEach(function(x,f){h+='<tr><td>'+NOM[f]+'</td><td>'+(x.ok?'<b>sim</b>':'não')+'</td><td class="num">'+num(x.reta)+(f?' (≥ 0,85)':' (≥ 0,95)')+'</td><td class="num">'+(f?Math.round(x.ang)+'° (≤ 65°)':num(x.fora)+' (≥ 1,20)')+'</td></tr>'});
+    $('#maoTab').innerHTML=h;
+    var n=m.filter(function(x){return x.ok}).length,t=$('#maoTxt'),nomes=['','Um dedo','Dois dedos','Três dedos','Quatro dedos'];
+    if(n===1&&m[0].ok){t.className='veredito';t.textContent='Só o polegar: não é número. É o joinha, que fica com a CNN 3D.'}
+    else if(n===0){t.className='veredito';t.textContent='Nenhum dedo esticado (punho): não é número.'}
+    else if(n===5){t.className='veredito';t.textContent='Cinco dedos: não é número. É a mão aberta, que fica com a CNN 3D (sinal de pare).'}
+    else if(n===3){t.className='veredito';t.textContent='Contagem: três dedos. A regra reconhece, mas no carro três dedos não tem comando.'}
+    else{t.className='veredito sim';t.textContent='Contagem: '+nomes[n].toLowerCase()+'. É número. No carro: '+({1:'abre Música',2:'abre Ar-condicionado',4:'abre Telefone'})[n]+'.'}}
+  var sl=$('#maoSliders'),ins=[];
+  NOM.forEach(function(nm,f){var d=el('div','ctrl'),l=el('label',null,'<span style="min-width:78px;display:inline-block">'+nm+'</span>'),i=el('input');i.type='range';i.min=0;i.max=100;i.value=curl[f]*100;
+    var v=el('b');function at(){curl[f]=i.value/100;v.textContent=i.value==0?'reto':i.value==100?'dobrado':i.value+'% dobrado';des()}i.oninput=at;l.appendChild(i);l.appendChild(v);d.appendChild(l);sl.appendChild(d);ins.push([i,at])});
+  [["Um dedo",[1,0,1,1,1]],["Dois dedos",[1,0,0,1,1]],["Três dedos",[1,0,0,0,1]],["Quatro dedos",[1,0,0,0,0]],["Mão aberta",[0,0,0,0,0]],["Punho",[1,1,1,1,1]],["Joinha",[0,1,1,1,1]],["Meio dobrado",[1,0.42,0.42,1,1]]].forEach(function(p){
+    var b=el('button','bt',p[0]);b.onclick=function(){p[1].forEach(function(v,f){ins[f][0].value=v*100;ins[f][1]()})};$('#maoPresets').appendChild(b)});
+  ins.forEach(function(x){x[1]()});arrasta(cv,r,des);})();
+
+/* ---- simulador de decisão ---- */
+(function(){var VAL=[1,2,3,4,5,0,-1],ROT={1:'1',2:'2',3:'3',4:'4',5:'5',0:'0','-1':'—'},SUB={1:'dedo',2:'dedos',3:'dedos',4:'dedos',5:'aberta',0:'punho','-1':'sem mão'},q=[2,2,2,2,2,2],box=$('#decQ');
+  q.forEach(function(_,i){var b=el('button');b.onclick=function(){q[i]=VAL[(VAL.indexOf(q[i])+1)%VAL.length];at()};box.appendChild(b)});
+  function at(){$$('button',box).forEach(function(b,i){b.innerHTML=ROT[q[i]]+'<small>'+SUB[q[i]]+'</small>'});
+    var mov=$('#decMov').value/100,nota=+$('#decNota').value,sg=+$('#decSeg').value;
+    $('#decMovV').textContent=num(mov)+' palma';$('#decNotaV').textContent=nota+'%';$('#decSegV').textContent=sg;
+    var pres=q.filter(function(v){return v>=0}),parada=pres.length>=5&&mov<=0.5,cont={},mais=null,vz=0;
+    pres.forEach(function(v){var k=(v>=1&&v<=4)?v:'x';cont[k]=(cont[k]||0)+1;if(cont[k]>vz){vz=cont[k];mais=k}});
+    var estavel=vz>=5,numero=parada&&estavel&&mais!=='x'?mais:null,h='';
+    function li(ok,t){return '<div class="veredito '+(ok?'sim':'nao')+'" style="font-weight:400">'+t+'</div>'}
+    h+=li(parada,'<b>Mão parada?</b> '+(parada?'Sim':'Não')+'. Mão presente em '+pres.length+' de 6 quadros (mínimo 5); pulso andou '+num(mov)+' palma (máximo 0,50).');
+    h+=li(estavel&&mais!=='x','<b>Contagem estável de 1 a 4 dedos?</b> '+(vz?('A leitura mais comum apareceu '+vz+' vezes em 6 (mínimo 5)'+(mais==='x'?', mas não é número (mão aberta ou punho).':'.')):'Não há mão.'));
+    if(numero){if(numero===3)h+='<div class="veredito">Quem decide: <b>contagem de dedos</b>. Ela detecta três dedos, mas três dedos não tem comando no carro. Nada é executado, e a CNN não dispara neste instante.</div>';
+      else h+='<div class="veredito sim">Quem decide: <b>contagem de dedos</b>. Dispara direto, sem porcentagem: '+({1:'um dedo, abre Música',2:'dois dedos, abre Ar-condicionado',4:'quatro dedos, abre Telefone'})[numero]+'. A nota da CNN não é consultada.</div>'}
+    else{var ok=nota>=70&&sg>=3;h+='<div class="veredito '+(ok?'sim':'nao')+'">Quem decide: <b>CNN 3D</b>. '+(ok?'Dispara o movimento: nota '+nota+'% em '+sg+' análises seguidas.':'Não dispara: precisa de nota ≥ 70% em 3 análises seguidas (agora: '+nota+'% em '+sg+').')+'</div>'}
+    $('#decOut').innerHTML=h}
+  ['decMov','decNota','decSeg'].forEach(function(i){$('#'+i).oninput=at});at()})();
+
+/* ---- célula GRU ---- */
+(function(){var cv=$('#cvgru'),c=cv.getContext('2d');
+  function at(){var h=$('#gH').value/100,x=$('#gX').value/100,r=$('#gR').value/100,z=$('#gZ').value/100;
+    $('#gHv').textContent=num(h);$('#gXv').textContent=num(x);$('#gRv').textContent=num(r);$('#gZv').textContent=num(z);
+    var cand=Math.tanh(1.6*x+1.2*r*h),nova=z*h+(1-z)*cand;
+    c.clearRect(0,0,cv.width,cv.height);c.font='13px Segoe UI,Arial';
+    var L=[["Memória antiga (h)",h,'#7fb4e6'],["Entrada nova (x)",x,'#8aa0b6'],["Candidato",cand,AZ],["Memória nova",nova,NV]],mx=cv.width/2+60,larg=150;
+    c.strokeStyle=CL;c.beginPath();c.moveTo(mx,10);c.lineTo(mx,cv.height-30);c.stroke();
+    L.forEach(function(l,i){var y=24+i*52;c.fillStyle=NV;c.fillText(l[0],8,y+18);c.fillStyle=l[2];var w=l[1]*larg;c.fillRect(w<0?mx+w:mx,y,Math.abs(w),26);c.fillStyle=NV;c.fillText(num(l[1]),w<0?mx+w-38:mx+w+6,y+18)});
+    c.fillStyle='#51657a';c.fillText('−1',mx-larg-4,cv.height-10);c.fillText('0',mx-3,cv.height-10);c.fillText('+1',mx+larg-8,cv.height-10);
+    $('#gTxt').innerHTML='memória nova = z × antiga + (1 − z) × candidato = '+num(z)+' × '+num(h)+' + '+num(1-z)+' × '+num(cand)+' = <b>'+num(nova)+'</b>'}
+  ['gH','gX','gR','gZ'].forEach(function(i){$('#'+i).oninput=at});at()})();
+
+/* ---- GRU lendo um gesto ---- */
+(function(){var X=[.10,.12,.22,.40,.60,.78,.88,.90],N=8,box=$('#gruT'),et=0,tm=null;
+  var V=X.map(function(x,i){return i?x-X[i-1]:0}),F=[],Bk=[],A=[],f=0,b=0,i;
+  for(i=0;i<N;i++){f=0.6*f+0.4*Math.tanh(7*V[i]);F.push(f)}
+  for(i=N-1;i>=0;i--){b=0.6*b+0.4*Math.tanh(7*(i<N-1?V[i+1]:0));Bk[i]=b}
+  var s=0;for(i=0;i<N;i++){A[i]=Math.exp(9*Math.abs(V[i]));s+=A[i]}A=A.map(function(a){return a/s});var amax=Math.max.apply(null,A);
+  X.forEach(function(x,i){var t=el('div','t','quadro '+(i+1)+'<div style="height:14px;position:relative;background:#e8f1fa;border-radius:7px;margin:4px 2px"><span style="position:absolute;top:2px;left:calc('+(x*100)+'% - 5px);width:10px;height:10px;border-radius:50%;background:#0b2545"></span></div><div class="col"><i class="fr"></i><i class="tras"></i><i class="at"></i></div><span class="pv"></span>');box.appendChild(t)});
+  var TX=["<b>Etapas 1 a 3 · Quadros, pontos e atributos.</b> Cada caixa é um quadro. A bolinha mostra onde está o pulso: a mão vai da esquerda para a direita. Cada quadro vira 182 números (forma da mão, posição e velocidade do pulso...).",
+   "<b>Etapa 5 · Leitura na ordem normal.</b> A GRU lê um quadro por vez, do primeiro ao último. A barra azul é a memória: ela cresce quando a rede 'percebe' a mão andando, e é carregada para o quadro seguinte.",
+   "<b>Etapa 5 · Leitura invertida.</b> Uma segunda GRU lê do último quadro para o primeiro (barra clara). Agora cada quadro tem duas memórias: o que veio antes e o que vem depois. Juntas: 128 + 128 = 256 números.",
+   "<b>Etapa 6 · Atenção.</b> A rede dá um peso para cada quadro (barra escura). Os quadros do meio, em que a mão anda mais, pesam mais. O resumo do clipe é a média ponderada.",
+   "<b>Etapa 7 · Saída.</b> O resumo passa pela camada final e pelo softmax: uma porcentagem por gesto. A maior vence. (Notas ilustrativas.)"];
+  function barras(nf,nb,na){$$('.t',box).forEach(function(t,i){var c=$$('.col i',t);c[0].style.height=(i<nf?Math.max(3,F[i]*54):0)+'px';c[1].style.height=(i>=N-nb?Math.max(3,Bk[i]*54):0)+'px';c[2].style.height=(na?A[i]/amax*54:0)+'px';
+    $('.pv',t).textContent=na?pct(A[i]*100,0):'';t.classList.remove('lendo')})}
+  function mostra(){clearInterval(tm);$('#gruTxt').innerHTML=TX[et];$('#gruOnde').textContent='Etapa '+(et+1)+' de 5';$('#gruOut').style.display=et===4?'grid':'none';$('#gruPrev').disabled=et===0;$('#gruNext').disabled=et===4;
+    if(et===0)barras(0,0,0);
+    else if(et===1){var k=0;barras(0,0,0);tm=setInterval(function(){k++;barras(k,0,0);if(k<=N)$$('.t',box)[k-1].classList.add('lendo');if(k>=N)clearInterval(tm)},380)}
+    else if(et===2){var j=0;barras(N,0,0);tm=setInterval(function(){j++;barras(N,j,0);if(j<=N)$$('.t',box)[N-j].classList.add('lendo');if(j>=N)clearInterval(tm)},380)}
+    else barras(N,N,1)}
+  $('#gruOut').innerHTML=[["Deslizar para a direita",86],["Outros gestos, somados",6],["Sem gesto",4],["Deslizar para a esquerda",2],["Dois dedos",2]].map(function(o,i){return '<div class="b'+(i?'':' fin')+'"><span>'+o[0]+'</span><div class="tr"><i style="width:'+o[1]+'%"></i></div><span class="v">'+o[1]+'%</span></div>'}).join('');
+  $('#gruNext').onclick=function(){et=Math.min(4,et+1);mostra()};$('#gruPrev').onclick=function(){et=Math.max(0,et-1);mostra()};$('#gruReset').onclick=function(){et=0;mostra()};mostra()})();
+
+/* ---- veto ---- */
+(function(){function at(){var p=$('#vP').value/10,soma=23*p,T=Math.min(+$('#vT').value,Math.max(0,100-soma));
+  $('#vPv').textContent=num(p,1)+'%';$('#vTv').textContent=Math.round(T)+'%';
+  $('#vB').innerHTML='<div class="b"><span>Soma das 23 ("Outros gestos")</span><div class="tr"><i style="width:'+Math.min(100,soma)+'%"></i></div><span class="v">'+num(soma,1)+'%</span></div><div class="b fin"><span>Maior nota das que ficam</span><div class="tr"><i style="width:'+T+'%"></i></div><span class="v">'+Math.round(T)+'%</span></div>';
+  var v=soma>T,t=$('#vTxt');t.className='veredito '+(v?'nao':'sim');t.textContent=v?'O veto cancelaria o número: a soma ('+num(soma,1)+'%) ganha, mesmo com cada classe em só '+num(p,1)+'%.':'O número passaria: a soma ('+num(soma,1)+'%) não chega à maior nota.'}
+  $('#vP').oninput=at;$('#vT').oninput=at;at()})();
+
+/* ---- resultados ---- */
+(function(){var M=[["Modelo final: CNN 3D + contagem, sem veto (usado ao vivo)",87.7,82.0,91.2,70.9,1],["GRU + CNN, média 0,3 / 0,7 (testada)",95.8,96.2,95.6,92.4],["GRU + CNN, números pela GRU (testada)",95.6,95.6,95.6,92.0],
+   ["Contagem + veto da CNN (testada, desligada)",86.2,71.6,95.2,87.9],["GRU sobre os pontos, sozinha",83.3,95.6,75.6,76.5],["CNN 3D ajustada, sozinha",81.1,58.4,95.2,84.0]];
+  var IX={carro:1,num:2,mov:3,c36:4},TX={carro:"1.300 clipes. É a régua dos slides. O modelo final ganha da CNN sozinha e da versão com veto, e perde para a GRU + CNN, que não funcionou na webcam.",
+   num:"500 clipes de um, dois e quatro dedos. A contagem leva a CNN de 58,4% a 82,0%. A GRU faz 95,6% nos dados, mas na webcam dava nota baixa.",
+   mov:"800 clipes dos 8 movimentos. Aqui o modelo final (91,2%) fica abaixo da CNN sozinha (95,2%): a contagem às vezes transforma um movimento em número.",
+   c36:"3.642 amostras, todas as 36 classes. O modelo final cai para 70,9%: gestos com dedos à mostra, que não são comando no carro, disparam números."};
+  function at(k){$('#resB').innerHTML=M.map(function(m){var v=m[IX[k]];return '<div class="b'+(m[5]?' fin':'')+'"><span>'+m[0]+'</span><div class="tr"><i style="width:'+v+'%"></i></div><span class="v">'+pct(v)+'</span></div>'}).join('');$('#resTxt').textContent=TX[k]}
+  seg('resReg',at);at('carro');
+  var G=[["Um dedo",75.0,67.0,63.5,1],["Dois dedos",81.5,56.0,67.5,1],["Quatro dedos",97.0,46.0,96.0,1],["Deslizar para a direita",87,94,94],["Deslizar para a esquerda",90,90,90],["Polegar para cima",95,98,98],["Polegar para baixo",98,98,98],["Sinal de pare",84,91,91],["Empurrar a mão",95,98,98],["Tamborilar os dedos",92,99,99],["Puxar a mão",89,94,94]];
+  var GT=["Modelo final. Números pela contagem de dedos, movimentos pela CNN 3D.","CNN 3D ajustada, sozinha. Vejam como os três números caem: quatro dedos fica em 46%.","Contagem + veto (desligado). Um e dois dedos pioram, porque o veto cancela números verdadeiros."];
+  function ag(v){$('#gesB').innerHTML=G.map(function(g){var x=g[1+ +v];return '<div class="b'+(g[4]?' fin':'')+'"><span>'+g[0]+'</span><div class="tr"><i style="width:'+x+'%"></i></div><span class="v">'+pct(x)+'</span></div>'}).join('');$('#gesTxt').textContent=GT[v]+' Barras escuras: números. Barras azuis: movimentos.'}
+  seg('gesV',ag);ag(0)})();
+
+/* ---- falsos ---- */
+(function(){var cv=$('#cvfal'),c=cv.getContext('2d'),S=[[7,5,'Um dedo'],[18,13,'Dois dedos'],[8,5,'Quatro dedos']],COR=['#7fb4e6','#1f6fb5','#0b2545'];
+  function des(ok){c.clearRect(0,0,cv.width,cv.height);c.font='13px Segoe UI,Arial';var x=20;
+    S.forEach(function(s,k){c.fillStyle=NV;c.fillText(s[2]+': '+(ok?s[1]:s[0]),x,22);
+      for(var i=0;i<s[0];i++){var cx=x+10+(i%9)*24,cy=48+Math.floor(i/9)*26,fica=!ok||i<s[1];c.beginPath();c.arc(cx,cy,9,0,7);if(fica){c.fillStyle=COR[k];c.fill()}else{c.strokeStyle=CL;c.lineWidth=2;c.setLineDash([3,3]);c.stroke();c.setLineDash([])}}
+      x+=290});
+    $('#falTxt').textContent=ok?'Com a janela do OK (simulação): 23 falsos em 31,5 min, 0,73 por minuto. Os círculos tracejados são os 10 que a janela barrou.':'Sem a janela do OK: 33 falsos em 31,5 min, 1,05 por minuto. Todos números; nenhum movimento.'}
+  seg('falV',function(v){des(+v)});des(0)})();
+})();
+</script>
+</body>
+</html>
