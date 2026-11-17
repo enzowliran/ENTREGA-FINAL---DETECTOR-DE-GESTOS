@@ -60,7 +60,9 @@
   .tabTexto td, .tabTexto th { text-align: left !important; vertical-align: top; }
   .tabModelos { font-size: 14.5px; } .tabModelos td { padding: 4px 12px; } .tabModelos th { padding: 8px 12px; font-size: 11px; } .tabModelos tr.bloco td { padding: 6px 12px; }
   .tabGestos { font-size: 17px; } .tabGestos td { padding: 7px 14px; text-align: left; } .tabGestos th { text-align: left; }
-  .tabDados { font-size: 17px; } .tabDados td, .tabDados th { text-align: left; }
+  .tabDados { font-size: 19.5px; } .tabDados td, .tabDados th { text-align: left; } .tabDados td { padding: 15px 16px; } .tabDados th { padding: 12px 16px; }
+  .tabDados td:first-child { font-weight: 600; color: var(--marinho); white-space: nowrap; }
+  .dadosA1 > .nota { display: none; }
   .barraCel { display: flex; align-items: center; justify-content: flex-start; gap: 12px; }
   .barraCel i { display: block; height: 12px; background: var(--azul2); }
   tr.vencedora .barraCel i { background: var(--marinho); }
@@ -536,9 +538,12 @@
   <!-- A1. Dados -->
   <section class="slide" data-titulo="A1 · Dados" data-fonte="Fonte: arquivos das bases; licenças de cada base">
     <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A1 · Dados</h2><p class="sub">As cinco bases e como cada uma foi usada</p></div>
-    <div class="corpo" style="justify-content:flex-start">
-      <div class="an" style="--d:1"><!--F:TABELA_DADOS--></div>
-      <p class="nota an" style="--d:2">Divisão sempre por pessoa: quem está no teste nunca aparece no treino. Nenhuma imagem de pessoa das bases aparece nos slides.</p>
+    <div class="corpo">
+      <div class="an dadosA1" style="--d:1"><!--F:TABELA_DADOS--></div>
+      <div class="grade an" style="--d:2;grid-template-columns:1fr 1fr;gap:30px;margin-top:30px;max-width:1250px">
+        <div class="caixa"><h3>Divisão sempre por pessoa</h3><p style="font-size:17px">Quem está no teste nunca aparece no treino. Nenhuma imagem de pessoa das bases aparece nos slides.</p></div>
+        <div class="caixa"><h3>Onde o MediaPipe acha a mão</h3><p style="font-size:17px">{{dados_mao}}</p></div>
+      </div>
     </div>
   </section>
 
@@ -883,7 +888,7 @@
   <section class="slide" data-titulo="A12 · Hardware">
     <div class="cab an"><p class="rotuloCab">Apêndice</p><h2>A12 · Como o sistema iria para um carro</h2></div>
     <div class="corpo">
-      <div class="duas" style="grid-template-columns:1fr 600px;gap:44px;align-items:start">
+      <div class="duas" style="grid-template-columns:1fr 600px;gap:44px;align-items:center">
         <table class="tabela tabTexto an" style="--d:1;font-size:16px">
           <tr><th>Tema</th><th>Situação</th></tr>
           <tr><td>Para onde os carros vão</td><td>Carro definido por software: poucos computadores centrais potentes, atualizados pela internet; em geral chips com CPU, GPU e acelerador de IA, não FPGA puro</td></tr>
@@ -929,7 +934,7 @@
               <text x="587" y="101" text-anchor="middle" font-size="16" font-weight="600" fill="#fff">Comando</text>
             </g>
           </svg>
-          <p class="nota">Ilustração. A câmera infravermelha, com LEDs, funciona à noite e com sol forte. Exemplo de placa: AMD Kria KV260 Vision AI Starter Kit (CPU ARM + lógica FPGA).</p></div>
+          <p class="nota" style="max-width:330px">Ilustração. A câmera infravermelha, com LEDs, funciona à noite e com sol forte. Exemplo de placa: AMD Kria KV260 Vision AI Starter Kit (CPU ARM + lógica FPGA).</p></div>
       </div>
     </div>
   </section>

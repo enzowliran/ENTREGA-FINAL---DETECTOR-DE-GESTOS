@@ -398,6 +398,8 @@ def main():
         "mov_falsos": cnn_carro.get("ipn_falsos"), "fl_cnn_carro": cnn_carro.get("ipn_falsos_por_minuto"),
         "fl_veto_carro": fvar.get("CNN 3D + contagem de dedos + veto da CNN (janela mais longa)", {}).get(so_carro, {}).get("ipn_falsos_por_minuto"),
         "ok_menos_pct": round(100 * (1 - f_com / f_sem)) if f_sem else None,
+        "dados_mao": "Amostras do teste misto em que o MediaPipe achou a mão em pelo menos 70% dos quadros: "
+                     + ", ".join(f"{k} {br(v)}%" for k, v in (misto.get("amostras_com_mao_por_fonte") or {}).items()) + ".",
         "car_num_ganho": GF.br(gc["numeros"]["acerto_pct"] - gc["numeros"]["cnn_sozinha_pct"]) if gc.get("numeros") else None,
     })
     tab_contagem, campos_contagem = confianca_contagem()
